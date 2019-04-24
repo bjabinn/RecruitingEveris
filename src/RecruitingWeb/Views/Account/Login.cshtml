@@ -1,0 +1,81 @@
+@using RecruitingWeb.Enums
+@using RecruitingWeb.Properties
+@using System.Configuration
+
+@model RecruitingWeb.Models.LoginViewModel
+
+@{Layout = "~/Views/Shared/_LayoutLogin.cshtml";}
+@{ 
+    var tiempoExpiracionCookie = ConfigurationManager.AppSettings["tiempoExpiracion"].ToString();
+}
+
+<div class="container">
+    <div>
+
+        <!-- title-->
+        <h1 class="white-color horizontal-text-center">@Resources.HTML_Login_RecruitingTool</h1>
+        <h5 class="white-color horizontal-text-center">@Resources.HTML_Login_DatosAcceso</h5>
+
+        <!-- form-->            <div class="row">
+            <div class="col-md-10 col-md-offset-2">
+                <div class="horizontal-subscribe-form">
+                    @using (Html.BeginForm("Login", "Account", FormMethod.Post, new Dictionary<string, object> { { "class", "form-inline" }, { "role", "form" }, { "data-parsley-validate", "true" }, { "data-parsley-excluded", ":not([data-validate])" } }))
+                    {
+
+                        @Edit.Text(Model.UserName, "UserName", id: "UserName", maxLength: 100, htmlClass: "form-control input-box", validate: false, attributes: new Dictionary<string, string>() { { "placeholder", "Usuario (Ej: evrusr)" }, { "autofocus", "true" } })
+                        @Edit.Password(Model.Password, "PassWord", id: "PassWord", maxLength: 100, htmlClass: "form-control input-box", validate: false, attributes: new Dictionary<string, string>() { { "placeholder", "Contraseña" } })
+                        <input class="btn btn-primary standard-button" type="submit" value="Entrar" id="entrarButton" />
+
+                        @Edit.Checkbox(Model.RememberMe, "RememberMe", id: "remember-password", label: "Recuérdame")
+                        if (Model.errorLogin == true)
+                        {
+                            <p class="errorLogin">@Resources.HTML_Login_UsuarioContraseniaIncorrectos</p>
+                        }
+
+                    }
+                </div>
+                <div class="row">
+                    <div id="notifyPass">
+                        <label class="textnotification">
+                            @Resources.HTML_Login_UsuarioContraseniaIncorrectos
+                        </label>
+                    </div>                  
+                </div>
+            </div>
+        </div>
+    </div>
+</div> <!-- End #login-content -->
+@section scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            @{
+				 if (TypeMessageEnum.ErrorMessage == ViewBag.TypeMessage)
+				 {
+					 @: $('#notifyPass').removeClass('hide');
+                             }else{
+                     @: if (!($('#notifyPass').hasClass('hide'))) $('#notifyPass').addClass('hide');
+                             }
+            }
+        });
+        $(window).on("load", function () {
+            var usuarioLogin = $.cookie('usuarioLogin');
+            var contraseniaLogin = $.cookie('contraseniaLogin');            
+            if(usuarioLogin != '' && contraseniaLogin != '')
+            {                
+                $('#UserName').val(usuarioLogin);
+                $('#PassWord').val(contraseniaLogin);
+            }
+        });
+        $(document).on('click', '#entrarButton', function () {
+            if($('#remember-password').is(':checked'))
+            {
+                var usuarioLogin = $('#UserName').val();
+                var contraseniaLogin = $('#PassWord').val();
+                $.cookie('usuarioLogin', usuarioLogin, {expires : @tiempoExpiracionCookie});
+                $.cookie('contraseniaLogin', contraseniaLogin, {expires : @tiempoExpiracionCookie});               
+            }
+        });
+    </script>
+}
+
+

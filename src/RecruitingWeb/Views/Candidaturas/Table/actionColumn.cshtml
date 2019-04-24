@@ -1,0 +1,223 @@
+@using Recruiting.Application.Candidaturas.ViewModel
+@using Recruiting.Application.Candidaturas.Enums
+@using RecruitingWeb.Properties
+@using Recruiting.Application.Usuarios.ViewModels
+
+@model Recruiting.Application.Candidaturas.ViewModel.CandidaturaRowViewModel
+
+@{
+    var currentUserId = (int)HttpContext.Current.Session["UsuarioId"];
+    var permisoModificarCandidatura = (bool)TempData["ModificarCandidatura"];
+    var permisoAdministrarCandidatura = (bool)TempData["AdministrarCandidatura"];
+    var permisoVerCandidatura = (bool)TempData["VerCandidatura"];
+    var permisoVerCandidato = (bool)TempData["VerCandidato"];
+    var currentUser = (UsuarioRolPermisoViewModel)HttpContext.Current.Session["Usuario"];
+    var userEmail = currentUser.Email;
+
+    var esMiEntrevista = ((currentUserId == Model.EntrevistadorId) ||
+    ((currentUserId == Model.FiltradorId) && (Model.EtapaId == (int)TipoEtapaCandidaturaEnum.FiltradoTecnico))); //comprueba que somos entrevistador O filtrador
+
+    var subEntrevistadores = Model.SubEntrevistadoresString.Split(',');
+    var soySubEntrevistador = "false";
+
+    foreach (var subEntrevistadorId in subEntrevistadores) //compruebaSiEsMiSubEntrevista.
+    {
+        if (currentUserId.ToString() == subEntrevistadorId && !esMiEntrevista && !permisoAdministrarCandidatura)
+        {
+            soySubEntrevistador = "true";
+            esMiEntrevista = true;
+            break;
+        }
+    }
+
+    var tipoEntrevista = "0";
+
+    if (Model.EstadoId == (int)TipoEstadoCandidaturaEnum.Entrevista)
+    {
+        tipoEntrevista = "1";
+    }
+    else if (Model.EstadoId == (int)TipoEstadoCandidaturaEnum.SegundaEntrevista)
+    {
+        tipoEntrevista = "2";
+    }
+
+    var estadoFinal = "false";
+
+    if (Model.EstadoId == (int)TipoEstadoCandidaturaEnum.Contratado || Model.EstadoId == (int)TipoEstadoCandidaturaEnum.Renuncia
+        || Model.EstadoId == (int)TipoEstadoCandidaturaEnum.RechazaOferta || Model.EstadoId == (int)TipoEstadoCandidaturaEnum.Descartado)
+    {
+        estadoFinal = "true";
+    }
+
+    var entrevistadorPermisos = esMiEntrevista && EsModificablePorEstado() && EsModificablePorEtapa();
+
+    var esModificablePorEstado = EsModificablePorEstado();
+    var esModificablePorEtapa = EsModificablePorEtapa();
+
+    var estoyEnFiltradoTelefonico = "false";
+
+    if (Model.EstadoId == (int)TipoEstadoCandidaturaEnum.Entrevista && Model.EtapaId == (int)TipoEtapaCandidaturaEnum.FiltradoTelefonico)
+    {
+        estoyEnFiltradoTelefonico = "true";
+    }
+
+    var estoyEnAgendarCartaOferta = "false";
+
+    if (Model.EstadoId == (int)TipoEstadoCandidaturaEnum.CartaOferta && Model.EtapaId == (int)TipoEtapaCandidaturaEnum.AgendarCartaOferta)
+    {
+        estoyEnAgendarCartaOferta = "true";
+    }
+
+    var estoyEnAgendarEntrevista = "false";
+
+    if (Model.EstadoId == (int)TipoEstadoCandidaturaEnum.Entrevista && Model.EtapaId == (int)TipoEtapaCandidaturaEnum.AgendarEntrevistas)
+    {
+        estoyEnAgendarEntrevista = "true";
+    }
+
+    var estoyEnAgendarSegundaEntrevista = "false";
+
+    if (Model.EstadoId == (int)TipoEstadoCandidaturaEnum.SegundaEntrevista && Model.EtapaId == (int)TipoEtapaCandidaturaEnum.AgendarSegundaEntrevista)
+    {
+        estoyEnAgendarSegundaEntrevista = "true";
+    }
+
+}
+
+<div class="row">
+
+    @Edit.Text(Model.Candidato.ToString(), "Candidato", id: "Candidato", htmlClass: "form-control hide")
+    @Edit.Text(Model.CandidatoId.ToString(), "CandidatoId", id: "CandidatoId", htmlClass: "form-control hide")
+    @Edit.Text(Model.CandidaturaId.ToString(), "CandidaturaId", id: "CandidaturaId", htmlClass: "form-control hide")
+
+    @if (!isRevoked())
+    {
+        <a title="@Resources.HTML_Title_CargarCurriculum" id="LoadCV" class="@GetDisabledClass(!permisoAdministrarCandidatura)">
+            @Display.GlyphiconButton("glyphicon-open icon action")
+        </a>
+
+        <a title="@Resources.HTML_Title_DescargarUltimoCv" id="DonwloadCVButton" class="@GetDisabledClass(!permisoVerCandidatura || !Model.CVAvailable)">
+            @Display.GlyphiconButton("glyphicon glyphicon-download-alt icon action")
+        </a>
+    }
+
+    <a href="/Candidaturas/EditExtend/@Model.CandidaturaId.ToString()" title="@Resources.HTML_Title_EditarCandidatura" id="EditExtendButton" class="@GetDisabledClass(!permisoAdministrarCandidatura)">
+        @Display.GlyphiconButton("glyphicon-pencil icon action")
+    </a>
+
+    <a title="@Resources.HTML_Title_Eliminar" id="DeleteButton" class="@GetDisabledClass(!permisoAdministrarCandidatura)">
+        @Display.GlyphiconButton("glyphicon-trash icon action")
+    </a>
+
+    <a href="/Candidaturas/Details/@Model.CandidaturaId.ToString()" title="@Resources.HTML_Title_DetalleCandidatura" id="DetailButton" class="@GetDisabledClass(!permisoVerCandidatura)">
+        @Display.GlyphiconButton("glyphicon-eye-open icon action")
+    </a>
+
+
+    <a href="/Candidatos/Details/@Model.CandidatoId.ToString()" title="@Resources.HTML_Title_VerCandidato" id="CandidateView" class="@GetDisabledClass(!permisoVerCandidato)">
+        @Display.GlyphiconButton("glyphicon-user icon action")
+    </a>
+
+
+    <a title="@Resources.HTML_Title_DescargarCartaOferta" id="btnGenerarDescargarCartaOferta" class="@GetDisabledClass((!permisoAdministrarCandidatura && !esMiEntrevista) || !Model.GeneradoCartaOferta)">
+        @Display.GlyphiconButton("glyphicon glyphicon-edit icon action")
+    </a>
+
+
+    <a href="/Bitacoras/Index?CandidaturaId=@Model.CandidaturaId.ToString()" title="@Resources.HTML_Title_BitacoraCandidatura" id="BitacoraButton" class="@GetDisabledClass(!permisoAdministrarCandidatura)">
+        @Display.GlyphiconButton("glyphicon glyphicon-list-alt icon action")
+    </a>
+
+    <input type="hidden" name="subEntrevistadoresString" value=@Model.SubEntrevistadoresString />
+
+    <input type="hidden" name="soySubEntrevistador" value=@soySubEntrevistador />
+
+    <input type="hidden" name="tipoEntrevista" value=@tipoEntrevista />
+
+    <input type="hidden" name="estadoFinal" value=@estadoFinal />
+
+    <input type="hidden" name="estoyEnFiltradoTelefonico" value="@estoyEnFiltradoTelefonico" />
+
+    <input type="hidden" name="estoyEnAgendarCartaOferta" value="@estoyEnAgendarCartaOferta" />
+
+    <input type="hidden" name="estoyEnAgendarEntrevista" value="@estoyEnAgendarEntrevista" />
+
+    <input type="hidden" name="estoyEnAgendarSegundaEntrevista" value="@estoyEnAgendarSegundaEntrevista" />
+
+</div>
+
+@functions{
+
+    public bool isPaused()
+    {
+        return (
+            Model.EstadoId == (int)TipoEstadoCandidaturaEnum.StandBy ||
+            Model.EstadoId == (int)TipoEstadoCandidaturaEnum.BacklogEntrevista ||
+            Model.EstadoId == (int)TipoEstadoCandidaturaEnum.AntiguoCVenBBDD ||
+            Model.EstadoId == (int)TipoEstadoCandidaturaEnum.Recontactado
+
+        );
+    }
+
+
+    public bool isRevoked()
+    {
+        return (
+            Model.EstadoId == (int)TipoEstadoCandidaturaEnum.Renuncia ||
+            Model.EstadoId == (int)TipoEstadoCandidaturaEnum.RechazaOferta ||
+            Model.EstadoId == (int)TipoEstadoCandidaturaEnum.KOOferta ||
+            Model.EstadoId == (int)TipoEstadoCandidaturaEnum.Descartado ||            
+            Model.EstadoId == (int)TipoEstadoCandidaturaEnum.Recontactado
+        );
+    }
+
+    public bool isContracted()
+    {
+        return (
+            Model.EstadoId == (int)TipoEstadoCandidaturaEnum.Contratado
+        );
+    }
+
+    public bool isPausable()
+    {
+        return (
+            Model.EtapaId == (int)TipoEtapaCandidaturaEnum.AgendarEntrevistas ||
+            Model.EtapaId == (int)TipoEtapaCandidaturaEnum.AgendarSegundaEntrevista ||
+            Model.EtapaId == (int)TipoEtapaCandidaturaEnum.AgendarCartaOferta ||
+            Model.EtapaId == (int)TipoEtapaCandidaturaEnum.FiltradoTelefonico ||
+            Model.EtapaId == (int)TipoEtapaCandidaturaEnum.PendienteDecisionSegundaEntrevista ||
+            Model.EtapaId == (int)TipoEtapaCandidaturaEnum.PendienteDecisionCartaOferta
+        );
+    }
+
+    public bool EsModificablePorEstado()
+    {
+        return (
+            Model.EstadoId == (int)TipoEstadoCandidaturaEnum.Entrevista ||
+            Model.EstadoId == (int)TipoEstadoCandidaturaEnum.SegundaEntrevista ||
+            Model.EstadoId == (int)TipoEstadoCandidaturaEnum.CartaOferta ||
+            Model.EstadoId == (int)TipoEstadoCandidaturaEnum.FiltradoPeople
+        );
+    }
+
+    public bool EsModificablePorEtapa()
+    {
+        return (
+            Model.EtapaId == (int)TipoEtapaCandidaturaEnum.EntregaCartaOferta ||
+            Model.EtapaId == (int)TipoEtapaCandidaturaEnum.FeedbackPrimeraEntrevista ||
+            Model.EtapaId == (int)TipoEtapaCandidaturaEnum.FeedbackSegundaEntrevista ||
+            Model.EtapaId == (int)TipoEtapaCandidaturaEnum.FiltradoTecnico
+        );
+    }
+}
+
+@helper GetDisabledClass(bool disable)
+{
+    var disabled = string.Empty;
+    if (disable)
+    {
+        disabled = "disabled";
+    }
+
+    @disabled
+}

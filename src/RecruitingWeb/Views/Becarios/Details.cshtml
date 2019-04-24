@@ -1,0 +1,79 @@
+﻿@using RecruitingWeb.Components.DataTable.Helpers
+@using RecruitingWeb.Helpers
+@using Recruiting.Application.Becarios.Enums;
+@using Recruiting.Application.Maestros.Enums;
+@using RecruitingWeb.Properties
+@using RecruitingWeb.Controllers
+
+@model Recruiting.Application.Becarios.ViewModels.CreateEditBecarioViewModel
+
+@{
+    var becariosController = new BecariosController();
+    var estadoMostrar = Model.BecarioDatosBasicos.EstadoBecarioId;
+    var estadoAnteriorStandBy = becariosController.GetLastEstadoBitacoraByBecarioIdStandBy((int)Model.BecarioId).EstadoAnteriorId;
+
+    if (estadoMostrar == (int)TipoEstadoBecarioEnum.Renuncia)
+    {
+        estadoMostrar = becariosController.GetLastEstadoBitacoraByBecarioId((int)Model.BecarioId).EstadoAnteriorId;
+    }
+}
+
+<div class="row titlePage">
+    <div class="col-lg-6">
+        <h3>@Resources.HTML_Becarios_Details_DetallesBecario - @Model.BecarioDatosBasicos.NombreCandidato</h3>
+    </div>
+</div>
+<div class="row header-flap">
+    <div class="btn-group" role="group">
+        <a class="btn btn-default" href="@Url.Action("Volver", "Becarios")">
+            <span class="text">@Resources.HTML_BotonGenericoVolver</span>
+        </a>
+        <a class="btn btn-default" title="@Resources.HTML_Title_VerCandidato" target="_blank" href="@Url.Action("Details/" +  Model.BecarioDatosBasicos.CandidatoId, "Candidatos")">
+            <span class="text">@Resources.HTML_Becarios_Details_VerCandidato</span>
+        </a>
+        <a href="@Url.Action("Edit", "Becarios", new {  id = Model.BecarioId })" class="btn btn-default">
+            <span class="text">@Resources.HTML_Becarios_Details_BotonEditarBecario</span>
+        </a>
+    </div>
+    <div class="col-lg-6 removePadding">
+        <h4 class="noMargin headerBox">@Resources.HTML_Becarios_Datos_Becario</h4>
+    </div>
+</div>
+
+@{
+    @Edit.Hidden(Model.BecarioId, "BecarioId")
+    @Html.Partial("~/Views/Becarios/Partials/Details/_DatosBasicos.cshtml", Model.BecarioDatosBasicos)
+
+    if ((estadoMostrar != (int)TipoEstadoBecarioEnum.Inicio && estadoMostrar != (int)TipoEstadoBecarioEnum.Stand_By) || (estadoMostrar == (int)TipoEstadoBecarioEnum.Stand_By && estadoAnteriorStandBy != 0 && estadoAnteriorStandBy != (int)TipoEstadoBecarioEnum.Inicio))
+    {
+        @Html.Partial("~/Views/Becarios/Partials/Details/EnProceso.cshtml", Model.BecarioObservaciones)
+    }
+
+    if ((estadoMostrar != (int)TipoEstadoBecarioEnum.Inicio && estadoMostrar != (int)TipoEstadoBecarioEnum.En_Proceso && estadoMostrar != (int)TipoEstadoBecarioEnum.Descartado && estadoMostrar != (int)TipoEstadoBecarioEnum.Stand_By) ||
+       (estadoMostrar == (int)TipoEstadoBecarioEnum.Stand_By && estadoAnteriorStandBy != 0 && estadoAnteriorStandBy != (int)TipoEstadoBecarioEnum.Inicio))
+    {
+        @Html.Partial("~/Views/Becarios/Partials/Details/GestionDocumental.cshtml", Model.BecarioSeleccion)
+
+        if (Model.BecarioSeleccion.CompletadoGestion == true)
+        {
+            @Html.Partial("~/Views/Becarios/Partials/Details/Asignacion.cshtml", Model.BecarioSeleccion)
+        }
+    }
+
+    if (estadoMostrar != (int)TipoEstadoBecarioEnum.Inicio && estadoMostrar != (int)TipoEstadoBecarioEnum.Stand_By
+                          && estadoMostrar != (int)TipoEstadoBecarioEnum.En_Proceso && estadoMostrar != (int)TipoEstadoBecarioEnum.Seleccionado
+                          && estadoMostrar != (int)TipoEstadoBecarioEnum.Descartado && estadoMostrar != (int)TipoEstadoBecarioEnum.Practicas)
+    {
+        @Html.Partial("~/Views/Becarios/Partials/Details/Practicas.cshtml", Model.BecarioDatosPracticas)
+    }
+
+    if (Model.BecarioDatosBasicos.EstadoBecarioId == (int)TipoEstadoBecarioEnum.Renuncia)
+    {
+        @Html.Partial("~/Views/Becarios/Partials/Details/DatosRenuncia.cshtml", Model)
+    }
+}
+
+@section scripts{
+    @BecariosFrontActions.MenuFrontActions()
+    @BecariosFrontActions.DetailsFrontActions(Url)
+}

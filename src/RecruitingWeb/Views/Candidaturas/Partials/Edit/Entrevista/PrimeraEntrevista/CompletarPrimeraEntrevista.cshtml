@@ -1,0 +1,82 @@
+﻿@using RecruitingWeb.Properties
+@using Recruiting.Application.Candidaturas.Enums;
+
+@model Recruiting.Application.Candidaturas.ViewModel.PrimeraEntrevistaViewModel
+
+@{
+    var candidaturaId = (Model.AgendarPrimeraEntrevista != null) ? Model.AgendarPrimeraEntrevista.AgendarPrimeraEntrevista.CandidaturaId : 0;
+}
+@if (Model.AgendarPrimeraEntrevista != null)
+{
+    <div class="row">
+        <div class="content-box">
+            <div class="content-box-content">
+                <div class="row section-header">
+                    <div class="col-lg-6">
+                        <h4>@Resources.HTML_Candidaturas_CompletarPrimeraEntrevista_DatosEntrevistaPrincipal</h4>
+                    </div>
+                    @if (Model.AgendarPrimeraEntrevista.SubEntrevistaList != null)
+                    {
+                        var TengoSubEntrevistas = false;
+                        foreach (var subEntrevista in Model.AgendarPrimeraEntrevista.SubEntrevistaList)
+                        {
+                            if (subEntrevista.SubEntrevistaId != null)
+                            {
+                                TengoSubEntrevistas = true;
+                                break;
+                            }
+                        }
+                        if (TengoSubEntrevistas)
+                        {
+                            <div class="col-lg-6 text-right">
+                                <a class="btn btn-default"
+                                   href="@Url.Action("VerSubEntrevistasPrimeraEntrevista", "Candidaturas", new { candidaturaId = candidaturaId })"
+                                   target="_blank">
+                                    <span class="text">@Resources.HTML_Candidaturas_CompletarPrimeraEntrevista_VerSubentrevistas</span>
+                                </a>
+                            </div>
+                        }
+                    }
+                </div>
+                <div class="content-box-content">
+                    <div class="section-form-entrevista" data-id="section-form-entrevista1">
+                        <div>
+                            @Html.Partial("~/Views/Candidaturas/Partials/Edit/Entrevista/PrimeraEntrevista/_AgendarPrimeraEntrevista.cshtml", Model.AgendarPrimeraEntrevista)
+                        </div>
+                        @if (Model.RangoSalarialesyDisponibilidades != null && Model.ResultadoPrimeraEntrevista != null &&
+                           Model.AccessEstado == (int)TipoEstadoCandidaturaEnum.Descartado && Model.AccessEtapa == (int)TipoEtapaCandidaturaEnum.FeedbackPrimeraEntrevista)
+                        {
+                            @Html.Partial("~/Views/Candidaturas/Partials/Edit/Entrevista/_RangoSalarialesyDisponibilidades.cshtml", Model.RangoSalarialesyDisponibilidades)
+                            @Html.Partial("~/Views/Candidaturas/Partials/Edit/Entrevista/PrimeraEntrevista/_ResultadoPrimeraEntrevista.cshtml", Model.ResultadoPrimeraEntrevista)
+                        }
+                        else if (Model.RangoSalarialesyDisponibilidades != null && Model.ResultadoPrimeraEntrevista != null &&
+                                                                                (Model.AccessEtapa != null
+                                                                                && ((Model.AccessEtapa == (int)TipoEtapaCandidaturaEnum.PendienteDecisionSegundaEntrevista
+                                                                                || Model.AccessEtapa == (int)TipoEtapaCandidaturaEnum.AgendarSegundaEntrevista
+                                                                                || Model.AccessEtapa == (int)TipoEtapaCandidaturaEnum.FeedbackSegundaEntrevista
+                                                                                || Model.AccessEtapa == (int)TipoEtapaCandidaturaEnum.AgendarCartaOferta
+                                                                                || Model.AccessEtapa == (int)TipoEtapaCandidaturaEnum.PendienteDecisionCartaOferta
+                                                                                || Model.AccessEtapa == (int)TipoEtapaCandidaturaEnum.FeedbackCartaOferta
+                                                                                || Model.AccessEtapa == (int)TipoEtapaCandidaturaEnum.Fin))))
+                        {
+
+
+                            if (Model.MostrarRangosSalariales == true)
+                            {
+                                @Html.Partial("~/Views/Candidaturas/Partials/Edit/Entrevista/_RangoSalarialesyDisponibilidades.cshtml", Model.RangoSalarialesyDisponibilidades)
+                                @Html.Partial("~/Views/Candidaturas/Partials/Edit/Entrevista/PrimeraEntrevista/_ResultadoPrimeraEntrevista.cshtml", Model.ResultadoPrimeraEntrevista)
+                            }
+                            else if (Model.MostrarRangosSalariales == false)
+                            {
+                                @Html.Partial("~/Views/Candidaturas/Partials/Edit/Entrevista/_ObservacionesEntrevista.cshtml", Model.RangoSalarialesyDisponibilidades)
+                                @Html.Partial("~/Views/Candidaturas/Partials/Edit/Entrevista/PrimeraEntrevista/_ResultadoPrimeraEntrevista.cshtml", Model.ResultadoPrimeraEntrevista)
+                            }
+                        }
+                    </div>
+                </div>
+            </div><!-- End content-box-content -->
+        </div><!-- End .content-box -->
+    </div><!--End .Row-->
+
+}
+

@@ -1,0 +1,52 @@
+﻿@using RecruitingWeb.Properties
+
+@using Recruiting.Application.Maestros.Enums
+@using Recruiting.Application.Candidaturas.Enums
+@model Recruiting.Application.Candidaturas.ViewModel.CompletarCartaOfertaViewModel
+
+<div class="row titlePage">
+    <div class="col-lg-6">
+        <h3>@Resources.HTML_Candidaturas_CompletarCartaOferta_FeedbackCartaOferta - @Model.NombreCandidato</h3>
+    </div>
+</div>
+<div class="row header-flap">
+    <div class="btn-group" role="group">
+        <a href="@Url.Action("Volver", "Candidaturas")" class="btn btn-default">
+            <span class="text">@Resources.HTML_BotonGenericoVolver</span>
+        </a>
+        <a id="btnEleccionCartaOferta" class="btn btn-default">
+            <span class="text">@Resources.HTML_Candidaturas_CompletarCartaOferta_GenerarCartaOferta</span>
+        </a>
+        <a href="#" data-action="guardar" class="btn btn-default">
+            <span class="text">@Resources.HTML_BotonGenericoGuardar</span>
+        </a>
+        <a href="#" data-action="finalizar" class="btn btn-default">
+            <span class="text">@Resources.HTML_BotonGenericoFinalizar</span>
+        </a>
+    </div>
+    <div class="col-lg-6 removePadding">
+        <h4 class="noMargin headerBox">@Resources.HTML_Candidaturas_CompletarCartaOferta_DatosCartaOferta</h4>
+    </div>
+</div>
+
+@using (Html.BeginForm("CompletarCartaOferta", "Candidaturas", FormMethod.Post, new Dictionary<string, object> { { "role", "form" }, { "data-parsley-validate", "true" }, { "id", "cartaOfertaForm" } }))
+{
+    @Edit.Hidden("guardar", "SubmitType")
+    @Edit.Hidden(Model.EntregaCartaOfertaViewModel.AgendarCartaOfertaViewModel.AgendarCartaOferta.CandidaturaId, "EntregaCartaOfertaViewModel.AgendarCartaOfertaViewModel.AgendarCartaOferta.CandidaturaId", attributes: new Dictionary<string, string> { { "id", "CandidaturaId" } })
+
+    @Html.Partial("~/Views/Candidaturas/Partials/Ejecutar/CartaOferta/CompletarCartaOferta.cshtml", Model)
+
+}
+
+@Html.Partial("~/Views/Candidaturas/Modal/_ModalBusquedaNecesida.cshtml", Model.CompletarCartaOferta)
+@Html.Partial("~/Views/Candidaturas/Modal/_ModalEditNecesidad.cshtml", Model.CompletarCartaOferta)
+@Html.Partial("~/Views/Candidaturas/Modal/_ModalEleccionCartaOferta.cshtml")
+
+
+@section scripts{
+
+    @CandidaturasFrontActions.MenuFrontActions()
+    @CandidaturasFrontActions.CompletarCartaOfertaPartialFrontActions(Url)
+    @CandidaturasFrontActions.CompletarCartaOfertaFrontActions(Url)
+
+}

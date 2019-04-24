@@ -1,0 +1,97 @@
+﻿@using Recruiting.Application.Becarios.Enums;
+@using RecruitingWeb.Properties
+@using RecruitingWeb.Controllers
+
+@model Recruiting.Application.Becarios.ViewModels.CreateEditBecarioViewModel
+
+@{
+    var becariosController = new BecariosController();
+    var estadoMostrar = Model.BecarioDatosBasicos.EstadoBecarioId;   
+    var estadoAnteriorStandBy = becariosController.GetLastEstadoBitacoraByBecarioIdStandBy((int)Model.BecarioId).EstadoAnteriorId;
+    var Activo = Model.Activo;
+    if (Activo == false)
+    {
+        Response.Redirect("/Shared/Borrado");
+    }
+    if (Model.BecarioDatosBasicos.EstadoBecarioId == (int)TipoEstadoBecarioEnum.Renuncia)
+    {
+        estadoMostrar = becariosController.GetLastEstadoBitacoraByBecarioId((int)Model.BecarioId).EstadoAnteriorId;
+    }
+}
+
+<div class="row titlePage">
+    <div class="col-lg-6">
+        <h3>@Resources.HTML_Becarios_Edit_EditandoBecario @Model.BecarioDatosBasicos.NombreCandidato</h3>
+    </div>
+</div>
+<div class="row header-flap">
+    <div class="btn-group" role="group">
+        <a href="@Url.Action("Volver", "Becarios")" class="btn btn-default">
+            <span class="text">@Resources.HTML_BotonGenericoVolver</span>
+        </a>
+        <a href="#" data-action="guardar" class="btn btn-default">
+            <span class="text">@Resources.HTML_BotonGenericoGuardar</span>
+        </a>
+    </div>
+    <div class="col-lg-6 removePadding">
+        <h4 class="noMargin headerBox">@Resources.HTML_Becarios_Datos_Becario</h4>
+    </div>
+</div>
+
+@using (Html.BeginForm("Edit", "Becarios", FormMethod.Post, new Dictionary<string, object> { { "role", "form" }, { "data-parsley-validate", "true" }, { "enctype", "multipart/form-data" } }))
+
+{
+    @Edit.Hidden("guardar", "SubmitType")
+    @Edit.Hidden(Model.BecarioId ?? null, "BecarioId")
+
+    Model.Access = "BecarioDatosBasicos.";
+    @Html.Partial("~/Views/Becarios/Partials/Edit/_DatosBasicos.cshtml", Model.BecarioDatosBasicos)
+
+    if ((estadoMostrar != (int)TipoEstadoBecarioEnum.Inicio && estadoMostrar != (int)TipoEstadoBecarioEnum.Stand_By) || (estadoMostrar == (int)TipoEstadoBecarioEnum.Stand_By && estadoAnteriorStandBy != 0 && estadoAnteriorStandBy != (int)TipoEstadoBecarioEnum.Inicio))
+    {
+        Model.AccessObservaciones = "BecarioObservaciones.";
+        @Html.Partial("~/Views/Becarios/Partials/Edit/EnProceso.cshtml", Model.BecarioObservaciones)
+    }
+
+    if ((estadoMostrar != (int)TipoEstadoBecarioEnum.Inicio && estadoMostrar != (int)TipoEstadoBecarioEnum.En_Proceso && estadoMostrar != (int)TipoEstadoBecarioEnum.Descartado && estadoMostrar != (int)TipoEstadoBecarioEnum.Stand_By) ||
+        (estadoMostrar == (int)TipoEstadoBecarioEnum.Stand_By && estadoAnteriorStandBy != 0 && estadoAnteriorStandBy != (int)TipoEstadoBecarioEnum.Inicio))
+    {
+        Model.AccessAsignacion = "BecarioSeleccion.BecarioAsignacion.";
+        Model.AccessGestion = "BecarioSeleccion.BecarioGestionDocumental.";
+        Model.AccessSeleccion = "BecarioSeleccion.";
+
+        @Edit.Hidden("guardar", "SubmitType")
+        @Edit.Hidden(Model.BecarioId ?? null, "BecarioId")
+
+        @Html.Partial("~/Views/Becarios/Partials/Edit/GestionDocumental.cshtml", Model.BecarioSeleccion)
+        @Html.Partial("~/Views/Becarios/Partials/Edit/Asignacion.cshtml", Model.BecarioSeleccion)
+    }
+
+    if (estadoMostrar != (int)TipoEstadoBecarioEnum.Inicio && estadoMostrar != (int)TipoEstadoBecarioEnum.Stand_By
+        && estadoMostrar != (int)TipoEstadoBecarioEnum.En_Proceso && estadoMostrar != (int)TipoEstadoBecarioEnum.Seleccionado
+        && estadoMostrar != (int)TipoEstadoBecarioEnum.Descartado && estadoMostrar != (int)TipoEstadoBecarioEnum.Practicas)
+    {
+        Model.AccessPracticas = "BecarioDatosPracticas.";
+        @Html.Partial("~/Views/Becarios/Partials/Edit/Practicas.cshtml", Model.BecarioDatosPracticas)
+    }
+
+    if (Model.BecarioDatosBasicos.EstadoBecarioId == (int)TipoEstadoBecarioEnum.Renuncia)
+    {
+        @Html.Partial("~/Views/Becarios/Partials/Edit/DatosRenuncia.cshtml", Model)
+    }
+}
+
+@Html.Partial("~/Views/Becarios/Modals/_ModalBusquedaCentro.cshtml")
+@Html.Partial("~/Views/Becarios/Modals/_ModalBusquedaConvocatoria.cshtml")
+@Html.Partial("~/Views/Becarios/Modals/_ModalCrearEditCentros.cshtml")
+@Html.Partial("~/Views/Becarios/Modals/_ModalCrearEditConvocatorias.cshtml")
+
+@section scripts{
+    @BecariosFrontActions.MenuFrontActions()
+    @BecariosFrontActions.DatosBasicosFrontActions(Url)
+    @BecariosFrontActions.EnProcesoPartialFrontActions(Model.AccessObservaciones)
+    @BecariosFrontActions.GestionAsignacionPartialFrontActions(Url)
+    @BecariosFrontActions.EditFrontActions(Model.AccessObservaciones, estadoMostrar)
+    @BecariosFrontActions.ForTable()
+}
+

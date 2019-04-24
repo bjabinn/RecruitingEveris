@@ -1,0 +1,126 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{2AF84FC4-A406-43F1-B248-EA8B674CFF1D}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Recruiting.SendMailsService</RootNamespace>
+    <AssemblyName>Recruiting.SendMailsService</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Correos\Mappers\CorreoBecarioMapper.cs" />
+    <Compile Include="Correos\Mappers\CorreoMapper.cs" />
+    <Compile Include="Correos\Mappers\CorreoPlantillaMapper.cs" />
+    <Compile Include="Correos\Mappers\CorreoPlantillaVariableMapper.cs" />
+    <Compile Include="Correos\Messages\GetCorreoByBecarioPlantillaResponse.cs" />
+    <Compile Include="Correos\Messages\GetCorreosBecarioPendientesEnvioResponse.cs" />
+    <Compile Include="Correos\Messages\GetTextoFormateadoMeetingResponse.cs" />
+    <Compile Include="Correos\Messages\GetCorreoByCandidaturaPlantillaResponse.cs" />
+    <Compile Include="Correos\Messages\GetCorreoByIdResponse.cs" />
+    <Compile Include="Correos\Messages\GetCorreosPendientesEnvioResponse.cs" />
+    <Compile Include="Correos\Messages\EnviarNotificacionesCandidaturasResponse.cs" />
+    <Compile Include="Correos\Messages\GetCorreosResponse.cs" />
+    <Compile Include="Correos\Messages\GetPlantillaCorreoByPlantillaIdResponse.cs" />
+    <Compile Include="Correos\Messages\GetPlantillaCorreoByNombreCentroIdResponse.cs" />
+    <Compile Include="Correos\Messages\GetPlantillaCorreoByIdResponse.cs" />
+    <Compile Include="Correos\Messages\GetPlantillaIdByNombrePlantillaResponse  .cs" />
+    <Compile Include="Correos\Messages\GetValorDefectoNombreVariablePlantillaCorreoResponse.cs" />
+    <Compile Include="Correos\Messages\SaveCorreoResponse.cs" />
+    <Compile Include="Correos\Services\CorreoPlantillaService.cs" />
+    <Compile Include="Correos\Services\CorreoPlantillaVariableService.cs" />
+    <Compile Include="Correos\Services\CorreoBecarioService.cs" />
+    <Compile Include="Correos\Services\CorreoService.cs" />
+    <Compile Include="Correos\Services\ICorreoPlantillaService.cs" />
+    <Compile Include="Correos\Services\ICorreoPlantillaVariableService.cs" />
+    <Compile Include="Correos\Services\ICorreoBecarioService.cs" />
+    <Compile Include="Correos\Services\ICorreoService.cs" />
+    <Compile Include="Correos\ViewModels\CorreoPlantillaRowViewModel.cs" />
+    <Compile Include="Correos\ViewModels\CorreoPlantillaVariableRowViewModel.cs" />
+    <Compile Include="Correos\ViewModels\CorreoBecarioRowViewModel.cs" />
+    <Compile Include="Correos\ViewModels\CorreoRowViewModel.cs" />
+    <Compile Include="Correos\Enums\NombresVariablesPlantillaCorreoEnum.cs" />
+    <Compile Include="Correos\Enums\SchedulerExecutionResultEnum.cs" />
+    <Compile Include="Correos\Enums\TipoPlantillaCorreoEnum.cs" />
+    <Compile Include="ISendMailsBecarioService.cs" />
+    <Compile Include="ISendMailsPlaningBatchService.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SendMailsBecarioService.cs" />
+    <Compile Include="SendMailsPlaningBatchService.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Recruiting.Application\Recruiting.Application.csproj">
+      <Project>{9500862e-e4e5-4b8c-82a3-2939449d1853}</Project>
+      <Name>Recruiting.Application</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Recruiting.Business\Recruiting.Business.csproj">
+      <Project>{2994b963-0181-4a1f-bb84-fde37e46d920}</Project>
+      <Name>Recruiting.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Recruiting.Data\Recruiting.Data.csproj">
+      <Project>{b2d0f6ac-a65c-4c5e-a093-8e644d93b5a9}</Project>
+      <Name>Recruiting.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Recruiting.Infra\Recruiting.Infra.csproj">
+      <Project>{b32595b8-4298-416e-89d2-d255710c6a33}</Project>
+      <Name>Recruiting.Infra</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

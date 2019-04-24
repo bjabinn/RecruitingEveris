@@ -1,0 +1,48 @@
+﻿@using RecruitingWeb.Components.DataTable.Helpers
+@using RecruitingWeb.Helpers
+@using Recruiting.Application.CandidaturasOfertas.ViewModels
+@using RecruitingWeb.Properties
+
+<div class="modal fade" id="modalCrearEditOfertas">
+    <div class="modal-dialog modalBusquedaDialogo">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="row">
+                    <div class="col-lg-6 text-left">
+                        <h4 class="modal-title tituloModal">
+                            @Resources.HTML_Candidaturas_ModalCrearEditOfertas_Oferta
+                        </h4>
+                    </div>
+                    <div class="col-lg-6 text-right">
+                        <button type="button" class="btnCloseModal" data-dismiss="modal">@Display.GlyphiconButton("glyphicon-remove")</button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body">
+                @Edit.Hidden("", "IdOfertaCrearEdit")
+
+                <div class="form-filter filtroModal" id="form-filterCrearOferta">
+                    <!-- Start form-filter  -->
+                    <div class="row botoneraModal">
+                    </div>
+                    <div class="row" data-id="formFilter">
+                        <div class="col-lg-12 noPadding">
+                            <div class="row">
+                                <div class="form-group col-lg-6">
+                                    <label class="col-lg-4">@Resources.HTML_Candidaturas_ModalCrearOfertas_Nombre</label>
+                                    <div class="col-lg-8">
+                                        @Edit.Text("", "NombreOfertaCrearEdit", required: true, htmlClass: "form-control", id: "NombreOfertaCrearEdit")
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> <!-- End form-filter  -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" id="BtnCrearEditOferta">@Resources.Boton_Aceptar</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

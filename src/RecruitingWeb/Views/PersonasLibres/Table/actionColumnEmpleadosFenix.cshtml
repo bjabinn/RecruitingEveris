@@ -1,0 +1,48 @@
+@using RecruitingWeb.Properties
+
+@model Recruiting.Application.PersonasLibres.ViewModels.EmpleadoFenixRowViewModel
+
+   
+@Edit.Text(Model.NroEmpleado.ToString(), "PersonaLibreRowViewModelList[{0}].NroEmpleado", id: "NroEmpleado", htmlClass: "form-control hide")
+@Edit.Text(Model.Nombre, "PersonaLibreRowViewModelList[{0}].Nombre", id: "Nombre", htmlClass: "form-control hide")
+@Edit.Text(Model.Apellidos, "PersonaLibreRowViewModelList[{0}].Apellidos", id: "Apellidos", htmlClass: "form-control hide")
+@Edit.Text(Model.Categoria, "PersonaLibreRowViewModelList[{0}].Categoria", id: "Categoria", htmlClass: "form-control hide")
+@Edit.Text(Model.Linea, "PersonaLibreRowViewModelList[{0}].Linea", id: "Linea", htmlClass: "form-control hide")
+@Edit.Text(Model.Celda, "PersonaLibreRowViewModelList[{0}].Celda", id: "Celda", htmlClass: "form-control hide")
+@Edit.Text(null, "PersonaLibreRowViewModelList[{0}].NecesidadId", id: "NecesidadId", htmlClass: "form-control hide", required: false)
+
+<a title="@Resources.HTML_Title_Aniadir"
+    id="AddButton"
+    @getClassAddDisabled("", !(bool)TempData["Crear/Modificar Personas Libres"])>
+    @Edit.Checkbox(false, "PersonaLibreRowViewModelList[{0}].isChecked", Model.NroEmpleado.ToString(), htmlClass: "padding-top-cero")
+</a>
+
+@helper getDisabledAttribute(bool disabled)
+{
+if (disabled)
+{
+        @(new MvcHtmlString("disabled=\"disabled\""))
+}
+else
+{
+        @(new MvcHtmlString(""))
+}
+}
+
+@helper getDataDisabledAttribute(bool disabled)
+{
+if (disabled)
+{
+        @(new MvcHtmlString("data-disabled=\"true\""))
+}
+else
+{
+        @(new MvcHtmlString(""))
+}
+}
+
+@helper getClassAddDisabled(string htmlClass, bool disabled)
+{
+var allClass = string.Format("class=\"{0} {1}\"", htmlClass, disabled ? "disabled" : "");
+    @(new MvcHtmlString(allClass))
+}

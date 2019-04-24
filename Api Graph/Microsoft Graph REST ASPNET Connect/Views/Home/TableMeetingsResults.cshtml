@@ -1,0 +1,86 @@
+﻿@model IEnumerable<Microsoft_Graph_REST_ASPNET_Connect.Models.FindMeetingTimesRowViewModel>
+
+<br />
+<p>
+    Find Meeting Time - Table Results
+</p>
+@using (Html.BeginForm("GetFechaLocationMeeting", "Home", FormMethod.Post, new { id = "getSalaFechaForm" }))
+{
+    <div class="form-group">
+        <table class="table">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Fecha)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Salas)
+                </th>
+                <th>Elegir</th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr >
+                    <td name="Fecha" >
+                        @Html.DisplayFor(model => item.Fecha)
+                        @Html.HiddenFor(model => item.Fecha, new { @id = "fechaMeeting" })
+                    </td>
+                    <td>
+                        @Html.DropDownList("Salas",
+          new List<SelectListItem> {
+                            new SelectListItem { Value = "INTELLIGENCE@everis.com" , Text = "ROOM-LIS-AtriumSaldanha-7-4-INTELLIGENCE@everis.com" },
+                            new SelectListItem { Value = "COLABORACAO@everis.com" , Text = "ROOM-LIS-AtriumSaldanha-7-7-COLABORACAO@everis.com" },
+                            new SelectListItem { Value = "BUSSINESS@everis.com" , Text = "ROOM-LIS-AtriumSaldanha-7-10-BUSSINESS - BUSSINESS@everis.com" },
+
+                         },
+     new { @class = "myselect", @id = "salasMeeting" })
+                    </td>
+                    <td >
+                        @Html.RadioButton("Elegir", item.Fecha.ToString(), new { id = "radioButton" })
+
+                    </td>
+                </tr>
+            }
+
+        </table>
+    </div>
+<div>
+    <button class="btn btn-default" id="submitButton"> Select Date and Room</button>
+</div>
+}
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript">
+     
+    //var dataToSent = {};
+    //function getValuesFromRowTable() {
+    //    var fechaMeeting = $("#fechaMeeting").val();
+    //    var salaMeeting = $("#salasMeeting").val();
+
+    //    dataToSent = {
+    //        fecha: fechaMeeting,
+    //        salaMeeting : salaMeeting
+    //    }
+    //}
+        
+        //var form = $("#getSalaFechaForm").serialize();
+
+
+    $(document).on('click', '#submitButton', function () {
+
+        var fechaMeeting = $("#fechaMeeting").val();
+        //var fechaMeeting = "17-11-2017 18:02:28";
+        var salaMeeting = $("#salasMeeting").val();
+
+        $.ajax({
+            url: '@Url.Action("GetFechaLocationMeeting", "Home")',
+            type: GET,
+            data: {
+                fecha : fechaMeeting,
+                salaMeeting : salaMeeting
+            },              
+        });
+           
+    });
+
+</script>

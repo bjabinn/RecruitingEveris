@@ -1,0 +1,48 @@
+﻿@using RecruitingWeb.Helpers
+@using RecruitingWeb.Components.Searchable
+@using RecruitingWeb.Properties
+
+<div class="modal fade" id="modalEleccionCO">
+    <div class="modal-dialog modalEleccion">
+        <div class="modal-content tablaCandidaturasCO">
+            <div class="modal-header">
+                <div class="row">
+                    <div class="col-lg-6 text-left">
+                        <h4 class="modal-title tituloModal">
+                            <div id="cabeceraEleccion">
+                                @Resources.HTML_Candidaturas_Elegir_Plantilla_CO
+                            </div>
+                        </h4>
+                    </div>
+                    <div class="col-lg-6 text-right">
+                        <button type="button" class="btnCloseModal" data-dismiss="modal">@Display.GlyphiconButton("glyphicon-remove")</button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body">
+                @Html.Hidden("candidaturaIdHidden")
+                <div class="row">
+                    <div class="col-lg-12 title-form">
+                        <label for="EleccionCO">@Resources.HTML_Candidaturas_ModalEleccion_CO</label>
+                    </div>
+                    <div class="hidden col-lg-6 title-form">
+                        <label for="EleccionCO">@Resources.HTML_Candidaturas_ModalEleccion_Oficina</label>
+                    </div>
+                    <div class="col-lg-6 ">
+                        @Edit.DropDownExtend("", "EleccionOficina", null, htmlClass: "hidden form-control", validate: true, required: true)
+                    </div>
+                    <div class="col-lg-12">
+                        @Edit.DropDownExtend("", "EleccionCO", null, htmlClass: "form-control", validate: true, required: true)
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <button type="button" class="btn btn-default" id="btnGenerarCartaOferta">@Resources.Boton_Aceptar</button>
+                    </div>
+                </div>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

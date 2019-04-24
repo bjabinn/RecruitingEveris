@@ -1,0 +1,63 @@
+﻿@using RecruitingWeb.Properties
+@using Recruiting.Application.Candidaturas.Enums;
+
+@model Recruiting.Application.Candidaturas.ViewModel.ResultadoPrimeraEntrevista
+@{
+    var expRegularDecimal = System.Configuration.ConfigurationManager.AppSettings["expRegularDecimal"];
+}
+
+<div class="row form-row">
+    <div class="form-group col-lg-4">
+        <div class="col-lg-12 title-form">
+            <label for="subidoTS">@Resources.HTML_Candidaturas_ResultadoPrimeraEntrevista_SubidaTest</label>
+        </div>
+
+        @if (Model.NombreTS == null)
+        {
+            <div class="col-lg-12">
+                @Edit.InputFileDig(false, false, "archivoTest", Model.NombreTS, false)
+            </div>
+        }
+        else
+        {
+            <div class="col-lg-12">
+                @Edit.InputFileDig(false, false, "archivoTest", Model.NombreTS, true, "DescargarTest", "DescargarTest")
+            </div>
+        }
+
+    </div>
+</div>
+<div class="row form-row">
+    <div class="form-group col-lg-4">
+        <div class="col-lg-4">
+            <label>@Resources.HTML_Candidaturas_ResultadoPrimeraEntrevista_SuperaPrimeraEntrevista</label>
+        </div>
+        <div class="col-lg-8">
+            @Edit.CheckBoxTri("TriStatus", (int)TipoDecisionEnum.SUPERA_PRIMERA_ENTREVISTA, (int)TipoDecisionEnum.NO_SUPERA_PRIMERA_ENTREVISTA, (int)TipoDecisionEnum.SIN_DECIDIR_PRIMERA_ENTREVISTA, (Model.SuperaEntrevistaId != null) ? Model.SuperaEntrevistaId.Value : (int)TipoDecisionEnum.SIN_DECIDIR_PRIMERA_ENTREVISTA)
+            @Edit.Hidden(Model.SuperaEntrevistaId, Model.AccessResultado + "SuperaEntrevistaId")
+        </div>
+    </div>
+    <div id="MotivoPrimeraEntrevistaRegion">
+        <div class="form-group col-lg-4">
+            <div class="col-lg-5 title-form">
+                <label for="AvisarAlCandidato">@Resources.HTML_Candidaturas_FeedbackPrimeraEntrevista_NotificarDescarteCandidato</label>
+            </div>
+            <div class="col-lg-7">
+                @Edit.CheckBoxDig(value: Model.NotificarDescarte, name: Model.AccessResultado + "NotificarDescarte", id: "NotificarDescarte", required: false, disabled: false)
+            </div>
+        </div>
+        <div class="form-group col-lg-4">
+            <div class="col-lg-12 title-form">
+                <label for="MotivoId">@Resources.HTML_Candidaturas_ResultadoPrimeraEntrevista_Motivo</label>
+            </div>
+            <div class="col-lg-12">
+                @Edit.DropDownExtend(Model.MotivoId, Model.AccessResultado + "MotivoId", Model.MotivoDescarteList, htmlClass: "form-control", id: "MotivoPrimeraEntrevistaId")
+            </div>
+        </div>
+    </div>
+</div>
+@Html.Hidden("PrimeraEntrevistaViewModel.ResultadoPrimeraEntrevista.Completada")
+
+
+
+

@@ -1,0 +1,29 @@
+@using RecruitingWeb.Properties
+@using Recruiting.Application.Maestros.Enums
+
+@model Recruiting.Application.Necesidades.ViewModels.StaffingNecesidadRowViewModel
+
+@{    
+    var perfil = Model.PersonaAsignadaId == null ? "" : Model.Perfil;
+    var tipoPersonaId = Model.TipoContratacionId != (int)TipoContratacionEnum.CambioInterno ?
+                        (int)TipoPersonaEnum.Candidatura : (int)TipoPersonaEnum.PersonaLibre;
+    var tipoPersona = Model.PersonaAsignadaId == null ? "" :  tipoPersonaId == (int)TipoPersonaEnum.Candidatura ? Resources.HTML_Necesidades_StaffingNecesidades_Candidatura : Resources.HTML_Necesidades_StaffingNecesidades_PersonaLibre;
+}
+
+<div>
+    <tr role="row" class="odd ui-draggable ui-droppable">
+        <td class="sorting_1">@Model.PersonaAsignadaId</td>
+        <td>@Model.PersonaAsignada</td>
+        <td>@perfil</td>
+        <td>@tipoPersona</td>
+        <td>
+            <div>
+                <input name="PersonaAsignadaId" type="text" value="@Model.PersonaAsignadaId" data-validate="true" id="PersonaAsignadaId" required="required" class="form-control hide">
+
+                <input name="TipoPersonaId" type="text" value="@tipoPersonaId" data-validate="true" id="TipoPersonaId" required="required" class="form-control hide">
+
+            </div>
+        </td>
+    </tr>
+
+</div>

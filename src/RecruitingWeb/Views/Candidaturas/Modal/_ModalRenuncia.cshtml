@@ -1,0 +1,73 @@
+﻿@using RecruitingWeb.Helpers
+@using RecruitingWeb.Components.Searchable
+@using RecruitingWeb.Properties
+
+<div class="modal fade" id="modalRenunciaDescarte">
+    <div class="modal-dialog modalRenuncia">
+        <div class="modal-content tablaCandidaturasRenuncia">
+            <div class="modal-header">
+                <div class="row">
+                    <div class="col-lg-6 text-left">
+                        <h4 class="modal-title tituloModal">
+                            <div id="cabeceraRenuncia">
+                                @Resources.HTML_Candidaturas_ModalRenuncia_MotivoRenuncia
+                            </div>
+                            <div class="hidden" id="cabeceraDescarte">
+                                @Resources.HTML_Candidaturas_ModalRenuncia_CabeceraDescarte
+                            </div>
+                        </h4>
+                    </div>
+                    <div class="col-lg-6 text-right">
+                        <button type="button" class="btnCloseModal" data-dismiss="modal">@Display.GlyphiconButton("glyphicon-remove")</button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body">
+                @Html.Hidden("candidaturaIdHidden")
+                <div id="tituloRenuncia">
+                    <p>@Resources.HTML_Candidaturas_ModalRenuncia_SeguroRenunciar</p>
+                </div>
+                <div class="hidden" id="tituloDescarte">
+                    <p>@Resources.HTML_Candidaturas_ModalRenuncia_SeguroDescartar</p>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12 title-form">
+                        <label for="ComentariosRenunciaDescarte">@Resources.HTML_Candidaturas_ModalRenuncia_Comentarios</label>
+                    </div>
+                </div>
+
+                @Edit.TextArea("", "ComentariosRenunciaDescarte", id: "ComentariosRenunciaDescarte", rows: 5, required: false, htmlClass: "form-control")
+
+            </div>
+            <div class="modal-footer">
+                <div class="row">
+                    <div class="col-lg-9 texto-renuncia">
+                        <div class="col-lg-4" id="RenunciaDescarteDiv">
+                            <label class="radio-inline">
+                                @Edit.RadioButton(true.ToString(), "RenunciaDescarteRadio", id: "RenunciaRadio", label: "Renuncia", isChecked: true, validate: false)
+                            </label>
+                            <label class="radio-inline">
+                                @Edit.RadioButton(false.ToString(), "RenunciaDescarteRadio", id: "DescarteRadio", label: "Descarte", validate: false)
+                            </label>
+                        </div>
+                        <div class="col-lg-4">
+                            <div id="seleccionMotivoRenuncia">
+                                @Resources.HTML_Candidaturas_ModalRenuncia_SeleccionarMotivoRenuncia
+                            </div>
+                            <div class="hidden" id="seleccionMotivoDescarte">
+                                @Resources.HTML_Candidaturas_ModalRenuncia_SeleccionarMotivoDescarte
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            @Edit.DropDownExtend("", "TipoRenuncia", Model.MotivoRenunciaList, htmlClass: "", validate: true, required: true)
+                            @Edit.DropDownExtend("", "TipoDescarte", Model.MotivoDescarteList, htmlClass: "hidden", validate: true, required: true)
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <button type="button" class="btn btn-default" id="BtnRenunciar">@Resources.Boton_Aceptar</button>
+                    </div>
+                </div>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

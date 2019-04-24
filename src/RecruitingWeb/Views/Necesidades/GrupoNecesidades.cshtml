@@ -1,0 +1,160 @@
+﻿@using System.Configuration
+
+@using RecruitingWeb.Helpers
+@using RecruitingWeb.Components.DataTable.Helpers
+@using RecruitingWeb.Properties
+
+@using Recruiting.Application.Usuarios.ViewModels
+@using Recruiting.Application.Necesidades.ViewModels
+
+@model RecruitingWeb.Models.FiltroGrupoNecesidadesModels
+
+@{
+    var tiempoExpiracionCookie = ConfigurationManager.AppSettings["tiempoExpiracion"].ToString();
+    var usuarioViewModel = (UsuarioRolPermisoViewModel)HttpContext.Current.Session["Usuario"];
+    var nUsuario = usuarioViewModel.UserName;
+}
+
+@Html.ScriptBlock(
+    @<script type="text/javascript">
+         registerCallback(function () {
+             var originalFilter = getFiltersGruposNecesidades();
+             var filter = GetFilterForSearchableTable(originalFilter);
+             $('#tablaGruposNecesidades').data("filters", filter);
+         });
+    </script>
+                )
+
+<div class="row titlePage">
+    <div class="col-lg-6">
+        <h3>@Resources.HTML_Necesidades_GrupoNecesidades_GestionGrupoNecesidades</h3>
+    </div>
+</div>
+<div class="row">
+    <a href="@Url.Action("Volver", "Necesidades")" class="btn btn-default" style="float:right;margin-bottom:10px;">
+        <span class="text">@Resources.HTML_BotonGenericoVolver</span>
+    </a>
+    <div class="col-lg-6 removePadding">
+        <h4 class="noMargin headerBox">@Resources.HTML_Necesidades_GrupoNecesidades_Filtro</h4>
+    </div>
+</div>
+<div class="row">
+    <div class="content-box border-top-cero">        
+        <div class="content-box-content" id="form-filter">            
+            <div class="row">
+                <div class="form-group col-lg-4">
+                    <div class="col-lg-12 title-form">
+                        <label for="filterGrupoNecesidadId">@Resources.HTML_Necesidades_GrupoNecesidades_IdGrupoNecesidades</label>
+                    </div>
+                    <div class="col-lg-12">
+                        @Edit.Number(Model.GrupoNecesidadId, "filterGrupoNecesidadId", id: "filterGrupoNecesidadId", validate: false,minValue:"1", required: true, htmlClass: "form-control")
+                    </div>
+                </div>
+                <div class="form-group col-lg-4">
+                    <div class="col-lg-12 title-form">
+                        <label for="filterNombreGrupoNecesidad">@Resources.HTML_Necesidades_GrupoNecesidades_NombreGrupoNecesidades</label>
+                    </div>
+                    <div class="col-lg-12">
+                        @Edit.Text(Model.GrupoNecesidadNombre, "filterNombreGrupoNecesidad", id: "filterNombreGrupoNecesidad", validate: false, required: true, htmlClass: "form-control")
+                    </div>
+                </div>
+                @if (Model.CentroIdUsuarioLogueado.ToString() == string.Empty)
+                {
+                    <div class="form-group col-lg-4">
+                        <div class="col-lg-12 title-form">
+                            <label for="CentroId">@Resources.HTML_Necesidades_Index_Centro</label>
+                        </div>
+                        <div class="col-lg-12">
+                            @Edit.DropDownExtend(Model.Centro, "filterCentro", Model.CentroList, htmlClass: "form-control col-md-4", validate: false, required: false, id: "filterCentro")
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="row">
+                <div class="form-group col-lg-4">
+                    <div class="col-lg-12 title-form">
+                        <label for="filterCliente">@Resources.HTML_Necesidades_GrupoNecesidades_Cliente</label>
+                    </div>
+                    <div class="col-lg-12">
+                        @Edit.DropDownExtend(Model.Cliente, "filterCliente", Model.ClienteList, htmlClass: "form-control col-md-4", validate: false, required: false, id: "filterCliente")
+                    </div>
+                </div>
+                <div class="form-group col-lg-4">
+                    <div class="col-lg-12 title-form">
+                        <label for="filterProyecto">@Resources.HTML_Necesidades_GrupoNecesidades_Proyecto</label>
+                    </div>
+                    <div class="col-lg-12">
+                        @Edit.DropDownExtend(Model.Proyecto, "filterProyecto", Model.ProyectoList, htmlClass: "form-control col-md-4", validate: false, required: false, id: "filterProyecto")
+                    </div>
+                </div>
+                <div class="form-group col-lg-4">
+                    <div class="col-lg-12 title-form">
+                        <label for="filterEstadoGrupoNecesidad">@Resources.HTML_Necesidades_GrupoNecesidades_EstadoGrupoNecesidades</label>
+                    </div>
+                    <div class="col-lg-12">
+                        @Edit.DropDownExtend((Model.EstadoGrupoNecesidad.HasValue) ? Model.EstadoGrupoNecesidad.ToString() : false.ToString(), "filterEstadoGrupoNecesidad"
+                                                                                                            , (new[] { new SelectListItem { Text = Resources.HTML_Necesidades_GrupoNecesidades_EstadoAbierto, Value = false.ToString() },
+                                                                                                            new SelectListItem { Text = Resources.HTML_Necesidades_GrupoNecesidades_EstadoCerrado, Value = true.ToString() } })
+                                                                                                                , htmlClass: "form-control col-md-4", validate: false, required: false, id: "filterEstadoGrupoNecesidad")
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12" style="text-align:right;">
+                    <div class="btn-group" role="group" aria-label="...">
+                        <button name="limpiar" id="limpiar" type="button" class="btn btn-default">@Resources.HTML_BotonGenericoLimpiar</button>
+                        <button name="buscar" type="button" class="btn btn-default">@Resources.HTML_BotonGenericoBuscar</button>
+                    </div>
+                </div>
+            </div>
+        </div> <!-- End .content-box-content #form-filter  -->
+    </div> <!-- End .content-box -->
+</div> <!-- End .row -->
+<div id="tabla" name="tabla">
+    <div class="content-box">
+        <div class="content-box-content">
+            <div class="row">
+                <div class="col-lg-12" style="text-align:right; padding-bottom: 10px;">
+                    <span id="btnDescargarExcel" class="icon icon-excel"></span>
+                </div>
+                <div class="col-lg-12">
+                    @{
+                        int pagina = ViewBag.Pagina ?? 0;
+                        var config = Html.InitializeDataTable<GrupoNecesidadesRowViewModel>();
+                        int nElem = Convert.ToUInt16(Resources.NElementosPagina);
+                        config.Name("tablaGruposNecesidades")
+                            .AjaxLoadUrl(Url.Action("LoadGrupoNecesidades", "Necesidades"))
+                            .CustomFilterAjax("getFiltersGruposNecesidades")
+                            .PrimaryKey(m => m.ToString())
+                            .AddPrimaryKeyToName(false)
+                            .Paginable()
+                            .PageSize(nElem)
+                            .InitialPage(pagina)
+                            .Columns(columns =>
+                            {
+                                columns.Bound(c => c.GrupoNecesidadId).Header(Resources.HTML_Necesidades_GrupoNecesidades_IdGrupoNecesidadesHeader).ColumnName("GrupoNecesidadId").Orderable(true);
+                                columns.Bound(c => c.NombreGrupo).Header(Resources.HTML_Necesidades_GrupoNecesidades_NombreGrupoNecesidadesHeader).ColumnName("NombreGrupoNecesidad").Orderable(false);
+                                columns.Bound(c => c.NombreCliente).Header(Resources.HTML_Necesidades_GrupoNecesidades_ClienteHeader).ColumnName("Cliente").Orderable(false);
+                                columns.Bound(c => c.NombreProyecto).Header(Resources.HTML_Necesidades_GrupoNecesidades_ProyectoHeader).ColumnName("Proyecto").Orderable(false);
+                                columns.Bound(c => c.EstadoGrupo).Header(Resources.HTML_Necesidades_GrupoNecesidades_EstadoGrupoNecesidadesHeader).ColumnName("Estado").Orderable(false);
+                                columns.Bound(c => c.NecesidadesAsignadas).Header(Resources.HTML_Necesidades_GrupoNecesidades_NecesidadesAsignadasHeader).ColumnName("NecesidadesAsignadas").Orderable(false);
+                                columns.Bound(c => c.NecesidadesAbiertas).Header(Resources.HTML_Necesidades_GrupoNecesidades_NumeroNecesidadesAbiertas).ColumnName("NecesidadesAbiertas").Orderable(false);
+                                columns.Bound(c => c.NecesidadesPreasignadas).Header(Resources.HTML_Necesidades_GrupoNecesidades_NumeroNecesidadesPreasignadas).ColumnName("NecesidadesPreasignadas").Orderable(false);
+                                columns.Bound(c => c.NecesidadesCerradas).Header(Resources.HTML_Necesidades_GrupoNecesidades_NumeroNecesidadesCerradas).ColumnName("NecesidadesCerradas").Orderable(false);
+                                columns.Template(@<div></div>).Header(Resources.HTML_Necesidades_Index_AccionesHeader);
+                            });
+
+@Html.Partial("Controls/DataTable", config)
+<div class="paginacionIn">
+    <p>@Resources.HTML_Necesidades_Index_TotalNecesidades <span id="tempdataGruposNecesidades" class="tempdataTotalRegistros"></span></p>
+</div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div> <!-- End content-box-content -->
+</div> <!-- End .content-box -->
+@section scripts{
+    @GrupoNecesidadesFrontActions.MenuFrontActions()
+    @GrupoNecesidadesFrontActions.IndexFrontActions(Url, nUsuario, tiempoExpiracionCookie)
+}

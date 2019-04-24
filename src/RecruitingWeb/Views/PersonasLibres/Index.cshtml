@@ -1,0 +1,244 @@
+﻿@using System.Configuration
+
+@using RecruitingWeb.Helpers
+@using RecruitingWeb.Properties
+@using RecruitingWeb.Components.DataTable.Helpers
+
+@using Recruiting.Application.Roles.Enums
+@using Recruiting.Application.Usuarios.ViewModels
+@using Recruiting.Application.PersonasLibres.ViewModels
+
+@model RecruitingWeb.Models.FiltroPersonaLibreModels
+@{
+    var tiempoExpiracionCookie = ConfigurationManager.AppSettings["tiempoExpiracion"].ToString();
+    var usuarioViewModel = (UsuarioRolPermisoViewModel)HttpContext.Current.Session["Usuario"];
+    var nUsuario = usuarioViewModel.UserName;
+    var categoriaLineaCelda = (PersonasLibresListCategoriaLineaCeldaviewModel)HttpContext.Current.Session["CategoriaLineaCelda"];
+
+    var ListadoPermisos = (Dictionary<int, string>)HttpContext.Current.Session["Permisos"];
+    
+    if (ListadoPermisos == null)
+    {
+        var permisos = new Dictionary<int, string>();
+
+        foreach (var rol in usuarioViewModel.UsuarioRol)
+        {
+            foreach (var permiso in rol.PermisoRol)
+            {
+                if (!permisos.ContainsKey(permiso.PermisoId))
+                {
+                    permisos.Add(permiso.PermisoId, permiso.PermisoNombre);
+                }
+            }
+        }
+        ListadoPermisos = permisos;
+    }
+
+    var ListadoRoles = (Dictionary<int, string>)HttpContext.Current.Session["Roles"];
+}
+
+@Html.ScriptBlock(
+    @<script type="text/javascript">
+         registerCallback(function () {
+             var originalFilter = getFiltersPersonasLibres();
+             var filter = GetFilterForSearchableTable(originalFilter);
+             $('#tablaPersonasLibres').data("filters", filter);
+         });
+    </script>
+        )
+
+<div class="row titlePage">
+    <div class="col-lg-6">
+        <h3>@Resources.HTML_PersonasLibres_Index_GestionPersonasLibres</h3>
+    </div>
+</div>
+<div class="row header-flap">
+    <div class="btn-group" role="group">
+        <a href="@Url.Action("Create", "PersonasLibres")" class="btn btn-default @(!ListadoPermisos.ContainsKey((int)PermisosRolesEnum.AdminEmpleadosFenix) ? "hide" : "")">
+            <span class="text">@Resources.HTML_PersonasLibres_Index_AniadirPersona</span>
+        </a>
+    </div>
+    <div class="col-lg-6 removePadding">
+        <h4 class="noMargin headerBox">@Resources.HTML_PersonasLibres_Index_Filtro</h4>
+    </div>
+</div>
+<div class="row">
+    <div class="content-box border-top-cero">
+        <div class="content-box-content" id="form-filter">
+            <div class="row" data-id="formFilter">
+                <div class="form-group col-lg-4">
+                    <div class="col-lg-4 title-form">
+                        <label for="NumeroEmpleado">@Resources.HTML_PersonasLibres_Index_NumeroEmpleado</label>
+                    </div>
+                    <div class="col-lg-8">
+                        @Edit.Number(Model.NumeroEmpleado, "filterNumeroEmpleado", id: "filterNumeroEmpleado", required: false, minValue: "1", validate: true, htmlClass: "form-control")
+                    </div>
+                </div>
+                <div class="form-group col-lg-4">
+                    <div class="col-lg-4 title-form">
+                        <label for="filterNombre">@Resources.HTML_PersonasLibres_Index_Nombre</label>
+                    </div>
+                    <div class="col-lg-8">
+                        @Edit.Text(Model.Nombre, "filterNombre", id: "filterNombre", required: false, validate: true, htmlClass: "form-control col-lg-4", maxLength: 500)
+                    </div>
+                </div>
+                <div class="form-group col-lg-4">
+                    <div class="col-lg-4 title-form">
+                        <label for="filterApellidos">@Resources.HTML_PersonasLibres_Index_Apellidos</label>
+                    </div>
+                    <div class="col-lg-8">
+                        @Edit.Text(Model.Apellidos, "filterApellidos", id: "filterApellidos", required: false, validate: true, htmlClass: "form-control col-lg-4", maxLength: 500)
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-lg-4">
+                    <div class="col-lg-4 title-form">
+                        <label for="Categoria">@Resources.HTML_PersonasLibres_Index_Categoria</label>
+                    </div>
+                    <div class="col-lg-8">
+                        @Edit.DropDownExtend(Model.Categoria, "filterCategoria", categoriaLineaCelda.ListCategoria, htmlClass: "form-control col-lg-4", validate: false, required: false, id: "filterCategoria")
+                    </div>
+                </div>
+                <div class="form-group col-lg-4">
+                    <div class="col-lg-4 title-form">
+                        <label for="Tecnologia">@Resources.HTML_PersonasLibres_Index_Tecnologia</label>
+                    </div>
+                    <div class="col-lg-8">
+                        @Edit.DropDownExtend(Model.TipoTecnologiaId, "filterTipoTecnologiaId", Model.TecnologiaList, htmlClass: "form-control col-lg-4", validate: false, required: false, id: "filterTipoTecnologiaId")
+                    </div>
+                </div>
+                <div class="form-group col-lg-4">
+                    <div class="col-lg-4 title-form">
+                        <label for="Linea">@Resources.HTML_PersonasLibres_Index_Linea</label>
+                    </div>
+                    <div class="col-lg-8">
+                        @Edit.DropDownExtend(Model.Linea, "filterLinea", categoriaLineaCelda.ListLinea, htmlClass: "form-control col-lg-4", validate: false, required: false, id: "filterLinea")
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-lg-4">
+                    <div class="col-lg-4 title-form">
+                        <label for="Celda">@Resources.HTML_PersonasLibres_Index_Celda</label>
+                    </div>
+                    <div class="col-lg-8">
+                        @Edit.DropDownExtend(Model.Celda, "filterCelda", categoriaLineaCelda.ListCelda, htmlClass: "form-control col-lg-4", validate: false, required: false, id: "filterCelda")
+                    </div>
+                </div>
+                <div class="form-group col-lg-4">
+                    <div class="col-lg-4 title-form">
+                        <label for="SinNecesidadAsignada">@Resources.HTML_PersonasLibres_Index_NecesidadAsignada</label>
+                    </div>
+                    <div class="col-lg-8">
+                        <select class="form-control" name="filterSinNecesidadAsignada" id="filterSinNecesidadAsignada">
+                            <option value="true" selected>@Resources.HTML_General_No</option>
+                            <option value="false">@Resources.HTML_General_Si</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group col-lg-4">
+                    <div class="col-lg-4 title-form">
+                        <label for="filterNivelIdioma">@Resources.HTML_Candidatos_Index_InglesHeader</label>
+                    </div>
+                    <div class="col-lg-8">
+                        @Edit.DropDownExtend(Model.NivelIdioma, "filterNivelIdioma", Model.NivelIdiomaList, htmlClass: "form-control", validate: false, required: false, id: "filterNivelIdioma")
+                    </div>
+                </div>
+                @if (Model.CentroIdUsuarioLogueado.ToString() == string.Empty)
+                {
+                    <div class="form-group col-lg-4 removePadding">
+                        <div class="col-lg-4 title-form">
+                            <label for="CentroId">@Resources.HTML_PersonasLibres_Index_Centro</label>
+                        </div>
+                        <div class="col-lg-8">
+                            @Edit.DropDownExtend(Model.CentroIdUsuario.ToString(), "filterCentro", Model.CentroList, htmlClass: "form-control col-lg-4", validate: false, required: false, id: "filterCentro")
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="form-group col-lg-4">
+                        <div class="col-lg-4 title-form">
+                        </div>
+                        <div class="col-lg-8">
+                        </div>
+                    </div>
+                }
+            </div>
+            <input id="idPersonaAAsignar" name="idPersonaAAsignar" hidden />
+            <div class="row">
+                <div class="col-lg-12" style="text-align:right;">
+                    <div class="btn-group" role="group" aria-label="...">
+                        <button name="limpiar" id="limpiar" type="button" class="btn btn-default">@Resources.HTML_BotonGenericoLimpiar</button>
+                        <button name="buscar" type="button" class="btn btn-default">@Resources.HTML_BotonGenericoBuscar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="tabla" name="tabla">
+    <div class="content-box">
+        <div class="content-box-content">
+            <div class="row">
+                <div class="col-lg-12" style="text-align:right; padding-bottom: 10px;">
+                    <span id="btnDescargarExcel" class="icon icon-excel"></span>
+                </div>
+                <div class="col-lg-12">
+                    @{
+                        int pagina = Model.Pagina ?? 0;
+                        var config = Html.InitializeDataTable<PersonaLibreRowViewModel>();
+                        int nElem = Convert.ToUInt16(Resources.NElementosPagina);
+                        config.Name("tablaPersonasLibres")
+                        .AjaxLoadUrl(Url.Action("LoadPersonasLibres", "PersonasLibres"))
+                        .CustomFilterAjax("getFiltersPersonasLibres")
+                        .PrimaryKey(m => m.PersonaLibreId.ToString())
+                        .AddPrimaryKeyToName(false)
+                        .Paginable()
+                        .PageSize(nElem)
+                        .InitialPage(pagina)
+                        .Columns(columns =>
+                        {
+                        columns.Bound(c => c.NroEmpleado).Header(Resources.HTML_PersonasLibres_Index_NumeroEmpleadoHeader).ColumnName("NroEmpleado").Orderable(true);
+                        columns.Bound(c => c.Nombre).Header(Resources.HTML_PersonasLibres_Index_NombreHeader).ColumnName("Nombre").Orderable(true);
+                        columns.Bound(c => c.Apellidos).Header(Resources.HTML_PersonasLibres_Index_ApellidosHeader).ColumnName("Apellidos").Orderable(true);
+                        columns.Bound(c => c.Categoria).Header(Resources.HTML_PersonasLibres_Index_CategoriaHeader).ColumnName("Categoria").Orderable(false);
+                        columns.Bound(c => c.Linea).Header(Resources.HTML_PersonasLibres_Index_LineaHeader).ColumnName("Linea").Orderable(true);
+                        columns.Bound(c => c.Celda).Header(Resources.HTML_PersonasLibres_Index_CeldaHeader).ColumnName("Celda").Orderable(true);
+                        columns.Bound(c => c.TipoTecnologiaId).Header(Resources.HTML_PersonasLibres_Index_TecnologiaHeader).ColumnName("TipoTecnologiaId").Orderable(false);
+                        columns.Bound(c => c.NecesidadId).Header(Resources.HTML_PersonasLibres_Index_NecesidadHeader).ColumnName("NecesidadId").Orderable(false);
+                        columns.Bound(c => c.NivelIdioma).Header(Resources.HTML_Candidatos_Index_InglesHeader).ColumnName("NivelIdioma").Orderable(false);
+                        columns.Bound(c => FormatHelper.Format(c.FechaLiberacion, "dd/MM/yyyy")).Header(Resources.HTML_PersonasLibres_Index_FechaLiberacionHeader).ColumnName("FechaLiberacion").Orderable(true);
+
+                        columns.Template(@<div>
+                <a class="glyphicon glyphicon-pencil icon action" title="@Resources.HTML_Title_Editar"></a>
+                <a class="glyphicon glyphicon-trash icon action" title="@Resources.HTML_Title_Eliminar"></a>
+                <a class="glyphicon glyphicon glyphicon-list-alt icon action" title="@Resources.HTML_Title_PersonasLibres"></a>
+            </div>).Header(Resources.HTML_PersonasLibres_Index_AccionesHeader);
+                  });
+
+                @Html.Partial("Controls/DataTable", config)
+
+                <div class="paginacionIn">
+                    <p>@Resources.HTML_PersonasLibres_Index_TotalPersonasLibres <span id="tempdataPersonasLibres" class="tempdataTotalRegistros"></span></p>
+                </div>
+
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@Html.Partial("~/Views/PersonasLibres/Modal/_ModalBusquedaNecesidad.cshtml", Model)
+
+@section scripts{
+
+    @PersonasLibresFrontActions.MenuFrontActions()
+    @PersonasLibresFrontActions.IndexFrontActions(Url, nUsuario, tiempoExpiracionCookie)
+    @PersonasLibresFrontActions.ModalNecesidadesFrontActions(Url)
+}
+
+

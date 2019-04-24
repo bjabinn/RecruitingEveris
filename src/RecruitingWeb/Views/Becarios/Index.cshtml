@@ -1,0 +1,326 @@
+@using RecruitingWeb.Components.DataTable.Helpers
+@using RecruitingWeb.Helpers
+@using RecruitingWeb.Properties
+@using RecruitingWeb.Components.Searchable
+@using Recruiting.Application.Roles.Enums
+@using Recruiting.Application.Usuarios.ViewModels
+@using Recruiting.Application.Becarios.ViewModels
+@using System.Configuration
+
+
+@model RecruitingWeb.Models.FiltroBecarioModels
+
+@{
+    var tiempoExpiracionCookie = ConfigurationManager.AppSettings["tiempoExpiracion"].ToString();
+    var usuarioViewModel = (UsuarioRolPermisoViewModel)HttpContext.Current.Session["Usuario"];
+    var nUsuario = usuarioViewModel.UserName;
+    var estados = "";
+    var gestionDocumentalCompleta = Model.GestionDocumentalCompleta == null ? "" : Model.GestionDocumentalCompleta.ToString();
+
+    if (Model.TipoEstadoBecarioId != null)
+    {
+        foreach (var estado in Model.TipoEstadoBecarioId)
+        {
+            estados = estados + (estado.ToString() + ',');
+        }
+        estados = estados.Remove(estados.Length - 1);
+    }
+
+    var ListadoPermisos = (Dictionary<int, string>)HttpContext.Current.Session["Permisos"];
+
+    if (ListadoPermisos == null)
+    {
+        var permisos = new Dictionary<int, string>();
+
+        foreach (var rol in usuarioViewModel.UsuarioRol)
+        {
+            foreach (var permiso in rol.PermisoRol)
+            {
+                if (!permisos.ContainsKey(permiso.PermisoId))
+                {
+                    permisos.Add(permiso.PermisoId, permiso.PermisoNombre);
+                }
+            }
+        }
+        ListadoPermisos = permisos;
+    }
+
+    var ListadoRoles = (Dictionary<int, string>)HttpContext.Current.Session["Roles"];
+}
+
+@Html.ScriptBlock(
+    @<script type="text/javascript">
+         registerCallback(function () {
+             comprobarCheckBox();
+             var originalFilter = getFiltersBecarios();
+             var filter = GetFilterForSearchableTable(originalFilter);
+             $('#tablaBecarios').data("filters", filter);
+
+         });
+    </script>
+                                                                                                                                                                                )
+
+@*Título de sección*@
+<div class="row titlePage">
+    <div class="col-lg-6">
+        <h3>@Resources.HTML_Becarios_Index_GestionBecarios</h3>
+    </div>
+</div>
+
+<div class="row header-flap">
+    @* Menú de opciones *@
+    <div class="btn-group" role="group">
+        <a href="@Url.Action("Create", "Becarios" )" class="btn btn-default @(!ListadoPermisos.ContainsKey((int)PermisosRolesEnum.AniadirEliminarBecario) ? "hide" : "")">
+            <span class="text">@Resources.HTML_Becarios_Index_AniadirBecario</span>
+        </a>
+    </div>
+    @* Pestaña caja superior*@
+    <div class="col-lg-6 removePadding">
+        <h4 class="noMargin headerBox">@Resources.HTML_Becarios_Index_Filtro</h4>
+    </div>
+</div>
+
+@* Card de contenido #1: Form de filtrado *@
+<div class="row">
+    <div class="content-box border-top-cero">
+        <!-- Start Content Box -->
+        <div class="content-box-content" id="form-filter">
+            <!-- Start form-filter  -->
+            <div class="row" data-id="formFilter">
+                <div class="form-group col-lg-4">
+                    <div class="col-lg-4 title-form">
+                        <label for="filterBecarioId">@Resources.HTML_Becarios_Index_Referencia</label>
+                    </div>
+                    <div class="col-lg-8">
+                        @Edit.Number(Model.BecarioId, name: "filterBecarioId", id: "filterBecarioId", required: false, minValue: "1", validate: true, htmlClass: "form-control")
+                    </div>
+                </div>
+
+                <div class="form-group col-lg-4">
+                    <div class="col-lg-4 title-form">
+                        <label for="filterCandidatoId">@Resources.HTML_Becarios_Index_CandidatoRef</label>
+                    </div>
+                    <div class="col-lg-8">
+                        @Edit.Number(Model.CandidatoId, name: "filterCandidatoId", id: "filterCandidatoId", required: false, minValue: "1", validate: true, htmlClass: "form-control")
+                    </div>
+                </div>
+
+                <div class="form-group col-lg-4">
+                    <div class="col-lg-4 title-form">
+                        <label for="filterNombreBecario">@Resources.HTML_Becarios_Index_NombreBecario</label>
+                    </div>
+                    <div class="col-lg-8">
+                        @Edit.Text(Model.NombreBecario, "filterNombreBecario", id: "filterNombreBecario", required: false, validate: true, htmlClass: "form-control col-lg-4", maxLength: 500)
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="form-group col-lg-4">
+                    <div class="col-lg-4 title-form">
+                        <label for="filterTipoBecarioId">@Resources.HTML_Becarios_Index_TipoBecario</label>
+                    </div>
+                    <div class="col-lg-8">
+                        @Edit.DropDownExtend(Model.TipoBecarioId, "filterTipoBecarioId", Model.TipoBecarioList, htmlClass: "form-control col-lg-4", validate: false, required: false, id: "filterTipoBecarioId")
+                    </div>
+                </div>
+                <div class="form-group col-lg-4">
+                    <div class="col-lg-4 title-form">
+                        <label for="filterTipoEstadoBecarioId">@Resources.HTML_Becarios_Index_TipoEstadoBecario</label>
+                    </div>
+                    <div class="col-lg-8">
+                        @Edit.DropDownExtend(estados, "filterTipoEstadoBecarioId", Model.EstadoBecarioList, htmlClass: "form-control col-md-4", validate: false, multiple: true, required: false, id: "filterTipoEstadoBecarioId")
+                    </div>
+                </div>
+                <div class="form-group col-lg-4">
+                    <div class="col-lg-4 title-form">
+                        <label for="filterBecarioCentroProcedencia">@Resources.HTML_Becarios_Index_CentroProcedencia</label>
+                    </div>
+                    <div class="col-lg-8">
+                        @(Html.Searchable("filterBecarioCentroProcedencia", Url)
+                                                                                                                                                                                .Id("filterBecarioCentroProcedencia")
+                                                                                                                                                                                .AddCssClass("form-control")
+                                                                                                                                                                                .Action("GetCentrosByNombreCentro", "Becarios")
+                                                                                                                                                                                .Value(Model.BecarioCentroProcedencia, hiddenValue: Model.BecarioCentroProcedenciaId.ToString()))
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-lg-4">
+                    <div class="col-lg-4 title-form">
+                        <label for="filterFechaInicio">@Resources.HTML_Becarios_Index_FechaInicioBusqueda</label>
+                    </div>
+                    <div class="col-lg-8">
+                        @Edit.Date(Model.FechaInicio, "filterFechaInicio", id: "filterFechaInicio", validate: false, required: false, htmlClass: "form-control align-left")
+                    </div>
+                </div>
+                <div class="form-group col-lg-4">
+                    <div class="col-lg-4 title-form">
+                        <label for="filterFechaFin">@Resources.HTML_Becarios_Index_FechaFinBusqueda</label>
+                    </div>
+                    <div class="col-lg-8">
+                        @Edit.Date(Model.FechaFin, "filterFechaFin", id: "filterFechaFin", required: false, validate: false, htmlClass: "form-control align-left")
+                    </div>
+                </div>
+                <div class="form-group col-lg-4">
+                    <div class="col-lg-4 title-form">
+                        <label for="filterFechaFinReal">@Resources.HTML_Becarios_Index_FechaFinRealBusqueda</label>
+                    </div>
+                    <div class="col-lg-8">
+                        @Edit.Date(Model.FechaFinReal, "filterFechaFinReal", id: "filterFechaFinReal", required: false, validate: true, htmlClass: "form-control align-left")
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-lg-4">
+                    <div class="col-lg-4 title-form">
+                        <label for="filterClienteId">@Resources.HTML_Becarios_Index_ClienteBusqueda</label>
+                    </div>
+                    <div class="col-lg-8">
+                        @Edit.DropDownExtend(Model.ClienteId, "filterClienteId", Model.ClienteList, htmlClass: "form-control col-md-4", validate: false, required: false, id: "filterClienteId")
+                    </div>
+                </div>
+                <div class="form-group col-lg-4">
+                    <div class="col-lg-4 title-form">
+                        <label for="filterProyecto">@Resources.HTML_Becarios_Index_ProyectoBusqueda</label>
+                    </div>
+                    <div class="col-lg-8">
+                        @Edit.DropDownExtend(Model.ProyectoId, "filterProyectoId", Model.ProyectoList, htmlClass: "form-control col-md-4", validate: false, required: false, id: "filterProyectoId")
+                    </div>
+                </div>
+                <div class="form-group col-lg-4">
+                    <div class="col-lg-4 title-form">
+                        <label for="filterProyecto">@Resources.HTML_Becarios_Index_DecisionFinal</label>
+                    </div>
+                    <div class="col-lg-8">
+                        @Edit.DropDownExtend(Model.TipoDecisionFinalId, "filterTipoDecisionFinalId", Model.TipoDecisionFinalPracticas, htmlClass: "form-control col-md-4", validate: false, required: false, id: "filterTipoDecisionFinalId")
+                    </div>
+                </div>
+            </div>
+            <div class="form-group col-lg-4">
+                <div class="col-lg-4 title-form">
+                    <label for="filterBecarioConvocatoria">@Resources.HTML_Becarios_Index_Convocatoria</label>
+                </div>
+                <div class="col-lg-8">
+                    @(Html.Searchable("filterBecarioConvocatoria", Url)
+                                                                                                            .Id("filterBecarioConvocatoria")
+                                                                                                            .AddCssClass("form-control")
+                                                                                                            .Action("GetConvocatoriasByNombre", "Becarios")
+                                                                                                            .Value(Model.BecarioConvocatoria, hiddenValue: Model.BecarioConvocatoriaId.ToString()))
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-lg-4 removePadding">
+                    <div class="col-lg-4 title-form">
+                        <label for="filterProyecto">@Resources.HTML_Becarios_Index_GestionDocumentalCompleta</label>
+                    </div>
+                    <div class="col-lg-8">
+                        @Edit.DropDownExtend(Model.TipoDecisionFinalId, "GestionDocumentalCompleta", Model.GestionDocumentalList, htmlClass: "form-control col-md-4", validate: false, required: false, id: "GestionDocumentalCompleta")
+                    </div>
+                </div>
+
+
+
+                <div class="form-group col-lg-4">
+                    <div class="col-lg-4 title-form">
+                        <label for="filterNivelIdioma">@Resources.HTML_Becarios_Index_NivelInglesHeader</label>
+                    </div>
+                    <div class="col-lg-8">
+                        @Edit.DropDownExtend(Model.NivelIdioma, "filterNivelIdioma", Model.NivelIdiomaList, htmlClass: "form-control", validate: false, required: false, id: "filterNivelIdioma")
+                    </div>
+                </div>
+                @if (Model.CentroIdUsuarioLogueado.ToString() == string.Empty)
+                {
+                    <div class="form-group col-lg-4">
+                        <div class="col-lg-4 title-form">
+                            <label for="CentroId">@Resources.HTML_Becarios_Index_Centro</label>
+                        </div>
+                        <div class="col-lg-8">
+                            @Edit.DropDownExtend(Model.CentroIdUsuario, "filterCentro", Model.CentroList, htmlClass: "form-control col-lg-4", validate: false, required: false, id: "filterCentro")
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="form-group col-lg-4">
+                        <div class="col-lg-4 title-form">
+                        </div>
+                        <div class="col-lg-8">
+                        </div>
+                    </div>
+                }
+
+            </div>
+            <div class="row">
+                <div class="col-lg-12" style="text-align:right;">
+                    <div class="btn-group" role="group" aria-label="...">
+                        <button name="limpiar" id="limpiar" type="button" class="btn btn-default">@Resources.HTML_BotonGenericoLimpiar</button>
+                        <button name="buscar" type="button" class="btn btn-default">@Resources.HTML_BotonGenericoBuscar</button>
+                    </div>
+                </div>
+            </div>
+        </div> <!-- End .content-box-content #form-filter -->
+    </div> <!-- End .content-box -->
+</div> <!-- End .row -->
+@* Card de contenido #2: Tabla de resultados *@
+<!-- Load Data Becarios  -->
+<div id="tabla" name="tabla">
+    <div class="content-box">
+        <div class="content-box-content">
+            <div class="row">
+                <div class="col-lg-12" style="text-align:right; padding-bottom: 10px;">
+                    <span id="btnDescargarExcel" class="icon icon-excel"></span>
+                </div>
+                <div class="col-lg-12">
+                    @{
+
+                        int pagina = ViewBag.Pagina ?? 0;
+                        var config = Html.InitializeDataTable<BecarioRowViewModel>
+                            ();
+                        int nElem = Convert.ToUInt16(Resources.NElementosPagina);
+                        config.Name("tablaBecarios")
+                        .AjaxLoadUrl(Url.Action("LoadBecarios", "Becarios"))
+                        .CustomFilterAjax("getFiltersBecarios")
+                        .PrimaryKey(m => m.BecarioId.ToString())
+                        .AddPrimaryKeyToName(false)
+                        .Paginable()
+                        .PageSize(nElem)
+                        .InitialPage(pagina)
+                        .Columns(columns =>
+                        {
+                            columns.Bound(c => c.BecarioId).Header(Resources.HTML_Becarios_Index_RefHeader).ColumnName("BecarioId").Orderable(true);
+                            columns.Bound(c => c.BecarioNombre).Header(Resources.HTML_Becarios_Index_NombreBecarioHeader).ColumnName("BecarioNombre").Orderable(true);
+                            columns.Bound(c => c.CandidatoId).Header(Resources.HTML_Becarios_Index_CandidatoIdHeader).ColumnName("CandidatoId").Orderable(true);
+                            columns.Bound(c => c.TipoBecario).Header(Resources.HTML_Becarios_Index_TipoBecarioHeader).ColumnName("TipoBecario").Orderable(true);
+                            columns.Bound(c => c.Cliente).Header(Resources.HTML_Becarios_Index_Cliente).ColumnName("Cliente").Orderable(true);
+                            columns.Bound(c => c.Proyecto).Header(Resources.HTML_Becarios_Index_Proyecto).ColumnName("Proyecto").Orderable(true);
+                            columns.Bound(c => c.FechaInicio).Header(Resources.HTML_Becarios_Index_FechaInicio).ColumnName("FechaInicio").Orderable(true);
+                            columns.Bound(c => c.FechaFin).Header(Resources.HTML_Becarios_Index_FechaFin).ColumnName("FechaFin").Orderable(true);
+                            columns.Bound(c => c.FechaFinReal).Header(Resources.HTML_Becarios_Index_FechaFinReal).ColumnName("FechaFinReal").Orderable(true);
+                            columns.Bound(c => c.EstadoBecario).Header(Resources.HTML_Becarios_Index_EstadoBecarioHeader).ColumnName("EstadoBecario").Orderable(true);
+                            columns.Bound(c => c.TipoDecisionFinal).Header(Resources.HTML_Becarios_Index_DecisionFinalHeader).ColumnName("TipoDecisionFinalId").Orderable(true);
+                            columns.Bound(c => c.NivelIdioma).Header(Resources.HTML_Candidatos_Index_InglesHeader).ColumnName("NivelIdioma").Orderable(false);
+                            columns.Template(@<div></div>).Header(Resources.HTML_Necesidades_Index_AccionesHeader);
+columns.Template(@<div></div>).Header(Resources.HTML_Candidaturas_Index_EstadosHeader);
+});
+@Html.Partial("Controls/DataTable", config)
+<div class="paginacionIn">
+    <p>@Resources.HTML_Becarios_Index_TotalBecarios <span id="tempdataBecarios" class="tempdataTotalRegistros"></span></p>
+</div>
+                    }
+                </div>
+            </div>
+        </div> <!-- End content box content-->
+    </div> <!-- End content box-->
+</div>
+@Html.Partial("~/Views/Becarios/Modals/_ModalStandBy.cshtml", Model)
+@Html.Partial("~/Views/Becarios/Modals/_ModalRenuncia.cshtml", Model)
+@Html.Partial("~/Views/Becarios/Modals/_ModalCrearCandidatura.cshtml", Model)
+
+@section scripts{
+
+    @BecariosFrontActions.MenuFrontActions()
+    @BecariosFrontActions.IndexFrontActions(Url, nUsuario, tiempoExpiracionCookie, gestionDocumentalCompleta)
+}
+
+

@@ -1,0 +1,13 @@
+﻿@using Recruiting.Application.Usuarios.ViewModels
+@using RecruitingWeb.Properties
+
+@model Recruiting.Application.Clientes.ViewModels.ClienteRowViewModel
+
+<div>
+    <a title="@Resources.HTML_Title_Editar" data-id="@Model.ClienteId" name="EditButtonCliente">
+        @Display.GlyphiconButton("glyphicon-pencil icon action")
+    </a>
+    <a title="@Resources.HTML_Title_Eliminar" data-id="@Model.ClienteId" name="DeleteButtonCliente">
+        @Display.GlyphiconButton("glyphicon-trash icon action")
+    </a>
+</div>

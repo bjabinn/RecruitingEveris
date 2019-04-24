@@ -1,0 +1,23 @@
+﻿@using Recruiting.Application.Becarios.ViewModels
+@using RecruitingWeb.Properties
+
+@model Recruiting.Application.Becarios.ViewModels.ConvocatoriaRowViewModel
+<div>
+    @Edit.Hidden(@Model.NombreConvocatoria , "NombreConvocatoria", new Dictionary<string, string> { { "id", "NombreConvocatoria" } })  
+    @Edit.Text(Model.ConvocatoriaId.ToString(), "ConvocatoriaId", id: "ConvocatoriaId", htmlClass: "form-control hide")
+    <div class="text-center">
+        @Edit.RadioButton(Model.ConvocatoriaId.ToString(), "SelectConvocatoria", id: "SelectConvocatoria", required: false, validate: false)
+        <a title="@Resources.HTML_Title_Editar"
+           id="EditConvocatoriaButton" data-target="#modalCrearEditConvocatorias" data-toggle="modal">
+
+            @Display.GlyphiconButton("glyphicon-pencil icon action")
+        </a>
+
+        <a title="@Resources.HTML_Title_Eliminar"
+           id="DeleteConvocatoriaButton">
+            @Display.GlyphiconButton("glyphicon-trash icon action")
+        </a>
+    </div>
+    
+</div>
+

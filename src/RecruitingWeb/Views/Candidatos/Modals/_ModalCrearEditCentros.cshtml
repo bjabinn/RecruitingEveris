@@ -1,0 +1,66 @@
+﻿@using RecruitingWeb.Components.DataTable.Helpers
+@using RecruitingWeb.Helpers
+@using Recruiting.Application.Becarios.ViewModels
+@using Recruiting.Application.Candidatos.ViewModels
+@using RecruitingWeb.Properties
+
+<div class="modal fade" id="modalCrearEditCentros">
+    <div class="modal-dialog modalBusquedaDialogo">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="row">
+                    <div class="col-lg-6 text-left">
+                        <h4 class="modal-title tituloModal">
+                            @Resources.HTML_Becarios_ModalCrearEditCentros_Centro
+                        </h4>
+                    </div>
+                    <div class="col-lg-6 text-right">
+                        <button type="button" class="btnCloseModal" data-dismiss="modal">@Display.GlyphiconButton("glyphicon-remove")</button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body">
+
+                @Edit.Hidden("", "CentroIdCrearEdit")
+                <div class="form-filter filtroModal" id="form-filterCrearEditCentro">
+                    <!-- Start form-filter  -->                   
+                    <div class="row" data-id="formFilter">
+                        <div class="col-lg-12">
+                            <div class="row">
+                                <div class="form-group col-lg-6">
+                                    <label class="col-lg-4">@Resources.HTML_Becarios_ModalCrearCentro_Centro</label>
+                                    <div class="col-lg-8">                                       
+                                        @Edit.Text("","Centro",required: false, validate: false, htmlClass: "form-control", id: "CentroCrearEdit")
+                                       
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-lg-6">
+                                    <label class="col-lg-5" for="filterCiudad">@Resources.HTML_Becarios_ModalCrearCentro_Ciudad</label>
+                                    <div class="col-lg-7">
+                                        @Edit.Text((string)null, "Ciudad", id: "CiudadCrearEdit", required: false, validate: false, htmlClass: "form-control col-lg-4")
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-lg-6">
+                                    <label class="col-lg-4" for="filterPais">@Resources.HTML_Becarios_ModalCrearCentro_Pais</label>
+                                    <div class="col-lg-8">
+                                        @Edit.Text((string)null, "Pais", id: "PaisCrearEdit", required: false, validate: false, htmlClass: "form-control col-lg-4")
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> <!-- End form-filter  -->
+                <!-- Desechable:  Listado Para Probar ---- var items = new List<RowCandidatoViewModel>() -->
+                <!-- Load Data Candidatos  -->
+          
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" id="BtnCrearEditCentro">@Resources.Boton_Aceptar</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

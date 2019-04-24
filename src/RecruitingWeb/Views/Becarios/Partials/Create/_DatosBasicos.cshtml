@@ -1,0 +1,143 @@
+﻿@using RecruitingWeb.Properties
+
+@model Recruiting.Application.Becarios.ViewModels.BecarioDatosBasicosViewModel
+
+
+<div class="row">
+    <div class="content-box border-top-cero">
+        <!-- Start Content Box -->
+        <div class="content-box-content">
+            <div class="section-form-DatosBasicos" data-id="section-form-DatosBasicos">
+                <div class="row form-row">
+                    <div class="form-group col-lg-4">
+                        <div class="col-lg-12 title-form">
+                            <label>@Resources.HTML_Becarios_DatosBasicos_Candidato</label>
+                        </div>
+                        <div class="col-lg-12">
+                            <span class="spanSearch">
+                                <button class="btn btnSearch" type="button" data-toggle="modal" data-target="#myModal">@Display.GlyphiconButton("glyphicon-search")</button>
+                            </span>
+                            @Edit.Hidden(Model.CandidatoId, Model.Access + "CandidatoId", new Dictionary<string, string> { { "id", "CandidatoId" } })
+                            @Edit.Text(Model.NombreCandidato, name: Model.Access + "NombreCandidato", required: true, id: "NombreCandidato", htmlClass: "form-control inputSearch", isReadOnly: true)
+                        </div>
+                    </div>
+                    <div class="form-group col-lg-4">
+                        <div class="col-lg-12 title-form">
+                            <label>@Resources.HTML_Becarios_DatosBasicos_TipoBecario</label>
+                        </div>
+                        <div class="col-lg-12">
+                            @Edit.DropDownExtend(Model.TipoBecarioId, Model.Access + "TipoBecarioId", Model.TipoBecarioList, required: true, htmlClass: "form-control", id: "TipoBecarioId")
+                        </div>
+                    </div>
+                    <div class="form-group col-lg-4">
+                        <div class="col-lg-12 title-form">
+                            <label>@Resources.HTML_Becarios_DatosBasicos_SubidaCV</label>
+                        </div>
+                        <div class="col-lg-12">
+                            @Edit.InputFileDig(false, false, "CV", Model.NombreCV)
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row form-row">
+                <div class="form-group col-lg-4">
+                    <div class="col-lg-12 title-form">
+                        <label>@Resources.HTML_Becarios_DatosBasicos_CentroProcedencia</label>
+                    </div>
+                    <div class="col-lg-12">
+                        <span class="spanSearch">
+                            <button id="btnCentroSearch" class="btn btnSearch" type="button" data-toggle="modal" data-target="#modalCentros">@Display.GlyphiconButton("glyphicon-search")</button>
+                        </span>
+                        @Edit.Hidden(Model.CentroProcedenciaId, Model.Access + "CentroProcedenciaId", new Dictionary<string, string> { { "id", "CentroProcedenciaId" } })
+                        @Edit.Text(Model.NombreCentroProcedencia, name: Model.Access + "NombreCentroProcedencia", required: true, id: "NombreCentroProcedencia", htmlClass: "form-control inputSearch", isReadOnly: true)
+                    </div>
+                </div>
+                <div class="form-group col-lg-4">
+                    <div class="col-lg-12 title-form">
+                        <label>@Resources.HTML_Becarios_DatosBasicos_Convocatoria</label>
+                    </div>
+                    <div class="col-lg-12">
+                        <span class="spanSearch">
+                            <button class="btn btnSearch" type="button" data-toggle="modal" data-target="#modalConvocatorias">@Display.GlyphiconButton("glyphicon-search")</button>
+                        </span>
+                        @Edit.Hidden(Model.ConvocatoriaId, Model.Access + "ConvocatoriaId", new Dictionary<string, string> { { "id", "ConvocatoriaId" } })
+                        @Edit.Text(Model.NombreConvocatoria, name: Model.Access + "NombreConvocatoria", required: true, id: "NombreConvocatoria", htmlClass: "form-control inputSearch", isReadOnly: true)
+                    </div>
+                </div>
+
+                <div class="form-group col-lg-4">
+                    <div class="col-lg-12 title-form">
+                        <label for="filterOrigenCV">@Resources.HTML_Candidaturas_DatosBasicos_OrigenCV</label>
+                    </div>
+                    <div class="col-lg-12">
+                        @Edit.DropDownExtend(Model.OrigenCvId, Model.Access + "OrigenCvId", Model.OrigenCvList, required: true, htmlClass: "form-control", id: "OrigenCvId")
+                    </div>
+                </div>
+
+            </div>
+            <div class="row form-row">
+                <div class="form-group col-lg-4">
+                    <div class="col-lg-12 title-form">
+                        <label for="filterFuenteReclutamiento">@Resources.HTML_Candidaturas_DatosBasicos_FuenteReclutamiento</label>
+                    </div>
+                    <div class="col-lg-12">
+                        @Edit.DropDownExtend(Model.FuenteReclutamientoId, Model.Access + "FuenteReclutamientoId", Model.FuenteReclutamientoList, required: true, htmlClass: "form-control", disabled: false, id: "FuenteReclutamientoId")
+                    </div>
+                </div>
+            </div>
+
+            <div class="row form-row" id="listaGeneralEmailReferenciados">
+                <div class="form-group col-lg-4">
+                    <div class="col-lg-12" style="margin-bottom:5px">
+                        <div class="col-lg-9 removePadding" style="padding-top:5px">
+                            <label>@Resources.HTML_Candidaturas_DatosBasicos_CorreosReferenciador</label>
+                        </div>
+                        <div class="col-lg-3 text-right removePadding">
+                            <button type="button" class="btn btn-default" aria-label="Left Align" id="btnCreateContactosReferenciados">
+                                @Resources.HTML_BotonGenerico_Aniadir
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <table id="listSubmitReferenciados" data-id="listSubmit">
+                            <thead>
+                                <tr role="row">
+                                    <th>@Resources.HTML_Candidaturas_Referenciado_ContactoHeader</th>
+                                    <th>@Resources.HTML_Candidaturas_Referenciado_EliminarHeader</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr role="row" class="hidden" id="templateContactos">
+                                    <td>@Edit.Text((String)null, Model.Access + "ListEmailReferenciados[{0}]", htmlClass: "form-control", required: false, disabled: true)</td>
+                                    <td>
+                                        <a id="btnDeleteRef"> @Display.GlyphiconButton("glyphicon-trash icon action")</a>
+                                    </td>
+                                </tr>
+
+                                @{
+                                    if (Model.ListEmailReferenciados != null)
+                                    {
+                                        for (int x = 0; x < Model.ListEmailReferenciados.Count; x++)
+                                        {
+                                            var emailContacto = Model.Access + "ListEmailReferenciados[{0}]";
+
+                                            <tr role="row" class="odd">
+                                                <td>@Edit.Text(@Model.ListEmailReferenciados[x], emailContacto, htmlClass: "form-control")</td>
+                                                <td>
+                                                    <a id="btnDeleteRef"> @Display.GlyphiconButton("glyphicon-trash icon action")</a>
+                                                </td>
+                                            </tr>
+
+                                        }
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>

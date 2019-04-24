@@ -1,0 +1,35 @@
+﻿@using RecruitingWeb.Properties
+
+<div class="modal fade" id="modalStandBy">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="row">
+                    <div class="col-lg-6 text-left">
+                        <h4 class="modal-title tituloModal">
+                            @Resources.HTML_Candidaturas_ModalStandBy_Pausarandidatura
+                        </h4>
+                    </div>
+                    <div class="col-lg-6 text-right">
+                        <button type="button" class="btnCloseModal" data-dismiss="modal">@Display.GlyphiconButton("glyphicon-remove")</button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body">
+                @Html.Hidden("candidaturaIdPausar")
+                <div>
+                    <p> @Resources.HTML_Candidaturas_ModalStandBy_AsigneFechaLimite </p>
+                </div>
+                <div class="row">
+                    <label class="col-lg-2 col-lg-offset-3" for="FechaContactoStandBy"> @Resources.HTML_Candidaturas_ModalStandBy_Fecha </label>
+                    <div class="col-lg-4">
+                        @Edit.Date(null, "FechaContactoStandBy", id: "FechaContactoStandBy", required: false, htmlClass: "form-control")
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" id="BtnPausar">@Resources.Boton_Aceptar</button>
+            </div>
+        </div>
+    </div>
+</div>

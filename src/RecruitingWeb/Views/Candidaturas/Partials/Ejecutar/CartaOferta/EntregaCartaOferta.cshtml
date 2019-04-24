@@ -1,0 +1,26 @@
+﻿@using RecruitingWeb.Components.DataTable.Helpers
+@using RecruitingWeb.Helpers
+@using Recruiting.Application.Candidatos.ViewModels
+@using RecruitingWeb.Properties
+
+@model Recruiting.Application.Candidaturas.ViewModel.EntregaCartaOfertaViewModel
+                
+<div class="row section-header">
+    <div class="col-lg-6">
+        <h5 class="TextSeparator">@Resources.HTML_Candidaturas_EntregaCartaOferta_DatosCartaOferta</h5>
+    </div>
+    <div class="col-lg-6 text-right">
+        <ul class="small-buttons-set butttonCollapse">
+            <li>
+                <a class="small-button" href="#" data-collapse="[data-id=section-form-cartaOferta]" data-collapse-show-text='@Display.GlyphiconButton("glyphicon-plus")' data-collapse-hide-text='@Display.GlyphiconButton("glyphicon-minus")' data-collapse-time="200">
+                    @Display.GlyphiconButton("glyphicon-minus")
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+<div class="section-form-cartaOferta" data-id="section-form-cartaOferta">
+    @Html.Partial("~/Views/Candidaturas/Partials/Ejecutar/CartaOferta/_DatosCartaOferta.cshtml", Model.AgendarCartaOfertaViewModel.AgendarCartaOferta)
+    @Html.Partial("~/Views/Candidaturas/Partials/Ejecutar/CartaOferta/_EntregaCartaOferta.cshtml", Model.EntregaCartaOferta)
+</div>
+           

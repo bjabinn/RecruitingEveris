@@ -1,0 +1,18 @@
+﻿@using Recruiting.Application.Usuarios.ViewModels
+@using RecruitingWeb.Properties
+@using Recruiting.Application.Roles.Enums
+@model Recruiting.Application.Roles.ViewModels.RolRowViewModel
+
+@{ 
+    var ListadoPermisos = (Dictionary<int, string>)HttpContext.Current.Session["Permisos"];
+    var ListadoRoles = (Dictionary<int, string>)HttpContext.Current.Session["Roles"];
+}
+
+<div>
+    <a title="@Resources.HTML_Title_Editar" data-id-user="@Model.RolId" id="EditButtonRol" class="@(!ListadoPermisos.ContainsKey((int)PermisosRolesEnum.AdminRoles) ? "disabled" : "")">
+        @Display.GlyphiconButton("glyphicon-pencil icon action")
+    </a>
+    <a title="@Resources.HTML_Title_Eliminar" data-id-user="@Model.RolId" id="DeleteButtonRol" class="@(!ListadoPermisos.ContainsKey((int)PermisosRolesEnum.AdminRoles) ? "disabled" : "")">
+        @Display.GlyphiconButton("glyphicon-trash icon action")
+    </a>
+</div>

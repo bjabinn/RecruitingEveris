@@ -1,0 +1,84 @@
+﻿@using RecruitingWeb.Properties
+@using Recruiting.Application.Candidaturas.Enums;
+
+@model Recruiting.Application.Candidaturas.ViewModel.ResultadoPrimeraEntrevista
+@{
+    var expRegularDecimal = System.Configuration.ConfigurationManager.AppSettings["expRegularDecimal"];
+}
+<div class="row form-row">
+    <div class="form-group col-lg-4">
+        <div class="col-lg-12 title-form">
+            <label for="subidoTS">@Resources.HTML_Candidaturas_ResultadoPrimeraEntrevista_SubidaTest</label>
+        </div>
+        <div class="col-lg-12 content-form">
+            @{
+                if (string.IsNullOrEmpty(Model.NombreTS) || string.IsNullOrWhiteSpace(Model.NombreTS))
+                {
+                    @Resources.HTML_General_CampoVacio_Details_NA
+                }
+                else
+                {
+                    @Edit.InputFileDownloadDig("DownloadTest", false, false, Model.NombreTS)
+
+
+                }
+            }
+        </div>
+    </div>
+</div>
+<div class="row form-row">
+    <div class="form-group col-lg-4">
+        <div class="col-lg-12 title-form">
+            <label>@Resources.HTML_Candidaturas_ResultadoPrimeraEntrevista_SuperaPrimeraEntrevista</label>
+        </div>
+        <div class="col-lg-12 content-form">
+
+            @if (Model.SuperaEntrevistaId == (int)TipoDecisionEnum.SUPERA_PRIMERA_ENTREVISTA)
+            {
+                @Resources.HTML_General_Si;
+            }
+            @if (Model.SuperaEntrevistaId == (int)TipoDecisionEnum.NO_SUPERA_PRIMERA_ENTREVISTA)
+            {
+                @Resources.HTML_General_No;
+            }
+            @if (Model.SuperaEntrevistaId == (int)TipoDecisionEnum.SIN_DECIDIR_PRIMERA_ENTREVISTA)
+            {
+                @Resources.HTML_General_Sin_Decidir;
+            }
+        </div>
+    </div>
+    @if (Model.SuperaEntrevistaId == (int)TipoDecisionEnum.NO_SUPERA_PRIMERA_ENTREVISTA)
+    {
+        <div class="form-group col-lg-4" id="MotivoRegion">
+            <div class="col-lg-12 title-form">
+                <label for="MotivoId">@Resources.HTML_Candidaturas_ResultadoPrimeraEntrevista_Motivo</label>
+            </div>
+            <div class="col-lg-12 content-form">
+                @{
+                    if (string.IsNullOrEmpty(Model.MotivoNombre))
+                    {
+                        @Resources.HTML_General_CampoVacio_Details_NA
+                    }
+                    else
+                    {
+                        @Model.MotivoNombre
+
+                    }
+                }
+            </div>
+        </div>
+        <div class="form-group col-lg-4">
+            <div class="col-lg-12 title-form">
+                <label for="AvisarAlCandidato">@Resources.HTML_Candidaturas_FeedbackPrimeraEntrevista_NotificarDescarteCandidato</label>
+            </div>
+            <div class="col-lg-12 content-form">
+                @(Model.NotificarDescarte ? @Resources.HTML_General_Si : @Resources.HTML_General_No)
+            </div>
+        </div>
+    }
+</div>
+@Html.Hidden("PrimeraEntrevistaViewModel.ResultadoPrimeraEntrevista.Completada")
+
+
+
+

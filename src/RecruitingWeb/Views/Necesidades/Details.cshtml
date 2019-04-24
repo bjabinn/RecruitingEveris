@@ -1,0 +1,335 @@
+﻿@using RecruitingWeb.Properties
+@using Recruiting.Application.Maestros.Enums
+
+@model Recruiting.Application.Necesidades.ViewModels.CreateEditNecesidadViewModel
+
+@{
+    var Activo = Model.Activo;
+    if (Activo == false)
+    {
+        Response.Redirect("/Shared/Borrado");
+    }
+}
+<div class="row titlePage">
+    <div class="col-lg-6">
+        <h3>@Resources.HTML_Necesidades_Details_VerNecesidad</h3>
+    </div>
+</div>
+<div class="row header-flap">
+    <div class="btn-group" role="group">
+        <a href="@Url.Action("Volver", "Necesidades")" class="btn btn-default">
+            <span class="text">@Resources.HTML_BotonGenericoVolver</span>
+        </a>
+        <a href="@Url.Action("Edit", "Necesidades", new {  id = Model.NecesidadId })" class="btn btn-default">
+            <span class="text">@Resources.HTML_Necesidades_Details_BotonEditarNecesidad</span>
+        </a>
+    </div>
+    <div class="col-lg-6 removePadding">
+        <h4 class="noMargin headerBox">
+            @Resources.HTML_Necesidades_Details_DatosNecesidad
+            @if (Model.GrupoNecesidad.HasValue)
+            {
+                @Resources.HTML_Necesidades_Edit_DelGrupo <a target="_blank" href="/Necesidades/SeguimientoGrupoNecesidad?grupoId=@Model.GrupoNecesidad.Value">@Model.GrupoNecesidad.Value</a>
+            }
+        </h4>
+    </div>
+</div>
+<div class="row">
+    <div class="content-box border-top-cero">
+        <div class="content-box-content">
+            @using (Html.BeginForm("Edit", "Necesidades", FormMethod.Post, new Dictionary<string, object> { { "role", "form" }, { "data-parsley-validate", "true" }, { "data-parsley-excluded", ":not([data-validate])" } }))
+            {
+                @Edit.Hidden("guardar", "SubmitType")
+                @Edit.Hidden(Model.NecesidadId, "NecesidadId")
+
+            <div class="section-form-basicos-necesidad margin" data-id="section-form-basicos">
+                <div class="row form-row">
+                    <div class="form-group col-lg-4">
+                        <div class="form-group col-lg-4">
+                            <div class="col-lg-12 title-form">
+                                <label for="EstadoNecesidadId">@Resources.HTML_Necesidades_Details_Estado</label>
+                            </div>
+                            <div class="col-lg-12 content-form">
+                                @Model.EstadoNecesidadNombre
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-4">
+                        </div>
+                        <div class="form-group col-lg-4">
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-row">
+                    <div class="form-group col-lg-4">
+                        <div class="col-lg-12 title-form">
+                            <label for="Nombre">@Resources.HTML_Necesidades_Details_Nombre</label>
+                        </div>
+                        <div class="col-lg-12 content-form">
+                            @{
+                                if (string.IsNullOrEmpty(Model.Nombre) || string.IsNullOrWhiteSpace(Model.Nombre))
+                                {
+                                    <p>@Resources.HTML_General_CampoVacio_Details_NA</p>;
+                                }
+                                else
+                                {
+                                    @Model.Nombre
+
+                                }
+                            }
+                        </div>
+                    </div>
+                    <div class="form-group col-lg-4">
+                        <div class="col-lg-12 title-form">
+                            <label for="CentroId">@Resources.HTML_Necesidades_Details_Centro</label>
+                        </div>
+                        <div class="col-lg-12 content-form">
+                            @Model.NombreCentro
+                        </div>
+                    </div>
+                    <div class="form-group col-lg-4">
+                        <div class="col-lg-12 title-form">
+                            <label for="OficinaId">@Resources.HTML_Necesidades_Details_Oficina</label>
+                        </div>
+                        <div class="col-lg-12 content-form">
+                            @Model.OficinaNombre
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-row">
+                    <div class="form-group col-lg-4">
+                        <div class="col-lg-12 title-form">
+                            <label for="SectorId">@Resources.HTML_Necesidades_Details_Sector</label>
+                        </div>
+                        <div class="col-lg-12 content-form">
+                            @Model.SectorNombre
+                        </div>
+                    </div>
+                    <div class="form-group col-lg-4">
+                        <div class="col-lg-12 title-form">
+                            <label for="ClienteId">@Resources.HTML_Necesidades_Details_Cliente</label>
+                        </div>
+                        <div class="col-lg-12 content-form">
+                            @Model.ClienteNombre
+                        </div>
+                    </div>
+                    <div class="form-group col-lg-4">
+                        <div class="col-lg-12 title-form">
+                            <label for="ProyectoId">@Resources.HTML_Necesidades_Details_Proyecto</label>
+                        </div>
+                        <div class="col-lg-12 content-form">
+                            @Model.ProyectoNombre
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-row">
+                    <div class="form-group col-lg-4">
+                        <div class="col-lg-12 title-form">
+                            <label for="TipoTecnologiaId">@Resources.HTML_Necesidades_Details_Tecnologia</label>
+                        </div>
+                        <div class="col-lg-12 content-form">
+                            @Model.TipoTecnologiaNombre
+                        </div>
+                    </div>
+                    <div class="form-group col-lg-4">
+                        <div class="col-lg-12 title-form">
+                            <label for="TipoServicioId">@Resources.HTML_Necesidades_Details_Servicio</label>
+                        </div>
+                        <div class="col-lg-12 content-form">
+                            @Model.TipoServicioNombre
+                        </div>
+                    </div>
+                    <div class="form-group col-lg-4">
+                        <div class="col-lg-12 title-form">
+                            <label for="TipoPerfilId">@Resources.HTML_Necesidades_Details_Perfil</label>
+                        </div>
+                        <div class="col-lg-12 content-form">
+                            @Model.TipoPerfilNombre
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-row">
+                    <div class="form-group col-lg-4">
+                        <div class="col-lg-12 title-form">
+                            <label for="MesesAsignacionId">@Resources.HTML_Necesidades_Details_Duracion</label>
+                        </div>
+                        <div class="col-lg-12 content-form">
+                            @Model.MesesAsignacionNombre
+                        </div>
+                    </div>
+                    <div class="form-group col-lg-4">
+                        <div class="col-lg-12 title-form">
+                            <label for="TipoContratacionId">@Resources.HTML_Necesidades_Details_Contratacion</label>
+                        </div>
+                        <div class="col-lg-12 content-form">
+                            @Model.TipoContratacionNombre
+                        </div>
+                    </div>
+                    <div class="form-group col-lg-4">
+                        <div class="col-lg-12 title-form">
+                            <label for="TipoPrevisionId">@Resources.HTML_Necesidades_Details_Prevision</label>
+                        </div>
+                        <div class="col-lg-12 content-form">
+                            @Model.TipoPrevisionNombre
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-row">
+                    <div class="form-group col-lg-4">
+                        <div class="col-lg-12 title-form">
+                            <label for="FechaSolicitud">@Resources.HTML_Necesidades_Details_FechaSolicitud</label>
+                        </div>
+                        <div class="col-lg-12 content-form">
+                            @Model.FechaSolicitud
+                        </div>
+                    </div>
+                    <div class="form-group col-lg-4">
+                        <div class="col-lg-12 title-form">
+                            <label for="FechaCompromiso">@Resources.HTML_Necesidades_Details_FechaCompromiso</label>
+                        </div>
+                        <div class="col-lg-12 content-form">
+                            @Model.FechaCompromiso
+                        </div>
+                    </div>
+                    <div class="form-group col-lg-4">
+                        <div class="col-lg-12 title-form">
+                            <label for="ReferenciaExterna">@Resources.HTML_Necesidades_Details_RefExterna</label>
+                        </div>
+                        <div class="col-lg-12 content-form">
+                            @{
+                                if (string.IsNullOrEmpty(Model.ReferenciaExterna) || string.IsNullOrWhiteSpace(Model.ReferenciaExterna))
+                                {
+                                    <p>@Resources.HTML_General_CampoVacio_Details_NA</p>;
+                                }
+                                else
+                                {
+                                    @Model.ReferenciaExterna
+
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-row">
+                    <div class="form-group col-lg-12">
+                        <div class="form-group col-lg-4">
+                            <div class="col-lg-12 title-form">
+                                <label for="FechaCierre">@Resources.HTML_Necesidades_Details_FechaCierre</label>
+                            </div>
+                            <div class="col-lg-12 content-form">
+                                @{
+                                    if (Model.FechaCierre.HasValue)
+                                    {
+
+                                        @Model.FechaCierre
+                                    }
+                                    else
+                                    {
+                                        <p>@Resources.HTML_General_CampoVacio_Details_NA</p>;
+
+                                    }
+                                }
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-4">
+                            <div class="col-lg-12 title-form">
+                                <label for="PersonaAsignada">@Resources.HTML_Necesidades_Details_PersonaAsignada</label>
+                            </div>
+                            <div class="col-lg-12 content-form">
+                                @{
+                                    if (string.IsNullOrEmpty(Model.PersonaAsignada) || string.IsNullOrWhiteSpace(Model.PersonaAsignada))
+                                    {
+                                        <p>@Resources.HTML_General_CampoVacio_Details_NA</p>;
+                                    }
+                                    else
+                                    {
+                                        @Model.PersonaAsignada
+
+                                    }
+                                }
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-4" data-section="Modulo">
+                            <div class="col-lg-12 title-form">
+                                <label for="Modulo">@Resources.HTML_Necesidades_Details_Modulo</label>
+                            </div>
+                            <div class="col-lg-12 content-form">
+                                @{
+                                    if (string.IsNullOrEmpty(Model.NombreModulo) || string.IsNullOrWhiteSpace(Model.NombreModulo))
+                                    {
+                                        <p>@Resources.HTML_General_CampoVacio_Details_NA</p>;
+                                    }
+                                    else
+                                    {
+                                        @Model.NombreModulo
+
+                                    }
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-row">
+                </div>
+                <div class="row form-row">
+                    <div class="form-group col-lg-8">
+                        <div class="col-lg-12 title-form">
+                            <label for="DetaleTecnologia">@Resources.HTML_Necesidades_Details_DetalleTecnologia</label>
+                        </div>
+                        <div class="col-lg-12 content-form">
+                            @{
+                                if (string.IsNullOrEmpty(Model.DetalleTecnologia) || string.IsNullOrWhiteSpace(Model.DetalleTecnologia))
+                                {
+                                    <p>@Resources.HTML_General_CampoVacio_Details_NA</p>;
+                                }
+                                else
+                                {
+                                    @Html.Raw((Model.DetalleTecnologia))
+                                }
+                            }
+                                </div>
+                    </div>
+                    <div class="form-group col-lg-4" id="AsignadaCorrectamenteGroup">
+                        <div class="col-lg-12 title-form">
+                            <label for="AsignadaCorrectamente">@Resources.HTML_Candidaturas_CompletarCartaOferta_CumpleNecesidad</label>
+                        </div>
+                        <div class="col-lg-12 content-form">
+                            @(Model.AsignadaCorrectamente == null ? Resources.HTML_General_No : Model.AsignadaCorrectamente == true ? Resources.HTML_General_Si : Resources.HTML_General_No)
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-row">
+                    <div class="form-group col-lg-4">
+                        <div class="col-lg-12 title-form">
+                            <label for="dispViaje">@Resources.HTML_Necesidades_Details_DisponibilidadViaje</label>
+                        </div>
+                        <div class="col-lg-12 content-form">
+                            @(Model.DisponibilidadViajes ? Resources.HTML_General_Si : Resources.HTML_General_No)
+                        </div>
+                    </div>
+                    <div class="form-group col-lg-4">
+                        <div class="col-lg-12 title-form">
+                            <label for="dispReubicacion">@Resources.HTML_Necesidades_Details_DisponibilidadReubicacion</label>
+                        </div>
+                        <div class="col-lg-12 content-form">
+                            @(Model.DisponibilidadReubicacion ? Resources.HTML_General_Si : Resources.HTML_General_No)
+                        </div>
+                    </div>
+                    <div class="form-group col-lg-4">
+                        <div class="col-lg-12 title-form">
+                            <label for="dispReubicacion">@Resources.HTML_Necesidades_Details_NecesidadIdioma</label>
+                        </div>
+                        <div class="col-lg-12 content-form">
+                            @(Model.NecesidadIdioma ? Resources.HTML_General_Si : Resources.HTML_General_No)
+                        </div>
+                    </div>
+                </div>
+            </div>
+            }
+        </div> <!-- End content-box-content -->
+    </div> <!-- End .content-box -->
+</div> <!--End .Row-->
+
+@section scripts{
+
+   @NecesidadesFrontActions.MenuFrontActions()
+}

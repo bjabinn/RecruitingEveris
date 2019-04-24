@@ -1,0 +1,49 @@
+﻿@using RecruitingWeb.Components.DataTable.Helpers
+@using RecruitingWeb.Helpers
+@using Recruiting.Application.Becarios.ViewModels
+@using Recruiting.Application.Candidatos.ViewModels
+@using RecruitingWeb.Properties
+
+<div class="modal fade" id="modalCrearEditConvocatorias">
+    <div class="modal-dialog modalBusquedaDialogo">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="row">
+                    <div class="col-lg-6 text-left">
+                        <h4 class="modal-title tituloModal">
+                            @Resources.HTML_Becarios_ModalCrearEditConvocatorias_Convocatoria
+                        </h4>
+                    </div>
+                    <div class="col-lg-6 text-right">
+                        <button type="button" class="btnCloseModal" data-dismiss="modal">@Display.GlyphiconButton("glyphicon-remove")</button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body">
+                @Edit.Hidden("", "IdConvocatoriaCrearEdit")
+
+                <div class="form-filter filtroModal" id="form-filterCrearConvocatoria">
+                    <!-- Start form-filter  -->
+                    <div class="row botoneraModal">
+                    </div>
+                    <div class="row" data-id="formFilter">
+                        <div class="col-lg-12 noPadding">
+                            <div class="row">
+                                <div class="form-group col-lg-6">
+                                    <label class="col-lg-4">@Resources.HTML_Becarios_ModalCrearConvocatoria_Nombre</label>
+                                    <div class="col-lg-8">
+                                        @Edit.Text("", "NombreConvocatoriaCrearEdit", required: true, htmlClass: "form-control", id: "NombreConvocatoriaCrearEdit")
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> <!-- End form-filter  -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" id="BtnCrearEditConvocatoria">@Resources.Boton_Aceptar</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

@@ -1,0 +1,471 @@
+input.datepicker {
+    background-color: white;
+}
+
+.padding-top-cero{
+    padding-top: 0px;
+}
+
+
+/********* Secciones de Formulario************/
+
+.section-form {
+    margin-top: 5%;
+    margin-bottom: 3%;
+}
+
+
+.section-header  h4 {
+    margin-top:5px;
+}
+
+.TextSeparator {
+    margin-top: 15px !important;
+}
+
+.row-section-header {
+    background: #e5e5e5 url('../images/bg-content-box.gif') top left repeat-x;
+    margin-bottom: 1%;
+    border: 1px solid #E3E3E3;
+    border-radius: 4px;
+    height: 45px;
+}
+
+/* enable absolute positioning */
+.inner-addon {
+    position: relative;
+}
+
+    /* style icon */
+    .inner-addon .glyphicon {
+        position: absolute;
+        padding: 5px;
+        pointer-events: none;
+    }
+
+/* align icon */
+.left-addon .glyphicon {
+    left: 5px;
+    top: 6px;
+}
+
+.right-addon .glyphicon {
+    right: 0px;
+}
+
+/* add padding  */
+.left-addon input {
+    padding-left: 30px;
+}
+
+.right-addon input {
+    padding-right: 30px;
+}
+
+.styleDatepicker {
+    min-width: 150px !important;
+    padding-left: 9px;
+}
+
+.btnAdd:hover {
+    color: rgb(239, 239, 239) !important;
+}
+
+.button:active {
+    padding: 5px 7px 3px 7px !important;
+}
+
+ul.parsley-errors-list:not(.filled) {
+    display: none;
+}
+
+ul.parsley-errors-list.filled {
+    display: inline-block;
+    font-style: normal;
+    line-height: 1.5em;
+    border: solid 1px;
+    background: #fffbcc url(../images/icons/exclamation.png) 5px 4px no-repeat;
+    border-color: #e6db55;
+    color: #666452;
+    padding-left: 13px !important;
+    opacity: 0.8;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 4px;
+    margin-top: 5px;
+    margin-left: 15px;
+    margin-bottom: 0px !important;
+    position: relative;
+    padding: 5px;
+    top: 5px;
+}
+
+    ul.parsley-errors-list.filled::before {
+        content: '';
+        position: absolute;
+        border-style: solid;
+        border-width: 0 11px 6px;
+        border-color: #e6db55 transparent;
+        z-index: 1;
+        top: -6px;
+        left: -2px;
+        opacity: 0.6;
+    }
+
+    ul.parsley-errors-list.filled > li {
+        padding-left: 15px;
+        list-style-type: none;
+    }
+
+/*modal header*/
+div.modal .modal-dialog .modal-header {
+    background-color: #698c00 !important;
+    border-bottom: 1px solid #eee !important;
+    height: 47px;
+    text-transform: uppercase;
+}
+
+div.modal-open .modal {
+    overflow: hidden;
+}
+
+.bootstrap-dialog .bootstrap-dialog-title, .modal-title {
+    color: #fff !important;
+}
+
+.modal-title {
+    padding: 3px 0;
+}
+
+.modal-body {
+    color: rgb(103, 106, 108);
+}
+
+/*cancel button*/
+
+.modal-dialog {
+    margin: 30px auto !important;
+}
+
+    .modal-dialog.modalBusquedaDialogo, .modalBusquedaDialogo {
+        width: 710px !important;
+    }
+
+    .modal-dialog.modalBusquedaNecesidad, .modalBusquedaNecesidad, .modalBusquedaCandidaturasFunnel {
+        width: 980px !important;
+    }
+
+    .modal-dialog.modalBusquedaNecesidad, .modalAniadirSubEntrevista {
+        width: 911px !important;
+    }
+    .modalTablaCandidaturasBecarios {
+        width: 1000px !important;
+    }
+
+/*add padding left in modal-header with glyphicon instead bg image*/
+.modal-title span.glyphicon {
+    margin-left: -12px;
+    margin-right: 5px;
+}
+
+/*right botton input on the modal window*/
+.btnCloseModal, .close {
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    font-size: 1.2em;
+    opacity: .5;
+    text-shadow: 0 1px 0 #fff;
+    vertical-align: -webkit-baseline-middle;
+    color: #fff;
+}
+
+.btnCloseModal {
+    margin-right: -15px;
+    margin-top: 6px;
+}
+
+    .btnCloseModal:hover, .close:hover {
+        opacity: .9;
+        color: #fff;
+    }
+
+.btnSearch {
+    background: transparent !important;
+    font-size: 12px;
+}
+
+    .btnSearch:hover {
+        color: #569F00 !important;
+        background: transparent !important;
+    }
+
+.spanSearch {
+    position: absolute;
+    right: 15px;
+    top: 3px;
+}
+
+.inputSearch {
+    padding-right: 40px;
+    cursor: pointer !important;
+}
+
+.menuButton {
+    padding: 0px;
+    float: right;
+}
+
+ul.searchable-results {
+    padding: 0px !important;
+    margin: 0px !important;
+    border: 1px solid #1e90ff;
+    max-height: 100px;
+    overflow-y: auto;
+    position: absolute;
+    z-index: 10;
+    background-color: white;
+    max-width: 85%;
+    border: 1px solid #ccc;
+    border: 1px solid rgba(0,0,0,.15);
+    border-radius: 4px;
+    -webkit-box-shadow: 0 6px 12px rgba(0,0,0,.175);
+    box-shadow: 0 6px 12px rgba(0,0,0,.175);
+}
+
+.searchable-item {
+    padding: 0px !important;
+    margin-left: 5px !important;
+}
+
+    .searchable-item:hover {
+        background-color: #1e90ff !important;
+        color: whitesmoke !important;
+        border: 1px solid #d5d5d5;
+        margin-left: 0px !important;
+    }
+
+.section-form-cartaOferta row {
+    margin: 0;
+}
+
+.section-form-entrevista .row {
+    margin: 0;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.section-form-DatosBasicos .form-group {
+    margin: 0;
+    margin-top: 5px;
+    margin-bottom: 15px;
+}
+
+
+.noPadding {
+    padding: 0;
+}
+
+.noMargin {
+    margin: 0;
+}
+
+.section-form-FiltradoCV {
+    margin-top: 1%;
+    margin-bottom: 1%;
+}
+
+.section-form-entrevista, .section-form-cartaOferta {
+    margin-top: 2%;
+    margin-bottom: 1%;
+}
+
+    .section-form-entrevista .row label, .section-form-cartaOferta label, .section-form-basicos-candidato label, .section-form-admin-rol label,
+    .section-form-DatosBasicos .row label, .section-form-entrevista1 label {
+        padding-top: 0px;
+        margin-bottom: 0;
+    }
+
+.section-form-entrevista1 {
+    margin-top: 1%;
+    margin-bottom: 1%;
+}
+
+    .section-form-entrevista1 .radio-inline {
+        padding-top: 0;
+    }
+
+.section-form-basicos-necesidad, .section-form-admin-rol {
+    margin-left: 1%;
+}
+
+    .section-form-basicos-necesidad .row label {
+        padding-top: 3px;
+    }
+
+    .section-form-basicos-necesidad .row, .section-form-cartaOferta .row {
+        margin-bottom: 5px;
+    }
+
+.sorting {
+    cursor: pointer;
+}
+
+.sorting_asc {
+    cursor: pointer;
+    position: relative;
+}
+
+    .sorting_asc:before {
+        font-family: fontAwesome;
+        content: "\f15d";
+        top: 0;
+        left: -5px;
+        padding-right: 10px;
+    }
+
+.sorting_desc {
+    cursor: pointer;
+    position: relative;
+}
+
+    .sorting_desc:before {
+        font-family: fontAwesome;
+        content: "\f15e";
+        top: 0;
+        left: -5px;
+        padding-right: 10px;
+    }
+
+.toggle.btn {
+    min-height: 0;
+    min-width: 0;
+    width: 55px !important;
+    height: 25px !important;
+}
+
+.toggle-off.btn {
+    padding-left: 24px;
+    padding-top: 3px;
+}
+
+.toggle-on.btn {
+    padding-left: 15px;
+    padding-top: 3px;
+    background-color: #628200 !important;
+}
+
+.toggle:hover {
+    background-color: transparent;
+}
+
+.section-form-basicos .padding-lg-textarea {
+    padding-left: 10px;
+}
+
+@media (min-width: 992px) {
+    .col-md-4 {
+        padding-left: 0px;
+    }
+}
+
+.modal-body .form-filter{
+    padding-top:0;
+}
+
+.modal-body .form-filter .botoneraModal{
+    margin-bottom:10px;
+}
+
+.modal-footer {
+    margin-top:10px;
+}
+
+.filtroModal {
+    padding-left:0;
+    padding-right:0;
+}
+
+.camposModalAniadirSubEntrevista {
+    padding-left:0;
+    padding-right:0;
+    height: 40px;
+    overflow:visible;
+}
+
+.help-block {
+    display:unset;
+    margin-left:10px;
+}
+
+.margin {
+    margin-top:1%;
+    margin-bottom:1%;
+}
+
+.perfil-list {
+    margin-left: 14px;
+}
+
+.form-control
+{
+    border-radius: 0px !important;
+    -webkit-box-shadow: none !important;
+    border: 1px solid #ccc !important;
+    font-size:12px;
+}
+
+/* Form Becarios Edit Tabla proceso*/
+
+.section-form-FiltradoCV #listSubmitObservaciones textarea.form-control {
+    height: 34px;
+}
+
+
+/**Release 1.0*/
+
+div .title-form
+{
+    margin-bottom:5px;
+}
+
+div .content-form
+{
+    font-weight: bold;
+}
+
+.headerBox {
+    background-color: #fff;
+    display: inline-block;
+    padding: 12px 30px 12px 15px;
+    /*font-size: 14px;
+    font-weight: 600; */
+    line-height: 1.42857143;
+    text-align: center;
+    vertical-align: middle;
+    /*border: 1px solid transparent;
+    position: absolute;
+    top: 10px;
+    color: #777;
+    box-shadow: 0 0 4px 0 rgba(0,0,0,.04);*/
+    box-shadow: 0px 0px 4px 0 rgba(0,0,0,.04), 0 3px 1px -2px rgba(0,0,0,.02), 0 1px 5px 0 rgba(0,0,0,.02);
+    border-radius: 3px;
+    border-top: 1px solid #8d9f04;
+}
+
+.section-header {
+    margin-bottom: 1%;
+    border-bottom: 1px solid #E3E3E3;
+    padding-top:15px;
+}
+
+.content-box-content {
+    position: relative;
+    width: auto;
+    height: 100%;
+    overflow: inherit;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+

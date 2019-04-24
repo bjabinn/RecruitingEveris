@@ -1,0 +1,32 @@
+﻿<!--  Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license.
+        See LICENSE in the source repository root for complete license information. -->
+
+@using Resources
+@model Microsoft_Graph_REST_ASPNET_Connect.Models.GraphModel
+
+@{
+  ViewBag.Title = "API Graph Recruiting";
+}
+
+<h1>@ViewBag.Title</h1>
+<h2>Actualizar Token</h2>
+@using (Html.BeginForm("GetMyEmailAddress", "Home"))
+{
+    <div class="col-sm-12">
+        <div class="form-group">
+            <button class="btn btn-default" id="get-my-email-address">Actualizar token</button>
+        </div>
+    </div>
+}
+<div class="col-sm-12">
+    <label for="user-email-address">Resultado</label>
+    <pre name="user-email-address">@ViewBag.Resultado</pre>
+</div>
+
+
+
+
+
+
+
+

@@ -1,0 +1,36 @@
+﻿@using RecruitingWeb.Properties
+
+@model Recruiting.Application.Becarios.ViewModels.BecarioDatosPracticasViewModel
+
+@{
+    ViewBag.ModoConsulta = ViewBag.ModoConsulta ?? false;
+}
+
+<div class="row">
+    <div class="content-box border-top-cero">
+        <div class="content-box-content">
+            <div class="section-form-DatosBasicos" data-id="section-form-DatosPracticas">
+                <div class="row form-row">
+                    <div class="form-group col-lg-4">
+                        <div class="col-lg-12 title-form">
+                            <label>@Resources.HTML_Becarios_Practicas_DecisionFinal</label>
+                        </div>
+                        <div class="col-lg-12">
+                            @Edit.DropDownExtend(Model.DecisionFinalId, Model.AccessPracticas + "DecisionFinalId", Model.TipoDecisionFinalPracticas, required: true, htmlClass: "form-control", id: "DecisionFinalId")
+                        </div>
+                    </div>
+                    <div class="form-group col-lg-8">
+                        <div class="col-lg-12 title-form">
+                            <label>@Resources.HTML_Becarios_Practicas_ObservacionFinal</label>
+                        </div>
+                        <div class="col-lg-12">
+                            @Edit.TextAreaEditor(Model.ObservacionFinalPracticas, Model.AccessPracticas + "ObservacionFinalPracticas", id: "ObservacionFinalPracticas", rows: 8, required: false, validate: false, htmlClass: "form-control")
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

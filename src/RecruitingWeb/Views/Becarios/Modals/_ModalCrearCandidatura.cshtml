@@ -1,0 +1,56 @@
+﻿@using RecruitingWeb.Properties
+
+<div class="modal fade" id="modalCrearCandidatura">
+    <div class="modal-dialog modalBusquedaDialogo">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="row">
+                    <div class="col-lg-6 text-left">
+                        <h4 class="modal-title tituloModal">
+                            @Resources.HTML_Becarios_ModalCrearCandidatura_CrearCandidatura
+                        </h4>
+                    </div>
+                    <div class="col-lg-6 text-right">
+                        <button type="button" class="btnCloseModal" data-dismiss="modal">@Display.GlyphiconButton("glyphicon-remove")</button>
+                    </div>
+                </div>
+            </div>
+            @using (Html.BeginForm("CreateCandidaturaFromBecario", "Candidaturas", FormMethod.Post, new Dictionary<string, object> { { "role", "form" }, { "data-parsley-validate", "true" }, { "id", "FormCrearCandidatura" } }))
+            {
+        <div class="modal-body">
+            <p> @Resources.HTML_Becarios_ModalCrearCandidatura_SeleccioneDatosBecario </p>
+            <div class="row">
+                @Edit.Hidden("", "IdBecarioCrear")
+                <div class="col-lg-12">
+                    <div class="row">
+                        <div class="form-group col-lg-6">
+                            <label class="col-lg-4">@Resources.HTML_Becarios_ModalCrearCandidatura_Tecnologia</label>
+                            <div class="col-lg-8">
+                                @Edit.DropDownExtend("", "TecnologiaId", Model.TipoTecnologiaList, validate: true, htmlClass: "form-control", required: true)
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-6">
+                            <label class="col-lg-4">@Resources.HTML_Becarios_ModalCrearCandidatura_OrigenCv</label>
+                            <div class="col-lg-8">
+                                @Edit.DropDownExtend("", "OrigenCvId", Model.OrigenCvList, validate: true, htmlClass: "form-control", required: true)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-lg-6">
+                            <label class="col-lg-4">@Resources.HTML_Becarios_ModalCrearCandidatura_FuenteReclutamiento</label>
+                            <div class="col-lg-8">
+                                @Edit.DropDownExtend("", "FuenteReclutamientoId", Model.FuenteReclutamientoList, validate: true, htmlClass: "form-control", required: true)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+            }
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" id="BtnCrearCandidatura">@Resources.Boton_Aceptar</button>
+        </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

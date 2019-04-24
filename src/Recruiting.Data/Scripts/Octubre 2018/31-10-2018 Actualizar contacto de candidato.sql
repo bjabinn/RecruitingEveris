@@ -1,0 +1,1 @@
+UPDATE CandidatoContacto SET Contacto = REPLACE(Contacto,' ','');

@@ -1,0 +1,76 @@
+@using System.Configuration;
+@using RecruitingWeb.Helpers
+@using RecruitingWeb.Properties
+@using RecruitingWeb.Components.DataTable.Helpers
+@using Recruiting.Application.Candidaturas.ViewModel
+
+<div class="modal fade" id="modalTablaCandidaturas">
+    <div class="modal-dialog modalTablaCandidaturasBecarios">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="row">
+                    <div class="col-lg-6 text-left">
+                        <h4 class="modal-title tituloModal">
+                            Lista de candidaturas
+                        </h4>
+                    </div>
+                    <div class="col-lg-6 text-right">
+                        <button type="button" class="btnCloseModal" data-dismiss="modal">@Display.GlyphiconButton("glyphicon-remove")</button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="form-filter filtroModal" id="form-filter">
+                    <!-- Start form-filter  -->
+                   
+
+                    <!-- Desechable:  Listado Para Probar ---- var items = new List<RowCandidatoViewModel>() -->
+                    <!-- Load Data Candidatos  -->
+                    @{
+                        int pagina = ViewBag.Pagina ?? 0;
+                        var config = Html.InitializeDataTable<CandidaturaRowViewModel>();
+                        config.Name("tablaCandidaturasModal")
+                        .AjaxLoadUrl(Url.Action("LoadCandidaturasModal", "Candidatos"))
+                        .CustomFilterAjax("getFiltersModalCandidaturas")
+                        .PrimaryKey(m => m.CandidaturaId.ToString())
+                        .AddPrimaryKeyToName(false)
+                        .Paginable()
+                        .PageSize(5)
+                        .InitialPage(pagina)
+                        .Columns(columns =>
+                        {
+                            columns.Bound(c => c.CandidaturaId).Header(Resources.HTML_Candidaturas_Index_ReferenciaHeader).ColumnName("CandidaturaId").Orderable(true).CssHeaderClass("ref-header");
+                            columns.Bound(c => c.OrigenCv).Header(Resources.HTML_Candidaturas_Index_OrigenCvHeader).ColumnName("OrigenCvId").Orderable(true).CssHeaderClass("origenCV-header");
+                            columns.Bound(c => c.Estado).Header(Resources.HTML_Candidaturas_Index_EstadoHeader).ColumnName("Estado").Orderable(true).CssHeaderClass("estado-header");
+                            columns.Bound(c => c.Etapa).Header(Resources.HTML_Candidaturas_Index_FaseHeader).ColumnName("Etapa").Orderable(true).CssHeaderClass("fase-header");
+                            columns.Bound(c => c.Candidato).Header(Resources.HTML_Candidaturas_Index_CandidatoHeader).ColumnName("Candidato").Orderable(true).CssHeaderClass("candidato-header");
+                            columns.Bound(c => c.TipoTecnologia).Header(Resources.HTML_Candidaturas_Index_TecnologiaHeader).ColumnName("TipoTecnologia").Orderable(true).CssHeaderClass("tecnologia-header");
+                            columns.Bound(c => c.Entrevistador).Header(Resources.HTML_Candidaturas_Index_EntrevistadorHeader).ColumnName("Entrevistador").Orderable(false).CssHeaderClass("entrevistador-header");
+                            columns.Bound(c => c.Agendada).Header(Resources.HTML_Candidaturas_Index_AgendadaHeader).ColumnName("Agendada").Orderable(false).CssHeaderClass("agendada-header");
+                            columns.Bound(c => c.Perfil).Header(Resources.HTML_Candidaturas_Index_PerfilHeader).ColumnName("Perfil").Orderable(true).CssHeaderClass("perfil-header");
+                            columns.Bound(c => c.Modulo).Header(Resources.HTML_Candidaturas_Index_ModuloHeader).ColumnName("Modulo").Orderable(true).CssHeaderClass("modulo-header");
+                            columns.Bound(c => c.PersonaCreacion).Header(Resources.HTML_Becarios_Index_PersonaCreacionHeader).ColumnName("PersonaCreacion").Orderable(true).CssHeaderClass("");
+                            columns.Bound(c => c.Centro).Header(Resources.HTML_Candidaturas_Index_CentroHeader).ColumnName("Centro").Orderable(true).CssHeaderClass("centro-header");
+                            
+
+                                columns.Template(
+                    @<div>
+
+                    </div>).Header(Resources.HTML_Candidaturas_Index_AccionesHeader);
+
+    });
+                    }
+
+                    @Html.Partial("Controls/DataTable", config)
+
+                    <div class="paginacionIn">
+                        <p> @Resources.HTML_Candidaturas_Index_TotalCandidaturas <span id="tempdataCandidaturas" class="tempdataTotalRegistros"></span> </p>
+                    </div>
+
+
+
+                </div>           
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+</div>

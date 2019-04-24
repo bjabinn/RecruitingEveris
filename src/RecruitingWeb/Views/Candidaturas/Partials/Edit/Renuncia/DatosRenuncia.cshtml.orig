@@ -1,0 +1,71 @@
+﻿<script src="~/Scripts/jquery/jquery-1.10.2.min.js"></script>
+<link rel="stylesheet" href="~/Content/sceditor/themes/default.min.css" type="text/css" />
+<script src="~/Scripts/sceditor/jquery.sceditor.xhtml.min.js"></script>
+
+@using RecruitingWeb.Properties
+@model Recruiting.Application.Candidaturas.ViewModel.CandidaturaViewModel
+
+
+<div class="row">
+    <div class="content-box">
+        <div class="content-box-content">
+            <div class="row section-header">
+                <div class="col-lg-6">
+                    <h4>@Resources.HTML_Candidaturas_Renuncia_DatosRenuncia </h4>
+                </div>
+            </div>
+<<<<<<< HEAD
+            <div class="content-box-content">
+                <div class="section-form-FiltradoCV" data-id="section-form-datosbasicos">
+                    <div class="row form-row">
+                        <div class="form-group col-lg-12">
+                            <label class="text-left col-lg-2" for="ComentariosRenunciaDescarte">@Resources.HTML_Candidaturas_Renuncia_ComentariosRenuncia</label>
+                            <div class="col-lg-10">
+                                @Edit.TextAreaEditor(Model.ComentariosRenunciaDescarte, name: "ComentariosRenunciaDescarte", id: "ComentariosRenunciaDescarte", rows: 5, required: false, htmlClass: "form-control")
+                            </div>
+                        </div>
+                    </div>
+                </div>
+=======
+
+            <div class="section-form-FiltradoCV" data-id="section-form-datosbasicos">
+>>>>>>> 4ee846a41b8cd773cde91f789bd4862724149f48
+                <div class="row form-row">
+                    <div class="form-group col-lg-4" id="MotivoRegion">
+                        <div class="col-lg-12 title-form">
+                            <label for="TipoRenunciaDescarte">@Resources.HTML_Candidaturas_ResultadoPrimeraEntrevista_Motivo</label>
+                        </div>
+                        <div class="col-lg-12">
+                            @Edit.DropDownExtend(Model.TipoRenunciaDescarte, "TipoRenunciaDescarte", ViewBag.TipoRenunciaList, htmlClass: "form-control", validate: true, required: true)
+                        </div>
+                    </div>
+                    <div class="form-group col-lg-8">
+                        <div class="col-lg-12 title-form">
+                            <label for="ComentariosRenunciaDescarte">@Resources.HTML_Candidaturas_Renuncia_ComentariosRenuncia</label>
+                        </div>
+                        <div class="col-lg-12">
+                            @Edit.TextArea(Model.ComentariosRenunciaDescarte, name: "ComentariosRenunciaDescarte", id: "ComentariosRenunciaDescarte", rows: 5, required: false, htmlClass: "form-control")
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> <!-- End content-box-content -->
+    </div> <!-- End .content-box -->
+</div> <!--End .Row-->
+
+<<<<<<< HEAD
+=======
+<script>
+    $(function () {
+        $("#ComentariosRenunciaDescarte").sceditor({
+            plugins: "xhtml",
+            toolbar: "font|bold,italic,underline,strike|bulletlist,orderedlist|horizontalrule|left,center,right,justify|removeformat|color|cut,copy,paste|link|maximize",
+            style: "default",            
+            height: 220,
+            resizeEnabled: false,
+            emoticonsEnabled: false
+        });
+    });
+</script>
+
+>>>>>>> 4ee846a41b8cd773cde91f789bd4862724149f48

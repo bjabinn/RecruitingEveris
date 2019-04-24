@@ -1,0 +1,442 @@
+﻿@using RecruitingWeb.Enums
+@using RecruitingWeb.Helpers
+@using Recruiting.Application.Roles.Enums
+@using Recruiting.Application.Usuarios.ViewModels
+@using RecruitingWeb.Properties
+
+@{ UsuarioRolPermisoViewModel usuario = HttpContext.Current != null ? (UsuarioRolPermisoViewModel)HttpContext.Current.Session["Usuario"] : null;
+    string nombreUsuario = null;
+    string cadenaFoto = "";
+    if (usuario != null)
+    {
+        nombreUsuario = usuario.UserName;
+        cadenaFoto = "http://myspacewe.everis.com/User%20Photos/Profile%20Pictures/" + nombreUsuario + "_MThumb.jpg";
+    }
+
+    var permisos = new Dictionary<int, string>();
+    var roles = new Dictionary<int, string>();
+
+    foreach (var rol in usuario.UsuarioRol)
+    {
+        roles.Add(rol.RolId, rol.Nombre);
+
+        foreach (var permiso in rol.PermisoRol)
+        {
+            if (!permisos.ContainsKey(permiso.PermisoId))
+            {
+                permisos.Add(permiso.PermisoId, permiso.PermisoNombre);
+            }
+        }
+    }
+
+    HttpContext.Current.Session["Permisos"] = permisos;
+    HttpContext.Current.Session["Roles"] = roles;
+ }
+
+<script type="text/javascript">
+window.addEventListener('error', function(e) {
+    if (e.target.src == '@cadenaFoto')
+    {
+        $(window).on("load", function () {0
+            HideUnloadedPhoto();
+        });
+    }
+}, true);
+
+</script>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Recruiting Tool</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/initJs")
+    <script src="~/Scripts/recruiting/Load.js"></script>
+</head>
+<body>
+
+    <div id="body-wrapper">
+
+        <!--Top bar-->
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <span minimaliza-sidebar="" class="ng-scope">
+                        <a id="toggleButton" class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#">
+                            <i class="fa fa-bars"></i>
+                        </a>
+                    </span>
+                    @{
+                        if (HttpContext.Current.Session["SideBarHidden"] != null
+                            && (bool)HttpContext.Current.Session["SideBarHidden"] == true)
+                        {
+                            @Html.Raw("<div id=\"small-buttons\" style=\"opacity: 1\">");
+                        }
+                        else
+                        {
+                            @Html.Raw("<div id=\"small-buttons\" style=\"opacity: 0\">");
+                        }
+                    }
+                    <span minimaliza-sidebar="" class="ng-scope">
+                        <a name="smallButton" href="@Url.Action("Index", "Dashboard")" class="navbar-minimalize minimalize-styl-2 btn btn-primary" data-option-name="Dashboard" title="@Resources.HTML_Title_AccesoDashboard">
+                            <i class="fa fa-dashboard" style="display: inline"></i>
+                        </a>
+                        <a name="smallButton" href="@Url.Action("Index", "Necesidades")" class="navbar-minimalize minimalize-styl-2 btn btn-primary @(!permisos.ContainsKey((int)PermisosRolesEnum.VerNecesidad) ? "hide" : "")" data-option-name="Necesidades" title="@Resources.HTML_Title_ConsultaCreaNecesidades">
+                            <i class="fa fa-bullseye" style="display: inline"></i>
+                        </a>
+                        <a name="smallButton" href="@Url.Action("Index", "Candidaturas")" class="navbar-minimalize minimalize-styl-2 btn btn-primary @(!permisos.ContainsKey((int)PermisosRolesEnum.VerCandidatura) ? "hide" : "")" data-option-name="Candidaturas" title="@Resources.HTML_Title_ConsultaCreaCandidaturas">
+                            <i class="fa fa-inbox" style="display: inline"></i>
+                        </a>
+                        <a name="smallButton" href="@Url.Action("Index", "Candidatos")" class="navbar-minimalize minimalize-styl-2 btn btn-primary @(!permisos.ContainsKey((int)PermisosRolesEnum.VerCandidato) ? "hide" : "")" data-option-name="Candidatos" title="@Resources.HTML_Title_ConsultaCreaCandidatos">
+                            <i class="fa fa-user" style="display: inline"></i>
+                        </a>
+                        <a name="smallButton" href="@Url.Action("Index", "PersonasLibres")" class="navbar-minimalize minimalize-styl-2 btn btn-primary @(!permisos.ContainsKey((int)PermisosRolesEnum.VerPersonasLibres) ? "hide" : "")" data-option-name="PersonasLibres" title="@Resources.HTML_Title_ConsultaCreaPersonasLibres">
+                            <i class="fa fa-user-o" style="display: inline"></i>
+                        </a>
+                        <a name="smallButton" href="@Url.Action("Index", "Becarios")" class="navbar-minimalize minimalize-styl-2 btn btn-primary @(!permisos.ContainsKey((int)PermisosRolesEnum.VerBecario) ? "hide" : "")" data-option-name="Becarios" title="@Resources.HTML_Title_ConsultaCreaBecarios">
+                            <i class="fa fa-book" style="display: inline"></i>
+                        </a>
+                        <a name="smallButton" href="@Url.Action("StaffingNecesidades", "Necesidades")" class="navbar-minimalize minimalize-styl-2 btn btn-primary @(!permisos.ContainsKey((int)PermisosRolesEnum.VerStaffingNecesidades) ? "hide" : "")" data-option-name="Staffing" title="@Resources.HTML_AsignaNecesidadesPersonas">
+                            <i class="fa fa-globe" style="display: inline"></i>
+                        </a>
+                        <a name="smallButton" href="@Url.Action("Index", "FunnelProcesos")" class="navbar-minimalize minimalize-styl-2 btn btn-primary @(!permisos.ContainsKey((int)PermisosRolesEnum.VerFunnelProcesos) ? "hide" : "")" data-option-name="Funnel" title="@Resources.HTML_ConsultaProcesos">
+                            <i class="fa fa-signal" style="display: inline"></i>
+                        </a>                        
+                    </span>
+                    @Html.Raw("</div>")
+                </div>
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="admin-menu" style="@((roles.ContainsKey((int)RolesEnum.SuperAdministrador) || roles.ContainsKey((int)RolesEnum.People)) ? "" : "display: none")">
+                        <a href="@Url.Action("Index", "Admin")" data-option-name="Admin" title="@Resources.HTML_Title_ConsultaCreaUsuariosRoles">
+                            <span class="glyphicon glyphicon-cog"></span> @Resources.HTML_Layout_Configuracion
+                        </a>
+                    </li>
+                    <li class="admin-menu">
+                        <a href="@Url.Action("LogOff", "Account")" data-option-name="singout" title="@Resources.HTML_Title_SalirAplicacion">
+                            <span class="glyphicon glyphicon-log-out"></span> @Resources.HTML_Layout_SignOut
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <div class="inner-wrapper">
+            <!--Left bar-->
+            @{
+                if (HttpContext.Current.Session["SideBarHidden"] != null
+                    && (bool)HttpContext.Current.Session["SideBarHidden"] == true)
+                {
+                    @Html.Raw("<nav id=\"sidebar\" style=\"width: 0px; position: relative; \">");
+                }
+                else
+                {
+                    @Html.Raw("<nav id=\"sidebar\">");
+                }
+            }
+
+
+            <!-- Sidebar with logo and menu -->
+            @*<h1 id="sidebar-title"><a href="#">Recruiting Admin</a></h1>*@
+
+            <!-- Logo (221px wide) -->
+            @*<a href="@Url.Action("Index", "Necesidades")" class="left-menu-logo"></a>*@
+
+            <!-- Sidebar Profile links -->
+            <!-- Accordion Menu -->
+            <ul id="main-nav">
+                <li id="profile-links" class="nav-header">
+                    @*<h5>@usuario.Aplication</h5>*@
+                    <div>
+                        <div class="user-photo">
+                            @if (cadenaFoto != "")
+                            {
+                    <img id="real-photo" alt="image" height="60" width="60" class="img-circle" src="@cadenaFoto">
+                    <img id="user-photo" alt="image" height="60" width="60" class="img-circle" src="" hidden>
+                            }
+                            else
+                            {
+            <img id="user-photo" alt="image" height="60" width="60" class="img-circle" src="">
+}
+                        </div>
+                        <span class="block m-t-xs ng-binding">@if (usuario != null)
+                        {
+                            @usuario.Usuario
+                        }
+                        </span><br />
+                        <small>
+                            <span id="profile-button" class="text-xs block">@Resources.HTML_Layout_MisRoles&nbsp;&nbsp;<span id="profile-arrow" class="fa fa-caret-down"></span></span>
+                        </small>
+                    </div>
+
+                    <ul id="profile-menu" name="profile-menu" class="dropdown-menu">
+                        @*<li><u><b>Mis roles:</b></u></li>*@
+                        @if (usuario != null)
+                        {
+                            foreach (var rol in usuario.UsuarioRol)
+                            {
+                    <li>@rol.Nombre</li>
+                            }
+                        }
+
+                    </ul>
+                </li>
+                  
+                <li>
+                    <a href="@Url.Action("Index", "Dashboard")" class="nav-top-item no-submenu" data-option-name="Dashboard" title="@Resources.HTML_Title_AccesoDashboard">
+                        <div><i class="fa fa-dashboard" style="display: inline"></i></div>
+                        <span>@Resources.HTML_Layout_Dashboard</span>
+                    </a>
+                </li>
+                <li class="@(!permisos.ContainsKey((int)PermisosRolesEnum.VerNecesidad) ? "hide" : "")">
+                    <a href="@Url.Action("Index", "Necesidades")" class="nav-top-item no-submenu" data-option-name="Necesidades" title="@Resources.HTML_Title_ConsultaCreaNecesidades">
+                        <div><i class="fa fa-bullseye" style="display: inline"></i></div>
+                        <span>@Resources.HTML_Layout_Necesidades</span>
+                    </a>
+                </li>
+
+                <li class="@(!permisos.ContainsKey((int)PermisosRolesEnum.VerCandidatura) ? "hide" : "")">
+                    <a href="@Url.Action("Index", "Candidaturas")" class="nav-top-item no-submenu" data-option-name="Candidaturas" title="@Resources.HTML_Title_ConsultaCreaCandidaturas">
+                        <div><i class="fa fa-inbox" style="display: inline"></i></div>
+                        <span>@Resources.HTML_Layout_Candidaturas</span>
+                    </a>
+                </li>
+
+                <li class="@(!permisos.ContainsKey((int)PermisosRolesEnum.VerCandidato) ? "hide" : "")">
+                    <a href="@Url.Action("Index", "Candidatos")" class="nav-top-item no-submenu" data-option-name="Candidatos" title="@Resources.HTML_Title_ConsultaCreaCandidatos">
+                        <div><i class="fa fa-user" style="display: inline"></i></div>
+                        <span>@Resources.HTML_Layout_Candidatos</span>
+                    </a>
+                </li>
+                <li class="@(!permisos.ContainsKey((int)PermisosRolesEnum.VerPersonasLibres) ? "hide" : "")">
+                    <a href="@Url.Action("Index", "PersonasLibres")" class="nav-top-item no-submenu" data-option-name="PersonasLibres" title="@Resources.HTML_Title_ConsultaCreaPersonasLibres">
+                        <div><i class="fa fa-user-o" style="display: inline"></i></div>
+                        <span>@Resources.HTML_Layout_PersonasLibres</span>
+                    </a>
+                </li>
+
+                <li class="@(!permisos.ContainsKey((int)PermisosRolesEnum.VerBecario) ? "hide" : "")">
+                    <a href="@Url.Action("Index", "Becarios")" class="nav-top-item no-submenu" data-option-name="Becarios" title="@Resources.HTML_Title_ConsultaCreaBecarios">
+                        <div><i class="fa fa-book" style="display: inline"></i></div>
+                        <span>@Resources.HTML_Layout_Becarios</span>
+
+                    </a>
+                </li>
+                <li class="@(!permisos.ContainsKey((int)PermisosRolesEnum.VerStaffingNecesidades) ? "hide" : "")">
+                    <a href="@Url.Action("StaffingNecesidades", "Necesidades")" class="nav-top-item no-submenu" data-option-name="Staffing" title="@Resources.HTML_AsignaNecesidadesPersonas">
+                        <div><i class="fa fa-globe" style="display: inline"></i></div>
+                        <span class="text">@Resources.HTML_Layout_StaffingNecesidades</span>
+                    </a>
+                </li>
+                <li class="@(!permisos.ContainsKey((int)PermisosRolesEnum.VerFunnelProcesos) ? "hide" : "")">
+                    <a href="@Url.Action("Index", "FunnelProcesos")" class="nav-top-item no-submenu" data-option-name="Funnel" title="@Resources.HTML_AsignaNecesidadesPersonas">
+                        <div><i class="fa fa-signal" style="display: inline"></i></div>
+                        <span class="text">@Resources.HTML_Layout_FunnelProcesos</span>
+                    </a>
+                </li>
+            </ul> <!-- End #main-nav -->
+
+            @Html.Raw("</nav>")
+            <!-- End #sidebar -->
+
+
+            @{
+                var claseDahsboard = Request.Url.ToString().Contains("Dashboard") ? "headerDashboard" : "";
+            }
+
+            <div id="main-content">
+                <div>
+
+                    <!-- Sub Header -->
+                    <div class="row sub-header">
+
+                        <div class="ibox col-xs-12 animated fadeIn @claseDahsboard" style="margin-bottom: 0px;">
+
+                            <div class="ibox-content p-sm">
+
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="inner-main-content">
+
+
+                        <!-- Main Content Section with everything -->
+
+                        @RenderBody()
+
+
+                        @*<div id="footer">
+                                <small>
+                                    Everis Center 2015 Recruiting Tool | <a href="#">Top</a>
+                                </small>
+                            </div>*@
+
+                        <!-- End #footer -->
+                    </div>
+
+
+                    <div id="footer">
+                        <div class="pull-right">
+                            <img src="~/Content/images/logo_everis_sm.png" alt="everis">
+                        </div>
+                        <div>
+                            everis Centers © 2015-<span id="cfeet">2017</span>
+                            <script type="text/javascript">
+                                document.getElementById('cfeet').innerHTML = new Date().getFullYear();
+                            </script>
+                        </div>
+                    </div>
+                </div>
+            </div> <!-- End #main-content -->
+
+        </div>
+    </div>
+
+    @Scripts.Render("~/bundles/base")
+    @Scripts.Render("~/bundles/plugins")
+    @Scripts.Render("~/bundles/jointJsAndDependencies")
+    @Scripts.Render("~/bundles/recruiting")
+    @RenderSection("scripts", required: false)
+    @Html.WriteScriptBlocks()
+
+    <!-- Script Pop Ups de Notificación-->
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            $(".sceditor-button").click(function () {
+                if ($(".sceditor-container").hasClass("sceditor-maximize")) {
+                    $("nav").css("z-index", "0");
+                    $("#sidebar").css("z-index", "0");
+                }
+                else {
+                    $("nav").css("z-index", "2");
+                    $("#sidebar").css("z-index", "1");
+                }
+            })
+
+
+            //check if scroll
+            if ($("#main-content").prop('scrollHeight') > $("#main-content").height()) {
+                $("#footer").css("bottom", "initial");
+            } else {
+                $("#footer").css("bottom", "0");
+            }
+
+            //check if resize
+            $("#main-content").resize(function () {
+                if ($("#main-content").prop('scrollHeight') > $("#main-content").height()) {
+                    $("#footer").css("bottom", "initial");
+                } else {
+                    $("#footer").css("bottom", "0");
+                }
+            });
+
+
+            //this is a mock service photo user to demo
+            $("#user-photo").attr("src", "/Content/images/mock.JPG");
+
+            $("#profile-button").click(function () {
+                if ($("#profile-menu").css("transform") == "matrix(1, 0, 0, 1, 0, 0)") {
+                    $("#profile-menu").css("transform", "scale(0.7, 0)");
+                    $("#profile-arrow").attr('class', 'fa fa-caret-down');
+                } else {
+                    $("#profile-menu").css("transform", "scale(1, 1)");
+                    $("#profile-arrow").attr('class', 'fa fa-caret-up');
+                }
+            })
+
+
+            var typeMessage;
+
+
+            //toggle button to hide/show sidebar
+            $('#toggleButton').click(function () { ToggleSidebar(); return false; });
+
+            function ToggleSidebar() {
+                //sidebar hide
+                if ($("#sidebar").css("width") != "0px") {
+                    $("#sidebar").css("width", "0px");
+                    $("#main-content").css("width", "100%");
+                    EnableSmallButtons();
+                    localStorage.setItem("sidebarHidden", true);
+                    $.ajax({ url: '@Url.Action("SideBarHidden", "Home")' });
+                }
+                    //sidebar show
+                else {
+                    if ($(window).width() >= 767) {
+                        $("#sidebar").css("position", "relative");
+                    } else {
+                        $("#sidebar").css("position", "fixed");
+                    }
+                    $("#sidebar").css("width", "220px");
+                    $("#sidebar").css("position", "relative");
+                    DisableSmallButtons();
+                    localStorage.setItem("sidebarHidden", false);
+                    $.ajax({ url: '@Url.Action("SideBarDisplayed", "Home")' });
+                }
+            }
+
+            //check content width when resize
+            $(window).resize(function () {
+                if ($(window).width() >= 767) {
+                    $("#sidebar").css("position", "relative");
+                    if ($("#sidebar").css("width") != "0px") {
+                    }
+                } else {
+                    $("#sidebar").css("width", "0px");
+                    $("#sidebar").css("position", "fixed");
+                    EnableSmallButtons();
+                    localStorage.setItem("sidebarHidden", true);
+                    $.ajax({ url: '@Url.Action("SideBarHidden", "Home")' });
+                }
+            });
+
+            //check if the meno was hidden previously
+            $(window).on("load", function () {
+                if (localStorage.getItem("sidebarHidden") == "true") {
+                    $("#sidebar").css("width", "0px");
+                    $("#sidebar").css("position", "fixed");
+                    EnableSmallButtons();
+                    $.ajax({ url: '@Url.Action("SideBarHidden", "Home")' });
+                }
+            })
+
+            function EnableSmallButtons()
+            {
+                $('#small-buttons').css("opacity", "1");
+                $('[name="smallButton"]').removeAttr('disabled');
+            }
+
+            function DisableSmallButtons()
+            {
+                $('#small-buttons').css("opacity", "0");
+                $('[name="smallButton"]').attr('disabled', 'disabled');
+            }
+
+            @if( ViewBag.ShowMessage == true){
+            if (TypeMessageEnum.AlertMessage == ViewBag.TypeMessage){
+            @: typeMessage = BootstrapDialog.TYPE_NOTIFY;
+                                                                                }
+            if (TypeMessageEnum.ErrorMessage == ViewBag.TypeMessage){
+                    @: typeMessage = BootstrapDialog.TYPE_ERROR;
+                                                                                }
+            if (TypeMessageEnum.PermisoMessage == ViewBag.TypeMessage){
+            @: typeMessage = BootstrapDialog.TYPE_ERROR;
+                                                                                }
+            @: BootstrapDialog.show({ type: typeMessage, title: '@ViewBag.TitleMessage', message: '@ViewBag.TextMessage', });
+                                                                                }
+        });
+
+        function HideUnloadedPhoto() {
+            $('#user-photo').removeAttr('hidden');
+            $('#real-photo').prop('hidden', 'hidden');
+        }
+
+    </script>
+
+</body>
+</html>

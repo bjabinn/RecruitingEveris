@@ -1,0 +1,98 @@
+﻿@using RecruitingWeb.Helpers
+@using RecruitingWeb.Components.Searchable
+@using RecruitingWeb.Properties
+
+@{
+    int nSubEntrevistas = (int)HttpContext.Current.Session["NumeroSubEntrevistas"];
+}
+
+<div class="modal fade" id="modalAniadirSubEntrevista">
+    <div class="modal-dialog modalAniadirSubEntrevista">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="row">
+                    <div class="col-lg-6 text-left">
+                        <h4 class="modal-title tituloModal">
+                            @Resources.HTML_Candidaturas_ModalAniadirSubEntrevista_AniadirNuevaSubentrevista
+                        </h4>
+                    </div>
+                    <div class="col-lg-6 text-right">
+                        <button type="button" class="btnCloseModal" data-dismiss="modal">@Display.GlyphiconButton("glyphicon-remove")</button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body">
+                @using (Html.BeginForm("AgregarUnaSubEntrevista", "Candidaturas", FormMethod.Post, new Dictionary<string, object> { { "id", "formAniadirSubEntrevista" }, { "role", "form" }, { "data-parsley-validate", "true" }, { "enctype", "multipart/form-data" } }))
+                {
+                    <div class="row">
+                        <div class="form-filter camposModalAniadirSubEntrevista" id="form-filter">
+                            <div class="form-group col-lg-12">
+                                <table id="listSubmitSubInterview" data-id="listSubmit">
+                                    <thead>
+                                        <tr role="row">
+                                            <th>@Resources.HTML_Candidaturas_ModalAniadirSubEntrevista_EntrevistadorHeader</th>
+                                            <th>@Resources.HTML_Candidaturas_ModalAniadirSubEntrevista_FechaSubentrevistaHeader</th>
+                                            <th>@Resources.HTML_Candidaturas_ModalAniadirSubEntrevista_TipoSubentrevista</th>
+                                            <th>@Resources.HTML_Candidaturas_ModalAniadirSubEntrevista_Presencial</th>
+                                            <th>@Resources.HTML_Candidaturas_ModalAniadirSubEntrevista_NotificarCandidato</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr role="row" id="subEntrevistaModal" name="subEntrevistaModal">
+                                            <td class="hidden">
+                                                @Edit.Hidden(0, "EntrevistadorNameModal", new Dictionary<string, string> { { "id", "EntrevistadorNameModal" } })
+                                                @Edit.Hidden(0, "CandidaturaIdModal", new Dictionary<string, string> { { "id", "CandidaturaIdModal" } })
+                                            </td>
+                                            <td>
+                                                <div class="col-lg-12 text-left">
+                                                    @(Html.Searchable("EntrevistadorIdModal", Url)
+                                                                    .Id("EntrevistadorIdSearchableModal")
+                                                                    .AddCssClass("form-control")
+                                                                    .Action("GetUsuariosByNombreUsuario", "Admin")
+                                                    )
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div id="datetimepicker" class="input-append date">
+                                                    <input name="FechaSubEntrevistaModal" id="FechaSubEntrevistaModal" class="form-control" type="text" style="z-index:3" required />                                                   
+                                                </div>
+                                            </td>
+                                            <td>
+                                                @Edit.DropDownExtend("", "TipoSubEntrevistaIdModal", Model.TipoSubEntrevistaList, id: "TipoSubEntrevistaModal", required: true)
+                                            </td>
+                                            <td>
+                                                @Edit.DropDownExtend("False",
+                                                       "PresencialModal",
+                                                       new SelectList(new Dictionary<string, string>
+                                                       {
+                                                                                                                            {Resources.Si, "True"},
+                                                                                                                            {Resources.No, "False"}
+                                                       },
+                                                       "Value", "Key"),
+                                                       validate: true, multiple: false, id: "PresencialModal", showEmptyOption: false, required: false)
+                                            </td>
+                                            <td>
+                                                @Edit.DropDownExtend("False",
+                                                       "AvisarAlCandidatoModal",
+                                                       new SelectList(new Dictionary<string, string>
+                                                       {
+                                                                                                                            {Resources.Si, "True"},
+                                                                                                                            {Resources.No, "False"}
+                                                       },
+                                                       "Value", "Key"),
+                                                       validate: true, multiple: false, id: "AvisarAlCandidatoModal", showEmptyOption: false, required: false)
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" id="BtnAddSubEntrevista">@Resources.HTML_Candidaturas_ModalAniadirSubEntrevista_Aniadir</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

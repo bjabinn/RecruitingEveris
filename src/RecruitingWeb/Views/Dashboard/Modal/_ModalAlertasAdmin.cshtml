@@ -1,0 +1,82 @@
+﻿@using RecruitingWeb.Components.Searchable
+@using RecruitingWeb.Properties
+@model Recruiting.Application.Dashboard.ViewModels.AlertasAdministradorViewModel
+
+<div class="modal fade" id="modalAlertasAdmin">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="row">
+                    <div class="col-lg-6 text-left">
+                        <h4 class="modal-title tituloModal">
+                            @Resources.HTML_Dashboard_ModalAlertasAdmin_Elegiralertas
+                        </h4>
+                    </div>
+                    <div class="col-lg-6 text-right">
+                        <button type="button" class="btnCloseModal" data-dismiss="modal">@Display.GlyphiconButton("glyphicon-remove")</button>
+                    </div>
+                </div>
+            </div>
+            @using (Html.BeginForm("SaveAlertasAdmin", "Dashboard", FormMethod.Post, new Dictionary<string, object> { { "class", "form-horizontal" }, { "role", "form" }, { "data-parsley-validate", "true" }, { "data-parsley-excluded", ":not([data-validate]) , [disabled]" }, { "enctype", "multipart/form-data" } }))
+            {
+                @Edit.Hidden(Model.UsuarioId.ToString(), "UsuarioId");
+
+                <div class="modal-body">
+                    <div>
+                        <p> @Resources.HTML_Dashboard_ModalAlertasAdmin_SeleccioneAlertasDashboard</p>
+                    </div>
+                    <div class="row">
+                        <label class="col-lg-4" for="NecesidadesCreadasModificadas">@Resources.HTML_Dashboard_ModalAlertasAdmin_NecesidadesCreadasModificadas</label>
+                        <div class="col-lg-1 customCheckbox2">
+                            @Edit.Checkbox(Model.NecesidadesCreadasModificadas, "NecesidadesCreadasModificadas", id: "NecesidadesCreadasModificadas")
+                        </div>
+                        <label class="col-lg-4" for="PrimeraEntrevista">@Resources.HTML_Dashboard_ModalAlertasAdmin_PrimerasEntrevistas</label>
+                        <div class="col-lg-1 customCheckbox2">
+                            @Edit.Checkbox(Model.PrimeraEntrevista, "PrimeraEntrevista", id: "PrimeraEntrevista")
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="col-lg-4" for="SubEntrevistaPrimeraEntrevista">@Resources.HTML_Dashboard_ModalAlertasAdmin_SubEntrevistasPrimeraEntrevista</label>
+                        <div class="col-lg-1 customCheckbox2">
+                            @Edit.Checkbox(Model.SubEntrevistaPrimeraEntrevista, "SubEntrevistaPrimeraEntrevista", id: "SubEntrevistaPrimeraEntrevista")
+                        </div>
+                        <label class="col-lg-4" for="SegundaEntrevista">@Resources.HTML_Dashboard_ModalAlertasAdmin_EntrevistasComplementarias</label>
+                        <div class="col-lg-1 customCheckbox2">
+                            @Edit.Checkbox(Model.SegundaEntrevista, "SegundaEntrevista", id: "SegundaEntrevista")
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="col-lg-4" for="SubEntrevistaSegundaEntrevista">@Resources.HTML_Dashboard_ModalAlertasAdmin_SubEntrevistasEntrevistaComplementaria</label>
+                        <div class="col-lg-1 customCheckbox2">
+                            @Edit.Checkbox(Model.SubEntrevistaSegundaEntrevista, "SubEntrevistaSegundaEntrevista", id: "SubEntrevistaSegundaEntrevista")
+                        </div>
+                        <label class="col-lg-4" for="CartaOferta">@Resources.HTML_Dashboard_ModalAlertasAdmin_CartaOferta</label>
+                        <div class="col-lg-1 customCheckbox2">
+                            @Edit.Checkbox(Model.CartaOferta, "CartaOferta", id: "CartaOferta")
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="col-lg-4" for="CvPendienteFiltro">@Resources.HTML_Dashboard_ModalAlertasAdmin_CvPendienteFiltro</label>
+                        <div class="col-lg-1 customCheckbox2">
+                            @Edit.Checkbox(Model.CvPendienteFiltro, "CvPendienteFiltro", id: "CvPendienteFiltro")
+                        </div>
+                        <label class="col-lg-4" for="CandidaturaStandBy">@Resources.HTML_Dashboard_ModalAlertasAdmin_CandidaturasStandBy</label>
+                        <div class="col-lg-1 customCheckbox2">
+                            @Edit.Checkbox(Model.CandidaturaStandBy, "CandidaturaStandBy", id: "CandidaturaStandBy")
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="col-lg-4" for="AvisarAlCandidato">@Resources.HTML_Dashboard_ModalAlertasAdmin_BecariosStandBy</label>
+                        <div class="col-lg-1 customCheckbox2">
+                            @Edit.Checkbox(Model.BecarioStandBy, "BecarioStandBy", id: "BecarioStandBy")
+                        </div>
+                    </div>
+                </div>
+            }
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" id="BtnGuardarAlertas">@Resources.Boton_Aceptar</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

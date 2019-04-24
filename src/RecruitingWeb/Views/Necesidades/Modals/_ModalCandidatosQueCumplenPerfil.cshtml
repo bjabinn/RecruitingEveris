@@ -1,0 +1,90 @@
+﻿@using RecruitingWeb.Properties
+@using RecruitingWeb.Components.DataTable.Helpers
+
+@using Recruiting.Application.Candidatos.ViewModels
+
+<div class="modal fade" id="modalCandidatosQueCumplenPerfil">
+    <div class="modal-dialog modalBusquedaDialogo">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="row">
+                    <div class="col-lg-8 text-left">
+                        <h4 class="modal-title tituloModal">
+                            @Resources.HTML_Necesidades_ModalCandidatosQueCumplenPerfil_CandidatosCumplenPerfil
+                        </h4>
+                    </div>
+                    <div class="col-lg-4 text-right">
+                        <button type="button" class="btnCloseModal" data-dismiss="modal">@Display.GlyphiconButton("glyphicon-remove")</button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="form-filter filtroModal" id="form-filterCandidatosQueCumplenPerfil">
+                    <div class="row">
+                        <div class="col-lg-12" style="text-align: right; margin-top:5px; margin-bottom:10px;">
+                            <div class="btn-group" role="group">
+                                <a class="btn btn-default" id="limpiarModalCandidatosQueCumplenPerfil">
+                                    <span class="text"> @Resources.HTML_BotonGenericoLimpiar</span>
+                                </a>
+                                <a class="btn btn-default" id="buscarModalCandidatosQueCumplenPerfil">
+                                    <span class="text"> @Resources.HTML_BotonGenericoBuscar</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" data-id="formFilter">
+                        <div class="form-group col-lg-6">
+                            <div class="col-lg-12 title-form">
+                                <label for="filterNombre">@Resources.HTML_Necesidades_ModalCandidatosQueCumplenPerfil_Nombre</label>
+                            </div>
+                            <div class="col-lg-12">
+                                @Edit.Text((string)null, "filterNombreCandidatoQueCumplePerfil", id: "filterNombreCandidatoQueCumplePerfil", required: false, validate: true, htmlClass: "form-control col-lg-4")
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-6">
+                            <div class="col-lg-12 title-form">
+                                <label for="filterApellidos">@Resources.HTML_Necesidades_ModalCandidatosQueCumplenPerfil_Apellidos</label>
+                            </div>
+                            <div class="col-lg-12">
+                                @Edit.Text((string)null, "filterApellidosCandidatoQueCumplePerfil", id: "filterApellidosCandidatoQueCumplePerfil", required: false, validate: true, htmlClass: "form-control col-lg-4")
+                            </div>
+                        </div>
+                        @Html.Hidden("filterNecesidadIdCandidatoQueCumplePerfil", "")
+                        @Html.Hidden("filterTipoTecnologiaIdCandidatoQueCumplePerfil", "")
+                        @Html.Hidden("filterTipoPerfilIdCandidatoQueCumplePerfil", "")
+                        <input id="filterBuscarCandidatoQueCumplePrefil" name="filterBuscarCandidatoQueCumplePerfil" hidden />
+                    </div>
+                </div>
+                @{
+                    var config = Html.InitializeDataTable<CandidatoQueCumplePerfilRowViewModel>();
+                    config.Name("tablaCandidatosQueCumplenPerfil")
+                        .AjaxLoadUrl(Url.Action("LoadCandidatosQueCumplenPerfil", "Necesidades"))
+                        .CustomFilterAjax("getFiltersCandidatosQueCumplenPerfil")
+                        .PrimaryKey(m => m.CandidatoId.ToString())
+                        .AddPrimaryKeyToName(false)
+                        .Paginable()
+                        .PageSize(8)
+                        .Columns(columns =>
+                        {
+                            columns.Bound(c => c.CandidatoId).Header(Resources.HTML_Necesidades_ModalCandidatosQueCumplenPerfil_ReferenciaHeader).ColumnName("Referencia").Orderable(true);
+                            columns.Bound(c => c.Nombre).Header(Resources.HTML_Necesidades_ModalCandidatosQueCumplenPerfil_NombreHeader).ColumnName("Nombre").Orderable(true);
+                            columns.Bound(c => c.Apellidos).Header(Resources.HTML_Necesidades_ModalCandidatosQueCumplenPerfil_ApellidosHeader).ColumnName("Apellidos").Orderable(true);
+                            columns.Bound(c => c.NumeroIdentificacion).Header(Resources.HTML_Necesidades_ModalCandidatosQueCumplenPerfil_IdentificacionHeader).ColumnName("Identificación").Orderable(false);
+                            columns.Bound(c => c.EtapaCandidatura).Header("Fase Candidatura").ColumnName(Resources.HTML_Necesidades_ModalCandidatosQueCumplenPerfil_FaseCandidaturaHeader).Orderable(false);
+                            columns.Bound(c => c.candidaturaIdAsociado).Header("Candidatura").ColumnName(Resources.HTML_Necesidades_ModalCandidatosQueCumplenPerfil_CandidaturaHeader).Orderable(false);
+                            columns.Template(@<div>
+
+        </div>).Header("Seleccionar").CssHeaderClass("text-center");
+                  });
+
+                }
+                <div id="partialTable">
+                    @Html.Partial("Controls/DataTable", config)
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" id="BtnCandidatosQueCumplenPerfil">@Resources.HTML_BotonGenericoSeleccionar</button>
+            </div>
+        </div>
+    </div>
+</div>

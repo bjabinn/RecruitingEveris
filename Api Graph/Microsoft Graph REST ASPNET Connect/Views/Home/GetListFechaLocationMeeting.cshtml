@@ -1,0 +1,65 @@
+﻿@model IEnumerable<Microsoft_Graph_REST_ASPNET_Connect.Models.FindMeetingTimesRowViewModel>
+
+@{
+    ViewBag.Title = "GetListFechaLocationMeeting";
+}
+
+<h2>GetListFechaLocationMeeting</h2>
+
+@*<p>
+    @Html.ActionLink("Create New", "Create")
+</p>*@
+
+@using (Html.BeginForm("GetListFechaLocationMeeting", "Home", FormMethod.Post))
+{
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Fecha)
+        </th>
+        <th>
+            @Html.DisplayNameFor(modelItem => modelItem.Salas)
+        </th>
+        <th>
+            @Html.DisplayNameFor(modelItem => modelItem.Selected)
+        </th>
+        <th></th>
+    </tr>
+
+@for (int i = 0; i < Model.Count(); i++)
+{
+    <tr>
+        @*@for (int j = 0; j < Model.ToArray()[i].attendees.Count(); j++)
+        {
+            @Html.HiddenFor(modelItem => Model.ToArray()[i].attendees.ToArray()[j])
+        }*@
+        
+
+        @Html.HiddenFor(modelItem => Model.ToArray()[i].attendees)
+        <td>
+            @Html.DisplayFor(modelItem => Model.ToArray()[i].Fecha)
+            @Html.HiddenFor(modelItem => Model.ToArray()[i].Fecha)
+        </td>
+        <td>
+            @Html.DropDownListFor(modelItem => Model.ToArray()[i].MailSelected,
+                          new SelectList(Model.ToArray()[i].Salas, "Email", "Name"))
+        </td>
+        <td>
+            @Html.EditorFor(modelItem => Model.ToArray()[i].Selected)
+        </td>
+        @*<td>
+            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+        </td>*@
+    </tr>
+}
+
+
+</table>
+@*<button class="btn btn-default" id="submit">Submit</button>*@
+<input type="submit" id="Submit" value="Submit" class="btn btn-default" />
+}
+
+

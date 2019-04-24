@@ -1,0 +1,16 @@
+﻿@using RecruitingWeb.Components.DataTable.Helpers
+@using RecruitingWeb.Helpers
+@using Recruiting.Application.Candidatos.ViewModels
+@using RecruitingWeb.Properties
+
+@model Recruiting.Application.Candidaturas.ViewModel.AgendarCartaOfertaViewModel
+
+<div class="row">
+    <div class="content-box border-top-cero">
+        <div class="content-box-content">
+            <div class="section-form-cartaOferta" data-id="section-form-cartaOferta">
+                @Html.Partial("~/Views/Candidaturas/Partials/Edit/CartaOferta/_DatosCartaOferta.cshtml", Model.AgendarCartaOferta)
+            </div>
+        </div>
+    </div>
+</div>

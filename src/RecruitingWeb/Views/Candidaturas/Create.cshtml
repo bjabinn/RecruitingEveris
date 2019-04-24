@@ -1,0 +1,46 @@
+﻿@using RecruitingWeb.Properties
+
+@using Recruiting.Application.Candidaturas.Enums
+@using Recruiting.Application.Maestros.Enums
+
+@model Recruiting.Application.Candidaturas.ViewModel.CandidaturaDatosBasicosViewModel
+
+<div class="row titlePage">
+    <div class="col-lg-6">
+        <h3>@Resources.HTML_Candidaturas_Create_CrearCandidatura - @Model.DatosBasicos.NombreCandidato</h3>
+    </div>
+</div>
+
+<div class="row header-flap">    
+    <div class="btn-group" role="group">
+        <a href="@Url.Action("Volver", "Candidaturas")" class="btn btn-default">
+            <span class="text">@Resources.HTML_BotonGenericoVolver</span>
+        </a>
+        <a href="#" data-action="finalizar" class="btn btn-default">
+            <span class="text">@Resources.HTML_BotonGenericoFinalizar</span>
+        </a>
+    </div>    
+    <div class="col-lg-6 removePadding">
+        <h4 class="noMargin headerBox">@Resources.HTML_Candidaturas_Create_DatosCandidatura</h4>
+    </div>
+</div>
+@using (Html.BeginForm("Create", "Candidaturas", FormMethod.Post, new Dictionary<string, object> { { "class", "form-horizontal" }, { "role", "form" }, { "data-parsley-validate", "true" }, { "enctype", "multipart/form-data" } }))
+{
+    var candidaturaId = (Model.DatosBasicos.CandidaturaId != null) ? Model.DatosBasicos.CandidaturaId : null;
+
+    @Edit.Hidden("guardar", "SubmitType")
+    @Edit.Hidden(candidaturaId, "DatosBasicos.CandidaturaId")
+    
+    @Html.Partial("~/Views/Candidaturas/Partials/Create/_DatosBasicos.cshtml", Model.DatosBasicos)
+}
+@Html.Partial("~/Views/Candidaturas/Modal/_ModalBusquedaCandidato.cshtml", Model.DatosBasicos)
+@Html.Partial("~/Views/Candidaturas/Modal/_ModalBusquedaOferta.cshtml")
+@Html.Partial("~/Views/Candidaturas/Modal/_ModalCrearEditOfertas.cshtml")
+
+@section scripts{
+    @CandidaturasFrontActions.MenuFrontActions()
+    @CandidaturasFrontActions.DatosBasicosFrontActions(Url)
+    @CandidaturasFrontActions.CreateFrontActions(Url)
+   
+}
+

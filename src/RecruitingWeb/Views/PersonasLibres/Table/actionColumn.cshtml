@@ -1,0 +1,64 @@
+@using RecruitingWeb.Properties
+
+@model Recruiting.Application.PersonasLibres.ViewModels.PersonaLibreRowViewModel
+
+<div>
+    @Edit.Text(Model.PersonaLibreId.ToString(), "PersonaLibreId", id: "PersonaLibreId", htmlClass: "form-control hide")
+
+    <a href="/PersonasLibres/Edit/@Model.PersonaLibreId" title="@Resources.HTML_Title_Editar"
+       id="EditButton"
+       disabled="disabled"
+       @getClassAddDisabled("", (!(bool)(TempData["Crear/Modificar Personas Libres"])) || (Model.NecesidadId != null))>
+       @Display.GlyphiconButton("glyphicon-pencil icon action")
+    </a>
+
+    <a title="@Resources.HTML_Title_Eliminar"
+       id="DeleteButton"
+       @getClassAddDisabled("", !(bool)(TempData["Crear/Modificar Personas Libres"]))>
+       @Display.GlyphiconButton("glyphicon-trash icon action")
+    </a>
+
+
+    <a href="/PersonasLibres/Details/@Model.PersonaLibreId" title="@Resources.HTML_Title_DetallePersonaLibre"
+       id="DetailButton"
+       @getClassAddDisabled("", !(bool)(TempData["Ver Personas Libres"]))>
+       @Display.GlyphiconButton("glyphicon-eye-open icon action")
+    </a>
+
+    <a title="@Resources.HTML_Title_BuscarNecesidad"
+       id="SearchButton" data-toggle="modal" data-target="#myModal"
+       @getClassAddDisabled("", (Model.NecesidadId != null) || !(bool)(TempData["Crear/Modificar Personas Libres"]))>
+        @Display.GlyphiconButton("glyphicon-record icon action")
+    </a>
+
+</div>
+
+@helper getDisabledAttribute(bool disabled)
+{
+    if (disabled)
+    {
+        @(new MvcHtmlString("disabled=\"disabled\""))
+    }
+    else
+    {
+        @(new MvcHtmlString(""))
+    }
+}
+
+@helper getDataDisabledAttribute(bool disabled)
+{
+    if (disabled)
+    {
+        @(new MvcHtmlString("data-disabled=\"true\""))
+    }
+    else
+    {
+        @(new MvcHtmlString(""))
+    }
+}
+
+@helper getClassAddDisabled(string htmlClass, bool disabled)
+{
+    var allClass = string.Format("class=\"{0} {1}\"", htmlClass, disabled ? "disabled" : "");
+    @(new MvcHtmlString(allClass))
+}

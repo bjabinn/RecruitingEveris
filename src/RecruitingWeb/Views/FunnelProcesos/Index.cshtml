@@ -1,0 +1,327 @@
+@using RecruitingWeb.Helpers
+@using RecruitingWeb.Properties
+@using RecruitingWeb.Components.Searchable
+@using RecruitingWeb.Components.DataTable.Helpers
+@using Recruiting.Application.Candidaturas.Enums
+
+@using Recruiting.Application.FunnelProcesos.ViewModels
+
+@model RecruitingWeb.Models.FiltroFunnelModels
+
+<div class="row titlePage">
+    <div class="col-lg-6">
+        <h3>@Resources.HTML_FunnelProcesos_Index_GestionProcesos</h3>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-6 removePadding">
+        <h4 class="noMargin headerBox">Filtro</h4>
+    </div>
+</div>
+<div class="row">
+    <div class="content-box  border-top-cero">
+        <div class="content-box-content" id="form-filter">
+            <div class="row" data-id="formFilter">
+                <div class="form-group col-lg-4">
+                    <div class="col-lg-4 title-form">
+                        <label for="filterNombre">@Resources.HTML_FunnelProcesos_Index_FechaInicio</label>
+                    </div>
+                    <div class="col-lg-8">
+                        @Edit.Date(Model.FechaInicio, "filterFechaInicio", id: "filterFechaInicio", required: false, validate: true, htmlClass: "form-control")
+                    </div>
+                </div>
+                <div class="form-group col-lg-4">
+                    <div class="col-lg-4 title-form">
+                        <label for="filterApellidos">@Resources.HTML_FunnelProcesos_Index_FechaFin</label>
+                    </div>
+                    <div class="col-lg-8">
+                        @Edit.Date(Model.FechaFin, "filterFechaFin", id: "filterFechaFin", required: false, validate: true, htmlClass: "form-control")
+                    </div>
+                </div>
+                <div class="form-group col-lg-4">
+                    <div class="col-lg-4 title-form">
+                        <label for="filterTitulacion">@Resources.HTML_FunnelProcesos_Index_Tecnologia</label>
+                    </div>
+                    <div class="col-lg-8">
+                        @Edit.DropDownExtend(Model.TipoTecnologiaId, "filterTecnologia", Model.TipoTecnologiaList, htmlClass: "form-control", validate: false, required: false, id: "filterTecnologia")
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-lg-4">
+                    <div class="col-lg-4 title-form">
+                        <label for="filterTipoIdentificacion">@Resources.HTML_FunnelProcesos_Index_Perfil</label>
+                    </div>
+                    <div class="col-lg-8">
+                        @Edit.DropDownExtend(Model.TipoCategoriaId, "filterCategoria", Model.TipoCategoriaList, htmlClass: "form-control", validate: false, required: false, id: "filterCategoria")
+                    </div>
+                </div>
+                <div class="form-group col-lg-4">
+                    <div class="col-lg-4 title-form">
+                        <label for="filterCandidaturaOferta">@Resources.HTML_Candidaturas_Index_Oferta</label>
+                    </div>
+                    <div class="col-lg-8">
+                        @(Html.Searchable("filterCandidaturaOferta", Url)
+                                                    .Id("filterCandidaturaOferta")
+                                                    .AddCssClass("form-control")
+                                                    .Action("GetOfertasByNombre", "FunnelProcesos")
+                                                    .Value(Model.CandidaturaOferta, hiddenValue: Model.CandidaturaOfertaId.ToString()))
+                    </div>
+                </div>
+                @if (Model.CentroIdUsuarioLogueado.ToString() == string.Empty)
+                {
+                    <div class="form-group col-lg-4">
+                        <div class="col-lg-4 title-form">
+                            <label for="CentroId">@Resources.HTML_Candidatos_Index_Centro</label>
+                        </div>
+                        <div class="col-lg-8">
+                            @Edit.DropDownExtend(Model.CentroIdUsuario, "filterCentro", Model.CentroList, htmlClass: "form-control", validate: false, required: false, id: "filterCentro")
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="row">
+                <div class="col-lg-12" style="text-align:right;">
+                    <div class="btn-group" role="group" aria-label="...">
+                        <button name="limpiar" id="limpiar" type="button" class="btn btn-default">@Resources.HTML_BotonGenericoLimpiar</button>
+                        <button name="buscar" id="buscar" type="button" class="btn btn-default">@Resources.HTML_BotonGenericoBuscar</button>
+                    </div>
+                </div>
+            </div>
+            <input hidden name="buscarTecnologia" id="buscarTecnologia" value="false" />
+            <input hidden name="buscarCategoria" id="buscarCategoria" value="false" />
+            <input hidden name="buscarTecnologiaCategoria" id="buscarTecnologiaCategoria" value="false" />
+            <input hidden name="buscarTablaCandidaturasModal" id="buscarTablaCandidaturasModal" value="false" />
+
+
+            <input hidden name="filterFechaInicioModal" id="filterFechaInicioModal" />
+            <input hidden name="filterFechaFinModal" id="filterFechaFinModal" />
+            <input hidden name="filterTecnologiaModal" id="filterTecnologiaModal" />
+            <input hidden name="filterCategoriaModal" id="filterCategoriaModal" />
+            <input hidden name="filterCentroIdUsuarioModal" id="filterCentroIdUsuarioModal" />
+            <input hidden name="filterEstadosModal" id="filterEstadosModal" />
+            <input hidden name="filterEtapasModal" id="filterEtapasModal" />
+
+
+
+        </div> <!-- End .content-box-content #form-filter  -->
+    </div> <!-- End .content-box -->
+</div> <!-- End .row -->
+<div class="row">
+    <div class="col-lg-12 content-box removePadding">
+        <div>
+            <div class="row section-header">
+                <div class="col-lg-6">
+                    <h4>@Resources.HTML_FunnelProcesos_Index_Graficas</h4>
+                </div>
+            </div>
+            <div>
+                <div>
+                    <div class="form-group col-lg-4">
+                    </div>
+                </div>
+                <div class="row col-lg-12">
+                    <div>
+                        <div class="form-group col-lg-4" id="regionChartFiltrado">
+                            <canvas id="chartFiltrado" width="80" height="80"></canvas>
+                        </div>
+                        <div class="form-group col-lg-4" id="regionChartEntrevistas">
+                            <canvas id="chartEntrevistas" width="80" height="80"></canvas>
+                        </div>
+                        <div class="form-group col-lg-4" id="regionChartCartaOferta">
+                            <canvas id="chartCartaOferta" width="80" height="80"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div> <!--End .Row-->
+<div class="row">
+    <div class="col-lg-12 content-box removePadding">
+        <div class="content-box-content">
+            <div class="row section-header">
+                <div class="col-lg-6">
+                    <h4>@Resources.HTML_FunnelProcesos_Index_Desglose</h4>
+                </div>
+            </div>
+            <div>
+                <div class="row col-lg-12 removePadding" id="regionTecnologia">
+                    <div id="tablaTecnologia" name="tablaTecnologia">
+                        <div>
+                            <div class="content-box-content">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        @{
+                                            int paginaTecnologia = 0;
+                                            var configTecnologia = Html.InitializeDataTable<DesgloseTecnologiaViewModel>();
+                                            int nElemTecnologia = Convert.ToUInt16(Resources.NElementosPagina);
+                                            configTecnologia.Name("tablaDesgloseTecnologia")
+                                                                                .AjaxLoadUrl(Url.Action("LoadDesgloseTecnologia", "FunnelProcesos"))
+                                                                                .CustomFilterAjax("getFiltersFunnel")
+                                                                                .PrimaryKey(m => m.TecnologiaId.ToString())
+                                                                                .AddPrimaryKeyToName(false)
+                                                                                .Paginable(true)
+                                                                                .PageSize(nElemTecnologia)
+                                                                                .InitialPage(paginaTecnologia)
+                                                                                .Columns(columns =>
+                                                                                {
+                                                                                    columns.Bound(c => c.NombreTecnologia).Header("Tecn.").ColumnName("NombreTecnologia").Orderable(false).CssHeaderClass("tecn-header");
+                                                                                    columns.Bound(c => c.DatosFiltradoCV.TotalCreados).Header("Creada").ColumnName("TotalCreados").Orderable(false);
+                                                                                    columns.Bound(c => c.DatosFiltradoCV.NumeroPendienteFiltrados).Header("Pend. Filtr.").ColumnName("NumeroPendienteFiltrados").Orderable(false);
+                                                                                    columns.Bound(c => c.DatosFiltradoCV.NumeroSupera).Header("Filtro OK").ColumnName("FiltradoNumeroSupera").Orderable(false);
+                                                                                    columns.Bound(c => c.DatosFiltradoCV.NumeroDescartados).Header("Filtro Desc.").ColumnName("FiltradoNumeroDescartados").Orderable(false);
+                                                                                    columns.Bound(c => c.DatosFiltradoCV.NumeroRenuncias).Header("Filtro Ren.").ColumnName("FiltradoNumeroRenuncias").Orderable(false);
+                                                                                    columns.Bound(c => c.DatosFiltradoCV.NumeroStandBy).Header("Filtro StandBy").ColumnName("FiltradoNumeroStandBy").Orderable(false).CssHeaderClass("filtro-standby-header");
+                                                                                    columns.Bound(c => c.DatosEntrevistas.NumeroPendientesCitacion).Header("Entr. Pend.").ColumnName("EntrevistasNumeroPendientesCitacion").Orderable(false);
+                                                                                    columns.Bound(c => c.DatosEntrevistas.NumeroFeedback).Header("Entr. Feed").ColumnName("EntrevistasNumeroFeedback").Orderable(false);
+                                                                                    columns.Bound(c => c.DatosEntrevistas.NumeroSupera).Header("Entr. OK").ColumnName("EntrevistasNumeroSupera").Orderable(false);
+                                                                                    columns.Bound(c => c.DatosEntrevistas.NumeroDescartados).Header("Entr. Desc.").ColumnName("EntrevistasNumeroDescartados").Orderable(false);
+                                                                                    columns.Bound(c => c.DatosEntrevistas.NumeroRenuncias).Header("Entr. Ren.").ColumnName("EntrevistasNumeroRenuncias").Orderable(false);
+                                                                                    columns.Bound(c => c.DatosEntrevistas.NumeroStandBy).Header("Entr. StandBy").ColumnName("EntrevistasNumeroStandBy").Orderable(false).CssHeaderClass("entrevista-standby-header"); ;
+                                                                                    columns.Bound(c => c.DatosCartaOferta.NumeroPendientesCitacion).Header("CO Pend.").ColumnName("CartaOfertasNumeroPendientesCitacion").Orderable(false);
+                                                                                    columns.Bound(c => c.DatosCartaOferta.NumeroFeedback).Header("CO Feed").ColumnName("CartaOfertasNumeroFeedback").Orderable(false);
+                                                                                    columns.Bound(c => c.DatosCartaOferta.NumeroAceptadas).Header("CO OK").ColumnName("CartaOfertasNumeroAceptadas").Orderable(false);
+                                                                                    columns.Bound(c => c.DatosCartaOferta.NumeroRechazadas).Header("CO Rech.").ColumnName("CartaOfertasNumeroRechazadas").Orderable(false);
+                                                                                    columns.Bound(c => c.DatosCartaOferta.NumeroDescartadas).Header("CO Desc.").ColumnName("CartaOfertasNumeroDescartadas").Orderable(false);
+                                                                                    columns.Bound(c => c.DatosCartaOferta.NumeroRenuncias).Header("CO Ren.").ColumnName("CartaOfertasNumeroRenuncias").Orderable(false);
+                                                                                    columns.Bound(c => c.DatosCartaOferta.NumeroStandBy).Header("CO StandBy").ColumnName("CartaOfertasNumeroStandBy").Orderable(false).CssHeaderClass("cartaoferta-standby-header");
+                                                                                    columns.Template(
+                                @<div>
+
+                                </div>);
+
+                                                                          });
+
+                                    @Html.Partial("Controls/DataTable", configTecnologia)
+
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div> <!-- End content-box-content -->
+                    </div> <!-- End .content-box -->
+                </div>
+                <div class="row col-lg-12 removePadding" id="regionCategoria" hidden>
+                    <div id="tablaCategoria" name="tablaCategoria">
+                        <div class="content-box">
+                            <div class="content-box-content">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        @{
+                                            int paginaCategoria = 0;
+                                            var configCategoria = Html.InitializeDataTable<DesgloseCategoriaViewModel>();
+                                            int nElemCategoria = Convert.ToUInt16(Resources.NElementosPagina);
+                                            configCategoria.Name("tablaDesgloseCategoria")
+                                                                    .AjaxLoadUrl(Url.Action("LoadDesgloseCategoria", "FunnelProcesos"))
+                                                                    .CustomFilterAjax("getFiltersFunnel")
+                                                                    .PrimaryKey(m => m.CategoriaId.ToString())
+                                                                    .AddPrimaryKeyToName(false)
+                                                                    .Paginable(true)
+                                                                    .PageSize(nElemCategoria)
+                                                                    .InitialPage(paginaCategoria)
+                                                                    .Columns(columns =>
+                                                                    {
+                                                                        columns.Bound(c => c.NombreCategoria).Header("Perfil").ColumnName("Categoria").Orderable(false).CssHeaderClass("tecn-header");
+                                                                        columns.Bound(c => c.DatosFiltradoCV.TotalCreados).Header("Creada").ColumnName("TotalCreados").Orderable(false);
+                                                                        columns.Bound(c => c.DatosFiltradoCV.NumeroPendienteFiltrados).Header("Pend. Filtr.").ColumnName("NumeroPendienteFiltrados").Orderable(false);
+                                                                        columns.Bound(c => c.DatosFiltradoCV.NumeroSupera).Header("Filtro OK").ColumnName("FiltradoNumeroSupera").Orderable(false);
+                                                                        columns.Bound(c => c.DatosFiltradoCV.NumeroDescartados).Header("Filtro Desc.").ColumnName("FiltradoNumeroDescartados").Orderable(false);
+                                                                        columns.Bound(c => c.DatosFiltradoCV.NumeroRenuncias).Header("Filtro Ren.").ColumnName("FiltradoNumeroRenuncias").Orderable(false);
+                                                                        columns.Bound(c => c.DatosFiltradoCV.NumeroStandBy).Header("Filtro StandBy").ColumnName("FiltradoNumeroStandBy").Orderable(false).CssHeaderClass("filtro-standby-header");
+                                                                        columns.Bound(c => c.DatosEntrevistas.NumeroPendientesCitacion).Header("Entr. Pend.").ColumnName("EntrevistasNumeroPendientesCitacion").Orderable(false);
+                                                                        columns.Bound(c => c.DatosEntrevistas.NumeroFeedback).Header("Entr. Feed").ColumnName("EntrevistasNumeroFeedback").Orderable(false);
+                                                                        columns.Bound(c => c.DatosEntrevistas.NumeroSupera).Header("Entr. OK").ColumnName("EntrevistasNumeroSupera").Orderable(false);
+                                                                        columns.Bound(c => c.DatosEntrevistas.NumeroDescartados).Header("Entr. Desc.").ColumnName("EntrevistasNumeroDescartados").Orderable(false);
+                                                                        columns.Bound(c => c.DatosEntrevistas.NumeroRenuncias).Header("Entr. Ren.").ColumnName("EntrevistasNumeroRenuncias").Orderable(false);
+                                                                        columns.Bound(c => c.DatosEntrevistas.NumeroStandBy).Header("Entr. StandBy").ColumnName("EntrevistasNumeroStandBy").Orderable(false).CssHeaderClass("entrevista-standby-header"); ;
+                                                                        columns.Bound(c => c.DatosCartaOferta.NumeroPendientesCitacion).Header("CO Pend.").ColumnName("CartaOfertasNumeroPendientesCitacion").Orderable(false);
+                                                                        columns.Bound(c => c.DatosCartaOferta.NumeroFeedback).Header("CO Feed").ColumnName("CartaOfertasNumeroFeedback").Orderable(false);
+                                                                        columns.Bound(c => c.DatosCartaOferta.NumeroAceptadas).Header("CO OK").ColumnName("CartaOfertasNumeroAceptadas").Orderable(false);
+                                                                        columns.Bound(c => c.DatosCartaOferta.NumeroRechazadas).Header("CO Rech.").ColumnName("CartaOfertasNumeroRechazadas").Orderable(false);
+                                                                        columns.Bound(c => c.DatosCartaOferta.NumeroDescartadas).Header("CO Desc.").ColumnName("CartaOfertasNumeroDescartadas").Orderable(false);
+                                                                        columns.Bound(c => c.DatosCartaOferta.NumeroRenuncias).Header("CO Ren.").ColumnName("CartaOfertasNumeroRenuncias").Orderable(false);
+                                                                        columns.Bound(c => c.DatosCartaOferta.NumeroStandBy).Header("CO StandBy").ColumnName("CartaOfertasNumeroStandBy").Orderable(false).CssHeaderClass("cartaoferta-standby-header");
+                                                                        columns.Template(
+                                @<div>
+
+                                </div>);
+
+                                                              });
+
+                                    @Html.Partial("Controls/DataTable", configCategoria)
+
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div> <!-- End content-box-content -->
+                    </div> <!-- End .content-box -->
+                </div>
+                <div class="row col-lg-12 removePadding" id="regionTecnologiaCategoria" hidden>
+                    <div id="tablaTecnologiaCategoria" name="tablaTecnologiaCategoria">
+                        <div class="content-box">
+                            <div class="content-box-content">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        @{
+                                            int paginaTecnologiaCategoria = 0;
+                                            var configTecnologiaCategoria = Html.InitializeDataTable<DesgloseCategoriaViewModel>();
+                                            int nElemTecnologiaCategoria = Convert.ToUInt16(Resources.NElementosPagina);
+                                            configTecnologiaCategoria.Name("tablaDesgloseTecnologiaCategoria")
+                                                                                                    .AjaxLoadUrl(Url.Action("LoadDesgloseTecnologiaCategoria", "FunnelProcesos"))
+                                                                                                    .CustomFilterAjax("getFiltersFunnel")
+                                                                                                    .PrimaryKey(m => m.CategoriaId.ToString())
+                                                                                                    .AddPrimaryKeyToName(false)
+                                                                                                    .Paginable(true)
+                                                                                                    .PageSize(nElemCategoria)
+                                                                                                    .InitialPage(paginaTecnologiaCategoria)
+                                                                                                    .Columns(columns =>
+                                                                                                    {
+                                                                                                        columns.Bound(c => c.DatosFiltradoCV.TotalCreados).Header("Creada").ColumnName("TotalCreados").Orderable(false);
+                                                                                                        columns.Bound(c => c.DatosFiltradoCV.NumeroPendienteFiltrados).Header("Pend. Filtr.").ColumnName("NumeroPendienteFiltrados").Orderable(false);
+                                                                                                        columns.Bound(c => c.DatosFiltradoCV.NumeroSupera).Header("Filtro OK").ColumnName("FiltradoNumeroSupera").Orderable(false);
+                                                                                                        columns.Bound(c => c.DatosFiltradoCV.NumeroDescartados).Header("Filtro Desc.").ColumnName("FiltradoNumeroDescartados").Orderable(false);
+                                                                                                        columns.Bound(c => c.DatosFiltradoCV.NumeroRenuncias).Header("Filtro Ren.").ColumnName("FiltradoNumeroRenuncias").Orderable(false);
+                                                                                                        columns.Bound(c => c.DatosFiltradoCV.NumeroStandBy).Header("Filtro StandBy").ColumnName("FiltradoNumeroStandBy").Orderable(false).CssHeaderClass("filtro-standby-header");
+                                                                                                        columns.Bound(c => c.DatosEntrevistas.NumeroPendientesCitacion).Header("Entr. Pend.").ColumnName("EntrevistasNumeroPendientesCitacion").Orderable(false);
+                                                                                                        columns.Bound(c => c.DatosEntrevistas.NumeroFeedback).Header("Entr. Feed").ColumnName("EntrevistasNumeroFeedback").Orderable(false);
+                                                                                                        columns.Bound(c => c.DatosEntrevistas.NumeroSupera).Header("Entr. OK").ColumnName("EntrevistasNumeroSupera").Orderable(false);
+                                                                                                        columns.Bound(c => c.DatosEntrevistas.NumeroDescartados).Header("Entr. Desc.").ColumnName("EntrevistasNumeroDescartados").Orderable(false);
+                                                                                                        columns.Bound(c => c.DatosEntrevistas.NumeroRenuncias).Header("Entr. Ren.").ColumnName("EntrevistasNumeroRenuncias").Orderable(false);
+                                                                                                        columns.Bound(c => c.DatosEntrevistas.NumeroStandBy).Header("Entr. StandBy").ColumnName("EntrevistasNumeroStandBy").Orderable(false).CssHeaderClass("entrevista-standby-header"); ;
+                                                                                                        columns.Bound(c => c.DatosCartaOferta.NumeroPendientesCitacion).Header("CO Pend.").ColumnName("CartaOfertasNumeroPendientesCitacion").Orderable(false);
+                                                                                                        columns.Bound(c => c.DatosCartaOferta.NumeroFeedback).Header("CO Feed").ColumnName("CartaOfertasNumeroFeedback").Orderable(false);
+                                                                                                        columns.Bound(c => c.DatosCartaOferta.NumeroAceptadas).Header("CO OK").ColumnName("CartaOfertasNumeroAceptadas").Orderable(false);
+                                                                                                        columns.Bound(c => c.DatosCartaOferta.NumeroRechazadas).Header("CO Rech.").ColumnName("CartaOfertasNumeroRechazadas").Orderable(false);
+                                                                                                        columns.Bound(c => c.DatosCartaOferta.NumeroDescartadas).Header("CO Desc.").ColumnName("CartaOfertasNumeroDescartadas").Orderable(false);
+                                                                                                        columns.Bound(c => c.DatosCartaOferta.NumeroRenuncias).Header("CO Ren.").ColumnName("CartaOfertasNumeroRenuncias").Orderable(false);
+                                                                                                        columns.Bound(c => c.DatosCartaOferta.NumeroStandBy).Header("CO StandBy").ColumnName("CartaOfertasNumeroStandBy").Orderable(false).CssHeaderClass("cartaoferta-standby-header");
+                                                                                                        columns.Template(
+                                @<div>
+
+                                </div>);
+
+                                                                                              });
+
+                                    @Html.Partial("Controls/DataTable", configTecnologiaCategoria)
+
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div> <!-- End content-box-content -->
+                    </div> <!-- End .content-box -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div> <!--End .Row-->
+@Html.Partial("~/Views/FunnelProcesos/Modals/_ModalTablaCandidaturas.cshtml")
+
+@section scripts{
+    @FunnelProcesosFrontActions.MenuFrontActions()
+    @FunnelProcesosFrontActions.IndexFrontActions(Url)
+
+}

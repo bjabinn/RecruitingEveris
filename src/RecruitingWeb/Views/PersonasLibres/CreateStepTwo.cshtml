@@ -1,0 +1,142 @@
+﻿@using RecruitingWeb.Properties
+
+@model Recruiting.Application.PersonasLibres.ViewModels.PersonasLibresToCreateViewModel
+
+<div class="row titlePage">
+    <div class="col-lg-6">
+        <h3>@Resources.HTML_PersonasLibres_CreateStepTwo_CrearPersonasLibres</h3>
+    </div>
+</div>
+<div class="row header-flap">
+    <div class="btn-group" role="group">
+        <a href="@Url.Action("Create", "PersonasLibres")" class="btn btn-default">
+            <span class="text">@Resources.HTML_BotonGenericoVolver</span>
+        </a>
+        <a href="#" data-action="finalizar" class="btn btn-default">
+            <span class="text">@Resources.HTML_BotonGenericoFinalizar</span>
+        </a>
+    </div>
+</div>
+
+@using (Html.BeginForm("CreateFinish", "PersonasLibres", FormMethod.Post, new Dictionary<string, object> { { "role", "form" }, { "data-parsley-validate", "true" }, { "data-parsley-excluded", ":not([data-validate]) , [disabled]" } }))
+{
+    for (int x = 0; x < Model.PersonaLibreRowViewModelList.Count; x++)
+    {
+        var cadenaAux = "PersonaLibreRowViewModelList[" + x + "].";
+        var idAux = "Persona_" + x;
+        var idAuxBotonColapsar = "Boton_" + x;
+        @Edit.Text(Model.PersonaLibreRowViewModelList[x].Nombre, cadenaAux + "Nombre", id: cadenaAux + "Nombre", htmlClass: "form-control hide", isReadOnly: true)
+        @Edit.Text(Model.PersonaLibreRowViewModelList[x].Apellidos, cadenaAux + "Apellidos", id: cadenaAux + "Apellidos", htmlClass: "form-control hide", isReadOnly: true)
+        @Edit.Text(Model.PersonaLibreRowViewModelList[x].Centro, cadenaAux + "Centro", id: cadenaAux + "Centro", htmlClass: "form-control hide", isReadOnly: true, required: false)
+        var dataIdTarget = "[data-id=" + x + "]";
+        <div class="row">
+            <div class="content-box">
+                <div class="content-box-content">
+                    <div class="row section-header">
+                        <div class="col-lg-6">
+                            <h4>@Model.PersonaLibreRowViewModelList[x].Nombre @Model.PersonaLibreRowViewModelList[x].Apellidos</h4>
+                        </div>
+                        <div class="col-lg-3"></div>
+                        <div class="col-lg-3" style="padding-left:170px">
+                            <div class="col-lg-4 title-form">
+                                <label id='@idAux'>@Resources.HTML_PersonasLibres_CreateStepTwo_Aniadir</label>
+                            </div>
+                            <div class="col-lg-8">                                
+                                @Edit.CheckBoxDig(true, name: cadenaAux + "isChecked", id: "Aniadir_" + x, disabled: false)
+                            </div>
+                        </div>
+                    </div>
+                    <div data-id='@x'>
+                        <div data-id="section-form-basicos">
+                            <div class="row form-row">
+                                <div class="form-group col-lg-4">
+                                    <div class="col-lg-12 title-form">
+                                        <label for="FechaLiberacion">@Resources.HTML_PersonasLibres_CreateStepTwo_FechaLiberacion</label>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        @Edit.Date(System.DateTime.Today.Date, cadenaAux + "FechaLiberacion", id: cadenaAux + "FechaLiberacion", htmlClass: "form-control", required: true)
+                                    </div>
+                                </div>
+                                <div class="form-group col-lg-4">
+                                    <div class="col-lg-12 title-form">
+                                        <label for="TipoTecnologiaId">@Resources.HTML_PersonasLibres_CreateStepTwo_Tecnologia</label>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        @Edit.DropDownExtend("", cadenaAux + "TipoTecnologiaId", Model.ListaTecnologias, id: cadenaAux + "TipoTecnologiaId", htmlClass: "form-control", required: true)
+                                    </div>
+                                </div>
+                                <div class="form-group col-lg-4">
+                                    <div class="col-lg-12 title-form">
+                                        <label for="Categoria">@Resources.HTML_PersonasLibres_CreateStepTwo_Categoria</label>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        @Edit.Text(Model.PersonaLibreRowViewModelList[x].Categoria, cadenaAux + "Categoria", id: cadenaAux + "Categoria", htmlClass: "form-control", isReadOnly: true)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row form-row">
+                                <div class="form-group col-lg-4">
+                                    <div class="col-lg-12 title-form">
+                                        <label for="Linea">@Resources.HTML_PersonasLibres_CreateStepTwo_Linea</label>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        @Edit.Text(Model.PersonaLibreRowViewModelList[x].Linea, cadenaAux + "Linea", id: "Linea", htmlClass: "form-control", isReadOnly: true)
+                                    </div>
+                                </div>
+                                <div class="form-group col-lg-4">
+                                    <div class="col-lg-12 title-form">
+                                        <label for="Celda">@Resources.HTML_PersonasLibres_CreateStepTwo_Celda</label>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        @Edit.Text(Model.PersonaLibreRowViewModelList[x].Celda, cadenaAux + "Celda", id: "Celda", htmlClass: "form-control", isReadOnly: true)
+                                    </div>
+                                </div>
+                                <div class="form-group col-lg-4">
+                                    <div class="col-lg-12 title-form">
+                                        <label for="NroEmpleado">@Resources.HTML_PersonasLibres_CreateStepTwo_NumeroEmpleado</label>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        @Edit.Text(Model.PersonaLibreRowViewModelList[x].NroEmpleado.ToString(), cadenaAux + "NroEmpleado", id: cadenaAux + "NroEmpleado", htmlClass: "form-control", required: true, isReadOnly: true)
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row form-row">
+                                <div class="form-group col-lg-8">
+                                    <div class="col-lg-12 title-form">
+                                        <label for="Comentario">@Resources.HTML_PersonasLibres_CreateStepTwo_Comentario</label>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        @Edit.TextArea(Model.PersonaLibreRowViewModelList[x].Comentario, cadenaAux + "Comentario", id: cadenaAux + "Comentario", rows: 4, required: false, htmlClass: "form-control", placeholder: "Comentario...")
+                                    </div>
+                                </div>
+                                <div class="form-group col-lg-4">
+                                    <div class="col-lg-12 title-form">
+                                        <label for="NivelIdioma">@Resources.HTML_Candidatos_Index_InglesHeader</label>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        @Edit.DropDownExtend("", cadenaAux + "NivelIdiomaId", Model.NivelIdiomaList, id: cadenaAux + "NivelIdiomaId", htmlClass: "form-control", required: false)
+                                    </div>
+                                </div>
+                                <div class="form-group col-lg-4">
+                                    <div class="col-lg-12 title-form">
+                                    </div>
+                                    <div class="col-lg-12">
+                                    </div>
+                                </div>
+                            </div>
+                        
+                        </div>
+                    </div>
+                </div>                
+            </div>            
+        </div>  
+    }
+}
+
+@section scripts{
+
+    @PersonasLibresFrontActions.MenuFrontActions()
+    @PersonasLibresFrontActions.CreateStepTwoFrontActions()
+
+}

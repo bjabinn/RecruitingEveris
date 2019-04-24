@@ -1,0 +1,11 @@
+@model Recruiting.Application.Necesidades.ViewModels.GrupoNecesidadesRowViewModel
+
+<div>
+    @Edit.Text(Model.GrupoNecesidadId.ToString(), "GrupoNecesidadId", id: "GrupoNecesidadId", htmlClass: "form-control hide")
+    <a title="Editar grupo" id="EditButton" @if (!(bool)TempData["ModificarNecesidad"]) { @: class="disabled"
+                                   }>@Display.GlyphiconButton("glyphicon-pencil icon action")</a>
+    <a title="Detalles Grupo" id="DetailsButton" @if (!(bool)TempData["VerNecesidad"]) { @: class="disabled"
+                                   }>@Display.GlyphiconButton("glyphicon-eye-open icon action")</a>
+    <a title="Borrar grupo" id="DeleteButton" @if (!(bool)TempData["AniadirEliminarNecesidad"]) { @: class="disabled"
+                                   }>@Display.GlyphiconButton("glyphicon-trash icon action")</a>
+</div>

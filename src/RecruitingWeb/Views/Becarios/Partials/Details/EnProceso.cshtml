@@ -1,0 +1,107 @@
+﻿@using RecruitingWeb.Properties
+@using RecruitingWeb.Helpers
+
+@model Recruiting.Application.Becarios.ViewModels.BecarioObservacionesViewModel
+
+@if (Model != null)
+{
+    <div class="content-box">
+        <div class="row section-header">
+            <div class="col-lg-12">
+                <h4>@Resources.HTML_Becarios_Proceso_DatosProceso </h4>
+            </div>
+        </div>
+        <div class="content-box-content">
+            <div class="row form-row">
+                <div class="form-group col-lg-4">
+                    <div class="col-lg-12 title-form">
+                        <label>@Resources.HTML_Candidaturas_Proceso_SuperaProceso</label>
+                    </div>
+                    <div class="col-lg-12 content-form">
+                        <label>@(Model.SuperaProceso == true ? @Resources.HTML_General_Si : @Resources.HTML_General_No)</label>
+                    </div>
+                </div>
+                <div class="form-group col-lg-4">
+                    <div class="col-lg-12 title-form">
+                        <label>@Resources.HTML_Becarios_Proceso_ObservacionFinal</label>
+                    </div>
+                    <div class="col-lg-12 content-form">
+                        @{
+                            if (string.IsNullOrEmpty(Model.ObservacionGeneralProceso) || string.IsNullOrWhiteSpace(Model.ObservacionGeneralProceso))
+                            {
+                                @Resources.HTML_General_CampoVacio_Details_NA
+                            }
+                            else
+                            {
+                                @Html.Raw(Model.ObservacionGeneralProceso)
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="row form-row">
+                <div class="form-group col-lg-12">
+                    <div class="col-lg-12">
+                        <table id="listSubmitObservaciones" data-id="listSubmit">
+                            @{
+                                if (!Model.BecarioObservacionList.Any())
+                                {
+                            <tr role="row" class="odd">
+                                    <td>@Resources.HTML_General_CampoVacio_Details_NA</td>
+                                    <td>@Resources.HTML_General_CampoVacio_Details_NA</td>
+                                    <td>@Resources.HTML_General_CampoVacio_Details_NA</td>
+                                    <td>@Resources.HTML_General_CampoVacio_Details_NA</td>
+                                    <td>@Resources.HTML_General_CampoVacio_Details_NA</td>
+                            </tr>
+                                }
+                            }
+                            <thead>
+                                <tr role="row">
+                                    <th>@Resources.HTML_Becarios_Proceso_Tipo</th>
+                                    <th>@Resources.HTML_Becarios_Proceso_PersonaConvocatoria</th>
+                                    <th>@Resources.HTML_Becarios_Proceso_FechaProceso</th>
+                                    <th>@Resources.HTML_Becarios_Proceso_Observaciones</th>
+                                    <th>@Resources.HTML_Becarios_Proceso_Resultado</th>
+                                    @*<th>@Resources.HTML_Becarios_Proceso_Eliminar</th>*@
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    if (Model.BecarioObservacionList != null)
+                                    {
+                                        for (int x = 0; x < Model.BecarioObservacionList.Count; x++)
+                                        {
+                                            <tr role="row" class="odd" name="observacionRow">
+                                                @Edit.Hidden(Model.BecarioObservacionList[x].ObservacionId.ToString(), ViewBag.AccessObservaciones + "BecarioObservacionList[{0}].ObservacionId", attributes: new Dictionary<string, string> { { "id", "ObservacionId" } })
+                                                <td>
+                                                    @Model.BecarioObservacionList[x].TipoPrueba
+                                                </td>
+                                                <td>
+                                                    @Model.BecarioObservacionList[x].PersonaConvocatoriaNombre
+                                                </td>
+                                                <td>@FormatHelper.Format(Model.BecarioObservacionList[x].FechaConvocatoria, "dd/MM/yyyy")</td>
+                                                <td class="col-lg-4" id="tablaBecarioProceso">@{
+                                                    if (string.IsNullOrEmpty(Model.BecarioObservacionList[x].Observacion) || string.IsNullOrWhiteSpace(Model.BecarioObservacionList[x].Observacion))
+                                                    {
+                                                        @Resources.HTML_General_CampoVacio_Details_NA
+                                                    }
+                                                    else
+                                                    {
+                                                        @Model.BecarioObservacionList[x].Observacion
+                                                    }
+                                                        }</td>
+                                                <td>@Model.BecarioObservacionList[x].TipoResultado</td>
+                                                @*<td></td>*@
+                                            </tr>
+
+                                        }
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

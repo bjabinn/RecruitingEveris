@@ -1,0 +1,466 @@
+﻿@using System.Web.Mvc
+@using RecruitingWeb.Helpers
+
+@helper Hidden(decimal? value, string name, Dictionary<string, string> attributes = null)
+{
+    string stringValue = value.HasValue ? value.ToString() : null;
+    @Hidden(stringValue, name, attributes)
+}
+
+@helper Hidden(string value, string name, Dictionary<string, string> attributes = null)
+{
+    <input name="@name" type="hidden" value="@value"
+           @if ((attributes != null) && attributes.Any()) { foreach (var attr in attributes) { @: @attr.Key="@attr.Value"
+           } } />
+}
+
+@helper Decimal(decimal? value, string name, string id = null, bool validate = true, bool required = true, string decimalSeparator = null,
+                                         string numberSeparator = null, string minValue = null, string maxValue = null, string expReg = null,
+                                             int? decimalPrecision = null, Dictionary<string, string> attributes = null, string htmlClass = null)
+{
+    <input name="@name" type="text" value="@value"
+           @(!string.IsNullOrWhiteSpace(id) ? new MvcHtmlString(string.Format("{0}=\"{1}\"", "id", id)) : null)
+           @(validate ? new MvcHtmlString(string.Format("{0}=\"{1}\"", "data-validate", "true")) : null)
+           @(required ? new MvcHtmlString(string.Format("{0}=\"{1}\"", "required", "required")) : null)
+           @(expReg != null ? new MvcHtmlString(string.Format("{0}=\"{1}\"", "data-parsley-pattern", expReg)) : null)
+           @(decimalSeparator != null ? new MvcHtmlString(string.Format("{0}=\"{1}\"", "data-a-dec", decimalSeparator)) : null)
+           @(numberSeparator != null ? new MvcHtmlString(string.Format("{0}=\"{1}\"", "data-a-sep", numberSeparator)) : null)
+           @(minValue != null ? new MvcHtmlString(string.Format("{0}=\"{1}\"", "data-v-min", minValue)) : null)
+           @(maxValue != null ? new MvcHtmlString(string.Format("{0}=\"{1}\"", "data-v-max", maxValue)) : null)
+           @(!string.IsNullOrWhiteSpace(htmlClass) ? new MvcHtmlString(string.Format("{0}=\"{1}\"", "class", htmlClass)) : null)
+           @(decimalPrecision.HasValue ? new MvcHtmlString(string.Format("{0}=\"{1}\"", "data-m-dec", decimalPrecision.Value)) : null)
+           @if ((attributes != null) && attributes.Any()) { foreach (var attr in attributes) { @: @attr.Key="@attr.Value"
+           } } />
+}
+
+@helper Checkbox(bool? isChecked, string name, string id = null, string label = null, bool validate = true, bool disabled = false,
+                                        string htmlClass = null, Dictionary<string, string> attributes = null)
+{
+    var cssClass = "customCheckbox";
+    if (!string.IsNullOrWhiteSpace(htmlClass))
+    {
+        cssClass = string.Format("{0} {1}", cssClass, htmlClass);
+    }
+    <label class="@cssClass">
+        <input name="@name" value="True" type="checkbox" @(isChecked.HasValue && isChecked.Value ? new MvcHtmlString("checked=\"checked\"") : null)
+               @(validate ? new MvcHtmlString(string.Format("{0}=\"{1}\"", "data-validate", "true")) : null)
+               @(!string.IsNullOrWhiteSpace(id) ? new MvcHtmlString(string.Format("{0}=\"{1}\"", "id", id)) : null)
+               @(disabled ? new MvcHtmlString("disabled=\"disabled\"") : null)
+               @if ((attributes != null) && attributes.Any()) { foreach (var attr in attributes) { @: @attr.Key="@attr.Value"
+               } } />
+        <span class="customCheckbox-icon"></span>
+        @if (!string.IsNullOrWhiteSpace(label))
+        {
+            <span class="customCheckbox-text">@label.HtmlEncode()</span>
+        }
+    </label>
+}
+
+@helper Text(string value, string name, string id = null, bool validate = true, int? maxLength = null, bool required = true, string minValue = null,
+                                    bool disabled = false, bool isReadOnly = false, string expReg = null, string htmlClass = null,
+                                    Dictionary<string, string> attributes = null)
+{
+    <input name="@name" type="text" value="@value"
+           @(validate ? new MvcHtmlString(string.Format("{0}=\"{1}\"", "data-validate", "true")) : null)
+           @(!string.IsNullOrWhiteSpace(id) ? new MvcHtmlString(string.Format("{0}=\"{1}\"", "id", id)) : null)
+           @(maxLength.HasValue ? new MvcHtmlString(string.Format("{0}=\"{1}\"", "data-parsley-maxlength", maxLength.Value)) : null)
+           @(required ? new MvcHtmlString(string.Format("{0}=\"{1}\"", "required", "required")) : null)
+           @(minValue != null ? new MvcHtmlString(string.Format("{0}=\"{1}\"", "min", minValue)) : null)
+           @(disabled ? new MvcHtmlString("disabled=\"disabled\"") : null)
+           @(isReadOnly ? new MvcHtmlString("readonly=\"readonly\"") : null)
+           @(!string.IsNullOrWhiteSpace(htmlClass) ? new MvcHtmlString(string.Format("class=\"{0}\"", htmlClass)) : null)
+           @(!string.IsNullOrWhiteSpace(expReg) ? new MvcHtmlString(string.Format("{0}=\"{1}\"", "pattern", expReg)) : null)
+           @if ((attributes != null) && attributes.Any()) { foreach (var attr in attributes) { @: @attr.Key="@attr.Value"
+           } } />
+}
+
+
+@helper Password(string value, string name, string id = null, bool validate = true, int? maxLength = null, bool required = true,
+                                    bool disabled = false, bool isReadOnly = false, string expReg = null, string htmlClass = null,
+                                    Dictionary<string, string> attributes = null)
+{
+    <input name="@name" type="password" value="@value"
+           @(validate ? new MvcHtmlString(string.Format("{0}=\"{1}\"", "data-validate", "true")) : null)
+           @(!string.IsNullOrWhiteSpace(id) ? new MvcHtmlString(string.Format("{0}=\"{1}\"", "id", id)) : null)
+           @(maxLength.HasValue ? new MvcHtmlString(string.Format("{0}=\"{1}\"", "data-parsley-maxlength", maxLength.Value)) : null)
+           @(required ? new MvcHtmlString(string.Format("{0}=\"{1}\"", "required", "required")) : null)
+           @(disabled ? new MvcHtmlString("disabled=\"disabled\"") : null)
+           @(isReadOnly ? new MvcHtmlString("readonly=\"readonly\"") : null)
+           @(!string.IsNullOrWhiteSpace(htmlClass) ? new MvcHtmlString(string.Format("class=\"{0}\"", htmlClass)) : null)
+           @(!string.IsNullOrWhiteSpace(expReg) ? new MvcHtmlString(string.Format("{0}=\"{1}\"", "data-parsley-pattern", expReg)) : null)
+           @if ((attributes != null) && attributes.Any()) { foreach (var attr in attributes) { @: @attr.Key="@attr.Value"
+           } } />
+}
+
+@helper TextArea(string value, string name, string id = null, bool validate = true, int? rows = null, int? maxLength = null, bool required = true,
+                                        bool disabled = false, string htmlClass = null, bool isReadOnly = false, string placeholder = null,
+                                            Dictionary<string, string> attributes = null)
+{
+<textarea name="@name"
+          @(rows.HasValue ? new MvcHtmlString(string.Format("{0}=\"{1}\"", "rows", rows.Value)) : null)
+          @(validate ? new MvcHtmlString(string.Format("{0}=\"{1}\"", "data-validate", "true")) : null)
+          @(!string.IsNullOrWhiteSpace(id) ? new MvcHtmlString(string.Format("{0}=\"{1}\"", "id", id)) : null)
+          @(!string.IsNullOrWhiteSpace(placeholder) ? new MvcHtmlString(string.Format("{0}=\"{1}\"", "placeholder", placeholder)) : null)
+          @(maxLength.HasValue ? new MvcHtmlString(string.Format("{0}=\"{1}\"", "data-parsley-maxlength", maxLength.Value)) : null)
+          @(required ? new MvcHtmlString(string.Format("{0}=\"{1}\"", "required", "required")) : null)
+          @(disabled ? new MvcHtmlString("disabled=\"disabled\"") : null)
+          @(!string.IsNullOrWhiteSpace(htmlClass) ? new MvcHtmlString(string.Format("class=\"{0}\"", htmlClass)) : null)
+          @if ((attributes != null) && attributes.Any()) { foreach (var attr in attributes) { @: @attr.Key="@attr.Value"
+          } }>
+    @if (!string.IsNullOrWhiteSpace(value))
+    {
+        @value
+    }
+</textarea>
+}
+
+@helper TextAreaEditor(string value, string name, string id = null, bool validate = true, int? rows = null, int? maxLength = null, bool required = true,
+                                        bool disabled = false, string htmlClass = null, bool isReadOnly = false, string placeholder = null,
+                                            Dictionary<string, string> attributes = null)
+{
+    <textarea name="@name" data-type="text-editor"
+              @(rows.HasValue ? new MvcHtmlString(string.Format("{0}=\"{1}\"", "rows", rows.Value)) : null)
+              @(validate ? new MvcHtmlString(string.Format("{0}=\"{1}\"", "data-validate", "true")) : null)
+              @(!string.IsNullOrWhiteSpace(id) ? new MvcHtmlString(string.Format("{0}=\"{1}\"", "id", id)) : null)
+              @(!string.IsNullOrWhiteSpace(placeholder) ? new MvcHtmlString(string.Format("{0}=\"{1}\"", "placeholder", placeholder)) : null)
+              @(maxLength.HasValue ? new MvcHtmlString(string.Format("{0}=\"{1}\"", "data-parsley-maxlength", maxLength.Value)) : null)
+              @(required ? new MvcHtmlString(string.Format("{0}=\"{1}\"", "required", "required")) : null)
+              @(disabled ? new MvcHtmlString("disabled=\"disabled\"") : null)
+              @(!string.IsNullOrWhiteSpace(htmlClass) ? new MvcHtmlString(string.Format("class=\"{0}\"", htmlClass)) : null)
+              @if ((attributes != null) && attributes.Any()) { foreach (var attr in attributes) { @: @attr.Key="@attr.Value"
+              } }>
+        @if (!string.IsNullOrWhiteSpace(value))
+    {
+            @value
+        }
+    </textarea>
+}
+
+@helper Date(DateTime? value, string name, string id = null, bool validate = true, string format = "dd/MM/yyyy", bool required = true,
+                                    bool disabled = false, string htmlClass = null, bool isReadOnly = false, string expReg = null,
+                                    Dictionary<string, string> attributes = null)
+{
+    var cssClass = "datepicker";
+    if (!string.IsNullOrWhiteSpace(htmlClass))
+    {
+        cssClass = string.Format("{0} {1}", cssClass, htmlClass);
+    }
+    <div class="inner-addon left-addon">
+        <i class="glyphicon glyphicon-calendar"></i>
+        <input autocomplete="off" name="@name" type="text" class="@cssClass" value="@FormatHelper.Format(value, format)"
+               @(validate ? new MvcHtmlString(string.Format("{0}=\"{1}\"", "data-validate", "true")) : null)
+               @(!string.IsNullOrWhiteSpace(id) ? new MvcHtmlString(string.Format("{0}=\"{1}\"", "id", id)) : null)
+               @(required ? new MvcHtmlString(string.Format("{0}=\"{1}\"", "required", "required")) : null)
+               @(disabled ? new MvcHtmlString("disabled=\"disabled\"") : null)
+               @(isReadOnly ? new MvcHtmlString("readonly=\"readonly\"") : null)
+               @(!string.IsNullOrWhiteSpace(expReg) ? new MvcHtmlString(string.Format("{0}=\"{1}\"", "data-parsley-pattern", expReg)) : null)
+               @if ((attributes != null) && attributes.Any()) { foreach (var attr in attributes) { @: @attr.Key="@attr.Value"
+               } } />
+    </div>
+}
+
+
+
+
+@helper RadioButton(string value, string name, string id = null, bool? isChecked = null, string label = null, bool validate = true,
+                                            bool required = true, bool disabled = false, string htmlClass = null, Dictionary<string, string> attributes = null, bool isReadOnly = false)
+{
+    var cssClass = "customRadio";
+    if (!string.IsNullOrWhiteSpace(htmlClass))
+    {
+        cssClass = string.Format("{0} {1}", cssClass, htmlClass);
+    }
+    <label class="@cssClass">
+        <input name="@name" type="radio" value="@value"
+               @(isReadOnly ? new MvcHtmlString("readonly=\"readonly\"") : null)
+               @(!string.IsNullOrWhiteSpace(id) ? new MvcHtmlString(string.Format("{0}=\"{1}\"", "id", id)) : null)
+               @(isChecked.HasValue && isChecked.Value ? new MvcHtmlString("checked=\"checked\"") : null)
+               @(validate ? new MvcHtmlString(string.Format("{0}=\"{1}\"", "data-validate", "true")) : null)
+               @(required ? new MvcHtmlString(string.Format("{0}=\"{1}\"", "required", "required")) : null)
+               @(disabled ? new MvcHtmlString("disabled=\"disabled\"") : null)
+               @if ((attributes != null) && attributes.Any()) { foreach (var attr in attributes) { @: @attr.Key="@attr.Value"
+               } } />
+        <span class="customRadio-icon"></span>
+        @if (!string.IsNullOrWhiteSpace(label))
+        {
+            <span class="customRadio-text">@label.HtmlEncode()</span>
+        }
+    </label>
+}
+
+
+@helper DropDownExtend(string value, string name, IEnumerable<object> optionList, string valuePropertyName, string textPropertyName, bool validate = true,
+                                            bool multiple = false, string htmlClass = "", int? size = null, bool required = true, bool showEmptyOption = true, bool disabled = false,
+                                                Dictionary<string, string> comboAttributes = null, Dictionary<string, string> optionAditionalData = null, string id = null, bool isReadOnly = false)
+{
+    <select class="@htmlClass" name="@name"
+            @(isReadOnly ? new MvcHtmlString("readonly=\"readonly\"") : null)
+            @(!string.IsNullOrWhiteSpace(id) ? new MvcHtmlString(string.Format("{0}=\"{1}\"", "id", id)) : null)
+            @(required ? new MvcHtmlString(string.Format("{0}=\"{1}\"", "required", "required")) : null)
+            @(validate ? new MvcHtmlString(string.Format("{0}=\"{1}\"", "data-validate", "true")) : null)
+            @(multiple ? new MvcHtmlString("multiple") : null)
+            @(disabled ? new MvcHtmlString("disabled=\"disabled\"") : null)
+            @(size.HasValue ? new MvcHtmlString("size=\"" + size + "\"") : null)
+            @if ((comboAttributes != null) && comboAttributes.Any()) { foreach (var attr in comboAttributes) { @: @attr.Key="@attr.Value"
+            } }>
+        @if (showEmptyOption)
+        {
+            <option value="">(select an option)</option>
+        }
+
+        @if ((optionList != null) && optionList.Any())
+        {
+            foreach (var listItem in optionList)
+            {
+                var listItemValue = MvcHelper.GetReflectionValue(listItem, valuePropertyName);
+                var listItemText = MvcHelper.GetReflectionValue(listItem, textPropertyName);
+
+                if ((listItemValue != null) && (listItemText != null))
+                {
+                    <option value="@listItemValue"
+                            @(listItemValue == value ? new MvcHtmlString("selected") : null)
+                            @(MvcHelper.GetReflectionAttributes(optionAditionalData, listItem))>
+                        @listItemText
+                    </option>
+                }
+                else
+                {
+                    <option>Property not found</option>
+                }
+            }
+        }
+    </select>
+}
+
+@helper DropDownExtend(int? value, string name, IEnumerable<object> optionList, string valuePropertyName, string textPropertyName, bool validate = true,
+                                                bool multiple = false, string htmlClass = "", int? size = null, bool required = true, bool showEmptyOption = true, bool disabled = false,
+                                            Dictionary<string, string> comboAttributes = null, Dictionary<string, string> optionAditionalData = null, string id = null, bool isReadOnly = false)
+{
+    string stringValue = value.HasValue ? value.ToString() : null;
+    @DropDownExtend(stringValue, name, optionList, valuePropertyName, textPropertyName, validate, multiple, htmlClass, size, required, showEmptyOption, disabled, comboAttributes, optionAditionalData, id, isReadOnly)
+}
+
+@helper DropDownExtend(string value, string name, IEnumerable<System.Web.Mvc.SelectListItem> optionList, bool validate = true, bool multiple = false,
+                                            string htmlClass = "", int? size = null, bool required = true, bool showEmptyOption = true, bool disabled = false,
+                                            Dictionary<string, string> comboAttributes = null, string id = null, bool isReadOnly = false)
+{
+    <select class="@htmlClass" name="@name"
+            @(isReadOnly ? new MvcHtmlString("readonly=\"readonly\"") : null)
+            @(!string.IsNullOrWhiteSpace(id) ? new MvcHtmlString(string.Format("{0}=\"{1}\"", "id", id)) : null)
+            @(required ? new MvcHtmlString(string.Format("{0}=\"{1}\"", "required", "required")) : null)
+            @(validate ? new MvcHtmlString(string.Format("{0}=\"{1}\"", "data-validate", "true")) : null)
+            @(multiple ? new MvcHtmlString("multiple") : null)
+            @(size.HasValue ? new MvcHtmlString("size=\"" + size + "\"") : null)
+            @(disabled ? new MvcHtmlString("disabled=\"disabled\"") : null)
+            @if ((comboAttributes != null) && comboAttributes.Any()) { foreach (var attr in comboAttributes) { @: @attr.Key="@attr.Value"
+            } }>
+        @if (showEmptyOption)
+        {
+            <option value="">(select an option)</option>
+        }
+
+        @if ((optionList != null) && optionList.Any())
+        {
+            foreach (var listItem in optionList)
+            {
+                var listItemValue = listItem.Value;
+                var listItemText = listItem.Text;
+
+                if ((listItemValue != null) && (listItemText != null))
+                {
+                    if ((value != null) && (multiple = true))
+                    {
+                        string[] arrayValue = value.Split(',');
+                        if (arrayValue.Length > 0)
+                        {
+                            int contador = 0;
+                            foreach (var valueItem in arrayValue)
+                            {
+                                if (listItemValue == valueItem)
+                                {
+                                    contador++;
+                                    <option value="@listItemValue"
+                                            @(listItemValue == valueItem ? new MvcHtmlString("selected") : null)>
+                                        @listItemText
+                                    </option>
+                                }
+                            }
+                            if (contador == 0)
+                            {
+                                <option value="@listItemValue">
+                                    @listItemText
+                                </option>
+                            }
+                        }
+                    }
+                    else
+                    {
+                        <option value="@listItemValue"
+                                @(listItemValue == value ? new MvcHtmlString("selected") : null)>
+                            @listItemText
+                        </option>
+                    }
+
+                }
+                else
+                {
+                    <option>Property not found</option>
+                }
+            }
+        }
+    </select>
+}
+
+@helper DropDownExtend(int? value, string name, IEnumerable<System.Web.Mvc.SelectListItem> optionList, bool validate = true, bool multiple = false,
+                                            string htmlClass = "", int? size = null, bool required = true, bool showEmptyOption = true, bool disabled = false,
+                                            Dictionary<string, string> comboAttributes = null, string id = null, bool isReadOnly = false)
+{
+    string stringValue = value.HasValue ? value.ToString() : null;
+    @DropDownExtend(stringValue, name, optionList, validate, multiple, htmlClass, size, required, showEmptyOption, disabled, comboAttributes, id, isReadOnly)
+}
+
+
+
+@helper CheckBoxDig(bool value, string name, string id, bool disabled = true, bool required = true, string label = "")
+{
+    <div class="checkbox checbox-switch switch-primary">
+        <label>
+            <input data-type="checkBoxDig" type="checkbox" name="@name" id="@id"
+                   @(disabled ? new MvcHtmlString("disabled=\"disabled\"") : null)
+                   @(value ? new MvcHtmlString("checked") : null)
+                   @(required ? new MvcHtmlString(string.Format("{0}=\"{1}\"", "required", "required")) : null)
+                   @(value ? new MvcHtmlString("value=\"True\"") : new MvcHtmlString("value=\"False\"")) />
+            <span></span>
+            @label
+        </label>
+    </div>
+}
+@helper CheckBoxTri(string name, int valueSi, int valueNo, int valueSinDecidir, int currentValue)
+{
+    <div class="dlk-radio btn-group">
+        <label class="btn" id="siLabel">
+            <input name="@name"  class="form-control" type="radio" value="@valueSi" @(currentValue == valueSi ? new MvcHtmlString(string.Format("{0}=\"{1}\"", "checked","checked")) : null )>
+            <i class="fa fa-check glyphicon glyphicon-ok"></i> Sí
+        </label>
+        <label class="btn" id="noLabel">
+            <input name="@name" class="form-control" type="radio" value="@valueNo" @(currentValue == valueNo ? new MvcHtmlString(string.Format("{0}=\"{1}\"", "checked","checked")) : null )>
+            <i class="fa fa-times glyphicon glyphicon-remove"></i> No
+        </label>
+        <label class="btn" id="statusLabel">
+            <input name="@name" class="form-control"  type="radio" value="@valueSinDecidir" @(currentValue == valueSinDecidir ? new MvcHtmlString(string.Format("{0}=\"{1}\"", "checked","checked")) : null )>
+            <i class="fa fa-clock-o glyphicon glyphicon-ok"></i> Sin decidir
+        </label>
+    </div>
+}
+
+@helper InputFileDig(bool disabled = true, bool required = true, string file = "file", string nameFile = "", bool botonDescargar = false, string idButton = "", string nameButton = "")
+{
+    <div class="input-group" data-type="file-component">
+        <span class="input-group-btn" style="vertical-align:top;">
+            <button data-type="file-browse" type="button" class="btn btn-default" style="padding-top: 9px; padding-bottom: 10px;">
+                <span class="glyphicon glyphicon-open"></span>
+            </button>
+        </span>
+        <input type="file" name="@file" data-type="file-upload" style="display:none">
+        <input type="text" value="@nameFile" data-type="file-name" disabled="disabled" @(required ? new MvcHtmlString(string.Format("{0}=\"{1}\"", "required", "required")) : null) placeholder="Archivo no seleccionado" class="form-control">
+        @if (botonDescargar)
+        {
+            <span class="input-group-btn" style="vertical-align:top;">
+                <button id="@idButton" name="@nameButton" type="button" class="btn btn-default" style="padding-top: 9px; padding-bottom: 10px;">
+                    <span class="glyphicon glyphicon-save"></span>
+                </button>
+            </span>
+        }
+    </div>
+}
+
+@helper InputFileDownloadDig(string id = "", bool disabled = true, bool required = false, string nameFile = "test")
+{
+    <div class="input-group" data-type="file-component">
+        <a id="@id">@nameFile</a>
+    </div>
+}
+
+@helper Number(int? value, string name, string id = null, bool validate = true, bool required = true,
+                                          string minValue = null, string maxValue = null, string expReg = null,
+                                              Dictionary<string, string> attributes = null, string htmlClass = null)
+{
+    <input name="@name" type="number" value="@value"
+           @(!string.IsNullOrWhiteSpace(id) ? new MvcHtmlString(string.Format("{0}=\"{1}\"", "id", id)) : null)
+           @(validate ? new MvcHtmlString(string.Format("{0}=\"{1}\"", "data-validate", "true")) : null)
+           @(required ? new MvcHtmlString(string.Format("{0}=\"{1}\"", "required", "required")) : null)
+           @(expReg != null ? new MvcHtmlString(string.Format("{0}=\"{1}\"", "pattern", expReg)) : null)
+           @(minValue != null ? new MvcHtmlString(string.Format("{0}=\"{1}\"", "min", minValue)) : null)
+           @(maxValue != null ? new MvcHtmlString(string.Format("{0}=\"{1}\"", "data-v-max", maxValue)) : null)
+           @(!string.IsNullOrWhiteSpace(htmlClass) ? new MvcHtmlString(string.Format("{0}=\"{1}\"", "class", htmlClass)) : null)
+           @if ((attributes != null) && attributes.Any()) { foreach (var attr in attributes) { @: @attr.Key="@attr.Value"
+           } } />
+}
+
+@helper RefCandidato(int? value, string name, string id = null, bool validate = true, bool required = true,
+                                          string minValue = null, string maxValue = null,
+                                              Dictionary<string, string> attributes = null, string htmlClass = null)
+{
+    <input name="@name" type="number" value="@value"
+           @(!string.IsNullOrWhiteSpace(id) ? new MvcHtmlString(string.Format("{0}=\"{1}\"", "id", id)) : null)
+           @(validate ? new MvcHtmlString(string.Format("{0}=\"{1}\"", "validate", "true")) : null)
+           @(required ? new MvcHtmlString(string.Format("{0}=\"{1}\"", "required", "required")) : null)
+           @(minValue != null ? new MvcHtmlString(string.Format("{0}=\"{1}\"", "min", minValue)) : null)
+           @(maxValue != null ? new MvcHtmlString(string.Format("{0}=\"{1}\"", "max", maxValue)) : null)
+           @(!string.IsNullOrWhiteSpace(htmlClass) ? new MvcHtmlString(string.Format("{0}=\"{1}\"", "class", htmlClass)) : null)
+           @if ((attributes != null) && attributes.Any()) { foreach (var attr in attributes) { @: @attr.Key="@attr.Value"
+           } } />
+}
+@helper RefCandidatura(int? value, string name, string id = null, bool validate = true, bool required = true,
+                                          string minValue = null, string maxValue = null,
+                                              Dictionary<string, string> attributes = null, string htmlClass = null)
+{
+    <input name="@name" type="number" value="@value"
+           @(!string.IsNullOrWhiteSpace(id) ? new MvcHtmlString(string.Format("{0}=\"{1}\"", "id", id)) : null)
+           @(validate ? new MvcHtmlString(string.Format("{0}=\"{1}\"", "validate", "true")) : null)
+           @(required ? new MvcHtmlString(string.Format("{0}=\"{1}\"", "required", "required")) : null)
+           @(minValue != null ? new MvcHtmlString(string.Format("{0}=\"{1}\"", "min", minValue)) : null)
+           @(maxValue != null ? new MvcHtmlString(string.Format("{0}=\"{1}\"", "max", maxValue)) : null)
+           @(!string.IsNullOrWhiteSpace(htmlClass) ? new MvcHtmlString(string.Format("{0}=\"{1}\"", "class", htmlClass)) : null)
+           @if ((attributes != null) && attributes.Any()) { foreach (var attr in attributes) { @: @attr.Key="@attr.Value"
+           } } />
+}
+@helper Dni(int? value, string name, string id = null, bool validate = true, bool required = true,
+                                          string minValue = null, string maxValue = null, string expReg = null,
+                                              Dictionary<string, string> attributes = null, string htmlClass = null)
+{
+    <input name="@name" type="number" value="@value"
+           @(!string.IsNullOrWhiteSpace(id) ? new MvcHtmlString(string.Format("{0}=\"{1}\"", "id", id)) : null)
+           @(validate ? new MvcHtmlString(string.Format("{0}=\"{1}\"", "data-validate", "true")) : null)
+           @(required ? new MvcHtmlString(string.Format("{0}=\"{1}\"", "required", "required")) : null)
+           @(expReg != null ? new MvcHtmlString(string.Format("{0}=\"{1}\"", "data-parsley-pattern", expReg)) : null)
+           @(minValue != null ? new MvcHtmlString(string.Format("{0}=\"{1}\"", "data-v-min", minValue)) : null)
+           @(maxValue != null ? new MvcHtmlString(string.Format("{0}=\"{1}\"", "data-v-max", maxValue)) : null)
+           @(!string.IsNullOrWhiteSpace(htmlClass) ? new MvcHtmlString(string.Format("{0}=\"{1}\"", "class", htmlClass)) : null)
+           @if ((attributes != null) && attributes.Any()) { foreach (var attr in attributes) { @: @attr.Key="@attr.Value"
+           } } />
+}
+
+
+@helper DateTime(DateTime? value, string name, string id = null, bool validate = true, string format = "dd/MM/yyyy HH:mm", bool required = true,
+                                    bool disabled = false, string htmlClass = null, bool isReadOnly = false, string expReg = null,
+                                    Dictionary<string, string> attributes = null)
+{
+    var cssClass = "";
+    if (!string.IsNullOrWhiteSpace(htmlClass))
+    {
+        cssClass = string.Format("{0} {1}", cssClass, htmlClass);
+    }
+    <div id="datetimepicker" class="inner-addon left-addon">
+        <i class="glyphicon glyphicon-calendar"></i>
+        <input autocomplete="off" name="@name" type="datetime" class="@cssClass datetimepicker" value="@FormatHelper.Format(value, format)"
+               @(validate ? new MvcHtmlString(string.Format("{0}=\"{1}\"", "data-validate", "true")) : null)
+               @(!string.IsNullOrWhiteSpace(id) ? new MvcHtmlString(string.Format("{0}=\"{1}\"", "id", id)) : null)
+               @(required ? new MvcHtmlString(string.Format("{0}=\"{1}\"", "required", "required")) : null)
+               @(disabled ? new MvcHtmlString("disabled=\"disabled\"") : null)
+               @(isReadOnly ? new MvcHtmlString("readonly=\"readonly\"") : null)
+               @(!string.IsNullOrWhiteSpace(expReg) ? new MvcHtmlString(string.Format("{0}=\"{1}\"", "data-parsley-pattern", expReg)) : null)
+               @if ((attributes != null) && attributes.Any()) { foreach (var attr in attributes) { @: @attr.Key="@attr.Value"
+               } } />
+    </div>
+}

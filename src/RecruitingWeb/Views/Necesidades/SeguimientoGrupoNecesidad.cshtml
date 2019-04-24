@@ -1,0 +1,199 @@
+﻿@using RecruitingWeb.Properties
+
+@model Recruiting.Application.Necesidades.ViewModels.CreateEditGrupoNecesidadViewModel
+
+@{
+    var Activo = Model.Activo;
+    if (Activo == false)
+    {
+        Response.Redirect("/Shared/Borrado");
+    }
+
+    var listaNecesidades = Model.ListaNecesidades;
+    var jsonString = Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(listaNecesidades));
+    var listaPerfiles = Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.PerfilList));
+    var listaTecnologias = Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.TecnologiaList));
+    var listaModulos = Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.ModuloList));
+    var listaContratacion = Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.ContratacionList));
+    var listaPrevision = Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.PrevisionList));
+    var listaServicios = Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.ServicioList));
+    var listaClientes = Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.ClienteList));
+    var GrupoCerrado = Model.EstadoGrupo;
+}
+
+@functions{
+    public string getNombreById(IEnumerable<SelectListItem> lista, string id)
+    {
+        string nombre = "";
+        foreach (var elemento in lista)
+        {
+            if (elemento.Value == id)
+            {
+                nombre = elemento.Text;
+            }
+        }
+        return nombre;
+    }
+}
+
+<div class="row titlePage">
+    <div class="col-lg-6">
+        <h3>@Resources.HTML_Necesidades_Index_GestionNecesidades</h3>
+    </div>
+</div>
+<div class="row header-flap">   
+    <div class="btn-group" role="group">
+        <a href="/Necesidades/GrupoNecesidades" class="btn btn-default">
+            <span class="text">@Resources.HTML_BotonGenericoVolver</span>
+        </a>
+        @if (!GrupoCerrado)
+        {
+            <a href="#" data-action="guardar" class="btn btn-default">
+                <span class="text">@Resources.HTML_BotonGenericoGuardar</span>
+            </a>
+        }
+    </div>    
+    <div class="col-lg-6 removePadding">
+        <h4 class="noMargin headerBox">@Resources.HTML_Necesidades_SeguimientoGrupoNecesidad_Grupo @Model.NombreGrupo</h4>
+    </div>
+</div>
+
+@using (Html.BeginForm("SeguimientoGrupoNecesidad", "Necesidades", FormMethod.Post, new Dictionary<string, object> { { "class", "form-horizontal" }, { "role", "form" }, { "data-parsley-validate", "true" }, { "data-parsley-excluded", ":not([data-validate])" }, { "id", "formularioPrincipal" } }))
+{
+
+    @Edit.Hidden("", "NecesidadesBorradas")
+    @Edit.Hidden(Model.GrupoNecesidadId, "GrupoNecesidadId")
+    @Edit.Text(Model.NombreGrupo, "NombreGrupo", id: "NombreGrupo", maxLength: 250, htmlClass: "form-control hidden")
+    @Edit.Text(Model.DescripcionGrupo, "DescripcionGrupo", id: "DescripcionGrupo", required: false, maxLength: 250, htmlClass: "form-control hidden")
+    @Edit.Text(Model.ListaNecesidades != null ? Model.ListaNecesidades.ToList()[0].Nombre : "", "Nombre", id: "Nombre", maxLength: 250, htmlClass: "form-control hidden")
+
+    if (Model.CentroId > 0)
+    {
+        @Edit.Text(Model.ListaNecesidades != null ? Model.ListaNecesidades.ToList()[0].NombreCentro : "", "NombreCentro", id: "NombreCentro", maxLength: 250, htmlClass: "form-control hidden", isReadOnly: true)
+        @Edit.Hidden(Model.ListaNecesidades != null ? Model.ListaNecesidades.ToList()[0].CentroId : 0, "CentroId")
+        @Edit.Hidden(Model.ListaNecesidades != null ? Model.ListaNecesidades.ToList()[0].NombreCentro : "", "NombreCentroHidden")
+    }
+    else
+    {
+        @Edit.DropDownExtend(Model.CentroId, "CentroId", Model.CentroList, htmlClass: "form-control hidden", id: "CentroId")
+    }
+
+    @Edit.DropDownExtend(Model.OficinaId, "OficinaId", Model.OficinaList, htmlClass: "form-control hidden", id: "OficinaId")
+    @Edit.DropDownExtend(Model.SectorId, "SectorId", Model.SectorList, htmlClass: "form-control hidden", id: "SectorId")
+    @Edit.DropDownExtend(Model.ClienteId, "ClienteId", Model.ClienteList, htmlClass: "form-control hidden", id: "ClienteId")
+    @Edit.DropDownExtend(Model.ProyectoId, "ProyectoId", Model.ProyectoList, htmlClass: "form-control hidden", id: "ProyectoId")
+    @Edit.DropDownExtend(Model.MesesAsignacionId, "MesesAsignacionId", Model.MesesAsignacionList, htmlClass: "form-control hidden", id: "MesesAsignacionId")    
+    @Edit.Date(Model.FechaSolicitud, "FechaSolicitud", id: "FechaSolicitud", htmlClass: "form-control hidden")
+    @Edit.TextArea(Model.DetalleTecnologia, "DetalleTecnologia", id: "DetalleTecnologia", rows: 8, required: false, htmlClass: "form-control hidden", placeholder: "Detalle de Tecnología ... ")
+    @Edit.Checkbox(Model.DisponibilidadViajes, "DisponibilidadViajes", id: "dispViaje", validate: false, htmlClass: "hidden")
+    @Edit.Checkbox(Model.DisponibilidadReubicacion, "DisponibilidadReubicacion", id: "dispReubicacion", validate: false, htmlClass: "hidden")
+    @Edit.Checkbox(Model.NecesidadIdioma, "NecesidadIdioma", id: "NecesidadIdioma", validate: false, htmlClass: "hidden")
+
+    <div class="row">
+        <div class="content-box border-top-cero">
+            <div class="content-box-content">
+                <div class="section-form-basicos-necesidad margin" data-id="section-form-basicos">
+                    <div class="row">
+                        <div class="form-group col-lg-4">
+                            <div class="col-lg-12 title-form">
+                                <label for="NombreGrupo">@Resources.HTML_Necesidades_SeguimientoGrupoNecesidad_Centro</label>
+                            </div>
+                            <div class="col-lg-12 content-form">
+                                <label name="NombreGrupo" id="NombreGrupo">@(getNombreById(Model.CentroList, Model.CentroId.ToString()))</label>
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-4">
+                            <div class="col-lg-12 title-form">
+                                <label for="NombreGrupo">@Resources.HTML_Necesidades_SeguimientoGrupoNecesidad_Oficina</label>
+                            </div>
+                            <div class="col-lg-12 content-form">
+                                <label name="NombreGrupo" id="NombreGrupo">@(getNombreById(Model.OficinaList, Model.OficinaId.ToString()))</label>
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-4">
+                            <div class="col-lg-12 title-form">
+                                <label for="NombreGrupo">@Resources.HTML_Necesidades_SeguimientoGrupoNecesidad_Cliente</label>
+                            </div>
+                            <div class="col-lg-12 content-form">
+                                <label name="NombreGrupo" id="NombreGrupo">@(getNombreById(Model.ClienteList, Model.ClienteId.ToString()))</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-lg-4">
+                            <div class="col-lg-12 title-form">
+                                <label for="NombreGrupo">@Resources.HTML_Necesidades_SeguimientoGrupoNecesidad_Proyecto</label>
+                            </div>
+                            <div class="col-lg-12 content-form">
+                                <label name="NombreGrupo" id="NombreGrupo">@(getNombreById(Model.ProyectoList, Model.ProyectoId.ToString()))</label>
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-4">
+                            <div class="col-lg-12 title-form">
+                            </div>
+                            <div class="col-lg-12 content-form">
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-4">
+                            <div class="col-lg-12 title-form">
+                            </div>
+                            <div class="col-lg-12 content-form">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!--End .Row-->
+    <div class="row">
+        <div class="col-lg-12 content-box">
+            <div class="content-box-content">
+                <div class="row section-header">
+                    <div class="col-lg-6 removePadding">
+                        <h4>@Resources.HTML_Necesidades_SeguimientoGrupoNecesidad_Perfiles</h4>
+                    </div>
+                    <div class="col-lg-6 text-right removePadding">
+                        <button type="button" class="btn btn-default" id="btnAddPerfil">
+                            @Resources.HTML_BotonGenerico_Aniadir
+                        </button>
+                    </div>
+                </div>
+                <div class="content-box-content">
+                    <div class="row col-lg-12 removePadding">
+                        <div class="form-group col-lg-4">
+                            <div class="col-lg-12 title-form">
+                                <label for="numeroElementosPorFila">
+                                    @Resources.HTML_Necesidades_SeguimientoGrupoNecesidad_Columnas
+                                </label>
+                            </div>
+                            <div class="col-lg-4">                                
+                                @Edit.Number(5,name: "numeroElementosPorFila", id: "numeroElementosPorFila", htmlClass: "form-control", required: false)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row col-lg-12">
+                        <div class="content-box-content">
+                            <div id="pantallaPerfiles" class="paper-content"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> <!--End .Row-->
+    <div id="paper-html-elements" class="paper-html-elements"></div>
+}
+@Html.Partial("~/Views/Necesidades/Modals/_ModalEditPerfil.cshtml", Model.ModalEdicionPerfil)
+@Html.Partial("~/Views/Necesidades/Modals/_ModalcreatePerfil.cshtml", Model.ModalEdicionPerfil)
+@Html.Partial("~/Views/Necesidades/Modals/_ModalBusquedaPersonaLibre.cshtml")
+@Html.Partial("~/Views/Necesidades/Modals/_ModalCandidatosQueCumplenPerfil.cshtml")
+
+@section scripts{
+    @GrupoNecesidadesFrontActions.MenuFrontActions()
+    @GrupoNecesidadesFrontActions.DetailFrontActions(Url, GrupoCerrado)  
+    @GrupoNecesidadesFrontActions.ForTableDetail()
+    @GrupoNecesidadesFrontActions.JointJsFrontActions(Model, Html, jsonString, listaPerfiles, listaTecnologias, listaModulos
+                                                    , listaContratacion, listaPrevision, listaServicios)
+    
+   
+
+}

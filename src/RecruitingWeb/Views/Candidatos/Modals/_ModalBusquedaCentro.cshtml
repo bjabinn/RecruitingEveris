@@ -1,0 +1,109 @@
+﻿@using RecruitingWeb.Components.DataTable.Helpers
+@using RecruitingWeb.Helpers
+@using Recruiting.Application.Becarios.ViewModels
+@using Recruiting.Application.Candidatos.ViewModels
+@using RecruitingWeb.Properties
+
+<div class="modal fade" id="modalCentros">
+    <div class="modal-dialog modalBusquedaDialogo">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="row">
+                    <div class="col-lg-6 text-left">
+                        <h4 class="modal-title tituloModal">
+                            @Resources.HTML_Becarios_ModalBusquedaCentro_BusquedaCentro
+                        </h4>
+                    </div>
+                    <div class="col-lg-6 text-right">
+                        <button type="button" class="btnCloseModal" data-dismiss="modal">@Display.GlyphiconButton("glyphicon-remove")</button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body">
+                <!-- Start form-filter  -->
+                <div id="form-filterCentro">
+                    <div class="row">
+                        <div class="col-lg-12" style="text-align: right; margin-top:5px;margin-bottom:10px;">
+                            <div class="btn-group" role="group">
+                                <a class="btn btn-default" id="limpiarModalCentro">
+                                    <span class="text"> @Resources.HTML_BotonGenericoLimpiar</span>
+                                </a>
+                                <a class="btn btn-default" id="buscarModalCentro">
+                                    <span class="text"> @Resources.HTML_BotonGenericoBuscar</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-lg-6">
+                            <div class="col-lg-12 title-form">
+                                <label>@Resources.HTML_Becarios_ModalBusquedaCentro_Centro</label>
+                            </div>
+                            <div class="col-lg-12">
+                                @Edit.Text((string)null, "filterCentro", id: "filterCentro", required: false, validate: false, htmlClass: "form-control col-lg-4")
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-6">
+                            <div class="col-lg-12 title-form">
+                                <label>@Resources.HTML_Becarios_ModalBusquedaCentro_Ciudad</label>
+                            </div>
+                            <div class="col-lg-12">
+                                @Edit.Text((string)null, "filterCiudad", id: "filterCiudad", required: false, validate: false, htmlClass: "form-control col-lg-4")
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-lg-6">
+                            <div class="col-lg-12 title-form">
+                                <label>@Resources.HTML_Becarios_ModalBusquedaCentro_Pais</label>
+                            </div>
+                            <div class="col-lg-12">
+                                @Edit.Text((string)null, "filterPais", id: "filterPais", required: false, validate: false, htmlClass: "form-control col-lg-4")
+                            </div>
+                        </div>
+                    </div> <!-- End form-filter  -->
+                </div> <!-- End form-filter  -->
+                <div class="row">
+                    <div class="col-lg-12" style="text-align: right; margin-top:5px;margin-bottom:10px;">
+                        <div class="btn-group" role="group">
+                            <a class="btn btn-default" id="BtnCreateCentro" data-target="#modalCrearEditCentros" data-toggle="modal">
+                                <span class="text"> @Resources.HTML_Becarios_ModalBusquedaCentro_CrearCentro</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Desechable:  Listado Para Probar ---- var items = new List<RowCandidatoViewModel>() -->
+                <!-- Load Data Candidatos  -->
+                @{
+                    var config = Html.InitializeDataTable<CandidatoCentroEducativoRowViweModel>();
+                    config.Name("tablaCentroEducativo")
+                        .AjaxLoadUrl(Url.Action("LoadCentrosProcedencia", "Candidatos"))
+                        .CustomFilterAjax("getFiltersCentros")
+                        .PrimaryKey(m => m.CentroId.ToString())
+                        .AddPrimaryKeyToName(false)
+                        .Paginable()
+                        .PageSize(5)
+                        .Columns(columns =>
+                        {
+                            columns.Bound(c => c.Centro).Header(Resources.HTML_Becarios_ModalBusquedaCentro_CentroHeader).ColumnName("Centro").Orderable(true);
+                            columns.Bound(c => c.Ciudad).Header(Resources.HTML_Becarios_ModalBusquedaCentro_CiudadHeader).ColumnName("Ciudad").Orderable(true);
+                            columns.Bound(c => c.Pais).Header(Resources.HTML_Becarios_ModalBusquedaCentro_PaisHeader).ColumnName("Pais").Orderable(true);
+                            columns.Template(@<div></div>).Header(Resources.HTML_Candidaturas_ModalBusquedaCandidato_AccionesHeader).CssHeaderClass("text-center");
+                        });
+                }
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div id="partialTable">
+                            @Html.Partial("Controls/DataTable", config)
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" id="BtnCentro">@Resources.HTML_BotonGenericoSeleccionar</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+

@@ -1,0 +1,25 @@
+@using RecruitingWeb.Properties
+
+@model Recruiting.Application.Necesidades.ViewModels.NecesidadRowViewModel
+
+<div>
+    @Edit.Text(Model.NecesidadId.ToString(), "NecesidadId", id: "NecesidadId", htmlClass: "form-control hide")
+   
+     
+    <a href="/Necesidades/Edit/@Model.NecesidadId.ToString()" title="@Resources.HTML_Title_Editar" id="EditButton" @if (!(bool)TempData["ModificarNecesidad"]) { @: class="disabled"
+                                   }>@Display.GlyphiconButton("glyphicon-pencil icon action")</a>
+
+     <a title="@Resources.HTML_Title_Eliminar" id="DeleteButton" @if (!(bool)TempData["AniadirEliminarNecesidad"]) { @: class="disabled"
+                                                               }>@Display.GlyphiconButton("glyphicon-trash icon action")</a>
+
+    <a href="/Necesidades/Details/@Model.NecesidadId.ToString()" title="@Resources.HTML_Title_DetalleNecesidad" id="DetailButton"
+       @if (!(bool)TempData["VerNecesidad"])
+       { 
+           @: class="disabled"
+                  }
+       >
+    @Display.GlyphiconButton("glyphicon-eye-open icon action")</a>
+    <a href="/BitacorasNecesidades/Index?NecesidadId=@Model.NecesidadId.ToString()" title="@Resources.HTML_Title_BitacoraNecesidad" id="BitacoraButton">
+        @Display.GlyphiconButton("glyphicon glyphicon-list-alt icon action")
+    </a>
+</div>

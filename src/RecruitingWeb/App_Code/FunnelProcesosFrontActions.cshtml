@@ -1,0 +1,731 @@
+﻿@using RecruitingWeb.Properties
+@using Recruiting.Application.Maestros.Enums
+@using Recruiting.Application.Candidaturas.Enums
+
+@helper MenuFrontActions()
+{
+    <script type="text/javascript">
+        //Menu
+
+        var menuItemToSelect = $("#main-nav li a[data-option-name=Funnel]");
+        menuItemToSelect.addClass("current");
+    </script>
+}
+
+@helper IndexFrontActions(System.Web.Mvc.UrlHelper Url)
+{
+    <script type="text/javascript">
+
+        $(window).keydown(function (event) {
+            if (event.keyCode == 13) {
+                buscarIntro();
+                return true;
+            }
+        });
+
+        function buscarIntro() {
+            $('body').LoadingOverlay("show");
+            loadGraficas();            
+            checkTableRegion();
+        }
+
+
+        function checkTableRegion() {
+             if ($('#filterTecnologia').val() == '') {
+                 $('#regionTecnologia').show();
+                 $('#regionCategoria').hide();
+                 $('#regionTecnologiaCategoria').hide();
+                 $('#buscarTecnologia').val(true);
+                 $('#buscarCategoria').val(false);
+                 $('#buscarTecnologiaCategoria').val(false);
+                 
+                 var table = $('#tablaDesgloseTecnologia');
+                 table.data("fn-search")();
+            }
+            else if ($('#filterCategoria').val() == '' && $('#filterTecnologia').val() != '') {
+                $('#regionTecnologia').hide();
+                $('#regionCategoria').show();
+                 $('#regionTecnologiaCategoria').hide();
+                 $('#buscarCategoria').val(true);
+                 $('#buscarTecnologia').val(false);
+                 $('#buscarTecnologiaCategoria').val(false);
+
+                 var table = $('#tablaDesgloseCategoria');
+                 table.data("fn-search")();
+            }
+            else {
+                $('#regionTecnologia').hide();
+                $('#regionCategoria').hide();
+                 $('#regionTecnologiaCategoria').show();
+                 $('#buscarTecnologiaCategoria').val(true);
+                 $('#buscarCategoria').val(false);
+                 $('#buscarTecnologia').val(false);
+
+                 var table = $('#tablaDesgloseTecnologiaCategoria');
+                 table.data("fn-search")();
+            }
+        }       
+
+
+        $(document).on('click', '#buscar', function () {
+            buscarIntro();
+
+        });
+
+        $(document).on('click', '#limpiar', function () {
+            resetFields('#form-filter');
+            buscarIntro();
+
+        }); 
+
+        function loadGraficas() {
+
+            var data = getFiltersFunnel();
+
+
+              $.ajax({
+                  url: '@Url.Action("LoadGraficasFunnel", "FunnelProcesos")',
+                  data: data,
+                type: 'POST',
+                success: function (data) {
+                    if (data.IsValid) {
+                        generateChartFiltrado(data.DatosFiltradoCV);
+                        generateChartEntrevistas(data.DatosEntrevistas);
+                        generateChartCartaOferta(data.DatosCartaOferta);
+                    }
+                    //alert(data);
+                },//success
+                error: function (data) {
+                    alert("Error: problemas al conectar con la base de datos");
+                }//error
+            });//ajax
+        }
+
+
+        function getFiltersFunnel() {  
+            
+
+            var FechaInicio = $('#filterFechaInicio').val().toString();
+            var FechaFin = $('#filterFechaFin').val().toString();
+            var TipoTecnologiaId = $('#filterTecnologia').val().toString();
+            var TipoCategoriaId = $('#filterCategoria').val().toString();
+            var CentroIdUsuario = $('#filterCentro').val();
+            var BuscarTecnologia = $('#buscarTecnologia').val();
+            var BuscarCategoria = $('#buscarCategoria').val();
+            var BuscarTecnologiaCategoria = $('#buscarTecnologiaCategoria').val();
+            var CandidaturaOfertaId = $("#filterCandidaturaOferta").val();
+              
+            return {
+                FechaInicio: FechaInicio, FechaFin: FechaFin, TipoTecnologiaId: TipoTecnologiaId,
+                TipoCategoriaId: TipoCategoriaId, CentroIdUsuario: CentroIdUsuario, BuscarTecnologia: BuscarTecnologia,
+                BuscarCategoria: BuscarCategoria, BuscarTecnologiaCategoria: BuscarTecnologiaCategoria,
+                CandidaturaOfertaId: CandidaturaOfertaId
+            };
+            
+
+
+        }
+
+        function generateChartFiltrado(datosFiltrado) {
+
+            $('#regionChartFiltrado').empty();
+
+            var mycanvas = document.createElement("canvas");
+            mycanvas.id = "chartFiltrado";
+            mycanvas.height = 60;
+            mycanvas.width = 80;
+            $('#regionChartFiltrado').append(mycanvas);
+
+
+            var ctx = document.getElementById("chartFiltrado").getContext('2d');
+            var myChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ["Pend. Filtro",  "Supera", "Descartados", "Renuncias", "StandBy"],
+                    datasets: [{
+                        backgroundColor: ["yellow", "#9aae04", "red", "blue", "gray"],
+                        data: [datosFiltrado.NumeroPendienteFiltrados, datosFiltrado.NumeroSupera, datosFiltrado.NumeroDescartados, datosFiltrado.NumeroRenuncias, datosFiltrado.NumeroStandBy]
+                    }]
+                },
+                options: {
+                    title: {
+                        display: true,
+                        text: "Total candidaturas: " + datosFiltrado.TotalCreados
+                    }
+                }
+            });
+        }
+
+        function generateChartEntrevistas(datosEntrevistas) {
+
+            $('#regionChartEntrevistas').empty();
+
+            var mycanvas = document.createElement("canvas");
+            mycanvas.id = "chartEntrevistas";
+            mycanvas.height = 60;
+            mycanvas.width = 80;
+            $('#regionChartEntrevistas').append(mycanvas);
+
+
+            var ctx = document.getElementById("chartEntrevistas").getContext('2d');
+            var myChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ["Pend. Citacion", "Feedback", "Supera", "Descartados", "Renuncias", "Standby"],
+                    datasets: [{
+                        backgroundColor: ["yellow", "purple", "#9aae04", "red", "blue", "gray"],
+                        data: [datosEntrevistas.NumeroPendientesCitacion, datosEntrevistas.NumeroFeedback,
+                            datosEntrevistas.NumeroSupera, datosEntrevistas.NumeroDescartados,
+                            datosEntrevistas.NumeroRenuncias, datosEntrevistas.NumeroStandBy]
+                    }]
+                },
+                options: {
+                    title: {
+                        display: true,
+                        text: "Total entrevistas agendadas: " + datosEntrevistas.TotalAgendadas
+                    }
+                }
+            });
+        }
+
+        function generateChartCartaOferta(datosCartaOferta) {
+
+            $('#regionChartCartaOferta').empty();
+
+            var mycanvas = document.createElement("canvas");
+            mycanvas.id = "chartCartaOferta";
+            mycanvas.height = 60;
+            mycanvas.width = 80;
+            $('#regionChartCartaOferta').append(mycanvas);
+
+
+            var ctx = document.getElementById("chartCartaOferta").getContext('2d');
+            var myChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ["Pend. Citacion", "En Feedback", "Aceptadas", "Rechazadas", "Descartadas", "Renuncias", "StandBy"],
+                    datasets: [{
+                        backgroundColor: ["yellow", "purple", "#9aae04", "orange", "red", "blue", "gray"],
+                        data: [datosCartaOferta.NumeroPendientesCitacion, datosCartaOferta.NumeroFeedback,
+                            datosCartaOferta.NumeroAceptadas, datosCartaOferta.NumeroRechazadas,
+                            datosCartaOferta.NumeroDescartadas, datosCartaOferta.NumeroRenuncias,
+                            datosCartaOferta.NumeroStandBy]
+                    }]
+                },
+                options: {
+                    title: {
+                        display: true,
+                        text: "Total carta ofertas agendadas: " + datosCartaOferta.TotalAgendadas
+                    }
+                }
+            });
+        }
+
+        $('#tablaDesgloseTecnologia').on('draw.dt', function (event, data) {
+            $('[name=NombreTecnologia]').addClass("tecn-header");
+            $(this).find("th:last").addClass("hidden");
+            $(this).find("th:first").attr("title", "Tecnologia");
+
+            $(this).find("th:not(:first)").each(function () {
+                RellenaTitulosTabla($(this), $(this).index());
+            });
+
+
+            $(this).find("tr").each(function () {
+                $(this).find('td:last').addClass("hidden");
+            });
+
+            $('body').LoadingOverlay("hide");
+        });
+      
+
+        $('#tablaDesgloseCategoria').on('draw.dt', function (event, data) {
+            $('[name=NombreCategoria]').addClass("tecn-header");
+            $(this).find("th:last").addClass("hidden");
+            $(this).find("th:first").attr("title", "Perfil");
+
+            $(this).find("th:not(:first)").each(function () {
+                RellenaTitulosTabla($(this), $(this).index());
+            });
+
+            $(this).find("tr").each(function () {
+                $(this).find('td:last').addClass("hidden");
+            });
+
+            $('body').LoadingOverlay("hide");
+        });
+
+        $('#tablaDesgloseTecnologiaCategoria').on('draw.dt', function (event, data) {           
+            $(this).find("th:last").addClass("hidden");
+
+            $(this).find("th").each(function () {
+                RellenaTitulosTabla($(this), $(this).index() + 1);
+            });
+
+            $(this).find("tr").each(function () {
+                $(this).find('td:last').addClass("hidden");
+            });
+
+            $('body').LoadingOverlay("hide");
+        });
+
+        function RellenaTitulosTabla(header, index) {
+            switch (index) {
+                case 1:
+                    {
+                        header.attr('title', 'Candidaturas Creadas');
+                        break;
+                    }
+                case 2:
+                    {
+                        header.attr('title', 'Pendientes filtrado');
+                        break;
+                    }
+                case 3:
+                    {
+                        header.attr('title', 'Filtrado Superado');
+                        break;
+                    }
+                case 4:
+                    {
+                        header.attr('title', 'Filtrado Descartadas');
+                        break;
+                    }
+                case 5:
+                    {
+                        header.attr('title', 'Filtrado Renuncias');
+                        break;
+                    }
+                case 6:
+                    {
+                        header.attr('title', 'Filtrado StandBy');
+                        break;
+                    }
+                case 7:
+                    {
+                        header.attr('title', 'Entrevistas pendientes citacion');
+                        break;
+                    }
+                case 8:
+                    {
+                        header.attr('title', 'Entrevistas Feedback');
+                        break;
+                    }
+                case 9:
+                    {
+                        header.attr('title', 'Entrevistas Superadas');
+                        break;
+                    }
+                case 10:
+                    {
+                        header.attr('title', 'Entrevistas Descartadas');
+                        break;
+                    }
+                case 11:
+                    {
+                        header.attr('title', 'Entrevistas Renuncias');
+                        break;
+                    }
+                case 12:
+                    {
+                        header.attr('title', 'Entrevistas StandBy');
+                        break;
+                    }
+                case 13:
+                    {
+                        header.attr('title', 'Carta Ofertas Pendientes Citacion');
+                        break;
+                    }
+                case 14:
+                    {
+                        header.attr('title', 'Carta Ofertas Feedback');
+                        break;
+                    }
+                case 15:
+                    {
+                        header.attr('title', 'Carta Ofertas Superadas');
+                        break;
+                    }
+                case 16:
+                    {
+                        header.attr('title', 'Carta Ofertas Rechazadas');
+                        break;
+                    }
+                case 17:
+                    {
+                        header.attr('title', 'Carta Ofertas Descartadas');
+                        break;
+                    }
+                case 18:
+                    {
+                        header.attr('title', 'Carta Ofertas Renuncias');
+                        break;
+                    }
+                case 19:
+                    {
+                        header.attr('title', 'Carta Ofertas StandBy');
+                        break;
+                    }
+            }
+        }
+
+        
+        $(document).on('click', "#tablaDesgloseTecnologia_wrapper .paginate_button:not('.current'), #tablaDesgloseCategoria_wrapper .paginate_button:not('.current'), #tablaDesgloseTecnologiaCategoria_wrapper .paginate_button:not('.current')", function () {
+            $('body').LoadingOverlay('show');
+        });
+
+        $(document).on('click', '#tablaDesgloseTecnologia td', function () {
+            var fechaInicio = ($(this).closest('tr').find('#FechaInicio').val());
+            var fechaFin = ($(this).closest('tr').find('#fechaFin').val());
+            var tecnologia = ($(this).closest('tr').find('#TecnologiaId').val());
+            var categoria = ($(this).closest('tr').find('#CategoriaId').val());
+            var centroIdUsuario = ($(this).closest('tr').find('#CentroIdUsuario').val());
+            var index = $(this).index();
+
+            if (tecnologia == "") {
+                tecnologia = 0;
+            }
+
+            RellenaFiltrosModal(fechaInicio, fechaFin, tecnologia, categoria, centroIdUsuario, index);
+            $('#modalTablaCandidaturas').modal('show');
+            $('#buscarTablaCandidaturasModal').val(true);
+            $('#tablaCandidaturasModal').data("fn-search")();
+
+        });
+
+        $(document).on('click', '#tablaDesgloseCategoria td', function () {
+            var fechaInicio = ($(this).closest('tr').find('#FechaInicio').val());
+            var fechaFin = ($(this).closest('tr').find('#fechaFin').val());
+            var tecnologia = ($(this).closest('tr').find('#TecnologiaId').val());
+            var categoria = ($(this).closest('tr').find('#CategoriaId').val());
+            var centroIdUsuario = ($(this).closest('tr').find('#CentroIdUsuario').val());
+            var index = $(this).index();
+
+            if (categoria == "") {
+                categoria = 0;
+            }
+
+            RellenaFiltrosModal(fechaInicio, fechaFin, tecnologia, categoria, centroIdUsuario, index);
+            $('#modalTablaCandidaturas').modal('show');
+            $('#buscarTablaCandidaturasModal').val(true);
+            $('#tablaCandidaturasModal').data("fn-search")();
+
+        });
+
+        $(document).on('click', '#tablaDesgloseTecnologiaCategoria td', function () {
+            var fechaInicio = ($(this).closest('tr').find('#FechaInicio').val());
+            var fechaFin = ($(this).closest('tr').find('#fechaFin').val());
+            var tecnologia = ($(this).closest('tr').find('#TecnologiaId').val());
+            var categoria = ($(this).closest('tr').find('#CategoriaId').val());
+            var centroIdUsuario = ($(this).closest('tr').find('#CentroIdUsuario').val());
+            var index = $(this).index() + 1;
+            RellenaFiltrosModal(fechaInicio, fechaFin, tecnologia, categoria, centroIdUsuario, index);
+            $('#modalTablaCandidaturas').modal('show');
+            $('#buscarTablaCandidaturasModal').val(true);
+            $('#tablaCandidaturasModal').data("fn-search")();
+
+        });
+
+        $('#tablaCandidaturasModal').on('draw.dt', function (event, data) {
+            var total = $('#tempdataCandidaturas');
+            total.html(data._iRecordsTotal);
+        });
+
+        function RellenaFiltrosModal(fechaInicio, fechaFin, tecnologia, categoria, centroIdUsuario, index) {
+           
+            switch (index) {
+                case 1:
+                    {
+                        var estadosFiltro = [];
+                        estadosFiltro.push(@((int)TipoEstadoCandidaturaEnum.FiltradoPeople));
+                        estadosFiltro.push(@((int)TipoEstadoCandidaturaEnum.Entrevista));
+                        estadosFiltro.push(@((int)TipoEstadoCandidaturaEnum.SegundaEntrevista));
+                        estadosFiltro.push(@((int)TipoEstadoCandidaturaEnum.CartaOferta));
+                        estadosFiltro.push(@((int)TipoEstadoCandidaturaEnum.Descartado));
+                        estadosFiltro.push(@((int)TipoEstadoCandidaturaEnum.Renuncia));
+                        estadosFiltro.push(@((int)TipoEstadoCandidaturaEnum.StandBy));
+                        estadosFiltro.push(@((int)TipoEstadoCandidaturaEnum.RechazaOferta));
+                        estadosFiltro.push(@((int)TipoEstadoCandidaturaEnum.Contratado));
+
+                        var etapasFiltro = [];
+                        etapasFiltro.push(@((int)TipoEtapaCandidaturaEnum.FiltradoTecnico));
+                        etapasFiltro.push(@((int)TipoEtapaCandidaturaEnum.FiltradoTelefonico));
+                        etapasFiltro.push(@((int)TipoEtapaCandidaturaEnum.AgendarEntrevistas));
+                        etapasFiltro.push(@((int)TipoEtapaCandidaturaEnum.FeedbackPrimeraEntrevista));
+                        etapasFiltro.push(@((int)TipoEtapaCandidaturaEnum.PendienteDecisionSegundaEntrevista));
+                        etapasFiltro.push(@((int)TipoEtapaCandidaturaEnum.AgendarSegundaEntrevista));
+                        etapasFiltro.push(@((int)TipoEtapaCandidaturaEnum.FeedbackSegundaEntrevista));
+                        etapasFiltro.push(@((int)TipoEtapaCandidaturaEnum.PendienteDecisionCartaOferta));
+                        etapasFiltro.push(@((int)TipoEtapaCandidaturaEnum.AgendarCartaOferta));
+                        etapasFiltro.push(@((int)TipoEtapaCandidaturaEnum.FeedbackCartaOferta));
+                        etapasFiltro.push(@((int)TipoEtapaCandidaturaEnum.Fin));
+
+                        break;
+                    }
+                case 2:
+                    {
+                        var estadosFiltro = [];
+                        estadosFiltro.push(@((int)TipoEstadoCandidaturaEnum.FiltradoPeople));
+                        estadosFiltro.push(@((int)TipoEstadoCandidaturaEnum.Entrevista));
+                       
+
+                        var etapasFiltro = [];
+                        etapasFiltro.push(@((int)TipoEtapaCandidaturaEnum.FiltradoTecnico));
+                        etapasFiltro.push(@((int)TipoEtapaCandidaturaEnum.FiltradoTelefonico));
+                       
+                        break;
+                    }
+                case 3:
+                    {
+                        var estadosFiltro = [];                        
+                        estadosFiltro.push(@((int)TipoEstadoCandidaturaEnum.Entrevista));
+                        estadosFiltro.push(@((int)TipoEstadoCandidaturaEnum.SegundaEntrevista));
+                        estadosFiltro.push(@((int)TipoEstadoCandidaturaEnum.CartaOferta));
+                        estadosFiltro.push(@((int)TipoEstadoCandidaturaEnum.Descartado));
+                        estadosFiltro.push(@((int)TipoEstadoCandidaturaEnum.Renuncia));
+                        estadosFiltro.push(@((int)TipoEstadoCandidaturaEnum.StandBy));
+                        estadosFiltro.push(@((int)TipoEstadoCandidaturaEnum.RechazaOferta));
+                        estadosFiltro.push(@((int)TipoEstadoCandidaturaEnum.Contratado));
+
+                        var etapasFiltro = [];                        
+                        etapasFiltro.push(@((int)TipoEtapaCandidaturaEnum.AgendarEntrevistas));
+                        etapasFiltro.push(@((int)TipoEtapaCandidaturaEnum.FeedbackPrimeraEntrevista));
+                        etapasFiltro.push(@((int)TipoEtapaCandidaturaEnum.PendienteDecisionSegundaEntrevista));
+                        etapasFiltro.push(@((int)TipoEtapaCandidaturaEnum.AgendarSegundaEntrevista));
+                        etapasFiltro.push(@((int)TipoEtapaCandidaturaEnum.FeedbackSegundaEntrevista));
+                        etapasFiltro.push(@((int)TipoEtapaCandidaturaEnum.PendienteDecisionCartaOferta));
+                        etapasFiltro.push(@((int)TipoEtapaCandidaturaEnum.AgendarCartaOferta));
+                        etapasFiltro.push(@((int)TipoEtapaCandidaturaEnum.FeedbackCartaOferta));
+                        etapasFiltro.push(@((int)TipoEtapaCandidaturaEnum.Fin));
+                        break;
+                    }
+                case 4:
+                    {
+                        var estadosFiltro = [];                       
+                        estadosFiltro.push(@((int)TipoEstadoCandidaturaEnum.Descartado));                       
+
+                        var etapasFiltro = [];
+                        etapasFiltro.push(@((int)TipoEtapaCandidaturaEnum.FiltradoTecnico));
+                        etapasFiltro.push(@((int)TipoEtapaCandidaturaEnum.FiltradoTelefonico));
+                        
+                        break;
+                    }
+                case 5:
+                    {
+                        var estadosFiltro = [];                        
+                        estadosFiltro.push(@((int)TipoEstadoCandidaturaEnum.Renuncia));                        
+
+                        var etapasFiltro = [];
+                        etapasFiltro.push(@((int)TipoEtapaCandidaturaEnum.FiltradoTecnico));
+                        etapasFiltro.push(@((int)TipoEtapaCandidaturaEnum.FiltradoTelefonico));
+                        
+                        break;
+                    }
+                case 6:
+                    {
+                        var estadosFiltro = [];                        
+                        estadosFiltro.push(@((int)TipoEstadoCandidaturaEnum.StandBy));                       
+
+                        var etapasFiltro = [];
+                        etapasFiltro.push(@((int)TipoEtapaCandidaturaEnum.FiltradoTecnico));
+                        etapasFiltro.push(@((int)TipoEtapaCandidaturaEnum.FiltradoTelefonico));
+                       
+                        break;
+                    }
+                case 7:
+                    {
+                        var estadosFiltro = [];                       
+                        estadosFiltro.push(@((int)TipoEstadoCandidaturaEnum.Entrevista));
+                        estadosFiltro.push(@((int)TipoEstadoCandidaturaEnum.SegundaEntrevista));
+                        
+
+                        var etapasFiltro = [];                       
+                        etapasFiltro.push(@((int)TipoEtapaCandidaturaEnum.AgendarEntrevistas));                       
+                        etapasFiltro.push(@((int)TipoEtapaCandidaturaEnum.AgendarSegundaEntrevista));
+                       
+                        break;
+                    }
+                case 8:
+                    {
+                        var estadosFiltro = [];                        
+                        estadosFiltro.push(@((int)TipoEstadoCandidaturaEnum.Entrevista));
+                        estadosFiltro.push(@((int)TipoEstadoCandidaturaEnum.SegundaEntrevista));                       
+
+                        var etapasFiltro = [];                        
+                        etapasFiltro.push(@((int)TipoEtapaCandidaturaEnum.FeedbackPrimeraEntrevista));
+                        etapasFiltro.push(@((int)TipoEtapaCandidaturaEnum.PendienteDecisionSegundaEntrevista));                        
+                        etapasFiltro.push(@((int)TipoEtapaCandidaturaEnum.FeedbackSegundaEntrevista));
+                        
+                        break;
+                    }
+                case 9:
+                    {
+                        var estadosFiltro = [];                        
+                        estadosFiltro.push(@((int)TipoEstadoCandidaturaEnum.CartaOferta));
+                        estadosFiltro.push(@((int)TipoEstadoCandidaturaEnum.Descartado));
+                        estadosFiltro.push(@((int)TipoEstadoCandidaturaEnum.Renuncia));
+                        estadosFiltro.push(@((int)TipoEstadoCandidaturaEnum.StandBy));
+                        estadosFiltro.push(@((int)TipoEstadoCandidaturaEnum.RechazaOferta));
+                        estadosFiltro.push(@((int)TipoEstadoCandidaturaEnum.Contratado));
+
+                        var etapasFiltro = [];                       
+                        etapasFiltro.push(@((int)TipoEtapaCandidaturaEnum.PendienteDecisionCartaOferta));
+                        etapasFiltro.push(@((int)TipoEtapaCandidaturaEnum.AgendarCartaOferta));
+                        etapasFiltro.push(@((int)TipoEtapaCandidaturaEnum.FeedbackCartaOferta));
+                        etapasFiltro.push(@((int)TipoEtapaCandidaturaEnum.Fin));
+                        break;
+                    }
+                case 10:
+                    {
+                        var estadosFiltro = [];                       
+                        estadosFiltro.push(@((int)TipoEstadoCandidaturaEnum.Descartado));
+                        
+                        var etapasFiltro = [];                       
+                        etapasFiltro.push(@((int)TipoEtapaCandidaturaEnum.AgendarEntrevistas));
+                        etapasFiltro.push(@((int)TipoEtapaCandidaturaEnum.FeedbackPrimeraEntrevista));
+                        etapasFiltro.push(@((int)TipoEtapaCandidaturaEnum.PendienteDecisionSegundaEntrevista));
+                        etapasFiltro.push(@((int)TipoEtapaCandidaturaEnum.AgendarSegundaEntrevista));
+                        etapasFiltro.push(@((int)TipoEtapaCandidaturaEnum.FeedbackSegundaEntrevista));
+                       
+                        break;
+                    }
+                case 11:
+                    {
+                        var estadosFiltro = [];                       
+                        estadosFiltro.push(@((int)TipoEstadoCandidaturaEnum.Renuncia));                       
+
+                        var etapasFiltro = [];                       
+                        etapasFiltro.push(@((int)TipoEtapaCandidaturaEnum.AgendarEntrevistas));
+                        etapasFiltro.push(@((int)TipoEtapaCandidaturaEnum.FeedbackPrimeraEntrevista));
+                        etapasFiltro.push(@((int)TipoEtapaCandidaturaEnum.PendienteDecisionSegundaEntrevista));
+                        etapasFiltro.push(@((int)TipoEtapaCandidaturaEnum.AgendarSegundaEntrevista));
+                        etapasFiltro.push(@((int)TipoEtapaCandidaturaEnum.FeedbackSegundaEntrevista));                      
+                        break;
+                    }
+                case 12:
+                    {
+                        var estadosFiltro = [];                       
+                        estadosFiltro.push(@((int)TipoEstadoCandidaturaEnum.StandBy));                       
+
+                        var etapasFiltro = [];                       
+                        etapasFiltro.push(@((int)TipoEtapaCandidaturaEnum.AgendarEntrevistas));
+                        etapasFiltro.push(@((int)TipoEtapaCandidaturaEnum.FeedbackPrimeraEntrevista));
+                        etapasFiltro.push(@((int)TipoEtapaCandidaturaEnum.PendienteDecisionSegundaEntrevista));
+                        etapasFiltro.push(@((int)TipoEtapaCandidaturaEnum.AgendarSegundaEntrevista));
+                        etapasFiltro.push(@((int)TipoEtapaCandidaturaEnum.FeedbackSegundaEntrevista));
+                        
+                        break;
+                    }
+                case 13:
+                    {
+                        var estadosFiltro = [];                        
+                        estadosFiltro.push(@((int)TipoEstadoCandidaturaEnum.CartaOferta));                       
+
+                        var etapasFiltro = [];                     
+                        etapasFiltro.push(@((int)TipoEtapaCandidaturaEnum.PendienteDecisionCartaOferta));
+                        etapasFiltro.push(@((int)TipoEtapaCandidaturaEnum.AgendarCartaOferta));
+                       
+                        break;
+                    }
+                case 14:
+                    {
+                        var estadosFiltro = [];                        
+                        estadosFiltro.push(@((int)TipoEstadoCandidaturaEnum.CartaOferta));                       
+
+                        var etapasFiltro = [];                       
+                        etapasFiltro.push(@((int)TipoEtapaCandidaturaEnum.FeedbackCartaOferta));
+                       
+                        break;
+                    }
+                case 15:
+                    {
+                        var estadosFiltro = [];                        
+                        estadosFiltro.push(@((int)TipoEstadoCandidaturaEnum.Contratado));
+
+                        var etapasFiltro = [];                       
+                        etapasFiltro.push(@((int)TipoEtapaCandidaturaEnum.Fin));
+
+                        break;
+                    }
+                case 16:
+                    {
+                        var estadosFiltro = [];                       
+                        estadosFiltro.push(@((int)TipoEstadoCandidaturaEnum.RechazaOferta));
+                        
+                        var etapasFiltro = [];                      
+                        etapasFiltro.push(@((int)TipoEtapaCandidaturaEnum.Fin));
+                        break;
+                    }
+                case 17:
+                    {
+                        var estadosFiltro = [];                        
+                        estadosFiltro.push(@((int)TipoEstadoCandidaturaEnum.Descartado));
+                       
+                        var etapasFiltro = [];                        
+                        etapasFiltro.push(@((int)TipoEtapaCandidaturaEnum.PendienteDecisionCartaOferta));
+                        etapasFiltro.push(@((int)TipoEtapaCandidaturaEnum.AgendarCartaOferta));
+                        etapasFiltro.push(@((int)TipoEtapaCandidaturaEnum.FeedbackCartaOferta));
+                        etapasFiltro.push(@((int)TipoEtapaCandidaturaEnum.Fin));
+
+                        break;
+                    }
+                case 18:
+                    {
+                        var estadosFiltro = [];                       
+                        estadosFiltro.push(@((int)TipoEstadoCandidaturaEnum.Renuncia));                        
+
+                        var etapasFiltro = [];                      
+                        etapasFiltro.push(@((int)TipoEtapaCandidaturaEnum.PendienteDecisionCartaOferta));
+                        etapasFiltro.push(@((int)TipoEtapaCandidaturaEnum.AgendarCartaOferta));
+                        etapasFiltro.push(@((int)TipoEtapaCandidaturaEnum.FeedbackCartaOferta));
+                        etapasFiltro.push(@((int)TipoEtapaCandidaturaEnum.Fin));
+                        break;
+                    }
+                case 19:
+                    {
+                        var estadosFiltro = [];                       
+                        estadosFiltro.push(@((int)TipoEstadoCandidaturaEnum.StandBy));                       
+
+                        var etapasFiltro = [];                    
+                        etapasFiltro.push(@((int)TipoEtapaCandidaturaEnum.PendienteDecisionCartaOferta));
+                        etapasFiltro.push(@((int)TipoEtapaCandidaturaEnum.AgendarCartaOferta));
+                        etapasFiltro.push(@((int)TipoEtapaCandidaturaEnum.FeedbackCartaOferta));
+                        etapasFiltro.push(@((int)TipoEtapaCandidaturaEnum.Fin));
+                        break;
+                    }
+            }
+
+            $('#filterFechaInicioModal').val(fechaInicio);
+            $('#filterFechaFinModal').val(fechaFin);
+            $('#filterTecnologiaModal').val(tecnologia);
+            $('#filterCategoriaModal').val(categoria);
+            $('#filterCentroIdUsuarioModal').val(centroIdUsuario);
+            $('#filterEstadosModal').val(estadosFiltro);
+            $('#filterEtapasModal').val(etapasFiltro);
+
+
+        }
+
+        function getFiltersModalCandidaturas() {
+            var FechaInicio = $('#filterFechaInicioModal').val().toString();
+            var FechaFin = $('#filterFechaFinModal').val().toString();           
+            var TipoTecnologiaId = $('#filterTecnologiaModal').val();            
+            var TipoCategoriaId = $('#filterCategoriaModal').val();
+            var CentroIdUsuario = $('#filterCentroIdUsuarioModal').val();
+            var Estados = $('#filterEstadosModal').val();
+            var Etapas = $('#filterEtapasModal').val();
+            var BuscarModalCandidatura = $('#buscarTablaCandidaturasModal').val();
+            var CandidaturaOfertaId = $('#filterCandidaturaOferta').val();
+            
+            return {
+                FechaInicio: FechaInicio, FechaFin: FechaFin, TipoTecnologiaId: TipoTecnologiaId,
+                TipoCategoriaId: TipoCategoriaId, CentroIdUsuario: CentroIdUsuario, Estados: Estados,
+                Etapas: Etapas, BuscarModalCandidatura: BuscarModalCandidatura,
+                CandidaturaOfertaId: CandidaturaOfertaId
+            };
+
+        }
+
+    </script>
+}
+

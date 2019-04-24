@@ -1,0 +1,184 @@
+﻿@using RecruitingWeb.Components.DataTable.Helpers
+@using RecruitingWeb.Helpers
+
+@model RecruitingWeb.Views.IntegrationExamplesViewModel
+
+@{
+    ViewBag.Title = "Ejemplo de componentes";
+}
+
+<div>
+    Ejemplo de formulario con Model
+    <br />
+    @using (Html.BeginForm("IntegrationExamples", "Home", FormMethod.Post, new Dictionary<string, object> { { "role", "form" }, { "data-parsley-validate", "true" }, { "data-parsley-excluded", ":not([data-validate])" } }))
+    {
+
+        var items = new List<SelectListItem>();
+        for (var i = 0; i < 10; i++)
+        {
+            items.Add(new SelectListItem { Value = i.ToString(), Text = "Text " + i.ToString() });
+        }
+
+        <div>
+            Decimal @Edit.Decimal(Model.Numero, "Numero")
+        </div>
+        <div>
+            Texto @Edit.Text(Model.Texto, "Texto")
+        </div>
+        <div>
+            Text Area @Edit.TextArea(Model.TextoTextArea, "TextoTextArea")
+        </div>
+        <div>
+            Combo @Edit.DropDownExtend(Model.IdCombo, "IdCombo", items, showEmptyOption: true)
+        </div>
+        <div>
+        Checkbox @Edit.Checkbox(Model.BoolCheckbox, "BoolCheckbox")
+        </div>
+        <div>
+            Radios Yes No
+            @Edit.RadioButton("True", "BoolRadio", label: "Yes", isChecked: Model.BoolRadio)
+            @Edit.RadioButton("False", "BoolRadio", label: "No", isChecked: !Model.BoolRadio)
+        </div>
+        <div>
+            Radios Multiple
+            @Edit.RadioButton("Valor 1", "StringRadio", label: "Valor 1", isChecked: Model.StringRadio == "Valor 1")
+            @Edit.RadioButton("Valor 2", "StringRadio", label: "Valor 2", isChecked: Model.StringRadio == "Valor 2")
+            @Edit.RadioButton("Valor 3", "StringRadio", label: "Valor 3", isChecked: Model.StringRadio == "Valor 3")
+        </div>
+
+        <div>
+            Fecha @Edit.Date(Model.Fecha, "Fecha")
+        </div>
+
+
+        <input type="submit" />
+    }
+</div>
+
+<div>
+    Componentes de entrada:
+    <br />
+    @Edit.Decimal(10, "A", attributes: new Dictionary<string, string> { { "Clave", "Valor" } }, numberSeparator: ",")
+    @Edit.Checkbox(true, "A")
+    @Edit.Text("Texto", "A")
+    @Edit.TextArea("Texto Area", "A")
+    @Edit.Date(DateTime.Now, "A")
+    <div>
+        @Edit.RadioButton("Value1", "Name", label: "Texto 1", validate: false)
+        @Edit.RadioButton("Value2", "Name", label: "Texto 2", isChecked: true, validate: false)
+        @Edit.RadioButton("Value3", "Name", label: "Texto 3", validate: false)
+    </div>
+    @{
+        var items2 = new List<SelectListItem>();
+        for (var i = 0; i < 10; i++)
+        {
+            items2.Add(new SelectListItem { Value = i.ToString(), Text = "Text " + i.ToString() });
+        }
+    }
+
+    @Edit.DropDownExtend("3", "name", items2, showEmptyOption: true)
+    @Edit.DropDownExtend("5", "nameRef", items2, "Value", "Text", showEmptyOption: true)
+</div>
+
+
+
+<div>
+    Componentes para mostrar datos:
+    <br />
+    @Display.Decimal(110, "A", attributes: new Dictionary<string, string> { { "Clave", "Valor" } })
+    @Display.Checkbox(true, "A")
+    @Display.Text("Texto", "A")
+    @Display.Text("Texto Area", "A")
+    @Display.Date(DateTime.Now, "A")
+    @Display.RadioButton("Value1", "NameDis", label: "Texto 1")
+    @Display.RadioButton("Value2", "NameDis", label: "Texto 2", isChecked: true)
+    @Display.RadioButton("Value3", "NameDis", label: "Texto 3")
+
+    @Display.DropDownExtend("3", items2)
+    @Display.DropDownExtend("5", items2, "Value", "Text")
+</div>
+
+<div>
+    Ejemplo tabla normal
+    @{
+        var config = Html.InitializeDataTable(items2);
+        config.Name("tablaNormal")
+            .PrimaryKey(m => m.Value)
+            .AddPrimaryKeyToName(false)
+            .Columns(columns =>
+            {
+                columns.Bound(c => c.Value).Header("H Value").ColumnName("Name");
+                columns.Bound(c => c.Text).Header("H Text").ColumnName("Status");
+            });
+    }
+
+    @Html.Partial("Controls/DataTable", config)
+</div>
+
+<div>
+    Ejemplo tabla paginando y ordenando en cliente
+    @{
+        config = Html.InitializeDataTable(items2);
+        config.Name("tablaPagOrdCliente")
+            .PrimaryKey(m => m.Value)
+            .AddPrimaryKeyToName(false)
+            .Paginable()
+            .PageSize(3)
+            .Columns(columns =>
+            {
+                columns.Bound(c => c.Value).Header("H Value").ColumnName("Name").Orderable(true);
+                columns.Bound(c => c.Text).Header("H Text").ColumnName("Status");
+            });
+    }
+
+    @Html.Partial("Controls/DataTable", config)
+</div>
+
+<div>
+    Ejemplo tabla datos de servidor con filtros
+    Filtro 1: <input type="text" name="filtro1" />
+    Filtro 2: <input type="text" name="filtro2" />
+    <input type="button" name="buscar" value="Buscar" />
+    <input type="button" name="limpiar" value="Limpiar" />
+    @{
+        config = Html.InitializeDataTable<SelectListItem>();
+        config.Name("tablaEjemploAjax")
+            .PrimaryKey(m => m.Value)
+            .AddPrimaryKeyToName(false)
+            .AjaxLoadUrl(Url.Action("AjaxHandler", "Home"))
+            .CustomFilterAjax("getFilters")
+            .Paginable()
+            .PageSize(3)
+            .Columns(columns =>
+            {
+                columns.Bound(c => c.Value).Header("H Value").ColumnName("Value").Orderable(false);
+                columns.Bound(c => c.Text).Header("H Text").Orderable(false);
+            });
+    }
+
+    @Html.Partial("Controls/DataTable", config)
+</div>
+
+@Html.ScriptBlock(
+    @<script type="text/javascript">
+
+        function getFilters() {
+            var filter1Val = $("[name=filtro1]").val();
+            var filter2Val = $("[name=filtro2]").val();
+            return { filter1: filter1Val, filter2: filter2Val };
+        }
+
+        registerCallback(function () {
+            $(document).on('click', '[name=buscar]', function () {
+                var table = $('#tablaEjemploAjax');
+                table.data("fn-search")();
+            });
+            $(document).on('click', '[name=limpiar]', function () {
+                var table = $('#tablaEjemploAjax');
+                table.data("fn-clear")();
+            });
+        });
+
+
+    </script>
+        )

@@ -1,0 +1,698 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{9500862E-E4E5-4B8C-82A3-2939449D1853}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Recruiting.Application</RootNamespace>
+    <AssemblyName>Recruiting.Application</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Preproduction|AnyCPU'">
+    <OutputPath>bin\Preproduction\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="EverNext.Domain">
+      <HintPath>..\..\lib\EverNext\EverNext.Domain.dll</HintPath>
+    </Reference>
+    <Reference Include="itextsharp, Version=5.5.11.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\iTextSharp.5.5.11\lib\itextsharp.dll</HintPath>
+    </Reference>
+    <Reference Include="itextsharp.xmlworker, Version=5.5.11.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\itextsharp.xmlworker.5.5.11\lib\itextsharp.xmlworker.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Oracle.ManagedDataAccess, Version=4.121.2.0, Culture=neutral, PublicKeyToken=89b483f429c47342, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Oracle.ManagedDataAccess.12.1.24160719\lib\net40\Oracle.ManagedDataAccess.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net.Http.WebRequest" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.AspNet.WebPages.3.2.2\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.AspNet.Mvc.5.2.2\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.AspNet.Razor.3.2.2\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.AspNet.WebPages.3.2.2\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.AspNet.WebPages.3.2.2\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.AspNet.WebPages.3.2.2\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Base\ApplicationResponseBase.cs" />
+    <Compile Include="Base\BaseApplicationService.cs" />
+    <Compile Include="Base\ModifiableEntityViewModel.cs" />
+    <Compile Include="Becarios\Enums\TipoBecaEnum.cs" />
+    <Compile Include="Becarios\Enums\TipoDecisionPracticasEnum.cs" />
+    <Compile Include="Becarios\Enums\TipoResultadoProcesoEnum.cs" />
+    <Compile Include="Becarios\Enums\TipoEstadoBecarioEnum.cs" />
+    <Compile Include="Becarios\Mappers\BecarioConvocatoriaMapper.cs" />
+    <Compile Include="Becarios\Mappers\BecarioEstadoMapper.cs" />
+    <Compile Include="Becarios\Mappers\BecarioMapper.cs" />
+    <Compile Include="Becarios\Mappers\BecarioCentroMapper.cs" />
+    <Compile Include="Becarios\Messages\GetBecariosEstadoDescartadoResponse.cs" />
+    <Compile Include="Becarios\Messages\GetCentroBecarioResponse.cs" />
+    <Compile Include="Becarios\Messages\GetEmailBecarioResponse.cs" />
+    <Compile Include="Becarios\Messages\SaveConvocatoriaResponse.cs" />
+    <Compile Include="Becarios\Messages\EditConvocatoriaResponse.cs" />
+    <Compile Include="Becarios\Messages\GetConvocatoriasByNombreResponse.cs" />
+    <Compile Include="Becarios\Messages\GetConvocatoriasResponse.cs" />
+    <Compile Include="Becarios\Messages\SaveEmailReferenciadoResponse.cs" />
+    <Compile Include="Becarios\Messages\SearchConvocatoriaUsadaResponse.cs" />
+    <Compile Include="Becarios\Messages\SearchCentroUsadoResponse.cs" />
+    <Compile Include="Becarios\Messages\RemoveConvocatoriaResponse.cs" />
+    <Compile Include="Becarios\Messages\RemoveCentroResponse.cs" />
+    <Compile Include="Becarios\Messages\EditCentroResponse.cs" />
+    <Compile Include="Becarios\Messages\BacktrackBecarioResponse.cs" />
+    <Compile Include="Becarios\Messages\DownloadAnexoResponse.cs" />
+    <Compile Include="Becarios\Messages\DownloadCVResponse.cs" />
+    <Compile Include="Becarios\Messages\EditBecarioResponse.cs" />
+    <Compile Include="Becarios\Messages\ExecuteBecarioResponse.cs" />
+    <Compile Include="Becarios\Messages\GetNumBecasByCandidatoIdResponse.cs" />
+    <Compile Include="Becarios\Messages\PauseBecarioResponse.cs" />
+    <Compile Include="Becarios\Messages\RemoveBecarioResponse.cs" />
+    <Compile Include="Becarios\Messages\GetBecarioByIdResponse.cs" />
+    <Compile Include="Becarios\Messages\GetBecariosExportToExcelResponse.cs" />
+    <Compile Include="Becarios\Messages\GetCentrosResponse.cs" />
+    <Compile Include="Becarios\Messages\GetCentrosByNombreCentroResponse.cs" />
+    <Compile Include="Becarios\Messages\GetBecariosResponse.cs" />
+    <Compile Include="Becarios\Messages\SaveCentroResponse.cs" />
+    <Compile Include="Becarios\Messages\GetEstadosBecariosResponse.cs" />
+    <Compile Include="Becarios\Messages\ResumeBecarioResponse.cs" />
+    <Compile Include="Becarios\Messages\RevokeBecarioResponse.cs" />
+    <Compile Include="Becarios\Messages\SaveBecarioResponse.cs" />
+    <Compile Include="Becarios\Messages\SavePracticasBecarioResponse.cs" />
+    <Compile Include="Becarios\Messages\SaveSeleccionBecarioResponse.cs" />
+    <Compile Include="Becarios\Messages\SaveProcesoBecarioResponse.cs" />
+    <Compile Include="Becarios\Messages\SearchConvocatoriaByNombreCentroIdResponse.cs" />
+    <Compile Include="Becarios\Messages\SearchCentroByNombreCiudadPaisResponse.cs" />
+    <Compile Include="Becarios\Messages\UploadCVResponse.cs" />
+    <Compile Include="Becarios\Services\BecarioConvocatoriaService.cs" />
+    <Compile Include="Becarios\Services\BecarioEstadoService.cs" />
+    <Compile Include="Becarios\Services\BecarioCentroService.cs" />
+    <Compile Include="Becarios\Services\BecarioService.cs" />
+    <Compile Include="Becarios\Services\IBecarioConvocatoriaService.cs" />
+    <Compile Include="Becarios\Services\IBecarioCentroService.cs" />
+    <Compile Include="Becarios\Services\IBecarioEstadoService.cs" />
+    <Compile Include="Becarios\Services\IBecarioService.cs" />
+    <Compile Include="Becarios\ViewModels\BecarioEstadoRowViewModel.cs" />
+    <Compile Include="Becarios\ViewModels\ConvocatoriaRowViewModel.cs" />
+    <Compile Include="Becarios\ViewModels\Partials\Observaciones\BecarioObservacionesViewModel.cs" />
+    <Compile Include="Becarios\ViewModels\Partials\Observaciones\BecarioObservacionViewModel.cs" />
+    <Compile Include="Becarios\ViewModels\BecarioRowViewModel.cs" />
+    <Compile Include="Becarios\ViewModels\BecarioRowExportToExcellViewModel.cs" />
+    <Compile Include="Becarios\ViewModels\BecariosPendienteStandByViewModel.cs" />
+    <Compile Include="Becarios\ViewModels\CreateEditBecarioViewModel.cs" />
+    <Compile Include="Becarios\ViewModels\CentroProcedenciaRowViewModel.cs" />
+    <Compile Include="Becarios\ViewModels\Partials\DatosBasicos\BecarioDatosBasicosViewModel.cs" />
+    <Compile Include="Becarios\ViewModels\Partials\Practicas\BecarioDatosPracticasViewModel.cs" />
+    <Compile Include="Becarios\ViewModels\Partials\Seleccion\BecarioGestionDocumentalViewModel.cs" />
+    <Compile Include="Becarios\ViewModels\Partials\Seleccion\BecarioAsignacionViewModel.cs" />
+    <Compile Include="Becarios\ViewModels\Partials\Seleccion\BecarioSeleccionViewModel.cs" />
+    <Compile Include="BitacorasBecarios\Enums\TipoBitacoraBecarioEnum.cs" />
+    <Compile Include="BitacorasBecarios\Mappers\BitacoraBecarioMapper.cs" />
+    <Compile Include="BitacorasBecarios\Messages\GenerateBitacoraBecarioResponse.cs" />
+    <Compile Include="BitacorasBecarios\Messages\GenerateBitacoraEditBecarioResponse.cs" />
+    <Compile Include="BitacorasBecarios\Messages\GetLastEstadoBitacoraByBecarioIdResponse.cs" />
+    <Compile Include="BitacorasBecarios\Messages\GetBitacorasBecarioResponse.cs" />
+    <Compile Include="BitacorasBecarios\Services\BitacoraBecarioService.cs" />
+    <Compile Include="BitacorasBecarios\Services\IBitacoraBecarioService.cs" />
+    <Compile Include="BitacorasBecarios\ViewModels\BitacoraBecarioRowViewModel.cs" />
+    <Compile Include="BitacorasBecarios\ViewModels\DatosComparativaBitacoraBecarioViewModel.cs" />
+    <Compile Include="BitacorasNecesidades\Enums\TipoBitacoraNecesidadEnum.cs" />
+    <Compile Include="BitacorasNecesidades\Mappers\BitacoraNecesidadMapper.cs" />
+    <Compile Include="BitacorasNecesidades\Messages\GenerateBitacoraEditNecesidadResponse.cs" />
+    <Compile Include="BitacorasNecesidades\Messages\GenerateBitacoraNecesidadResponse.cs" />
+    <Compile Include="BitacorasNecesidades\Messages\GetBitacoraNecesidadByIdResponse.cs" />
+    <Compile Include="BitacorasNecesidades\Messages\GetBitacorasNecesidadResponse.cs" />
+    <Compile Include="BitacorasNecesidades\Services\BitacoraNecesidadService.cs" />
+    <Compile Include="BitacorasNecesidades\Services\IBitacoraNecesidadService.cs" />
+    <Compile Include="BitacorasNecesidades\ViewModels\DatosComparativaBitacoraViewModel.cs" />
+    <Compile Include="BitacorasNecesidades\ViewModels\BitacoraNecesidadRowViewModel.cs" />
+    <Compile Include="Bitacoras\Enums\TipoBitacoraEnum.cs" />
+    <Compile Include="Bitacoras\Mappers\BitacoraMapper.cs" />
+    <Compile Include="Bitacoras\Messages\DeleteBitacoraResponse.cs" />
+    <Compile Include="Bitacoras\Messages\GetLastBitacoraByCandidaturaIdResponse.cs" />
+    <Compile Include="Bitacoras\Messages\GetBitacoraByIdResponse.cs" />
+    <Compile Include="Bitacoras\Messages\GenerateBitacoraResponse.cs" />
+    <Compile Include="Bitacoras\Messages\GetBitacorasResponse.cs" />
+    <Compile Include="Bitacoras\Messages\SaveBitacoraResponse.cs" />
+    <Compile Include="Bitacoras\Services\IBitacoraService.cs" />
+    <Compile Include="Bitacoras\Services\BitacoraService.cs" />
+    <Compile Include="Bitacoras\ViewModels\BitacoraRowExportToExcelViewModel.cs.cs" />
+    <Compile Include="Bitacoras\ViewModels\BitacoraCorreoViewModel.cs" />
+    <Compile Include="Bitacoras\ViewModels\BitacoraRowViewModel.cs" />
+    <Compile Include="Candidatos\Enums\TipoContactoEnum.cs" />
+    <Compile Include="Candidatos\Enums\TitulacionEnum.cs" />
+    <Compile Include="Candidatos\Mappers\CandidatoCentroMapper.cs" />
+    <Compile Include="Candidatos\Messages\CreateCandidatoOtherInfoResponse.cs" />
+    <Compile Include="Candidatos\Messages\EditCentroResponse.cs" />
+    <Compile Include="Candidatos\Messages\GetCandidatoBecariosModalResponse.cs" />
+    <Compile Include="Candidatos\Messages\CheckCandidatoEnRecruitingResponse.cs" />
+    <Compile Include="Candidatos\Messages\GetCandidatoCandidaturasModalResponse.cs" />
+    <Compile Include="Candidatos\Messages\GetCentrosByNombreCentroEducativoResponse.cs" />
+    <Compile Include="Candidatos\Messages\GetCentrosByNombreCentroResponse.cs" />
+    <Compile Include="Candidatos\Messages\GetCentrosEducativosResponse.cs" />
+    <Compile Include="Candidatos\Messages\LiberaDeNecesidadResponse.cs" />
+    <Compile Include="Candidatos\Messages\GetCandidatosQueCumplenPerfilResponse.cs" />
+    <Compile Include="Candidatos\Messages\RemoveCentroResponse.cs" />
+    <Compile Include="Candidatos\Messages\SaveCentroResponse.cs" />
+    <Compile Include="Candidatos\Messages\SearchCandidatoByContactoResponse.cs" />
+    <Compile Include="Candidatos\Messages\SearchCandidatoUsadoResponse.cs" />
+    <Compile Include="Candidatos\Messages\SearchCentroByNombreCiudadPaisResponse.cs" />
+    <Compile Include="Candidatos\Messages\SearchCentroUsadoResponse.cs" />
+    <Compile Include="Candidatos\Messages\TieneCVEnBDResponse.cs" />
+    <Compile Include="Candidatos\Messages\UpdateCandidatoContactoResponse.cs" />
+    <Compile Include="Candidatos\Messages\UpdateCandidatoOtherInfoResponse.cs" />
+    <Compile Include="Candidatos\Services\CandidatoCentroService.cs" />
+    <Compile Include="Candidatos\Services\ICandidatoCentroService.cs" />
+    <Compile Include="Candidatos\ViewModels\BecarioModalRowViewModel.cs" />
+    <Compile Include="Candidatos\ViewModels\CandidatoQueCumplePerfilRowViewModel.cs" />
+    <Compile Include="Candidatos\ViewModels\CandidatoOtherInfoViewModel.cs" />
+    <Compile Include="Candidatos\ViewModels\CandidaturaModalRowViewModel.cs" />
+    <Compile Include="Candidatos\ViewModels\CandidatoCentroEducativoRowViewModel.cs" />
+    <Compile Include="Candidatos\ViewModels\CentroProcedenciaRowViewModel.cs" />
+    <Compile Include="CandidaturasOfertas\Mappers\CandidaturaOfertaMapper.cs" />
+    <Compile Include="CandidaturasOfertas\Messages\GetOfertasByNombreResponse.cs" />
+    <Compile Include="CandidaturasOfertas\Messages\GetOfertasResponse.cs" />
+    <Compile Include="CandidaturasOfertas\Messages\RemoveOfertaResponse.cs" />
+    <Compile Include="CandidaturasOfertas\Messages\SearchOfertaUsadaResponse.cs" />
+    <Compile Include="CandidaturasOfertas\Messages\SearchOfertaByNombreCentroIdResponse.cs" />
+    <Compile Include="CandidaturasOfertas\Services\CandidaturaOfertaService.cs" />
+    <Compile Include="CandidaturasOfertas\ViewModels\OfertaRowViewModel.cs" />
+    <Compile Include="Candidaturas\Enums\FuenteReclutamientoEnum.cs" />
+    <Compile Include="Candidaturas\Enums\OrigenCvEnum.cs" />
+    <Compile Include="Candidaturas\Enums\TipoSubEntrevistaEnum.cs" />
+    <Compile Include="Candidaturas\Mappers\CandidaturaSubEntrevistaMapper.cs" />
+    <Compile Include="Candidaturas\Messages\AddSubEntrevistaFromModalResponse.cs" />
+    <Compile Include="Candidaturas\Messages\CheckNoMotivadoCambioEmpresaResponse.cs" />
+    <Compile Include="Candidaturas\Messages\CheckDescarteMenosSeisMesesResponse.cs" />
+    <Compile Include="Candidaturas\Messages\ContactarCandidatoResponse.cs" />
+    <Compile Include="Candidaturas\Messages\CrearCandidaturaOtherInfoResponse.cs" />
+    <Compile Include="Candidaturas\Messages\DeleteEmailSeguirCandidaturaResponse.cs" />
+    <Compile Include="Candidaturas\Messages\CrearCandidaturaBecarioResponse.cs" />
+    <Compile Include="Candidaturas\Messages\CheckEnProcesoResponse.cs" />
+    <Compile Include="Candidaturas\Messages\GetCandidaturasByIdCandidatoResponse.cs" />
+    <Compile Include="Candidaturas\Messages\GetDropdownOficinaCartaOfertaResponse.cs" />
+    <Compile Include="Candidaturas\Messages\GetDropdownCartaOfertaResponse.cs" />
+    <Compile Include="Candidaturas\Messages\GetEmailEntrevistadorResponse.cs" />
+    <Compile Include="Candidaturas\Messages\RevertirCandidaturaRecontactadaResponse.cs" />
+    <Compile Include="Candidaturas\Messages\DiscardCandidaturaResponse.cs" />
+    <Compile Include="Candidaturas\Messages\CrearCandidaturaRecontactadaResponse.cs" />
+    <Compile Include="Candidaturas\Messages\RecontactarCandidaturaResponse.cs" />
+    <Compile Include="CandidaturasOfertas\Messages\SaveOfertaResponse.cs" />
+    <Compile Include="Candidaturas\Messages\SaveEmailSeguirCandidaturaResponse.cs" />
+    <Compile Include="Candidaturas\Messages\UpdateNumeroDeEntrevistasResponse.cs" />
+    <Compile Include="Candidaturas\Messages\SaveNumeroDeEntrevistasResponse.cs" />
+    <Compile Include="Candidaturas\Messages\TieneAvisoConLaMismaFechaSubEntrevistaResponse.cs" />
+    <Compile Include="Candidaturas\Messages\GetMonedaCandidaturaResponse.cs" />
+    <Compile Include="Candidaturas\Messages\GetListaSubEntrevistasByEntrevistaIdResponse.cs" />
+    <Compile Include="Candidaturas\Messages\TieneSubEntrevistasSinCompletarResponse.cs" />
+    <Compile Include="Candidaturas\Messages\UpdateSubEntrevistasResponse.cs" />
+    <Compile Include="Candidaturas\Messages\GetListaSubEntrevistasResponse.cs" />
+    <Compile Include="Candidaturas\Messages\GetMonedaByCentroIdResponse.cs" />
+    <Compile Include="Candidaturas\Messages\GetOrdenByEtapaCandidaturaResponse.cs" />
+    <Compile Include="Candidaturas\Messages\EstoyEnCandidaturaEstadoPendienteEntrevistaDosResponse.cs" />
+    <Compile Include="Candidaturas\Messages\ExistAnyCVBlobInDBResponse.cs" />
+    <Compile Include="Candidaturas\Messages\SaveSubEntrevistasResponse.cs" />
+    <Compile Include="Candidaturas\Messages\UploadUrlCVResponse.cs" />
+    <Compile Include="Candidaturas\Messages\VuelcaCVsEnRutaLocalYActualizaBdResponse.cs" />
+    <Compile Include="Candidaturas\Services\CandidaturaMonedaService.cs" />
+    <Compile Include="CandidaturasOfertas\Services\ICandidaturaOfertaService.cs" />
+    <Compile Include="Candidaturas\Services\ICandidaturaMonedaService.cs" />
+    <Compile Include="Candidaturas\ViewModel\CreateEditRowExperienciaCandidatoViewModel.cs" />
+    <Compile Include="Candidaturas\ViewModel\CreateEditRowIdiomaCandidaturaViewModel.cs" />
+    <Compile Include="Candidaturas\ViewModel\DatosCandidaturaOtherInfoViewModel.cs" />
+    <Compile Include="Candidaturas\ViewModel\DatosBecarioCrearViewModel.cs" />
+    <Compile Include="Candidaturas\ViewModel\Partial\Entrevista\SubEntrevistaListViewModel.cs" />
+    <Compile Include="Candidaturas\ViewModel\Partial\Entrevista\SubEntrevistaModalViewModel.cs" />
+    <Compile Include="Candidaturas\ViewModel\Partial\Entrevista\SubEntrevistaViewModel.cs" />
+    <Compile Include="Centros\Enums\CentroEnum.cs" />
+    <Compile Include="Centros\Mappers\CentroMapper.cs" />
+    <Compile Include="Centros\Messages\GetTokenIdByCentroIdResponse.cs" />
+    <Compile Include="Centros\Messages\GetCentrosResponse.cs" />
+    <Compile Include="Centros\Services\ICentroService.cs" />
+    <Compile Include="Centros\Services\CentroService.cs" />
+    <Compile Include="Centros\ViewModels\CentroViewModel.cs" />
+    <Compile Include="Clientes\Messages\SearchClienteUsadoResponse.cs" />
+    <Compile Include="Dashboard\Messages\SaveAlertasAdminResponse.cs" />
+    <Compile Include="Dashboard\ViewModels\BecariosPendienteEntrevistaViewModel.cs" />
+    <Compile Include="Dashboard\ViewModels\CandidaturasPendienteStandByViewModel.cs" />
+    <Compile Include="Dashboard\ViewModels\CandidaturasPendienteEntrevistaViewModel.cs" />
+    <Compile Include="Dashboard\ViewModels\AlertasAdministradorViewModel.cs" />
+    <Compile Include="FunnelProcesos\Mappers\FunnelProcesosMapper.cs" />
+    <Compile Include="FunnelProcesos\Messages\GetCandidaturasModalResponse.cs" />
+    <Compile Include="FunnelProcesos\Messages\GetDatosDesgloseCategoriaResponse.cs" />
+    <Compile Include="FunnelProcesos\Messages\GetDatosDesgloseTecnologiaCategoriaResponse.cs" />
+    <Compile Include="FunnelProcesos\Messages\GetDatosDesgloseTecnologiaResponse.cs" />
+    <Compile Include="FunnelProcesos\Messages\GetDatosCartaOfertaResponse.cs" />
+    <Compile Include="FunnelProcesos\Messages\GetDatosEntrevistasResponse.cs" />
+    <Compile Include="FunnelProcesos\Messages\GetDatosFiltradoCVResponse.cs" />
+    <Compile Include="FunnelProcesos\Services\FunnelProcesosService.cs" />
+    <Compile Include="FunnelProcesos\Services\IFunnelProcesosService.cs" />
+    <Compile Include="FunnelProcesos\ViewModels\CandidaturaModalRowViewModel.cs" />
+    <Compile Include="FunnelProcesos\ViewModels\DesgloseCategoriaViewModel.cs" />
+    <Compile Include="FunnelProcesos\ViewModels\DesgloseTecnologiaCategoriaViewModel.cs" />
+    <Compile Include="FunnelProcesos\ViewModels\DesgloseTecnologiaViewModel.cs" />
+    <Compile Include="FunnelProcesos\ViewModels\DatosCartaOfertaViewModel.cs" />
+    <Compile Include="FunnelProcesos\ViewModels\DatosEntrevistasViewModel.cs" />
+    <Compile Include="FunnelProcesos\ViewModels\FiltroFunnelProcesosViewModel.cs" />
+    <Compile Include="FunnelProcesos\ViewModels\DatosFiltradoCVViewModel.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="Graph\Mappers\GraphMapper.cs" />
+    <Compile Include="Graph\Messages\FindMeetingTimesResponse\FindMeetingTimesResponse.cs" />
+    <Compile Include="Graph\Messages\FindMeetingTimesRequest\FindMeetingTimesRequest.cs" />
+    <Compile Include="Graph\Messages\GetStringExcludedRoomsResponse.cs" />
+    <Compile Include="Graph\Messages\SaveExcludedRoomsResponse.cs" />
+    <Compile Include="Graph\Messages\GetExcludedRoomsResponse.cs" />
+    <Compile Include="Graph\Messages\GetTokenByIdResponse.cs" />
+    <Compile Include="Graph\Messages\SaveTokenResponse.cs" />
+    <Compile Include="Graph\Messages\SendMeetingResponse.cs" />
+    <Compile Include="Graph\Messages\GetRoomResponse.cs" />
+    <Compile Include="Graph\Messages\FindRoomsListResponse.cs" />
+    <Compile Include="Graph\Services\EventosService.cs" />
+    <Compile Include="Graph\Services\GraphService.cs" />
+    <Compile Include="Graph\Services\IEventosService.cs" />
+    <Compile Include="Graph\Services\IGraphService.cs" />
+    <Compile Include="Graph\ViewModels\EventoRowViewModel.cs" />
+    <Compile Include="Graph\ViewModels\ExcludedRoomViewModel.cs" />
+    <Compile Include="Graph\ViewModels\FindMeetingTimesRowViewModel.cs" />
+    <Compile Include="Graph\ViewModels\CuentaTokenViewModel.cs" />
+    <Compile Include="Graph\ViewModels\ExcludedRoomsViewModel.cs" />
+    <Compile Include="Graph\ViewModels\SendMeetingSubEntrevistasViewModel.cs" />
+    <Compile Include="Graph\ViewModels\VariablesMeetingViewModel.cs" />
+    <Compile Include="Graph\ViewModels\SendMeetingViewModel.cs" />
+    <Compile Include="Graph\ViewModels\GetRoomViewModel.cs" />
+    <Compile Include="Graph\ViewModels\GraphModel.cs" />
+    <Compile Include="Helpers\BecarioAnexoHelper.cs" />
+    <Compile Include="Helpers\BecarioCvHelper.cs" />
+    <Compile Include="Maestros\Enums\CentrosEnum.cs" />
+    <Compile Include="Maestros\Enums\TipoIdiomaEnum.cs" />
+    <Compile Include="Maestros\Enums\TipoPersonaEnum.cs" />
+    <Compile Include="Maestros\Enums\TipoModuloEnum.cs" />
+    <Compile Include="Maestros\Enums\TipoTecnologiaEnum.cs" />
+    <Compile Include="Maestros\Enums\TipoPrevisionEnum.cs" />
+    <Compile Include="Necesidades\Enums\EstadoStaffingNecesidadEnum.cs" />
+    <Compile Include="Necesidades\Mappers\GrupoNecesidadMapper.cs" />
+    <Compile Include="Necesidades\Messages\CheckLiberateNecesidadResponse.cs" />
+    <Compile Include="Necesidades\Messages\GetNecesidadesPersonaLibreResponse.cs" />
+    <Compile Include="Necesidades\Messages\GetNecesidadesCandidaturaResponse.cs" />
+    <Compile Include="Necesidades\Messages\GetNecesidadesByCentroUsuarioIdResponse.cs" />
+    <Compile Include="Necesidades\Messages\GetNecesidadesStaffingExportToExcelResponse.cs" />
+    <Compile Include="Necesidades\Messages\GetStaffingPersonasResponse.cs" />
+    <Compile Include="Necesidades\Messages\GetStaffingNecesidadesResponse.cs" />
+    <Compile Include="Necesidades\Messages\SaveObservacionesStaffingResponse.cs" />
+    <Compile Include="Necesidades\Messages\SavePrioridadNecesidadResponse.cs" />
+    <Compile Include="Necesidades\Messages\SaveStaffingNecesidadResponse.cs" />
+    <Compile Include="Necesidades\Messages\SearchGrupoNecesidadByNombreResponse.cs" />
+    <Compile Include="Necesidades\Messages\GetNecesidadesGrupoExportToExcellResponse.cs" />
+    <Compile Include="Necesidades\Messages\DeleteGrupoNecesidadResponse.cs" />
+    <Compile Include="Necesidades\Messages\CheckGrupoCerradoResponse.cs" />
+    <Compile Include="Necesidades\Messages\GetNecesidadByCandidaturaIdAndCandidatoIdResponse.cs" />
+    <Compile Include="Necesidades\Messages\GetGrupoNecesidadByIdResponse.cs" />
+    <Compile Include="Necesidades\Messages\GetNecesidadByNombreCandidatoResponse.cs" />
+    <Compile Include="Necesidades\Messages\GetGruposNecesidadesResponse.cs" />
+    <Compile Include="Necesidades\Messages\SaveGrupoNecesidadResponse.cs" />
+    <Compile Include="Necesidades\Services\GrupoNecesidadService.cs" />
+    <Compile Include="Necesidades\Services\IGrupoNecesidadService.cs" />
+    <Compile Include="Necesidades\ViewModels\GrupoNecesidadesRowViewModel.cs" />
+    <Compile Include="Necesidades\ViewModels\CreateEditGrupoNecesidadViewModel.cs" />
+    <Compile Include="Necesidades\ViewModels\CreateEditSoloGrupoNecesidadViewModel.cs" />
+    <Compile Include="Necesidades\ViewModels\ModalEdicionPerfilViewModel.cs" />
+    <Compile Include="Necesidades\ViewModels\NecesidadGrupoRowExportToExcelViewModel.cs" />
+    <Compile Include="Necesidades\ViewModels\NecesidadStaffingRowExportToExcelViewModel.cs" />
+    <Compile Include="Necesidades\ViewModels\SavePrioridadNecesidadViewModel.cs" />
+    <Compile Include="Necesidades\ViewModels\SaveStaffingNecesidadViewModel.cs" />
+    <Compile Include="Necesidades\ViewModels\StaffingPersonaRowViewModel.cs" />
+    <Compile Include="Necesidades\ViewModels\StaffingNecesidadRowViewModel.cs" />
+    <Compile Include="Ofertas\Messages\GetOfertasByNameAndCentroResponse.cs" />
+    <Compile Include="Ofertas\Messages\GetOfertasNombreIdResponse.cs" />
+    <Compile Include="Ofertas\ViewModels\OfertaNombreIdViewModel.cs" />
+    <Compile Include="Oficinas\Enums\OficinasEnum.cs" />
+    <Compile Include="Oficinas\Mappers\OficinaMapper.cs" />
+    <Compile Include="Oficinas\Messages\GetOficinasResponse.cs" />
+    <Compile Include="Oficinas\Services\OficinaService.cs" />
+    <Compile Include="Oficinas\Services\IOficinaService.cs" />
+    <Compile Include="Oficinas\ViewModels\OficinaViewModel.cs" />
+    <Compile Include="PersonasLibres\Mappers\EmpleadosFenixMapper .cs" />
+    <Compile Include="Dashboard\Enums\TipoRolUsuario.cs" />
+    <Compile Include="Dashboard\ViewModels\FiltradoPendienteViewModel.cs" />
+    <Compile Include="PersonasLibres\Mappers\PersonaLibreMapper.cs" />
+    <Compile Include="PersonasLibres\Messages\DeletePersonaLibreResponse.cs" />
+    <Compile Include="PersonasLibres\Messages\GetListEmpleadosFenixCategoriaLineaCeldaResponse.cs" />
+    <Compile Include="PersonasLibres\Messages\GetListCategoriaLineaCeldaResponse.cs" />
+    <Compile Include="PersonasLibres\Messages\GetPersonaLibreByIdResponse.cs" />
+    <Compile Include="PersonasLibres\Messages\GetPersonasLibresExportToExcelResponse.cs" />
+    <Compile Include="PersonasLibres\Messages\GetEmpleadosFenixResponse.cs" />
+    <Compile Include="PersonasLibres\Messages\GetPersonasLibresResponse.cs" />
+    <Compile Include="PersonasLibres\Messages\UpdateCategoriaLineaCeldaInRecruitingDbResponse.cs" />
+    <Compile Include="PersonasLibres\Messages\SavePersonaLibreResponse.cs" />
+    <Compile Include="PersonasLibres\Messages\SearchPersonaLibreByNombreYApellidosResponse.cs" />
+    <Compile Include="PersonasLibres\Messages\SearchPersonaLibreByNumeroEmpleadoResponse.cs" />
+    <Compile Include="PersonasLibres\Messages\LiberatePersonaLibreResponse.cs" />
+    <Compile Include="PersonasLibres\Messages\UpdatePersonaLibreByNecesidadIdAndPersonaLibreIdResponse.cs" />
+    <Compile Include="PersonasLibres\Messages\UpdatePersonaLibreResponse.cs" />
+    <Compile Include="PersonasLibres\Services\EmpleadosFenixService.cs" />
+    <Compile Include="PersonasLibres\Services\IEmpleadoFenixService.cs" />
+    <Compile Include="PersonasLibres\Services\PersonaLibreService.cs" />
+    <Compile Include="PersonasLibres\Services\IPersonasLibresService.cs" />
+    <Compile Include="PersonasLibres\ViewModels\PersonaLibreRowExportToExcelViewModel.cs" />
+    <Compile Include="PersonasLibres\ViewModels\EmpleadoFenixRowViewModel.cs" />
+    <Compile Include="PersonasLibres\ViewModels\PersonaLibreRowViewModel.cs" />
+    <Compile Include="PersonasLibres\ViewModels\CreateEditPersonaLibreViewModel.cs" />
+    <Compile Include="Candidatos\Mappers\CandidatoExperienciaMapper.cs" />
+    <Compile Include="Candidatos\Mappers\CandidatoIdiomaMapper.cs" />
+    <Compile Include="Candidatos\Mappers\CandidatoMapper.cs" />
+    <Compile Include="Candidatos\Mappers\CandidatoContactoMapper.cs" />
+    <Compile Include="Candidatos\Messages\DeleteCandidatoResponse.cs" />
+    <Compile Include="Candidatos\Messages\GetEmailCandidatoResponse.cs" />
+    <Compile Include="Candidatos\Messages\GetCandidatoByIdResponse.cs" />
+    <Compile Include="Candidatos\Messages\GetCandidatosExportToExcelResponse.cs" />
+    <Compile Include="Candidatos\Messages\GetCandidatosResponse.cs" />
+    <Compile Include="Candidatos\Messages\GetNumCandidatosByOfertaResponse.cs" />
+    <Compile Include="Candidatos\Messages\SaveCandidatoResponse.cs" />
+    <Compile Include="Candidatos\Messages\SearchCandidatoByNombreYApellidosResponse.cs" />
+    <Compile Include="Candidatos\Messages\SearchCandidatoByNumeroIdentificacionResponse.cs" />
+    <Compile Include="Candidatos\Services\CandidatoService.cs" />
+    <Compile Include="Candidatos\Services\ICandidatoService.cs" />
+    <Compile Include="Candidatos\ViewModels\CandidatoRowExportToExcelViewModel.cs" />
+    <Compile Include="Candidatos\ViewModels\CreateEditRowExperienciaCandidatoViewModel.cs" />
+    <Compile Include="Candidatos\ViewModels\CreateEditRowIdiomaCandidatoViewModel.cs" />
+    <Compile Include="Candidatos\ViewModels\CreateEditRowContactoCandidatoViewModel.cs" />
+    <Compile Include="Candidaturas\Enums\CandidaturaFilterEnum.cs" />
+    <Compile Include="Candidaturas\Enums\TipoPerfilCandidaturaEnum.cs" />
+    <Compile Include="Candidaturas\Enums\TipoDecisionEnum.cs" />
+    <Compile Include="Candidaturas\Enums\TipoCambioBitacoraEnum.cs" />
+    <Compile Include="Candidaturas\Enums\TipoEntrevistaEnum.cs" />
+    <Compile Include="Candidaturas\Enums\TipoEstadoCandidaturaEnum.cs" />
+    <Compile Include="Candidaturas\Enums\TipoEtapaCandidaturaEnum.cs" />
+    <Compile Include="Candidaturas\Mappers\CandidaturaCartaOfertaMapper.cs" />
+    <Compile Include="Candidaturas\Mappers\CandidaturaEstadoMapper.cs" />
+    <Compile Include="Candidaturas\Mappers\CandidaturaEtapaMapper.cs" />
+    <Compile Include="Candidaturas\Mappers\CandidaturaMapper.cs" />
+    <Compile Include="Candidaturas\Mappers\CandidaturaPrimeraEntrevistaMapper.cs" />
+    <Compile Include="Candidaturas\Mappers\CandidaturaSegundaEntrevistaMapper.cs" />
+    <Compile Include="Candidaturas\Messages\AsignToOfertaResponse.cs" />
+    <Compile Include="Candidaturas\Messages\DownloadCartaGeneradaResponse.cs" />
+    <Compile Include="Candidaturas\Messages\DownloadCVResponse.cs" />
+    <Compile Include="Candidaturas\Messages\GetCandidatoByCandidaturaResponse.cs" />
+    <Compile Include="Candidaturas\Messages\GetCentroCandidaturaResponse.cs" />
+    <Compile Include="Candidaturas\Messages\GetCandidaturasByNombreEstadoCandidaturaResponse.cs" />
+    <Compile Include="Candidaturas\Messages\GetCandidaturasByEstadoCandidaturaIdResponse.cs" />
+    <Compile Include="Candidaturas\Messages\GetCandidaturasExportToExcelResponse.cs" />
+    <Compile Include="Candidaturas\Messages\GetCartaOfertaIdByCandidaturaIdResponse.cs" />
+    <Compile Include="Candidaturas\Messages\GetFiltroEnSesionResponse.cs" />
+    <Compile Include="Candidaturas\Messages\GetCartaOfertaResponse.cs" />
+    <Compile Include="Candidaturas\Messages\GetEstadosCandidaturaResponse.cs" />
+    <Compile Include="Candidaturas\Messages\GetEtapasCandidaturaResponse.cs" />
+    <Compile Include="Candidaturas\Messages\GetFiltradoCVCandidaturaResponse.cs" />
+    <Compile Include="Candidaturas\Messages\GetNumCandidaturasByCandidatoIdResponse.cs" />
+    <Compile Include="Candidaturas\Messages\GetPrimeraEntrevistaResponse.cs" />
+    <Compile Include="Candidaturas\Messages\GetScheduleCartaOfertaResponse.cs" />
+    <Compile Include="Candidaturas\Messages\GetSchedulePrimeraEntrevistaResponse.cs" />
+    <Compile Include="Candidaturas\Messages\GetScheduleSegundaEntrevistaResponse.cs" />
+    <Compile Include="Candidaturas\Messages\GetSegundaEntrevistaResponse.cs" />
+    <Compile Include="Candidaturas\Messages\RemoveCandidaturaResponse.cs" />
+    <Compile Include="Candidaturas\Messages\EditCandidaturaResponse.cs" />
+    <Compile Include="Candidaturas\Messages\UploadCartaOfertaGeneradaResponse.cs" />
+    <Compile Include="Candidaturas\Messages\UploadCVResponse.cs" />
+    <Compile Include="Candidaturas\Messages\SaveCartaOfertaResponse.cs" />
+    <Compile Include="Candidaturas\Messages\PauseCandidaturaResponse.cs" />
+    <Compile Include="Candidaturas\Messages\RevokeCandidaturaResponse.cs" />
+    <Compile Include="Candidaturas\Messages\RescheduleCartaOfertaResponse.cs" />
+    <Compile Include="Candidaturas\Messages\ReschedulePrimeraEntrevistaResponse.cs" />
+    <Compile Include="Candidaturas\Messages\RescheduleSegundaEntrevistaResponse.cs" />
+    <Compile Include="Candidaturas\Messages\SaveCandidaturaResponse.cs" />
+    <Compile Include="Candidaturas\Messages\SaveCartaOfertaAndNecesidadResponse.cs" />
+    <Compile Include="Candidaturas\Messages\SaveFiltradoCVCandidaturaResponse.cs" />
+    <Compile Include="Candidaturas\Messages\SavePrimeraEntrevistaResponse.cs" />
+    <Compile Include="Candidaturas\Messages\ExecuteCandidaturaResponse.cs" />
+    <Compile Include="Candidaturas\Messages\GetCandidaturaToGeneratePDFbyIdResponse.cs" />
+    <Compile Include="Candidaturas\Messages\BacktrackCandidaturaResponse.cs" />
+    <Compile Include="Candidaturas\Messages\GetCandidaturaByIdResponse.cs" />
+    <Compile Include="Candidaturas\Messages\GetCandidaturasResponse.cs" />
+    <Compile Include="Candidaturas\Messages\RemoveOfertaResponse.cs" />
+    <Compile Include="Candidaturas\Messages\ResumeCandidaturaResponse.cs" />
+    <Compile Include="Candidaturas\Messages\SaveSegundaEntrevistaResponse.cs" />
+    <Compile Include="Candidaturas\Messages\SaveScheduleCartaOfertaResponse.cs" />
+    <Compile Include="Candidaturas\Messages\SaveSchedulePrimeraEntrevistaResponse.cs" />
+    <Compile Include="Candidaturas\Messages\SaveScheduleSegundaEntrevistaResponse.cs" />
+    <Compile Include="Candidaturas\Services\CandidaturaEstadoService.cs" />
+    <Compile Include="Candidaturas\Services\CandidaturaEtapaService.cs" />
+    <Compile Include="Candidaturas\Services\CandidaturaService.cs" />
+    <Compile Include="Candidaturas\Services\ICandidaturaEstadoService.cs" />
+    <Compile Include="Candidaturas\Services\ICandidaturaEtapaService.cs" />
+    <Compile Include="Candidaturas\Services\ICandidaturaService.cs" />
+    <Compile Include="Candidaturas\ViewModel\CandidaturaFiltroViewModel.cs" />
+    <Compile Include="Candidaturas\ViewModel\CandidaturaRowExportToExcellViewModel.cs" />
+    <Compile Include="Candidaturas\ViewModel\CandidaturaRowViewModel.cs" />
+    <Compile Include="Candidaturas\ViewModel\CandidaturaViewModel.cs" />
+    <Compile Include="Candidaturas\ViewModel\Partial\CartaOferta\CartaOfertaPdfViewModel.cs" />
+    <Compile Include="Candidaturas\ViewModel\Partial\CartaOferta\CompletarCartaOfertaViewModel.cs" />
+    <Compile Include="Candidaturas\ViewModel\Partial\DatosBasicos\CandidaturaDatosCandidatos.cs" />
+    <Compile Include="Candidaturas\ViewModel\Partial\DatosBasicos\CandidaturaDatosBasicos.cs" />
+    <Compile Include="Candidaturas\ViewModel\Partial\DatosBasicos\CandidaturaDatosBasicosViewModel.cs" />
+    <Compile Include="Candidaturas\ViewModel\Partial\CartaOferta\CompletarCartaOferta.cs" />
+    <Compile Include="Candidaturas\ViewModel\Partial\CartaOferta\AgendarCartaOfertaViewModel.cs" />
+    <Compile Include="Candidaturas\ViewModel\Partial\CartaOferta\AgendarCartaOferta.cs" />
+    <Compile Include="Candidaturas\ViewModel\Partial\CartaOferta\EntregaCartaOfertaViewModel.cs" />
+    <Compile Include="Candidaturas\ViewModel\Partial\CartaOferta\EntregaCartaOferta.cs" />
+    <Compile Include="Candidaturas\ViewModel\Partial\DatosBasicos\CandidaturaEstadoRowViewModel.cs" />
+    <Compile Include="Candidaturas\ViewModel\Partial\DatosBasicos\CandidaturaEtapaRowViewModel.cs" />
+    <Compile Include="Candidaturas\ViewModel\Partial\Entrevista\AgendarPrimeraEntrevista.cs" />
+    <Compile Include="Candidaturas\ViewModel\Partial\Entrevista\SegundaEntrevistaViewModel.cs" />
+    <Compile Include="Candidaturas\ViewModel\Partial\Entrevista\PrimeraEntrevistaViewModel.cs" />
+    <Compile Include="Candidaturas\ViewModel\Partial\Entrevista\AgendarPrimeraEntrevistaViewModel.cs" />
+    <Compile Include="Candidaturas\ViewModel\Partial\Entrevista\AgendarSegundaEntrevistaViewModel.cs" />
+    <Compile Include="Candidaturas\ViewModel\Partial\Entrevista\ResultadoPrimeraEntrevista.cs" />
+    <Compile Include="Candidaturas\ViewModel\Partial\Entrevista\AgendarSegundaEntrevista.cs" />
+    <Compile Include="Candidaturas\ViewModel\Partial\Entrevista\ResultadoSegundaEntrevista.cs" />
+    <Compile Include="Candidaturas\ViewModel\Partial\Entrevista\RangoSalarialesyDisponibilidades.cs" />
+    <Compile Include="Candidaturas\ViewModel\Partial\Filtrar\CandidaturaFiltradoCvViewModel.cs" />
+    <Compile Include="Clientes\Mappers\ClienteMapper.cs" />
+    <Compile Include="Clientes\Messages\GetClienteResponse.cs" />
+    <Compile Include="Clientes\Messages\DeleteClienteResponse.cs" />
+    <Compile Include="Clientes\Messages\GetClientesResponse.cs" />
+    <Compile Include="Clientes\Messages\SaveClienteResponse.cs" />
+    <Compile Include="Clientes\Services\ClienteService.cs" />
+    <Compile Include="Clientes\Services\IClienteService.cs" />
+    <Compile Include="Clientes\ViewModels\ClienteRowViewModel.cs" />
+    <Compile Include="Dashboard\Enums\TipoPerfilEnum.cs" />
+    <Compile Include="Dashboard\Mappers\DashboardMapper.cs" />
+    <Compile Include="Dashboard\Messages\GetDashboardResponse.cs" />
+    <Compile Include="Dashboard\Services\DashboardService.cs" />
+    <Compile Include="Dashboard\Services\IDashboardService.cs" />
+    <Compile Include="Dashboard\ViewModels\DashboardViewModel.cs" />
+    <Compile Include="Dashboard\ViewModels\EntrevistasFueraFechaRowViewModel.cs" />
+    <Compile Include="Dashboard\ViewModels\EntrevistasPlanificadasRowViewModel.cs" />
+    <Compile Include="Dashboard\ViewModels\InfoAdministradorViewModel.cs" />
+    <Compile Include="Dashboard\ViewModels\InfoEntrevistadorViewModel.cs" />
+    <Compile Include="Decisiones\Mappers\TipoDecisionMapper.cs" />
+    <Compile Include="Decisiones\Messages\GetTipoDecisionListByEtapaIdResponse.cs" />
+    <Compile Include="Decisiones\Services\ITipoDecisionService.cs" />
+    <Compile Include="Decisiones\Services\TipoDecisionService.cs" />
+    <Compile Include="Decisiones\ViewModels\TipoDecisionRowViewModel.cs" />
+    <Compile Include="Helpers\CandidatoCandidaturaHelper.cs" />
+    <Compile Include="Helpers\ModifiableEntityHelper.cs" />
+    <Compile Include="Helpers\PDFHelper.cs" />
+    <Compile Include="Maestros\Enums\TipoContratacionEnum.cs" />
+    <Compile Include="Maestros\Enums\EstadoNecesidadEnum.cs" />
+    <Compile Include="Maestros\Enums\MasterDataTypeEnum.cs" />
+    <Compile Include="Maestros\Mappers\MaestroMapper.cs" />
+    <Compile Include="Maestros\Messages\GetTipoMedioContactoEmailResponse.cs" />
+    <Compile Include="Maestros\Messages\GetMaestroListByTipoIdResponse.cs" />
+    <Compile Include="Maestros\Services\IMaestroService.cs" />
+    <Compile Include="Maestros\Services\MaestroService.cs" />
+    <Compile Include="Maestros\ViewModels\MaestroRowViewModel.cs" />
+    <Compile Include="Necesidades\Mappers\NecesidadMapper.cs" />
+    <Compile Include="Necesidades\Messages\CloneNecesidadResponse.cs" />
+    <Compile Include="Necesidades\Messages\GetNecesidadesExportToExcellResponse.cs" />
+    <Compile Include="Necesidades\Messages\SaveNecesidadResponse.cs" />
+    <Compile Include="Necesidades\Messages\DeleteNecesidadResponse.cs" />
+    <Compile Include="Necesidades\Messages\GetNecesidadByIdResponse.cs" />
+    <Compile Include="Necesidades\Messages\GetNecesidadesResponse.cs" />
+    <Compile Include="Necesidades\Services\INecesidadService.cs" />
+    <Compile Include="Necesidades\Services\MockNecesidadService.cs" />
+    <Compile Include="Necesidades\Services\NecesidadService.cs" />
+    <Compile Include="Necesidades\ViewModels\CreateEditNecesidadViewModel.cs" />
+    <Compile Include="Candidatos\ViewModels\CreateEditCandidatoViewModel.cs" />
+    <Compile Include="Candidatos\ViewModels\CandidatoRowViewModel.cs" />
+    <Compile Include="Necesidades\ViewModels\NecesidadRowViewModel.cs" />
+    <Compile Include="Necesidades\ViewModels\NecesidadRowExportToExcelViewModel.cs" />
+    <Compile Include="Necesidades\ViewModels\NecesidadViewModel.cs" />
+    <Compile Include="Necesidades\ViewModels\Partial\DatosBasicos\NecesidadDatosBasicosViewModel.cs" />
+    <Compile Include="Necesidades\ViewModels\Partial\DatosBasicos\NecesidadDatosBasicos.cs" />
+    <Compile Include="Ofertas\Mappers\OfertaMapper.cs" />
+    <Compile Include="Ofertas\Messages\GetOfertasExportToExcelResponse.cs" />
+    <Compile Include="Ofertas\Messages\SaveOfertaResponse.cs" />
+    <Compile Include="Ofertas\Messages\DeleteOfertaResponse.cs" />
+    <Compile Include="Ofertas\Messages\GetOfertaByIdResponse.cs" />
+    <Compile Include="Ofertas\Messages\GetOfertasResponse.cs" />
+    <Compile Include="Ofertas\Services\IOfertaService.cs" />
+    <Compile Include="Ofertas\Services\MockOfertaService.cs" />
+    <Compile Include="Ofertas\Services\OfertaService.cs" />
+    <Compile Include="Ofertas\ViewModels\OfertaRowExportToExcelViewModel.cs.cs" />
+    <Compile Include="Ofertas\ViewModels\OfertaRowViewModel.cs" />
+    <Compile Include="Ofertas\ViewModels\CreateEditOfertaViewModel.cs" />
+    <Compile Include="Permisos\Mappers\PermisoMapper.cs" />
+    <Compile Include="Permisos\Messages\GetPermisosResponse.cs" />
+    <Compile Include="PersonasLibres\ViewModels\EmpleadosFenixListCategoriaLineaCeldaViewModel.cs" />
+    <Compile Include="PersonasLibres\ViewModels\PersonasLibresListCategoriaLineaCeldaViewModel.cs" />
+    <Compile Include="PersonasLibres\ViewModels\PersonasLibresToCreateViewModel.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Proyectos\Mappers\ProyectoMapper.cs" />
+    <Compile Include="Proyectos\Messages\GetProyectosByClienteResponse.cs" />
+    <Compile Include="Proyectos\Messages\DeleteProyectoResponse.cs" />
+    <Compile Include="Proyectos\Messages\GetProyectoResponse.cs" />
+    <Compile Include="Proyectos\Messages\GetSectorServicioClienteFromProyectoResponse.cs" />
+    <Compile Include="Proyectos\Messages\GetProyectosNombreIdResponse.cs" />
+    <Compile Include="Proyectos\Messages\SaveProyectoResponse.cs" />
+    <Compile Include="Proyectos\Messages\GetProyectosResponse.cs" />
+    <Compile Include="Proyectos\Messages\SearchProyectoUsadoResponse.cs" />
+    <Compile Include="Proyectos\Services\IProyectoService.cs" />
+    <Compile Include="Proyectos\Services\ProyectoService.cs" />
+    <Compile Include="Proyectos\ViewModels\ProyectoNombreIdViewModel.cs" />
+    <Compile Include="Proyectos\ViewModels\ProyectoRowViewModel.cs" />
+    <Compile Include="Roles\Enums\RolesEnum.cs" />
+    <Compile Include="Roles\Enums\PermisosRolesEnum.cs" />
+    <Compile Include="Roles\Mappers\RolMapper.cs" />
+    <Compile Include="Roles\Messages\DeleteRolResponse.cs" />
+    <Compile Include="Roles\Messages\GetRolesResponse.cs" />
+    <Compile Include="Roles\Messages\GetRolByIdResponse.cs" />
+    <Compile Include="Roles\Messages\SaveRolResponse.cs" />
+    <Compile Include="Roles\Services\IRolService.cs" />
+    <Compile Include="Roles\Services\RolService.cs" />
+    <Compile Include="Roles\ViewModels\CreateEditRolViewModel.cs" />
+    <Compile Include="Roles\ViewModels\RolRowViewModel.cs" />
+    <Compile Include="Roles\ViewModels\PermisoRolViewModel.cs" />
+    <Compile Include="Permisos\Services\IPermisoService.cs" />
+    <Compile Include="Permisos\Services\PermisoService.cs" />
+    <Compile Include="Permisos\ViewModels\PermisoViewModel.cs" />
+    <Compile Include="Usuarios\Mappers\UsuarioMapper.cs" />
+    <Compile Include="Usuarios\Messages\DeleteUsuarioResponse.cs" />
+    <Compile Include="Usuarios\Messages\GetUsuarioByEmailResponse.cs" />
+    <Compile Include="Usuarios\Messages\GetUsuariosEntrevistadoresByNombreUsuarioYCentroResponse.cs" />
+    <Compile Include="Usuarios\Messages\GetUsuariosByNombreUsuarioResponse.cs" />
+    <Compile Include="Usuarios\Messages\GetUsuarioByUserNameResponse.cs" />
+    <Compile Include="Usuarios\Messages\GetUsuarioByIdResponse.cs" />
+    <Compile Include="Usuarios\Messages\GetUsuarioRolPermisoResponse.cs" />
+    <Compile Include="Usuarios\Messages\GetUsuariosResponse.cs" />
+    <Compile Include="Usuarios\Messages\SaveUsuarioResponse.cs" />
+    <Compile Include="Usuarios\Messages\SearchUserNameUsadoResponse.cs" />
+    <Compile Include="Usuarios\Services\IUsuarioService.cs" />
+    <Compile Include="Usuarios\Services\UsuarioService.cs" />
+    <Compile Include="Usuarios\ViewModels\UsuarioRolPermisoViewModel.cs" />
+    <Compile Include="Usuarios\ViewModels\CreateEditUsuarioViewModel.cs" />
+    <Compile Include="Usuarios\ViewModels\UsuarioRolViewModel.cs" />
+    <Compile Include="Usuarios\ViewModels\UsuarioRowViewModel.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Recruiting.Business\Recruiting.Business.csproj">
+      <Project>{2994b963-0181-4a1f-bb84-fde37e46d920}</Project>
+      <Name>Recruiting.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Recruiting.Data\Recruiting.Data.csproj">
+      <Project>{b2d0f6ac-a65c-4c5e-a093-8e644d93b5a9}</Project>
+      <Name>Recruiting.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Recruiting.Infra\Recruiting.Infra.csproj">
+      <Project>{b32595b8-4298-416e-89d2-d255710c6a33}</Project>
+      <Name>Recruiting.Infra</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="CandidaturasOfertas\Enums\" />
+    <Folder Include="FunnelProcesos\Enums\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="..\..\packages\SonarAnalyzer.CSharp.7.3.0.5690\analyzers\Google.Protobuf.dll" />
+    <Analyzer Include="..\..\packages\SonarAnalyzer.CSharp.7.3.0.5690\analyzers\SonarAnalyzer.CSharp.dll" />
+    <Analyzer Include="..\..\packages\SonarAnalyzer.CSharp.7.3.0.5690\analyzers\SonarAnalyzer.dll" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- <Import Project="..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />
+  <Target Name="EnsureBclBuildImported" BeforeTargets="BeforeBuild" Condition="'$(BclBuildImported)' == ''">
+    <Error Condition="!Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" Text="This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=317567." HelpKeyword="BCLBUILD2001" />
+    <Error Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" Text="The build restored NuGet packages. Build the project again to include these packages in the build. For more information, see http://go.microsoft.com/fwlink/?LinkID=317568." HelpKeyword="BCLBUILD2002" />
+  </Target> -->
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

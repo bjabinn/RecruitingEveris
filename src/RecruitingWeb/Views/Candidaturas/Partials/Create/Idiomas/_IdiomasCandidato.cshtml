@@ -1,0 +1,65 @@
+﻿@using RecruitingWeb.Properties
+
+
+@model Recruiting.Application.Candidaturas.ViewModel.CandidaturaDatosBasicos
+
+
+<div class="form-group col-lg-4" id="conocimientoIdiomas" hidden="hidden">
+                        <div class="row" style="margin-top:15px;margin-bottom:5px;">
+                            <div class="col-lg-12">
+                                <div class="col-lg-8 title-form removePadding">
+                                    <label>@Resources.HTML_Candidatos_Create_ConocimientosIdiomas</label>
+                                </div>
+                                <div class="col-lg-4 removePadding" style="text-align:right;">
+                                    <button type="button" class="btn btn-default" id="btncreateIdioma">
+                                        <span class="text">@Resources.HTML_BotonGenerico_Aniadir</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row form-row" style="margin-bottom:30px;">
+                            <div class="col-lg-12">
+                                <table id="listSubmitIdioma" data-id="listSubmit">
+                                    <thead>
+                                        <tr role="row">
+                                            <th>@Resources.HTML_Candidatos_Edit_IdiomaHeader</th>
+                                            <th>@Resources.HTML_Candidatos_Edit_NivelHeader</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr role="row" class="hidden" id="templateContactos">
+                                            <td>@Edit.DropDownExtend((String)null, "DatosBasicos.IdiomaCandidatoViewModel[{0}].IdiomaId", Model.IdiomaList, validate: true, multiple: false, htmlClass: "form-control", showEmptyOption: true, required: false, disabled: true)</td>
+                                            <td>@Edit.DropDownExtend((String)null, "DatosBasicos.IdiomaCandidatoViewModel[{0}].NivelIdiomaId", Model.NivelIdiomaList, validate: true, multiple: false, htmlClass: "form-control", showEmptyOption: true, required: false, disabled: true)</td>
+                                            <td>
+                                                <a id="btnDeleteLang"> @Display.GlyphiconButton("glyphicon-trash icon action")</a>
+                                            </td>
+                                        </tr>
+
+                                        @foreach (var item in Model.IdiomaCandidatoViewModel)
+                                        {
+
+                                            var candId = "DatosBasicos.IdiomaCandidatoViewModel[{0}].CandidatoId";
+                                            var nameId = "DatosBasicos.IdiomaCandidatoViewModel[{0}].CandidatoIdiomasId";
+                                            var nameIdioma = "DatosBasicos.IdiomaCandidatoViewModel[{0}].IdiomaId";
+                                            var nameNivelIdioma = "DatosBasicos.IdiomaCandidatoViewModel[{0}].NivelIdiomaId";
+
+                                            <tr role="row" class="odd">
+                                                <td class="hidden">@Edit.Hidden(item.CandidatoId, candId)</td>
+                                                <td class="hidden">@Edit.Hidden(item.CandidatoIdiomasId, nameId)</td>
+                                                <td>@Edit.DropDownExtend(item.IdiomaId, nameIdioma, Model.IdiomaList, validate: true, multiple: false, htmlClass: "form-control", showEmptyOption: true, required: true, disabled: false)</td>
+                                                <td>@Edit.DropDownExtend(item.NivelIdiomaId, nameNivelIdioma, Model.NivelIdiomaList, validate: true, multiple: false, htmlClass: "form-control", showEmptyOption: true, required: true, disabled: false)</td>
+                                                <td>
+                                                    <a id="btnDelete"> @Display.GlyphiconButton("glyphicon-trash icon action")</a>
+                                                </td>
+                                            </tr>
+                                        }
+
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+            
+                   

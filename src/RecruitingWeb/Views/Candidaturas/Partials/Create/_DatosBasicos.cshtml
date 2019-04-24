@@ -1,0 +1,222 @@
+﻿@using RecruitingWeb.Helpers
+@using RecruitingWeb.Properties
+@using RecruitingWeb.Components.Searchable
+
+@model Recruiting.Application.Candidaturas.ViewModel.CandidaturaDatosBasicos
+
+@{      
+    var expRegularDecimal = System.Configuration.ConfigurationManager.AppSettings["expRegularDecimal"];
+    var conditionTest = Model.FiltradorId != null;
+    string htmlMoneda = FormatHelper.GetHtmlMoneda(Model.Moneda);  
+}
+
+<div class="row">
+    <div class="content-box border-top-cero">
+        <div class="content-box-content">
+            <div class="section-form-DatosBasicos" data-id="section-form-DatosBasicos">
+                <div class="row form-row">
+                    <div class="form-group col-lg-4">
+                        <div class="col-lg-12 title-form">
+                            <label for="CandidatoId">@Resources.HTML_Candidaturas_DatosBasicos_Candidato</label>
+                        </div>
+                        <div class="col-lg-12">
+                            <div>
+                                <span class="spanSearch">
+                                    <button class="btn btnSearch" type="button" data-toggle="modal" data-target="#myModal">@Display.GlyphiconButton("glyphicon-search")</button>
+                                </span>
+
+                                @Edit.Hidden(Model.CandidatoId, Model.Access + "CandidatoId", new Dictionary<string, string> { { "id", "CandidatoId" } })
+                                @Edit.Hidden(Model.Moneda, Model.Access + "Moneda")
+                                @Edit.Text(Model.NombreCandidato, name: Model.Access + "NombreCandidato", required: true, id: "NombreCandidato", htmlClass: "form-control inputSearch", isReadOnly: true)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-lg-4">
+                        <div class="col-lg-12 title-form">
+                            <label for="TipoPerfilId">@Resources.HTML_Candidaturas_DatosBasicos_TipoPerfil</label>
+                        </div>
+                        <div class="col-lg-12">
+                            @Edit.DropDownExtend(Model.CategoriaId, Model.Access + "CategoriaId", Model.CategoriaList, required: true, htmlClass: "form-control", id: "CategoriaId")
+                        </div>
+                    </div>
+                    <div class="form-group col-lg-4">
+                        <div class="col-lg-12 title-form">
+                            <label for="SalarioDeseado">@Resources.HTML_Candidaturas_DatosBasicos_SalarioDeseado</label>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="inner-addon right-addon">
+                                @Edit.Decimal(Model.SalarioDeseado, name: Model.Access + "SalarioDeseado", id: "SalarioDeseado", required: false, htmlClass: "form-control", expReg: expRegularDecimal, decimalSeparator: ",", numberSeparator: ".")
+                                @Html.Raw(htmlMoneda)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-row">
+                    <div class="form-group col-lg-4">
+                        <div class="col-lg-12 title-form">
+                            <label for="tipoTecnologia">@Resources.HTML_Candidaturas_DatosBasicos_TipoTecnologia</label>
+                        </div>
+                        <div class="col-lg-12">
+                            @Edit.DropDownExtend(Model.TipoTecnologiaId, Model.Access + "TipoTecnologiaId", Model.TecnologiaList, required: true, htmlClass: "form-control", id: "TipoTecnologiaId")
+                        </div>
+                    </div>
+                    <div class="form-group col-lg-4">
+                        <div class="col-lg-12 title-form">
+                            <label for="filterOrigenCV">@Resources.HTML_Candidaturas_DatosBasicos_OrigenCV</label>
+                        </div>
+                        <div class="col-lg-12">
+                            @Edit.DropDownExtend(Model.OrigenCvId, Model.Access + "OrigenCvId", Model.OrigenCvList, required: true, htmlClass: "form-control", id: "OrigenCvId")
+                        </div>
+                    </div>
+                    <div class="form-group col-lg-4">
+                        <div class="col-lg-12 title-form">
+                            <label for="FiltradorId">@Resources.HTML_Candidaturas_DatosBasicos_Filtrador</label>
+                        </div>
+                        <div class="col-lg-12">
+                            @{
+                                string FiltradorName = Model.Access + "FiltradorId";
+                            }
+                            @(Html.Searchable(FiltradorName, Url)
+                                                        .Id("FiltradorId")
+                                                        .AddCssClass("form-control")
+                                                        .Action("GetUsuariosEntrevistadoresByNombreUsuario", "Admin")
+                                                        .Value(Model.FiltradorNombre, Model.FiltradorId.ToString()))
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-row">
+                    <div class="form-group col-lg-4">
+                        <div class="col-lg-12 title-form">
+                            <label for="filterFuenteReclutamiento">@Resources.HTML_Candidaturas_DatosBasicos_FuenteReclutamiento</label>
+                        </div>
+                        <div class="col-lg-12">
+                            @Edit.DropDownExtend(Model.FuenteReclutamientoId, Model.Access + "FuenteReclutamientoId", Model.FuenteReclutamientoList, required: true, htmlClass: "form-control", disabled: true, id: "FuenteReclutamientoId")
+                        </div>
+                    </div>
+                    <div class="form-group col-lg-4">
+                        <div class="col-lg-12 title-form">
+                            <label for="subidoCV">@Resources.HTML_Candidaturas_DatosBasicos_SubidaCV</label>
+                        </div>
+
+                        @if (Model.NombreCV == null)
+                        {
+                            <div class="col-lg-12">
+                                @Edit.InputFileDig(false, false, "CV", Model.NombreCV, false)
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="col-lg-12">
+                                @Edit.InputFileDig(false, false, "CV", Model.NombreCV, true, "DescargarCV", "DescargarCV")
+                            </div>
+                        }
+                    </div>
+                    <div class="form-group col-lg-4">
+                        <div class="col-lg-12 title-form">
+                            <label>@Resources.HTML_Candidaturas_DatosBasicos_Oferta</label>
+                        </div>
+                        <div class="col-lg-12">
+                            <span class="spanSearch">
+                                <button class="btn btnSearch" type="button" data-toggle="modal" data-target="#modalOfertas">@Display.GlyphiconButton("glyphicon-search")</button>
+                            </span>
+                            @Edit.Hidden(Model.CandidaturaOfertaId, Model.Access + "CandidaturaOfertaId", new Dictionary<string, string> { { "id", "OfertaId" } })
+                            @Edit.Text(Model.NombreOferta, name: Model.Access + "NombreOferta", required: false, id: "NombreOferta", htmlClass: "form-control inputSearch", isReadOnly: true)
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-row">
+                    <div class="form-group col-lg-4">
+                        <div class="col-lg-12 title-form">
+                            <label for="filterUbicacionCandidato">@Resources.HTML_Candidatos_Index_UbicacionHeader</label>
+                        </div>
+                        <div class="col-lg-12">
+                            @Edit.Text(Model.UbicacionCandidato, name: Model.Access + "UbicacionCandidato", id: "ubicacionCandidato", htmlClass: "form-control", required: false)
+                        </div>
+                    </div>
+                    <div class="form-group col-lg-4">
+                        <div class="col-lg-12 title-form">
+                            <label for="filterAnioExperiencia">@Resources.HTML_Candidatura_Create_AnioExperiencia</label>
+                        </div>
+                        <div class="col-lg-12">
+                            @Edit.DateTime(Model.AnioExperiencia, name: Model.Access + "AnioExperiencia", id: "AnioExperiencia", htmlClass: "form-control", required: false)
+                        </div>
+                    </div>
+                    <div class="form-group col-lg-4" data-section="Modulo">
+                        <div class="col-lg-12 title-form">
+                            <label for="Modulo">@Resources.HTML_Candidaturas_DatosBasicos_Modulo</label>
+                        </div>
+                        <div class="col-lg-12">
+                            @Edit.DropDownExtend(Model.Modulo, Model.Access + "Modulo", Model.ModuloList, required: false, htmlClass: "form-control", id: "Modulo")
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-row">
+                    <div class="form-group col-lg-8">
+                        <div class="col-lg-12 title-form">
+                            <label for="DatosCv">@Resources.HTML_Candidaturas_DatosBasicos_OtrosDatos</label>
+                        </div>
+                        <div class="col-lg-12">
+                            @Edit.TextAreaEditor(Model.DatosCv, Model.Access + "DatosCv", id: "DatosCv", rows: 8, required: false, htmlClass: "form-control", placeholder: "Otros Datos del CV ...")
+                        </div>
+                    </div>
+
+                    <div class="form-group col-lg-4" id="listaGeneralEmailReferenciados" hidden="hidden">
+                        <div class="col-lg-12" style="margin-bottom:5px">
+                            <div class="col-lg-9 removePadding" style="padding-top:5px">
+                                <label>@Resources.HTML_Candidaturas_DatosBasicos_CorreosReferenciador</label>
+                            </div>
+                            <div class="col-lg-3 text-right removePadding">
+                                <button type="button" class="btn btn-default" aria-label="Left Align" id="btnCreateContactosReferenciados">
+                                    @Resources.HTML_BotonGenerico_Aniadir
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <table id="listSubmitReferenciados" data-id="listSubmit">
+                                <thead>
+                                    <tr role="row">
+                                        <th>@Resources.HTML_Candidaturas_Referenciado_ContactoHeader</th>
+                                        <th>@Resources.HTML_Candidaturas_Referenciado_EliminarHeader</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr role="row" class="hidden" id="templateContactos">
+                                        <td>@Edit.Text((String)null, Model.Access + "ListEmailReferenciados[{0}]", htmlClass: "form-control", required: false, disabled: true)</td>
+                                        <td>
+                                            <a id="btnDelete"> @Display.GlyphiconButton("glyphicon-trash icon action")</a>
+                                        </td>
+                                    </tr>
+
+                                    @{
+                                        if (Model.ListEmailReferenciados != null)
+                                        {
+                                            for (int x = 0; x < Model.ListEmailReferenciados.Count; x++)
+                                            {
+                                                var emailContacto = Model.Access + "ListEmailReferenciados[{0}]";
+
+                                                <tr role="row" class="odd">
+                                                    <td>@Edit.Text(@Model.ListEmailReferenciados[x], emailContacto, htmlClass: "form-control")</td>
+                                                    <td>
+                                                        <a id="btnDelete"> @Display.GlyphiconButton("glyphicon-trash icon action")</a>
+                                                    </td>
+                                                </tr>
+
+                                            }
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-row">
+
+                    @Html.Partial("~/Views/Candidaturas/Partials/Create/Tecnologias/_ExperienciaCandidato.cshtml", Model)
+                    @Html.Partial("~/Views/Candidaturas/Partials/Create/Idiomas/_IdiomasCandidato.cshtml", Model)
+
+                </div>
+
+            </div>
+        </div> <!-- End content-box-content -->
+    </div> <!-- End .content-box -->
+</div> <!--End .Row-->

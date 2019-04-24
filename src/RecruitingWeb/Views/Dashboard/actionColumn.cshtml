@@ -1,0 +1,29 @@
+@using Recruiting.Application.Necesidades.ViewModels
+@using Recruiting.Infra.Caching;
+@using RecruitingWeb.Properties
+
+@model Recruiting.Application.Necesidades.ViewModels.NecesidadRowViewModel
+
+
+<div>
+    @Edit.Text(Model.NecesidadId.ToString(), "NecesidadId", id: "NecesidadId", htmlClass: "form-control hide")
+   
+    <a title="@Resources.HTML_Title_DetalleNecesidad" id="DetailButton"
+       @if (!(bool)TempData["VerNecesidad"])
+       { 
+           @: class="disabled"
+                  }
+       >
+    @Display.GlyphiconButton("glyphicon-eye-open icon action")</a>
+
+
+
+</div>
+@*@functions
+{
+    public void VaciarSesionNecesidad()
+    {
+        SessionCacheStorageService sesionNecesidad = new SessionCacheStorageService();
+        sesionNecesidad.Remove("filtro_necesidad");
+    }
+}*@

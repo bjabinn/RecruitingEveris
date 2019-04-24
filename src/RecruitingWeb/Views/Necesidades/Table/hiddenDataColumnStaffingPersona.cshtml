@@ -1,0 +1,6 @@
+@model Recruiting.Application.Necesidades.ViewModels.StaffingPersonaRowViewModel
+
+<div>
+    @Edit.Text(Model.PersonaId.ToString(), "PersonaAsignadaId", id: "PersonaAsignadaId", htmlClass: "form-control hide")
+    @Edit.Text(Model.TipoPersonaId.ToString(), "TipoPersonaId", id: "TipoPersonaId", htmlClass: "form-control hide")
+</div>

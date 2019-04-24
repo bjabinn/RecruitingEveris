@@ -1,0 +1,1964 @@
+﻿@using System.Web.Mvc
+@using RecruitingWeb.Helpers
+@using RecruitingWeb.Properties
+@using Recruiting.Application.Becarios.Enums
+
+@helper MenuFrontActions()
+    {
+        <script type="text/javascript">
+            //Menu
+            var menuItemToSelect = $("#main-nav li a[data-option-name=Becarios]");
+            menuItemToSelect.addClass("current");
+        </script>
+}
+
+@helper IndexFrontActions(System.Web.Mvc.UrlHelper Url, string nUsuario, string tiempoExpiracionCookie, string gestionDocumentalCompleta)
+    {
+        <script type="text/javascript">
+
+        //Navegacion Filtro
+        $(window).keydown(function (event) {
+            if (event.keyCode == 13) {
+                buscarIntro();
+                return true;
+            }
+        });
+
+        function buscarIntro() {
+            var table = $('#tablaBecarios');
+            table.data("fn-search")();
+        }
+
+
+        $(document).on('click', '[name=buscar]', function () {
+            buscarIntro();
+        });
+
+        $(document).on('click', '[name=limpiar]', function () {
+            resetFields('#form-filter');
+            var table = $('#tablaBecarios');
+            var url = '@Url.Action("Limpiar", "Becarios")';
+            window.location.href = url;
+        });
+
+        //Carga Tabla
+        $('#tablaBecarios').on('draw.dt', function (event, data) {
+            var total = $('#tempdataBecarios');
+            colorearBecariosVisitados();
+            total.html(data._iRecordsTotal);
+        });
+
+        function getFiltersBecarios() {
+
+            var filterTipoEstadoBecarioId = "";
+            if ($("select#filterTipoEstadoBecarioId[multiple]").length > 0) {
+                filterTipoEstadoBecarioId = [];
+                $("select#filterTipoEstadoBecarioId[multiple] option:selected").each(function (i, selected) {
+                    if ($(this).length) {
+                        filterTipoEstadoBecarioId[i] = selected.value;
+                    }
+                });
+            } else {
+                filterTipoEstadoBecarioId = $("[name=filterTipoEstadoBecarioId]").val();
+            }
+
+            if ($('#GestionDocumentalCompleta').val() == "True") {
+                var filterGestionDocumentalCompleta = true;
+            }
+            else if ($('#GestionDocumentalCompleta').val() == "False") {
+                var filterGestionDocumentalCompleta = false;
+            }
+            else {
+                var filterGestionDocumentalCompleta = '';
+            }
+
+
+            var filterBecarioId = $("#filterBecarioId").val();
+            var filterNombreBecario = $("#filterNombreBecario").val();
+            var filterCandidatoId = $("#filterCandidatoId").val();
+            var filterTipoBecarioId = $("#filterTipoBecarioId").val();
+            var filterClienteId = $("#filterClienteId").val();
+            var filterProyectoId = $("#filterProyectoId").val();
+            var filterFechaInicio = $("#filterFechaInicio").val();
+            var filterFechaFin = $("#filterFechaFin").val();
+            var filterFechaFinReal = $("#filterFechaFinReal").val();
+            var filterBecarioCentroProcedencia = $("#filterBecarioCentroProcedencia").val();
+            var filterBecarioCentroProcedenciaName = $("#filterBecarioCentroProcedencia-Text").val();
+            var filterTipoDecisionFinalId = $("#filterTipoDecisionFinalId").val();
+            var filterBecarioConvocatoria = $("#filterBecarioConvocatoria").val();
+            var filterBecarioConvocatoriaName = $("#filterBecarioConvocatoria-Text").val();
+            var filterCentro = $("[name=filterCentro]").val();
+            var filterNivelIdioma = $("[name=filterNivelIdioma]").val();
+            return {
+                BecarioId: filterBecarioId, NombreBecario: filterNombreBecario, CandidatoId: filterCandidatoId,
+                TipoBecario: filterTipoBecarioId, TipoEstadoBecario: filterTipoEstadoBecarioId,
+                CentroProcedencia: filterBecarioCentroProcedencia, CentroProcedenciaName: filterBecarioCentroProcedenciaName,
+                Cliente: filterClienteId, Proyecto: filterProyectoId, FechaInicio: filterFechaInicio, FechaFin: filterFechaFin,
+                FechaFinReal: filterFechaFinReal, TipoDecisionFinalId: filterTipoDecisionFinalId,
+                GestionDocumentalCompleta: filterGestionDocumentalCompleta, Convocatoria: filterBecarioConvocatoria,
+                ConvocatoriaName: filterBecarioConvocatoriaName, CentroSearch: filterCentro, NivelIdioma: filterNivelIdioma
+
+            };
+        }
+
+
+        //Navegacion buttons
+
+        $(document).on('click', '#EditButton', function () {
+            var item = $(this).closest("tr").find("#BecarioId").val();
+            saveCookie(item);
+            var url = '@Url.Action("Edit", "Becarios", new { id = "__id__" })';
+            window.location.href = url.replace('__id__', item);
+        });
+
+        $(document).on('click', '#BitacoraButton', function () {
+            var item = $(this).closest("tr").find("#BecarioId").val();
+            var url = '@Url.Action("Index", "BitacorasBecarios", new { BecarioId = "__BecarioId__" })';
+            window.location.href = url.replace('__BecarioId__', item);
+        });
+
+        $(document).on('click', '#PasarCandidaturaButton', function () {
+            var item = $(this).closest("tr").find("#BecarioId").val();
+            $('[name=IdBecarioCrear]').val(item);
+
+        });
+
+        $(document).on('click', '#BtnCrearCandidatura', function () {
+
+            if ($("#FormCrearCandidatura").parsley().validate() == true) {
+                BootstrapDialog.confirm({
+                    title: '@Resources.Becario_PasarCandidaturaTitulo',
+                    message: '@Resources.Becario_PasarCandidaturaTexto',
+                    type: BootstrapDialog.TYPE_CONFIRMDELETE,
+                    callback: function (result) {
+                        if (result) {
+                            $('#FormCrearCandidatura').submit();
+                        } else {
+                            BootstrapDialog.closeAll();
+                        }
+                    }
+                });
+            }
+
+        });
+
+
+        $(document).on('click', '#DeleteButton', function () {
+
+            var item = $(this).closest("tr").find("#BecarioId").val();
+
+            BootstrapDialog.confirm({
+                title: '@Resources.Becario_EliminarTitulo',
+                message: '@Resources.Becario_EliminarTexto',
+                type: BootstrapDialog.TYPE_CONFIRMDELETE,
+                callback: function (result) {
+                    if (result) {
+                        $.post('@Url.Action("Delete", "Becarios")', { id: item }).
+                            success(function (Data) {
+                                if (Data.IsValid) {
+                                    var tableComponent = $('#tablaBecarios').DataTable();
+                                    tableComponent.ajax.reload(null, true);
+                                } else if (Data == "") {
+                                    BootstrapDialog.show({
+                                        type: BootstrapDialog.TYPE_ERROR,
+                                        title: '@Resources.Permiso_Titulo',
+                                        message: '@Resources.Permiso_Mensaje',
+                                    });
+                                }
+                            });
+                    } else {
+                        BootstrapDialog.closeAll();
+                    }
+                }
+            });
+        });
+
+        $(document).on('click', '#RetrocederButton', function () {
+
+            var becarioId = $(this).closest("tr").find("#BecarioId").val();
+            var estadoFinal = $(this).closest("tr").find('[name="estadoFinal"]').val();
+            var becaYaAbierta = false;
+            if(estadoFinal == "true")
+            {
+                var candidatoId = $(this).closest("tr").find('#CandidatoId').val();
+                var repetida = false;
+                var url = '@Url.Action("CheckBecasAbiertas", "Becarios")';
+
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: { CandidatoId: candidatoId },
+                    cache: false,
+                    success: function (data) {
+                        repetida = data;
+                        if(repetida == true)
+                        {
+                            muestraErrorRetroceder();
+                        }
+                        else
+                        {
+                            muestraConfirmarRetroceder(becarioId);
+                        }
+                    },
+                    error: function (data) {
+                        alert("Error");
+                    }
+                });
+            }
+            else
+            {
+                muestraConfirmarRetroceder(becarioId);
+            }
+
+        });
+
+        $(document).on('click', '#DetailButton', function () {
+            var item = $(this).closest("tr").find("#BecarioId").val();
+            saveCookie(item);
+            var url = '@Url.Action("Details", "Becarios", new { id = "__id__" })';
+            window.location.href = url.replace('__id__', item);
+        });
+
+        $(document).on('click', '#Ejecutar', function () {
+            var id = $(this).closest("tr").find("#BecarioId").val();
+            var url = '@Url.Action("Ejecutar", "Becarios", new { id = "__id__" })';
+            window.location.href = url.replace('__id__', id);
+
+        });
+
+        $(document).on('click', '#btnDescargarExcel', function () {
+            var pageFilter = $('#tablaBecarios').data('filters');
+            var filters = {
+                filterBecarioId: pageFilter['custom-filter-BecarioId'],
+                filterCandidatoId: pageFilter['custom-filter-CandidatoId'],
+                filterBecarioCentroProcedencia: pageFilter['custom-filter-CentroProcedencia'],
+                filterNombreBecario: pageFilter['custom-filter-NombreBecario'],
+                filterTipoEstadoBecarioId: pageFilter['custom-filter-TipoEstadoBecario'].toString(),
+                filterTipoBecarioId: pageFilter['custom-filter-TipoBecario'],
+                filterClienteId: pageFilter['custom-filter-Cliente'],
+                filterProyectoId: pageFilter['custom-filter-Proyecto'],
+                filterFechaInicio: pageFilter['custom-filter-FechaInicio'],
+                filterFechaFin: pageFilter['custom-filter-FechaFin'],
+                filterFechaFinReal: pageFilter['custom-filter-FechaFinReal'],
+                filterTipoDecisionFinalId : pageFilter['custom-filter-TipoDecisionFinalId'],
+                filterGestionDocumentalCompleta: pageFilter['custom-filter-GestionDocumentalCompleta'],
+                filterBecarioConvocatoria: pageFilter['custom-filter-Convocatoria'],
+                filterCentro: pageFilter['custom-filter-CentroSearch'],
+                filterNivelIdioma: pageFilter['custom-filter-NivelIdioma']
+            };
+
+            var strFiltros = jQuery.param(filters);
+            var url = '@Url.Action("ExportToExcel", "Becarios")?' + strFiltros;
+            window.location.assign(url);
+        });
+
+        $(document).on('click', '#Pausar', function () {
+            var becarioId = $(this).closest("tr").find("#BecarioId").val();
+            $("#modalStandBy").modal('show');
+            $('[name=becarioIdPausar]').val(becarioId);
+
+        });
+
+        $(document).on('click', '#RenunciarButton', function () {
+            $("#modalRenunciaDescarte").modal('show');
+            var item = $(this).closest("tr").find("#BecarioId").val();
+            $('[name=becarioIdHidden]').val(item);
+        });
+
+        $(document).on('click', '#BtnRenunciar', function () {
+            var becarioId = $('[name=becarioIdHidden]').val();
+            var comentariosRenunciaDescarte = $('[name=ComentariosRenunciaDescarte]').val();
+            $.post('@Url.Action("Renunciar", "Becarios")', { BecarioId: becarioId, ComentariosRenunciaDescarte: comentariosRenunciaDescarte  }).
+                        success(function (IsValid) {
+                            if (IsValid) {
+                                var tableComponent = $('#tablaBecarios').DataTable();
+                                tableComponent.ajax.reload(null, true);
+                                BootstrapDialog.closeAll();
+                                $("#modalRenunciaDescarte").modal('hide');
+                                $('[name=becarioIdHidden]').val('');
+                                $('[name=ComentariosRenunciaDescarte]').summernote("code", "");
+                            } else if (Data == "") {
+                                BootstrapDialog.show({
+                                    type: BootstrapDialog.TYPE_ERROR,
+                                    title: '@Resources.Permiso_Titulo',
+                                    message: '@Resources.Permiso_Mensaje',
+                                });
+                            }
+                        })
+        });
+
+
+        $(document).on('click', '#BtnPausar', function () {
+            var becarioId = $('[name=becarioIdPausar]').val();
+            var fecha = $('[name="FechaContactoStandBy"]').val();
+            $.post('@Url.Action("Pausar", "Becarios")', { BecarioId: becarioId, fechaContactoStandBy: fecha }).
+                        success(function (IsValid) {
+                            if (IsValid) {
+                                var tableComponent = $('#tablaBecarios').DataTable();
+                                tableComponent.ajax.reload(null, true);
+                                BootstrapDialog.closeAll();
+                                $("#modalStandBy").modal('hide');
+                                $('[name=becarioIdPausar]').val('');
+                                $('[name="FechaContactoStandBy"]').val('');
+                            } else if (Data == "") {
+                                BootstrapDialog.show({
+                                    type: BootstrapDialog.TYPE_ERROR,
+                                    title: '@Resources.Permiso_Titulo',
+                                    message: '@Resources.Permiso_Mensaje',
+                                });
+                            }
+                        })
+        });
+
+
+        //Inicializaciones
+
+        $(document).ready(function () {
+            var filterProyectoInicial = $("[name=filterProyectoId]").val();
+        });
+
+        //Funciones
+
+        
+
+        function comprobarCheckBox(){
+            if("@gestionDocumentalCompleta" == "True")
+            {
+                $("#GestionDocumentalCompleta").val('True');
+            }
+            else if("@gestionDocumentalCompleta" == "False")
+            {
+                $("#GestionDocumentalCompleta").val('False');
+            }
+
+        }
+
+        function muestraErrorRetroceder()
+        {
+            BootstrapDialog.show({
+                type: BootstrapDialog.TYPE_ERROR,
+                title: '@Resources.ErrorBecario',
+                message: '@Resources.ErrorBecaAbierta',
+            });
+        }
+
+        function muestraConfirmarRetroceder(becarioId)
+        {
+            BootstrapDialog.confirm({
+
+                title: '@Resources.Becario_RetrocederTitulo',
+                message: '@Resources.Becario_RetrocederTexto',
+                type: BootstrapDialog.TYPE_CONFIRMDELETE,
+                callback: function (result) {
+                    if (result) {
+                        $.post('@Url.Action("RetrocederEstado", "Becarios")', { BecarioId: becarioId }).
+                            success(function (IsValid) {
+
+                                if (IsValid) {
+                                    var tableComponent = $('#tablaBecarios').DataTable();
+                                    tableComponent.ajax.reload(null, true);
+                                } else if (Data == "") {
+                                    BootstrapDialog.show({
+                                        type: BootstrapDialog.TYPE_ERROR,
+                                        title: '@Resources.Permiso_Titulo',
+                                        message: '@Resources.Permiso_Mensaje',
+                                    });
+                                }
+                            })
+
+                    } else {
+                        BootstrapDialog.closeAll();
+                    }
+                }
+            });
+        }
+
+        function saveCookie(item)
+        {
+            var cookieActual = getCookies();
+            if(cookieActual != null)
+            {
+                if(!cookieActual.includes(item))
+                {
+                    cookieActual += "," + item;
+                }
+            }
+            else
+            {
+                cookieActual = item;
+            }
+
+            $.cookie('@nUsuario' + '-becarios', cookieActual, {expires : @tiempoExpiracionCookie});
+        }
+
+        function getCookies()
+        {
+            var cookieActual = $.cookie('@nUsuario' + '-becarios');
+            return cookieActual;
+        }
+
+        function colorearBecariosVisitados()
+        {
+            var listaBecarios = getCookies();
+            if (listaBecarios != null)
+            {
+                $('#tablaBecarios tr:not(:first)').each(function(){
+                    if($(this).find("#BecarioId") != null)
+                    {
+                        if(listaBecarios.includes($(this).find("#BecarioId").val()))
+                        {
+                            $(this).addClass("linkVisitado");
+                        }
+                    }
+                });
+            }
+        }
+
+        function generaSectorYServicioFromProyecto(ProyectoId, actualizaCliente) {
+
+            if (ProyectoId != null && ProyectoId != '')
+            {
+                $.post('@Url.Action("GeneraSectorYServicioFromProyecto", "Becarios")', { proyectoId: ProyectoId }).done(function (data) {
+
+                    var sectorId = data.SectorId;
+                    var servicioId = data.ServicioId;
+                    var clienteId = data.ClienteId;
+
+                    if (sectorId != null && sectorId != '') {
+                        $('#SectorId').val(sectorId);
+                    }
+                    if (servicioId != null && servicioId != '') {
+                        $('#TipoServicioId').val(servicioId);
+                    }
+                    if (clienteId != null && clienteId != '' && actualizaCliente) {
+                        $('#filterClienteId').val(clienteId);
+                    }
+
+
+                });
+            }
+
+        };
+
+
+        function checkCliente(){
+
+            var clienteIdSeleccionado = $("#filterClienteId").val();
+            var $select = $('#filterProyectoId');
+            $select.empty();
+
+            $.post('@Url.Action("GeneraProyectosFromClientes", "Becarios")', { clienteId: clienteIdSeleccionado }).done(function (data) {
+
+                $('<option>', {
+                    value: ''
+                }).html('(select an option)').appendTo($select);
+
+                $.each(data, function (indice, elementoActual) {
+                    $('<option>', {
+                        value: elementoActual.ProyectoId
+                    }).html(elementoActual.Nombre).appendTo($select);
+                });
+
+                if (clienteIdSeleccionado != '') {
+                    generaSectorYServicioFromProyecto($('#filterProyectoId').val(), false);
+                    CheckFilterProyectoInicial();
+                }
+
+            });
+        }
+
+        function CheckFilterProyectoInicial() {
+            if (filterProyectoInicial != '') {
+                $("[name=filterProyectoId]").val(filterProyectoInicial);
+                filterProyectoInicial = '';
+            }
+        }
+
+            /*
+        function CheckOrigenCv() {
+            if ($('[name=OrigenCvId]').val() == 1400 || $('[name=OrigenCvId]').val() == 1401 || $('[name=OrigenCvId]').val() == 1420 || $('[name=OrigenCvId]').val() == "") {
+                $('[name=FuenteReclutamientoId]').prop('disabled', false);
+                $('[name=FuenteReclutamientoId]').prop('required', true);
+            }
+            else if ($('[name=OrigenCvId]').val() == 1413 || $('[name=OrigenCvId]').val() == 1414) {
+                $('[name=FuenteReclutamientoId]').prop('disabled', true);
+                $('[name=FuenteReclutamientoId]').prop('required', false);
+            }
+            else {
+                $('[name=FuenteReclutamientoId]').prop('disabled', true);
+                $('[name=FuenteReclutamientoId]').prop('required', false);
+                $('[name=FuenteReclutamientoId]').prop('selectedIndex', 0);
+            }
+        }
+        */
+
+        //Comprobaciones y restricciones
+               
+        $("#filterClienteId").on("change", function (event) {
+            checkCliente();
+        });
+
+
+        $("#filterProyectoId").on("change", function (event) {
+
+            generaSectorYServicioFromProyecto($(this).val(), true);
+
+        });
+
+            /*
+        $('[name=OrigenCvId]').on("change", function (event) {
+
+            CheckOrigenCv();
+            
+        });*/
+
+        </script>
+}
+
+@helper DatosBasicosFrontActions(System.Web.Mvc.UrlHelper Url)
+    {
+
+        <script type="text/javascript">
+
+            //Descarga CV y Test
+            $(document).ready(function () {
+                checkOrigenCv();
+            });
+
+        $(document).on('click', '#DescargarCV', function () {
+            var id = $("[name=BecarioId]").val();
+            var url = '@Url.Action("DownloadCV", "Becarios", new { id = "__id__" })';
+            window.location.href = url.replace('__id__', id);
+        });
+
+            $(document).on('click', '#DescargarAnexo', function () {
+            var id = $('[name=BecarioId]').val();
+            var url = '@Url.Action("DownloadAnexo", "Becarios", new { id = "__id__" })';
+            window.location.href = url.replace('__id__', id);
+        });
+
+        //Logica Modal Candidato
+        $(document).on('click', '#buscarModalCandidato', function () {
+            var table = $('#tablaCandidatos');
+            table.data("fn-search")();
+        });
+
+        $(document).on('click', '#limpiarModalCandidato', function () {
+            var table = $('#tablaCandidatos');
+            table.data("fn-clear")();
+            resetFields('#form-filterCandidato');
+        });
+
+        function getFiltersCandidatosBecarios() {
+
+            var filterNombre = $("[name=filterNombre]").val();
+            var filterApellidos = $("[name=filterApellidos]").val();
+            var filterTipoIdentificacion = $("[name=filterTipoIdentificacion]").val();
+            var filterNumIdentificacion = $("[name=filterNumIdentificacion]").val();
+            var filterEmail = $("[name=filterEmail]").val();
+            var filterTelefono = $("[name=filterTelefono]").val();
+
+
+            return {
+                Nombre: filterNombre, Apellidos: filterApellidos, TipoIdentificacion: filterTipoIdentificacion,
+                NumeroIdentificacion: filterNumIdentificacion, Email: filterEmail, Telefono: filterTelefono
+            };
+        }
+
+        $(document).on('click', '#BtnCandidato', function () {
+            var id = $("#myModal input:radio:checked").closest("tr").find("#CandidatoId").val();
+            var nombre = $("#myModal input:radio:checked").closest("tr").find("#NombresYApellidos").val();
+            $('#NombreCandidato').attr('value', nombre);
+            $('#CandidatoId').attr('value', id);
+            $('#myModal').modal('hide');
+        });
+
+        //Logica Modal Centro
+        $(document).on('click', '#buscarModalCentro', function () {
+            var table = $('#tablaCentro');
+            table.data("fn-search")();
+        });
+
+        $(document).on('click', '#limpiarModalCentro', function () {
+            var table = $('#tablaCentro');
+            table.data("fn-clear")();
+            resetFields('#form-filterCentro');
+        });
+
+        function getFiltersCentros() {
+
+            var filterCentro = $("#filterCentro").val();
+            var filterCiudad = $("#filterCiudad").val();
+            var filterPais = $("#filterPais").val();
+
+            return {
+                Centro: filterCentro, Ciudad: filterCiudad, Pais: filterPais,
+            };
+        }
+
+        $(document).on('click', '#BtnCentro', function () {
+            var id = $("#modalCentros input:radio:checked").closest("tr").find("#CentroId").val();
+            var centro = $("#modalCentros input:radio:checked").closest("tr").find("#Centro").val();
+            $('#NombreCentroProcedencia').val(centro);
+            $('#CentroProcedenciaId').val(id);
+            $('#modalCentros').modal('hide');
+        });
+
+        //Logica Modal Convocatoria
+
+        $(document).on('click', '#buscarModalConvocatoria', function () {
+            var table = $('#tablaConvocatorias');
+            table.data("fn-search")();
+        });
+
+        $(document).on('click', '#limpiarModalConvocatoria', function () {
+            var table = $('#tablaConvocatorias');
+            table.data("fn-clear")();
+            resetFields('#form-filterConvocatoria');
+        });
+
+        function getFiltersConvocatorias() {
+
+            var filterNombreConvocatoria = $("[name=filterNombreConvocatoria]").val();
+
+            return {
+                NombreConvocatoria: filterNombreConvocatoria,
+            };
+        }
+
+        $(document).on('click', '#BtnConvocatoria', function () {
+            var id = $("#modalConvocatorias input:radio:checked").closest("tr").find("#ConvocatoriaId").val();
+            var nombreConvocatoria = $("#modalConvocatorias input:radio:checked").closest("tr").find("#NombreConvocatoria").val();
+            $('#NombreConvocatoria').attr('value', nombreConvocatoria);
+            $('#ConvocatoriaId').attr('value', id);
+            $('#modalConvocatorias').modal('hide');
+        });
+
+
+        //Logica crear/editar Centro
+
+        $(document).on('click', '#BtnCreateCentro', function () {
+            $('[name="CentroIdCrearEdit"]').val(0);
+            $('#CentroCrearEdit').val("");
+            $('#CiudadCrearEdit').val("");
+            $('#PaisCrearEdit').val("");
+        });
+
+
+        $(document).on('click', '#EditCentroButton', function () {
+
+            var centroId = $(this).closest("tr").find("#CentroId").val();
+            var centro = $(this).closest("tr").find("#Centro").val();
+            var ciudad = $(this).closest("tr").find("#Ciudad").val();
+            var pais = $(this).closest("tr").find("#Pais").val();
+            $('[name="CentroIdCrearEdit"]').val(centroId);
+            $('#CentroCrearEdit').val(centro);
+            $('#CiudadCrearEdit').val(ciudad);
+            $('#PaisCrearEdit').val(pais);
+
+        });
+
+        $(document).on('click', '#BtnCrearEditCentro', function () {
+            if ($('#CentroCrearEdit').val() == "" ||
+                    $('#CiudadCrearEdit').val() == "" ||
+                    $('#PaisCrearEdit').val() == "") {
+                BootstrapDialog.show({
+                    type: BootstrapDialog.TYPE_ERROR,
+                    title: '@Resources.CentroVacioTitulo',
+                    message: '@Resources.CentroVacioTexto',
+                });
+            }
+            else {
+                BootstrapDialog.confirm({
+                    title: '@Resources.Becario_ConfirmacionGuardarCentroTitulo',
+                    message: '@Resources.Becario_ConfirmacionGuardarCentroTexto',
+                    type: BootstrapDialog.TYPE_CONFIRMFINALICE,
+                    callback: function (result) {
+                        if (result) {
+                            var centroId = $('[name=CentroIdCrearEdit]').val();
+                            var centro = $('#CentroCrearEdit').val();
+                            var ciudad = $('#CiudadCrearEdit').val();
+                            var pais = $('#PaisCrearEdit').val();
+
+
+                            $.post('@Url.Action("CrearEditCentro", "Becarios")', { CentroId: centroId, Centro: centro, Ciudad: ciudad, Pais: pais }).
+                                                success(function (IsValid) {
+                                                    if (IsValid) {
+                                                        $('[name=CentroIdEdit]').val('');
+                                                        $('#CentroCrear').val('');
+                                                        $('#CiudadCrear').val('');
+                                                        $('#PaisCrear').val('');
+                                                        BootstrapDialog.closeAll();
+                                                        var table = $('#tablaCentro');
+                                                        table.data("fn-search")();
+                                                    }
+                                                    else if (Data == "") {
+                                                        BootstrapDialog.show({
+                                                            type: BootstrapDialog.TYPE_ERROR,
+                                                            title: '@Resources.Permiso_Titulo',
+                                                            message: '@Resources.Permiso_Mensaje',
+                                                        });
+                                                    }
+                                                })
+
+                        } else {
+                            BootstrapDialog.closeAll();
+                        }
+                    }
+                });
+                $('#modalCrearEditCentros').modal('hide');
+            }
+
+            });
+
+
+            function checkOrigenCv() {
+                var input;
+
+                if ($('#OrigenCvId').val() == 1400 || $('#OrigenCvId').val() == 1401 || $('#OrigenCvId').val() == 1420 || $('#OrigenCvId').val() == "") { // busqueda y inscripcion
+                    $('#FuenteReclutamientoId').prop('disabled', false);
+                    $('#FuenteReclutamientoId').prop('required', true);
+                    clearEmailTable();
+                }
+                else if($('#OrigenCvId').val() == 1413 || $('#OrigenCvId').val() == 1414)
+                {
+                    $('#FuenteReclutamientoId').prop('disabled', true);
+                    $('#FuenteReclutamientoId').prop('required', false);
+                    clearEmailTable();
+                }
+                else {
+                    $('#FuenteReclutamientoId').prop('disabled', true);
+                    $('#FuenteReclutamientoId').prop('required', false);
+                    $('#FuenteReclutamientoId').prop('selectedIndex', 0);
+                    $('#listaGeneralEmailReferenciados').prop('hidden', false);
+
+                    
+                    input = 'input[name^="BecarioDatosBasicos.ListEmailReferenciados"]';
+                   
+                    $(document).on("change", input, function () {
+                            var email = $(this);
+
+                            if (!validateEmail(email.val()) && email.val().length > 0) {
+
+                                BootstrapDialog.alert({
+                                    title: '@Resources.Candidatura_ErrorEmail_Titulo',
+                                    message: '@Resources.Candidatura_ErrorEmail_Texto',
+                                    callback: function () {
+                                        email.attr("class", "form-control btn-danger");
+                                    }
+                                });
+
+                            } else {
+                                email.attr("class", "form-control");
+                            }
+
+                        });
+
+                }
+            }
+
+            $(document).on('change', '#OrigenCvId', function () {
+                checkOrigenCv();
+            });
+
+            $(document).on('click', '#btnCreateContactosReferenciados', function () {
+                createItem("listSubmitReferenciados");
+            });
+
+            $(document).on('click', '#btnDeleteRef', function () {
+                var item = $(this).closest("tr");
+                deleteItemRef(item);
+            });
+
+            function validateEmail(email) {
+                var re = /^(([^<>()\[\]\\.,;:\s@@"]+(\.[^<>()\[\]\\.,;:\s@@"]+)*)|(".+"))@@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                return re.test(String(email).toLowerCase());
+            }
+
+
+            function clearEmailTable() {
+                var cont = 0;
+                var tabla = $('#listSubmitReferenciados');
+                var filas = tabla.find('tr:not(:first)');
+                filas.each(function () {
+                    if (cont > 0) {
+                        $(this).remove();
+                    }
+                    else {
+                        cont++;
+                    }
+                });
+                $('#listaGeneralEmailReferenciados').prop('hidden', true);
+
+
+            }
+
+            function createItem(item) {
+                var original = $('#' + item + ' tbody tr:first');
+                var clone = original.clone(false);
+                clone.removeClass('hidden');
+                var cloneInputs = clone.find("input, textarea");
+                cloneInputs.removeAttr('disabled');
+                $('#' + item + ' tbody').append(clone);
+
+            }
+
+
+            function deleteItemRef(item) {
+                BootstrapDialog.confirm({
+                    title: '@Resources.Candidatura_EliminarEmail_Titulo',
+                    message: '@Resources.Candidatura_EliminarEmail_Texto',
+                    type: BootstrapDialog.TYPE_CONFIRMDELETE,
+                    callback: function (result) {
+                        if (result) {
+                            item.remove();
+                            return false;
+                        } else {
+                            BootstrapDialog.closeAll();
+                        }
+                    }
+                });
+            }
+
+        //Logica crear/editar Convocatoria
+
+        $(document).on('click', '#BtnCreateConvocatoria', function () {
+            $('#NombreConvocatoriaCrearEdit').val("");
+            $('[name=IdConvocatoriaCrearEdit]').val(0);
+        });
+
+        $(document).on('click', '#EditConvocatoriaButton', function () {
+
+            var convocatoriaId = $(this).closest("tr").find("#ConvocatoriaId").val();
+            var nombreConvocatoria = $(this).closest("tr").find("#NombreConvocatoria").val();
+            $('[name="IdConvocatoriaCrearEdit"]').val(convocatoriaId);
+            $('#NombreConvocatoriaCrearEdit').val(nombreConvocatoria);
+
+        });
+
+        $(document).on('click', '#BtnCrearEditConvocatoria', function () {
+            if ($('#NombreConvocatoriaCrearEdit').val() == "") {
+                BootstrapDialog.show({
+                    type: BootstrapDialog.TYPE_ERROR,
+                    title: '@Resources.ConvocatoriaVaciaTitulo',
+                    message: '@Resources.ConvocatoriaVaciaTexto',
+                });
+            }
+            else {
+                BootstrapDialog.confirm({
+                    title: '@Resources.Becario_ConfirmacionGuardarConvocatoriaTitulo',
+                    message: '@Resources.Becario_ConfirmacionGuardarConvocatoriaTexto',
+                    type: BootstrapDialog.TYPE_CONFIRMFINALICE,
+                    callback: function (result) {
+                        if (result) {
+                            var idConvocatoria = $('[name=IdConvocatoriaCrearEdit]').val();
+                            var nombreConvocatoria = $('#NombreConvocatoriaCrearEdit').val();
+
+
+                            $.post('@Url.Action("CrearEditConvocatoria", "Becarios")', { IdConvocatoria: idConvocatoria, NombreConvocatoria: nombreConvocatoria}).
+                                success(function (IsValid) {
+                                    if (IsValid) {
+                                        $('#NombreConvocatoriaCrearEdit').val('');
+                                        BootstrapDialog.closeAll();
+                                        var table = $('#tablaConvocatorias');
+                                        table.data("fn-search")();
+                                    }
+                                    else if (Data == "") {
+                                        BootstrapDialog.show({
+                                            type: BootstrapDialog.TYPE_ERROR,
+                                            title: '@Resources.Permiso_Titulo',
+                                            message: '@Resources.Permiso_Mensaje',
+                                        });
+                                    }
+                                })
+
+                        } else {
+                            BootstrapDialog.closeAll();
+                        }
+                    }
+                });
+                $('#modalCrearEditConvocatorias').modal('hide');
+            }
+
+        });
+
+        //Logica borrar Centro
+
+        $(document).on('click', '#DeleteCentroButton', function () {
+
+            var item = $(this).closest("tr").find("#CentroId").val();
+
+            BootstrapDialog.confirm({
+                title: '@Resources.Becarios_EliminarCentroTitulo',
+                message: '@Resources.Becarios_EliminarCentroTexto',
+                type: BootstrapDialog.TYPE_CONFIRMDELETE,
+                callback: function (result) {
+                    if (result) {
+                        $.post('@Url.Action("ComprobarCentroUsado", "Becarios")', { CentroId: item }).
+                            success(function (Data) {
+                                if (Data.IsValid) {
+                                    if(Data.Usado == true)
+                                    {
+                                        BootstrapDialog.show({
+                                            type: BootstrapDialog.TYPE_ERROR,
+                                            title: '@Resources.CentroEnUsoTitulo',
+                                            message: '@Resources.CentroEnUsoTexto',
+                                        });
+                                    }
+                                    else
+                                    {
+                                        $.post('@Url.Action("DeleteCentro", "Becarios")', { CentroId: item }).
+                                        success(function (Data) {
+                                            if (Data.IsValid) {
+                                                var table = $('#tablaCentro');
+                                                table.data("fn-search")();
+                                            }
+                                            else if (Data == "") {
+                                                BootstrapDialog.show({
+                                                    type: BootstrapDialog.TYPE_ERROR,
+                                                    title: '@Resources.Permiso_Titulo',
+                                                    message: '@Resources.Permiso_Mensaje',
+                                                });
+                                            }
+                                        })
+                                    }
+                                }
+                                else if (Data == "") {
+                                    BootstrapDialog.show({
+                                        type: BootstrapDialog.TYPE_ERROR,
+                                        title: '@Resources.Permiso_Titulo',
+                                        message: '@Resources.Permiso_Mensaje',
+                                    });
+                                }
+                            })
+                    } else {
+                        BootstrapDialog.closeAll();
+                    }
+                }
+            });
+        });
+
+        //Logica borrar Convocatoria
+
+        $(document).on('click', '#DeleteConvocatoriaButton', function () {
+
+            var item = $(this).closest("tr").find("#ConvocatoriaId").val();
+
+            BootstrapDialog.confirm({
+                title: '@Resources.Becarios_EliminarConvocatoriaTitulo',
+                message: '@Resources.Becarios_EliminarConvocatoriaTexto',
+                type: BootstrapDialog.TYPE_CONFIRMDELETE,
+                callback: function (result) {
+                    if (result) {
+                        $.post('@Url.Action("ComprobarConvocatoriaUsada", "Becarios")', { ConvocatoriaId: item }).
+                                success(function (Data) {
+                                    if (Data.IsValid) {
+                                        if(Data.Usada == true)
+                                        {
+                                            BootstrapDialog.show({
+                                                type: BootstrapDialog.TYPE_ERROR,
+                                                title: '@Resources.ConvocatoriaEnUsoTitulo',
+                                                message: '@Resources.ConvocatoriaEnUsoTexto',
+                                            });
+                                        }
+                                        else
+                                        {
+                                            $.post('@Url.Action("DeleteConvocatoria", "Becarios")', { ConvocatoriaId: item }).
+                                            success(function (Data) {
+                                                if (Data.IsValid) {
+                                                    var table = $('#tablaConvocatorias');
+                                                    table.data("fn-search")();
+                                                }
+                                                else if (Data == "") {
+                                                    BootstrapDialog.show({
+                                                        type: BootstrapDialog.TYPE_ERROR,
+                                                        title: '@Resources.Permiso_Titulo',
+                                                        message: '@Resources.Permiso_Mensaje',
+                                                    });
+                                                }
+                                            })
+                                        }
+                                    }
+                                    else if (Data == "") {
+                                        BootstrapDialog.show({
+                                            type: BootstrapDialog.TYPE_ERROR,
+                                            title: '@Resources.Permiso_Titulo',
+                                            message: '@Resources.Permiso_Mensaje',
+                                        });
+                                    }
+                                })
+                    } else {
+                        BootstrapDialog.closeAll();
+                    }
+                }
+            });
+        });
+
+        //Logica comprobaciones Centro
+
+
+        $(document).on('change', '#CentroCrearEdit', function () {
+            var NombreCentro = $('#CentroCrearEdit').val();
+            var Ciudad = $('#CiudadCrearEdit').val();
+            var Pais = $('#PaisCrearEdit').val();
+            checkNombreCentro(NombreCentro, Ciudad, Pais);
+        });
+        $(document).on('change', '#CiudadCrearEdit', function () {
+            var NombreCentro = $('#CentroCrearEdit').val();
+            var Ciudad = $('#CiudadCrearEdit').val();
+            var Pais = $('#PaisCrearEdit').val();
+            checkNombreCentro(NombreCentro, Ciudad, Pais);
+        });
+        $(document).on('change', '#PaisCrearEdit', function () {
+            var NombreCentro = $('#CentroCrearEdit').val();
+            var Ciudad = $('#CiudadCrearEdit').val();
+            var Pais = $('#PaisCrearEdit').val();
+            checkNombreCentro(NombreCentro, Ciudad, Pais);
+        });
+
+
+
+        function checkNombreCentro(NombreCentro, Ciudad, Pais) {
+            $.ajax({
+                url: '@Url.Action("ComprobarExisteCentro", "Becarios")',
+                data: { NombreCentro: NombreCentro, Ciudad: Ciudad, Pais: Pais },
+                type: 'POST',
+                success: function (data) {
+                    if (data) {
+                        BootstrapDialog.show({
+                            title: '@Resources.ExisteCentro',
+                            message: data,
+                            type: BootstrapDialog.TYPE_CONFIRMFINALICE,
+                            closable: false,
+                            closeByBackdrop: false,
+                            closeByKeyboard: false,
+                            buttons: [{
+                                label: '@Resources.Boton_Aceptar',
+                                cssClass: 'btn btnAdd',
+                                action: function (dialogRef) {
+                                    //lo ponemos vacio
+                                    $('#CentroCrearEdit').val('');
+                                    dialogRef.close();
+                                }
+                            }]
+
+                        });
+                    }
+                    //alert(data);
+                },//success
+                error: function (data) {
+                    alert("Error: problemas al conectar con la base de datos");
+                }//error
+            });//ajax
+        }
+
+        //Logica comprobaciones Convocatoria
+
+        $(document).on('change', '#NombreConvocatoriaCrearEdit', function () {
+            var NombreConvocatoria = $('#NombreConvocatoriaCrearEdit').val();
+            checkNombreConvocatoria(NombreConvocatoria);
+        });
+
+
+        function checkNombreConvocatoria(NombreConvocatoria) {
+            $.ajax({
+                url: '@Url.Action("ComprobarExisteConvocatoria", "Becarios")',
+                data: { NombreConvocatoria: NombreConvocatoria },
+                type: 'POST',
+                success: function (data) {
+                    if (data) {
+                        BootstrapDialog.show({
+                            title: '@Resources.ExisteCentro',
+                            message: data,
+                            type: BootstrapDialog.TYPE_CONFIRMFINALICE,
+                            closable: false,
+                            closeByBackdrop: false,
+                            closeByKeyboard: false,
+                            buttons: [{
+                                label: '@Resources.Boton_Aceptar',
+                                cssClass: 'btn btnAdd',
+                                action: function (dialogRef) {
+                                    //lo ponemos vacio
+                                    $('#NombreConvocatoriaCrearEdit').val("");
+                                    dialogRef.close();
+                                }
+                            }]
+                        });
+                    }
+                    //alert(data);
+                },//success
+                error: function (data) {
+                    alert("Error: problemas al conectar con la base de datos");
+                }//error
+            });//ajax
+        }
+
+        //Comprobaciones tipo beca
+
+        $(document).ready(function () {
+            checkTipoBeca();
+        });
+
+        $(document).on('change', '#TipoBecarioId', function () {
+            checkTipoBeca();
+        });
+
+        function checkTipoBeca()
+        {
+            var becaInterna = @((int)TipoBecaEnum.BecaInterna);
+
+            if($('#TipoBecarioId').val() == becaInterna)
+            {
+                $('#CentroProcedenciaId').val('');
+                $('#NombreCentroProcedencia').val('');
+                $('#btnCentroSearch').addClass('hidden');
+                $('#NombreCentroProcedencia').prop('required', false);
+            }
+            else
+            {
+                $('#btnCentroSearch').removeClass('hidden');
+                $('#NombreCentroProcedencia').prop('required', true);
+            }
+        }
+
+        </script>
+}
+
+
+@helper CreateFrontActions(System.Web.Mvc.UrlHelper Url)
+    {
+        <script type="text/javascript">
+
+        function finalizar(source) {
+            if ($("form").parsley().validate() == true) {
+                BootstrapDialog.confirm({
+                    title: '@Resources.Becario_ConfirmacionFinalizarTitulo',
+                    message: '@Resources.Becario_ConfirmacionFinalizarTexto',
+                    type: BootstrapDialog.TYPE_CONFIRMFINALICE,
+                    callback: function (result) {
+                        if (result) {
+                            forTable();
+                            var submitType = $("[name=SubmitType]");
+                            submitType.val("finalizar");
+                            $("form").submit();
+
+                        } else {
+                            BootstrapDialog.closeAll();
+                        }
+                    }
+                });
+            }
+        }
+
+        </script>
+}
+
+@helper EnProcesoPartialFrontActions(string AccessObservaciones)
+    {
+        <script type="text/javascript">
+
+        //Inicializaciones
+
+        var obserVacionesEliminadas = [];
+
+        //Funciones
+
+        function createItem(item) {
+            var original = $('#' + item + ' tbody tr:first');
+            var clone = original.clone(false);
+            clone.removeClass('hidden');
+            var cloneInputs = clone.find("input, textarea, select");
+            cloneInputs.removeAttr('disabled');
+            cloneInputs.attr('required', 'true');
+            clone.find("#Observacion").removeAttr('required');
+            initializeSearchables(clone);
+            initializeDateTimes(clone);
+            $('#' + item + ' tbody').append(clone);
+
+        }
+        $(document).on('click', '#btnCreateObservacionBecario', function () {
+            createItem("listSubmitObservaciones");
+        });
+
+        function initializeDateTimes(container) {
+            container.find('.datetimepicker').each(function () {
+                $(this)
+                   .removeClass('hasDatepicker')
+                   .removeData('datetimepicker')
+                   .removeAttr('id')
+                   .unbind()
+                    .datetimepicker(
+                    {
+                        firstDay: 1,
+                        selectOtherMonths: true,
+                        changeMonth: true,
+                        changeYear: true
+                    });
+            });
+        };
+
+        function initializeEditDateTimes() {
+            $('#listSubmitObservaciones').find('.datetimepicker').each(function () {
+                $(this)
+                   .removeClass('hasDatepicker')
+                    .removeData('datetimepicker')
+                   .removeAttr('id')
+                   .unbind()
+                    .datetimepicker(
+                    {
+                        firstDay: 1,
+                        selectOtherMonths: true,
+                        changeMonth: true,
+                        changeYear: true
+                    });
+            });
+        };
+
+        function initializeEditSearchables() {
+            var url = '/Admin/GetUsuariosByNombreUsuario';
+            $('#listSubmitObservaciones').find('[name="@(AccessObservaciones + "BecarioObservacionList[{0}].PersonaConvocatoriaNombre")"]').each(function () {
+                $(this).Searchable(url);
+            });
+        }
+
+        function initializeSearchables(container) {
+            var url = '/Admin/GetUsuariosByNombreUsuario';
+            container.find('[name="@(AccessObservaciones + "BecarioObservacionList[{0}].PersonaConvocatoriaNombre")"]').each(function () {
+                $(this).Searchable(url);
+            });
+        };
+
+        function checkResultadosObservaciones() {
+            var correctas = true;
+            var resultadoSi = @((int)(TipoResultadoProcesoEnum.Si));
+            var resultadoNo = @((int)(TipoResultadoProcesoEnum.No));
+            var resultadoDuda = @((int)(TipoResultadoProcesoEnum.Duda));
+
+            if ($('#listSubmitObservaciones tbody tr:not(:first)').length == 0)
+            {
+                correctas = false;
+                return correctas;
+            }
+            else
+            {
+
+                if ($('#SuperaProceso').val() == 'True') {
+                    $("#listSubmitObservaciones tbody tr:not(:first)").each(function () {
+                        if ($(this).find('#TipoResultadoId').val() == resultadoNo) {
+                            correctas = false;
+                            return correctas;
+                        }
+                    });
+                }
+                else
+                {
+                    $("#listSubmitObservaciones tbody tr:not(:first)").each(function () {
+                        if ($(this).find('#TipoResultadoId').val() == resultadoSi) {
+                            correctas = false;
+                            return correctas;
+                        }
+                    });
+                }
+
+                return correctas;
+            }
+        }
+
+        function deleteItem(item) {
+            BootstrapDialog.confirm({
+                title: '@Resources.HTML_Becarios_Proceso_EliminarObservacionTitulo',
+                message: '@Resources.HTML_Becarios_Proceso_EliminarObservacionTexto',
+                type: BootstrapDialog.TYPE_CONFIRMDELETE,
+                callback: function (result) {
+                    if (result) {
+                        var idBorrar = '';
+
+                        idBorrar = item.find('#ObservacionId').val();
+
+                        if (idBorrar != null && idBorrar != '') {
+                            obserVacionesEliminadas.push(idBorrar);
+                        }
+                        item.remove();
+                        return false;
+                    }
+                    else {
+                        BootstrapDialog.closeAll();
+                    }
+                }
+            });
+        }
+
+        //Comprobaciones y restricciones
+
+        $(document).ready(function () {
+            var obserVacionesEliminadas = [];
+
+            $(document).on('change', '#Filtrado', function () {
+                var selectMotivo = $('#RegionDescartar');
+                var valueRadio = $(this).val();
+                if (valueRadio == "True") {
+                    selectMotivo.addClass('hide');
+                } else {
+                    selectMotivo.removeClass('hide');
+                }
+            });
+
+            //provocar el evento al cargar la pagina del boton switch
+            var valueSuperaEntrevista = $('#Filtrado');
+            valueSuperaEntrevista.trigger('change');
+            initializeEditSearchables();
+            initializeEditDateTimes();
+        });
+        $(document).on('click', '#btnDelete', function () {
+            var item = $(this).closest("tr");
+            deleteItem(item);
+        });
+
+        </script>
+}
+
+@helper EnProcesoFrontActions(string AccessObservaciones)
+    {
+        <script type="text/javascript">
+
+        //Guardar/Finalizar
+
+        function guardar(source) {
+            var observacionesCorrectas = checkResultadosObservaciones();
+            if (!observacionesCorrectas) {
+                BootstrapDialog.confirm({
+                    title: '@Resources.Becario_ConfirmacionGuardarDiscrepanciaTitulo',
+                    message: '@Resources.Becario_ConfirmacionGuardarDiscrepanciaTexto',
+                    type: BootstrapDialog.TYPE_CONFIRMFINALICE,
+                    callback: function (result) {
+                        if (result) {
+                            var submitType = $("[name=SubmitType]");
+                            submitType.val("guardar");
+                            forTable();
+                            $('[name="@(AccessObservaciones + "ObservacionesBorradas")"]').val(obserVacionesEliminadas.toString());
+                            $("#formProceso").submit();
+                        } else {
+                            BootstrapDialog.closeAll();
+                        }
+                    }
+                });
+            }
+            else
+            {
+                BootstrapDialog.confirm({
+                    title: '@Resources.Becario_ConfirmacionGuardarTitulo',
+                    message: '@Resources.Becario_ConfirmacionGuardarTexto',
+                    type: BootstrapDialog.TYPE_CONFIRMFINALICE,
+                    callback: function (result) {
+                        if (result) {
+                            var submitType = $("[name=SubmitType]");
+                            submitType.val("guardar");
+                            forTable();
+                            $('[name="@(AccessObservaciones + "ObservacionesBorradas")"]').val(obserVacionesEliminadas.toString());
+                            $("#formProceso").submit();
+                        } else {
+                            BootstrapDialog.closeAll();
+                        }
+                    }
+                });
+            }
+
+        }
+
+        function finalizar(source) {
+            var observacionesCorrectas = checkResultadosObservaciones();
+            if (!observacionesCorrectas) {
+                BootstrapDialog.confirm({
+                    title: '@Resources.Becario_ConfirmacionGuardarDiscrepanciaTitulo',
+                    message: '@Resources.Becario_ConfirmacionGuardarDiscrepanciaTexto',
+                    type: BootstrapDialog.TYPE_CONFIRMFINALICE,
+                    callback: function (result) {
+                        if (result) {
+                            var submitType = $("[name=SubmitType]");
+                            submitType.val("finalizar");
+                            forTable();
+                            $('[name="@(AccessObservaciones + "ObservacionesBorradas")"]').val(obserVacionesEliminadas.toString());
+                            $("#formProceso").submit();
+                        } else {
+                            BootstrapDialog.closeAll();
+                        }
+                    }
+                });
+            }
+            else {
+                BootstrapDialog.confirm({
+                    title: '@Resources.Becario_ConfirmacionFinalizarTitulo',
+                    message: '@Resources.Becario_ConfirmacionFinalizarTexto',
+                    type: BootstrapDialog.TYPE_CONFIRMFINALICE,
+                    callback: function (result) {
+                        if (result) {
+                            var submitType = $("[name=SubmitType]");
+                            submitType.val("finalizar");
+                            forTable();
+                            $("#formProceso").submit();
+                        } else {
+                            BootstrapDialog.closeAll();
+                        }
+                    }
+                });
+            }
+        }
+        </script>
+}
+
+@helper GestionAsignacionPartialFrontActions(System.Web.Mvc.UrlHelper Url)
+    {
+        <script type="text/javascript">
+        var filterProyectoInicial = $("[name=Proyecto]").val();
+        $(document).ready(function () {
+            var completado = $('#CompletadoGestion').val();
+            if (completado == "True") {
+                $('#regionAsignacion').removeClass('hidden');
+            }
+
+        });
+
+        function rellenarFechaFinReal() {
+            if ($('#FechaFinReal').val() == '')
+            {
+                $('#FechaFinReal').val($('#FechaFin').val());
+            }
+        }
+
+
+        $(document).on('change', '#CompletadoGestion', function () {
+            var completado = $('#CompletadoGestion').val();
+            if (completado == "True") {
+                $('#regionAsignacion').removeClass('hidden');
+            }
+            else {
+                $('#regionAsignacion').addClass('hidden');
+            }
+        });
+
+        $(document).on('change', '#CompletadoAsignacion', function () {
+            var completado = $('#CompletadoAsignacion').val();
+            if (completado == "True") {
+                requerirCamposAsignacion();
+            }
+            else {
+                quitarRequerirCamposAsignacion();
+            }
+        });
+
+        //Funciones
+
+        function requerirCamposAsignacion() {
+            $('#regionAsignacion').find("input, textarea, select").each(function () {
+                $(this).attr('required', 'true');
+            });
+        }
+
+        function quitarRequerirCamposAsignacion() {
+            $('#regionAsignacion').find("input, textarea, select").each(function () {
+                $(this).removeAttr('required');
+            });
+        }
+
+
+        $("#Cliente").on("change", function (event) {
+            checkCliente();
+        });
+
+
+        $("#Proyecto").on("change", function (event) {
+
+            generaSectorYServicioFromProyecto($(this).val(), true);
+
+        });
+
+
+        function generaSectorYServicioFromProyecto(ProyectoId, actualizaCliente) {
+
+            if (ProyectoId != null && ProyectoId != '')
+            {
+                $.post('@Url.Action("GeneraSectorYServicioFromProyecto", "Becarios")', { proyectoId: ProyectoId }).done(function (data) {
+
+                    var sectorId = data.SectorId;
+                    var servicioId = data.ServicioId;
+                    var clienteId = data.ClienteId;
+
+                    if (sectorId != null && sectorId != '') {
+                        $('#SectorId').val(sectorId);
+                    }
+                    if (servicioId != null && servicioId != '') {
+                        $('#TipoServicioId').val(servicioId);
+                    }
+                    if (clienteId != null && clienteId != '' && actualizaCliente) {
+                        $('#Cliente').val(clienteId);
+                    }
+
+
+                });
+            }
+
+        };
+
+
+        function checkCliente(){
+
+            var clienteIdSeleccionado = $("#Cliente").val();
+            var $select = $('#Proyecto');
+            $select.empty();
+
+            $.post('@Url.Action("GeneraProyectosFromClientes", "Becarios")', { clienteId: clienteIdSeleccionado }).done(function (data) {
+
+                $('<option>', {
+                    value: ''
+                }).html('(select an option)').appendTo($select);
+
+                $.each(data, function (indice, elementoActual) {
+                    $('<option>', {
+                        value: elementoActual.ProyectoId
+                    }).html(elementoActual.Nombre).appendTo($select);
+                });
+
+                if (clienteIdSeleccionado != '') {
+                    generaSectorYServicioFromProyecto($('#Proyecto').val(), false);
+                    CheckFilterProyectoInicial();
+                }
+
+            });
+        }
+
+        function CheckFilterProyectoInicial() {
+            if (filterProyectoInicial != '') {
+                $("[name=Proyecto]").val(filterProyectoInicial);
+                filterProyectoInicial = '';
+            }
+        }
+
+
+
+        $(document).ready(function () {
+
+            var completadoGestion = $('#CompletadoGestion');
+            completadoGestion.trigger('change');
+            var completadoAsignacion = $('#CompletadoAsignacion');
+            completadoAsignacion.trigger('change');
+
+            //    var checkSubidoAnexo = $("#subidoAnexo");
+            //    var buttonSubirAnexo = $("#colSubirAnexo");;
+            //    var buttonBajarAnexo = $("#colDescargarAnexo");;
+
+            //    if (checkSubidoAnexo.prop('checked')) {
+            //        buttonSubirAnexo.addClass('hidden');
+            //    } else {
+            //        buttonBajarAnexo.addClass('hidden');
+            //    }
+
+
+            //    $(document).on('change', '#SubirAnexo', function () {
+
+            //        var CamponameFile = $('#nameFile');
+            //        var pathFile = $(this).val();
+            //        var nameFile = pathFile.split("\\");
+
+            //        if (pathFile == "") {
+            //            CamponameFile.html(pathFile);
+            //            $('#subidoAnexo').prop('checked', false);
+
+            //        } else {
+
+            //            var aux = nameFile[(nameFile.length) - 1].split('.');
+            //            var extension = aux[(aux.length) - 1]
+
+
+            //            if (extension == "docx" || extension == "pdf" || extension == "doc" || extension == "txt" || extension == "xls" || extension == "xlsx") {
+            //                CamponameFile.html(nameFile[(nameFile.length) - 1]);
+            //                $('#subidoAnexo').prop('checked', true);
+            //                buttonBajarAnexo.removeClass('hidden');
+            //            } else {
+            //                $(this).val("");
+            //                CamponameFile.html('');
+            //                $('#subidoAnexo').prop('checked', false);
+            //                BootstrapDialog.show({ type: BootstrapDialog.TYPE_ERROR, title: 'Subida de Archivo', message: 'Solo se permiten Archivos Word, Pdf, Txt o Excel.', });
+            //            }
+
+            //        }
+
+            //    });
+        });
+
+
+        </script>
+}
+
+@helper SeleccionFrontActions()
+    {
+        <script type="text/javascript">
+
+
+        //Guardar / Finalizar
+
+        function guardar(source) {
+            if ($("form").parsley().validate() == true) {
+                rellenarFechaFinReal();
+                BootstrapDialog.confirm({
+                    title: '@Resources.Becario_ConfirmacionGuardarTitulo',
+                    message: '@Resources.Becario_ConfirmacionGuardarTexto',
+                    type: BootstrapDialog.TYPE_CONFIRMFINALICE,
+                    callback: function (result) {
+                        if (result) {
+                            forTable();
+                            var submitType = $("[name=SubmitType]");
+                            submitType.val("guardar");
+                            $("form").submit();
+
+                        } else {
+                            BootstrapDialog.closeAll();
+                        }
+                    }
+                });
+            }
+        }
+
+        function finalizar(source) {
+            if ($("form").parsley().validate() == true) {
+                rellenarFechaFinReal();
+                if ($('#CompletadoGestion').val() == 'True' && $('#CompletadoAsignacion').val() == 'True')
+                {
+                    BootstrapDialog.confirm({
+                        title: '@Resources.Becario_ConfirmacionFinalizarTitulo',
+                        message: '@Resources.Becario_ConfirmacionFinalizarTexto',
+                        type: BootstrapDialog.TYPE_CONFIRMFINALICE,
+                        callback: function (result) {
+                            if (result) {
+                                forTable();
+                                var submitType = $("[name=SubmitType]");
+                                submitType.val("finalizar");
+                                $("form").submit();
+
+                            } else {
+                                BootstrapDialog.closeAll();
+                            }
+                        }
+                    });
+                }
+                else
+                {
+                    BootstrapDialog.show({
+                        type: BootstrapDialog.TYPE_ERROR,
+                        title: '@Resources.ErrorBecarioSeleccionTitulo',
+                        message: '@Resources.ErrorBecarioSeleccionTexto',
+                    });
+                }
+            }
+        }
+
+
+        </script>
+}
+
+@helper PracticasFrontActions()
+    {
+        <script type="text/javascript">
+
+
+        //Guardar / Finalizar
+
+        function guardar(source) {
+            BootstrapDialog.confirm({
+                title: '@Resources.Becario_ConfirmacionGuardarTitulo',
+                message: '@Resources.Becario_ConfirmacionGuardarTexto',
+                type: BootstrapDialog.TYPE_CONFIRMFINALICE,
+                callback: function (result) {
+                    if (result) {
+                        var submitType = $("[name=SubmitType]");
+                        submitType.val("guardar");
+                        forTable();
+                        $("#formProceso").submit();
+                    } else {
+                        BootstrapDialog.closeAll();
+                    }
+                }
+            });
+        }
+
+        function finalizar(source) {
+
+            BootstrapDialog.confirm({
+                title: '@Resources.Becario_ConfirmacionFinalizarTitulo',
+                message: '@Resources.Becario_ConfirmacionFinalizarTexto',
+                type: BootstrapDialog.TYPE_CONFIRMFINALICE,
+                callback: function (result) {
+                    if (result) {
+                        var submitType = $("[name=SubmitType]");
+                        submitType.val("finalizar");
+                        forTable();
+                        $("#formProceso").submit();
+                    } else {
+                        BootstrapDialog.closeAll();
+                    }
+                }
+            });
+        }
+
+        </script>
+}
+
+
+
+@helper EditFrontActions(string AccessObservaciones, int estadoMostrar)
+    {
+        <script type="text/javascript">
+
+
+
+        //Comprobaciones y restricciones
+        $(document).ready(function () {
+            deshabilitarCampos();
+        });
+        //Funciones
+
+        function deshabilitarCampos() {
+            $('#SuperaProceso').attr("disabled", "disabled");
+            $('#CompletadoGestion').attr("disabled", "disabled");
+            $('#CompletadoAsignacion').attr("disabled", "disabled");
+
+        }
+
+        function habilitarCampos() {
+            $('#SuperaProceso').removeAttr("disabled");
+            $('#CompletadoGestion').removeAttr("disabled");
+            $('#CompletadoAsignacion').removeAttr("disabled");
+
+        }
+
+        //Guardar
+
+        function guardar(source) {
+            if ($("form").parsley().validate() == true) {
+                if (realizarComprobaciones())
+                {
+
+                    BootstrapDialog.confirm({
+                        title: '@Resources.Becario_ConfirmacionModificarTitulo',
+                        message: '@Resources.Becario_ConfirmacionModificarTexto',
+                        type: BootstrapDialog.TYPE_CONFIRMFINALICE,
+                        callback: function (result) {
+                            if (result) {
+                                var submitType = $("[name=SubmitType]");
+                                submitType.val("guardar");
+                                habilitarCampos();
+                                forTable();
+
+                                $('[name="@(AccessObservaciones + "ObservacionesBorradas")"]').val(obserVacionesEliminadas.toString());
+
+                                //CAMBIO DE FUNCION JQUERY PARA SUBIR ARCHIVO
+                                var formElement = $("form");//obtenemos la referencia del formulario
+                                var action = formElement.attr("action");//establecemos la accion
+                                var formData = new FormData(formElement[0]);//creamos un formData para obtener todos los elementos del formulario
+
+                                //CREAMOS UNA LLAMADA CON AJAX
+                                if ($('form').parsley().validate() == true) {
+                                    $.ajax({
+                                        //EN URL ESTABLECEMOS LA ACCION
+                                        url: action,//accion de antes
+                                        type: 'POST',//metodo post para enviar con el formulario
+                                        data: formData,//todos los datos añadidos
+                                        contentType: false,
+                                        cache: false,
+                                        processData: false,
+                                        success: function (data) {//si todo esta bien guardamos el formulario
+                                            var mensajeError = data.ErrorMessage;
+                                            if (mensajeError == null) mensajeError = "";
+                                            if (data.IsValid == true) {
+                                                BootstrapDialog.show({
+                                                    type: BootstrapDialog.TYPE_NOTIFY,
+                                                    title: '@Resources.Becario_BecarioGuardadoTitulo',
+                                                    message: '@Resources.Becario_BecarioGuardadoMensaje' + mensajeError,
+                                                    action: function () { setTimeout(function () { BootstrapDialog.closeAll(); }, 2000); }
+                                                });
+                                            }
+                                            else {//si no nos genera el mensaje de error
+                                                BootstrapDialog.show({
+                                                    type: BootstrapDialog.TYPE_ERROR,
+                                                    title: '@Resources.Error_Guardado',
+                                                    message: mensajeError,
+                                                    action: function () { setTimeout(function () { BootstrapDialog.closeAll(); }, 2000); }
+                                                });
+                                            }
+                                        }
+                                    });
+                                }
+                                else {
+                                    BootstrapDialog.show({
+                                        type: BootstrapDialog.TYPE_ERROR,
+                                        title: '@Resources.Error_Guardado',
+                                        message: '@Resources.Candidatura_CandidaturaGuardarRequeridosMensaje',
+                                        action: function () { setTimeout(function () { BootstrapDialog.closeAll(); }, 2000); }
+                                    });
+                                }
+                                deshabilitarCampos();
+
+                            } else {
+                                BootstrapDialog.closeAll();
+                            }
+                        }
+                    });
+                }
+                deshabilitarCampos();
+            }
+             else
+                        {
+                            BootstrapDialog.show({
+                                type: BootstrapDialog.TYPE_ERROR,
+                                title: '@Resources.Error_Guardado',
+                                message: '@Resources.Candidatura_CandidaturaGuardarRequeridosMensaje',
+                                action: function () { setTimeout(function () { BootstrapDialog.closeAll(); }, 2000); }
+                            });
+                        }
+        }
+
+        function realizarComprobaciones() {
+            var estadoActual = @estadoMostrar;
+            var inicio = @((int)TipoEstadoBecarioEnum.Inicio);
+            var proceso = @((int)TipoEstadoBecarioEnum.En_Proceso);
+            var seleccionado = @((int)TipoEstadoBecarioEnum.Seleccionado);
+            var practicas = @((int)TipoEstadoBecarioEnum.Practicas);
+            var standBy = @((int)TipoEstadoBecarioEnum.Stand_By);
+            var descartado = @((int)TipoEstadoBecarioEnum.Descartado);
+
+            if (estadoActual != inicio && estadoActual != standBy
+                && estadoActual != proceso && estadoActual != descartado)
+            {
+                rellenarFechaFinReal();
+            }
+
+            return true;
+
+        }
+        </script>
+}
+
+@helper DetailsFrontActions(System.Web.Mvc.UrlHelper Url)
+    {
+        <script type="text/javascript">
+        $(document).on('click', '#DownloadCV', function () {
+
+            var id = $("[name=BecarioId]").val();
+            var url = '@Url.Action("DownloadCV", "Becarios", new { id = "__id__" })';
+            window.location.href = url.replace('__id__', id);
+        });
+
+        $(document).on('click', '#DownloadAnexo', function () {
+            var id = $('[name=BecarioId]').val();
+            var url = '@Url.Action("DownloadAnexo", "Becarios", new { id = "__id__" })';
+            window.location.href = url.replace('__id__', id);
+        });
+        </script>
+}
+
+@helper ForTable()
+    {
+        <script type="text/javascript">
+            //Fortable
+            function forTable() {
+
+                var $cont = 0;
+                $("#listSubmitObservaciones tbody tr:not(:first)").each(function () {
+                    var item = $(this);
+                    item.find('input, select, textarea').each(function () {
+                        var input = $(this);
+                        input.attr('name', String.format(input.attr('name'), $cont));
+                    });
+
+                    $cont++;
+
+                });
+
+                $cont = 0;
+                $("#listSubmitReferenciados tbody tr:not(:first)").each(function () {
+                    var item = $(this);
+                    item.find('input, textarea').each(function () {
+                        var input = $(this);
+                        input.attr('name', String.format(input.attr('name'), $cont));
+                    });
+
+                    $cont++;
+
+                });
+
+            }
+
+            String.format = function (format) {
+                var args = Array.prototype.slice.call(arguments, 1);
+                return format.replace(/{(\d+)}/g, function (match, number) {
+                    return typeof args[number] != 'undefined'
+                        ? args[number]
+                        : match
+                        ;
+
+                });
+
+
+            }
+        </script>
+}
+
+@helper BitacoraFrontActions(System.Web.Mvc.UrlHelper Url)
+    {
+        <script type="text/javascript">
+
+
+        $(document).ready(function () {
+
+            //Load bitacora
+
+            $('#tablaBitacoras').on('draw.dt', function (event, data) {
+                var total = $('#tempdataBitacoras');
+                total.html(data._iRecordsTotal);
+            });
+
+
+            var menuItemToSelect = $("#main-nav li a[data-option-name=Bitacoras]");
+            menuItemToSelect.addClass("current");
+
+
+        });
+
+
+        function getFiltersBitacoras() {
+            var filterBitacoraId = $("[name=filterBitacoraId]").val();
+            var filterTipoCambio = $("[name=filterTipoCambio]").val();
+            var filterMensajeSistema = $("[name=filterMensajeSistema]").val();
+            var filterUsuario = $("[name=filterUsuario]").val();
+            var filterFechaCreacion = $("[name=filterFechaCreacion]").val();
+            var filterCentro = $("[name=filterCentro]").val();
+            return {
+                BitacoraId: filterBitacoraId, TipoCambio: filterTipoCambio, MensajeSistema: filterMensajeSistema, Usuario: filterUsuario,
+                FechaCreacion: filterFechaCreacion,CentroSearch: filterCentro
+            };
+        }
+
+
+        //Modal comentarios bitacora
+
+        $(document).on('click', '#BtnShowModal', function () {
+            $('#myModal').modal('');
+        });
+
+
+        $(document).on('click', '#BtnBitacoraseBecario', function () {
+            $('#myModal').modal('hide');
+
+            var parametros = {
+                CandidaturaId: $("#CandidaturaId").val(),
+                MensajeSistema: $("#MensajeSistema").val()
+            };
+
+
+            var strParametros = jQuery.param(parametros);
+            var url = '@Url.Action("Create", "BitacorasBecarios")?' + strParametros;
+            window.location.assign(url);
+        });
+        </script>
+
+
+}

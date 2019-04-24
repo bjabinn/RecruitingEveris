@@ -1,0 +1,25 @@
+﻿@using Recruiting.Application.Becarios.ViewModels
+@using RecruitingWeb.Properties
+
+@model Recruiting.Application.Becarios.ViewModels.CentroProcedenciaRowViewModel
+<div>
+    @Edit.Hidden(@Model.Centro , "Centro", new Dictionary<string, string> { { "id", "Centro" } })
+    @Edit.Hidden(@Model.Ciudad, "Ciudad", new Dictionary<string, string> { { "id", "Ciudad" } })
+    @Edit.Hidden(@Model.Pais, "Pais", new Dictionary<string, string> { { "id", "Pais" } })
+    @Edit.Text(Model.CentroId.ToString(), "CentroId", id: "CentroId", htmlClass: "form-control hide")
+    <div class="text-center">
+        @Edit.RadioButton(Model.CentroId.ToString(), "SelectCentro", id: "SelectCentro", validate: false, required: false)
+        <a title="@Resources.HTML_Title_Editar"
+           id="EditCentroButton" data-target="#modalCrearEditCentros" data-toggle="modal">
+
+            @Display.GlyphiconButton("glyphicon-pencil icon action")
+        </a>
+
+        <a title="@Resources.HTML_Title_Eliminar"
+           id="DeleteCentroButton">
+            @Display.GlyphiconButton("glyphicon-trash icon action")
+        </a>
+    </div>
+    
+</div>
+

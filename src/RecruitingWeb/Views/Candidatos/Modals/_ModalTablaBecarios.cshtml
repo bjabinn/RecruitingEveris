@@ -1,0 +1,70 @@
+@using System.Configuration;
+@using RecruitingWeb.Helpers
+@using RecruitingWeb.Properties
+@using RecruitingWeb.Components.DataTable.Helpers
+@using Recruiting.Application.Candidatos.ViewModels
+
+<div class="modal fade" id="modalTablaBecarios">
+    <div class="modal-dialog modalTablaCandidaturasBecarios">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="row">
+                    <div class="col-lg-6 text-left">
+                        <h4 class="modal-title tituloModal">
+                            Lista de becarios
+                        </h4>
+                    </div>
+                    <div class="col-lg-6 text-right">
+                        <button type="button" class="btnCloseModal" data-dismiss="modal">@Display.GlyphiconButton("glyphicon-remove")</button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="form-filter filtroModal" id="form-filter">
+                    <!-- Start form-filter  -->
+                    <!-- Desechable:  Listado Para Probar ---- var items = new List<RowCandidatoViewModel>() -->
+                    <!-- Load Data Candidatos  -->
+                    @{
+                        int pagina = ViewBag.Pagina ?? 0;
+                        var config = Html.InitializeDataTable<BecarioModalRowViewModel>();
+                        config.Name("tablaBecariosModal")
+                        .AjaxLoadUrl(Url.Action("LoadBecariosModal", "Candidatos"))
+                        .CustomFilterAjax("getFiltersModalBecarios")
+                        .PrimaryKey(m => m.BecarioId.ToString())
+                        .AddPrimaryKeyToName(false)
+                        .Paginable()
+                        .PageSize(5)
+                        .InitialPage(pagina)
+                        .Columns(columns =>
+                        {
+                            columns.Bound(c => c.BecarioId).Header(Resources.HTML_Becarios_Index_RefHeader).ColumnName("BecarioId").Orderable(true);
+                            columns.Bound(c => c.BecarioNombre).Header(Resources.HTML_Becarios_Index_NombreBecarioHeader).ColumnName("BecarioNombre").Orderable(true);
+                            columns.Bound(c => c.CandidatoId).Header(Resources.HTML_Becarios_Index_CandidatoIdHeader).ColumnName("CandidatoId").Orderable(true);
+                            columns.Bound(c => c.TipoBecario).Header(Resources.HTML_Becarios_Index_TipoBecarioHeader).ColumnName("TipoBecario").Orderable(true);
+                            columns.Bound(c => c.CentroProcedencia).Header(Resources.HTML_Becarios_Index_CentroProcedenciaHeader).ColumnName("CentroProcedencia").Orderable(true);
+                            columns.Bound(c => c.Cliente).Header(Resources.HTML_Becarios_Index_Cliente).ColumnName("Cliente").Orderable(true);
+                            columns.Bound(c => c.Proyecto).Header(Resources.HTML_Becarios_Index_Proyecto).ColumnName("Proyecto").Orderable(true);
+                            columns.Bound(c => c.FechaInicio).Header(Resources.HTML_Becarios_Index_FechaInicio).ColumnName("FechaInicio").Orderable(true);
+                            columns.Bound(c => c.FechaFin).Header(Resources.HTML_Becarios_Index_FechaFin).ColumnName("FechaFin").Orderable(true);
+                            columns.Bound(c => c.FechaFinReal).Header(Resources.HTML_Becarios_Index_FechaFinReal).ColumnName("FechaFinReal").Orderable(true);
+                            columns.Bound(c => c.EstadoBecario).Header(Resources.HTML_Becarios_Index_EstadoBecarioHeader).ColumnName("EstadoBecario").Orderable(true);
+                            columns.Bound(c => c.Centro).Header(Resources.HTML_Becarios_Index_CentroBecarioHeader).ColumnName("Centro").Orderable(true);
+                            columns.Bound(c => c.Centro).Header(Resources.HTML_Becarios_Index_PersonaCreacionHeader).ColumnName("PersonaCreacion").Orderable(true);
+                            columns.Template(@<div></div>).Header(Resources.HTML_Candidatos_Index_AccionesHeader);
+
+      });
+                    }
+
+                    @Html.Partial("Controls/DataTable", config)
+
+                    <div class="paginacionIn">
+                        <p> @Resources.HTML_Candidaturas_Index_TotalCandidaturas <span id="tempdataCandidaturas" class="tempdataTotalRegistros"></span> </p>
+                    </div>
+
+
+
+                </div>           
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+</div>

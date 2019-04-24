@@ -1,0 +1,36 @@
+﻿@model System.Web.Mvc.HandleErrorInfo
+
+@{
+    ViewBag.Title = "Error";
+}
+<div class="row titlePage">
+    <div class="col-lg-6">
+        <h3>ERROR</h3>
+    </div>
+</div>
+<div class="row header-flap">
+    <div class="btn-group" role="group">
+        <a href="@Url.Action("Volver", "Candidaturas")" class="btn btn-default">
+            <span class="text">Volver</span>
+        </a>
+    </div>
+</div>
+<div class="row">
+    <div class="content-box">
+        <div class="content-box-content">
+            <div class="row">
+                <div class="form-group col-lg-4"></div>
+                <div class="form-group col-lg-4">
+                    <div class="col-lg-12">
+                        <label class="text-danger" style="font-size:30px">PÁGINA NO ENCONTRADA</label>
+                    </div>
+                </div>
+                <div class="form-group col-lg-4"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+

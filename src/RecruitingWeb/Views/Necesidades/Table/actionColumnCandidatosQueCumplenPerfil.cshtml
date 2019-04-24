@@ -1,0 +1,11 @@
+﻿@using Recruiting.Application.PersonasLibres.ViewModels
+@using Recruiting.Application.Necesidades.ViewModels
+@model Recruiting.Application.Candidatos.ViewModels.CandidatoQueCumplePerfilRowViewModel
+<div>
+    @Edit.Hidden(@Model.Nombre + " " + @Model.Apellidos, "NombresYApellidos", new Dictionary<string, string> { { "id", "NombresYApellidos" } })
+    @Edit.Text(Model.CandidatoId.ToString(), "CandidatoId", id: "CandidatoId", htmlClass: "form-control hide", required: false)
+    @Edit.Hidden(@Model.candidaturaIdAsociado, "CandidaturaIdAsociado", new Dictionary<string, string> { { "id", "CandidaturaIdAsociado" } })
+    <div class="text-center">
+        @Edit.RadioButton(Model.CandidatoId.ToString(), "SelectCandidatoQueCumplePerfil", id: "SelectCandidatoQueCumplePerfil")
+    </div>
+</div>

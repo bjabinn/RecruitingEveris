@@ -1,0 +1,140 @@
+﻿@using RecruitingWeb.Properties
+@using RecruitingWeb.Components.DataTable.Helpers
+@using Recruiting.Application.PersonasLibres.ViewModels
+
+@{
+    var categoriaLineaCelda = (PersonasLibresListCategoriaLineaCeldaviewModel)HttpContext.Current.Session["CategoriaLineaCelda"];
+}
+
+<div class="modal fade" id="myModal">
+    <div class="modal-dialog modalBusquedaDialogo">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="row">
+                    <div class="col-lg-6 text-left">
+                        <h4 class="modal-title tituloModal">
+                            @Resources.HTML_Necesidades_ModalBusquedaPersonaLibre_BusquedaPersonasLibres
+                        </h4>
+                    </div>
+                    <div class="col-lg-6 text-right">
+                        <button type="button" class="btnCloseModal" data-dismiss="modal">@Display.GlyphiconButton("glyphicon-remove")</button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="form-filter filtroModal" id="form-filterPersonaLibre">
+                    <div class="row">
+                        <div class="col-lg-12" style="text-align: right; margin-top:5px; margin-bottom:10px;">
+                            <div class="btn-group" role="group">
+                                <a class="btn btn-default" id="limpiarModal">
+                                    <span class="text"> @Resources.HTML_BotonGenericoLimpiar</span>
+                                </a>
+                                <a class="btn btn-default" id="buscarModal">
+                                    <span class="text"> @Resources.HTML_BotonGenericoBuscar</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" data-id="formFilter">
+                        <div class="col-lg-12 removePadding">
+                            <div class="row">
+                                <div class="form-group col-lg-6">
+                                    <div class="col-lg-12 title-form">
+                                        <label for="NroEmpleado">@Resources.HTML_Necesidades_ModalBusquedaPersonaLibre_NumeroEmpleado</label>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        @Edit.Text((string)null, "filterNroEmpleado", id: "filterNroEmpleado", required: false, validate: true, htmlClass: "form-control col-lg-4")
+                                    </div>
+                                </div>
+                                <div class="form-group col-lg-6">
+                                    <div class="col-lg-12 title-form">
+                                        <label for="filterNombre">@Resources.HTML_Necesidades_ModalBusquedaPersonaLibre_Nombre</label>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        @Edit.Text((string)null, "filterNombre", id: "filterNombre", required: false, validate: true, htmlClass: "form-control col-lg-4")
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-lg-6">
+                                    <div class="col-lg-12 title-form">
+                                        <label for="filterApellidos">@Resources.HTML_Necesidades_ModalBusquedaPersonaLibre_Apellidos</label>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        @Edit.Text((string)null, "filterApellidos", id: "filterApellidos", required: false, validate: true, htmlClass: "form-control col-lg-4")
+                                    </div>
+                                </div>
+                                <div class="form-group col-lg-6">
+                                    <div class="col-lg-12 title-form">
+                                        <label for="filterCategoria">@Resources.HTML_Necesidades_ModalBusquedaPersonaLibre_Categoria</label>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        @Edit.DropDownExtend((string)null, "filterCategoria", categoriaLineaCelda.ListCategoria, htmlClass: "form-control col-lg-4", validate: false, required: false, id: "filterCategoria")
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-lg-6">
+                                    <div class="col-lg-12 title-form">
+                                        <label for="filterLinea">@Resources.HTML_Necesidades_ModalBusquedaPersonaLibre_Linea</label>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        @Edit.DropDownExtend((string)null, "filterLinea", categoriaLineaCelda.ListLinea, htmlClass: "form-control col-lg-4", validate: false, required: false, id: "filterLinea")
+                                    </div>
+                                </div>
+                                <div class="form-group col-lg-6">
+                                    <div class="col-lg-12 title-form">
+                                        <label for="filterCelda">@Resources.HTML_Necesidades_ModalBusquedaPersonaLibre_Celda</label>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        @Edit.DropDownExtend((string)null, "filterCelda", categoriaLineaCelda.ListCelda, htmlClass: "form-control col-lg-4", validate: false, required: false, id: "filterCelda")
+                                    </div>
+                                </div>
+                                <input id="filterBuscarPersonaLibre" name="filterBuscarPersonaLibre" hidden />
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-lg-6">
+                                    <div class="col-lg-12 title-form">
+                                        <label for="filterTecnologia">@Resources.HTML_Necesidades_ModalBusquedaPersonaLibre_Tecnologia</label>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        @Edit.DropDownExtend((string)null, "filterTecnologia", Model.TecnologiaList, htmlClass: "form-control col-lg-4", validate: false, required: false, id: "filterLinea")
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>                         
+                @{
+                    var config = Html.InitializeDataTable<PersonaLibreRowViewModel>();
+                    config.Name("tablaNecesidadesPersonasLibres")
+                        .AjaxLoadUrl(Url.Action("LoadPersonasLibres", "Necesidades"))
+                        .CustomFilterAjax("getFiltersNecesidadesPersonasLibres")
+                        .PrimaryKey(m => m.PersonaLibreId.ToString())
+                        .AddPrimaryKeyToName(false)
+                        .Paginable()
+                        .PageSize(5)
+                        .Columns(columns =>
+                        {
+                            columns.Bound(c => c.Nombre).Header(Resources.HTML_Necesidades_ModalBusquedaPersonaLibre_NombreHeader).ColumnName("Nombre").Orderable(true);
+                            columns.Bound(c => c.Apellidos).Header(Resources.HTML_Necesidades_ModalBusquedaPersonaLibre_ApellidosHeader).ColumnName("Apellidos").Orderable(true);
+                            columns.Bound(c => c.TipoTecnologiaId).Header(Resources.HTML_Necesidades_ModalBusquedaPersonaLibre_TecnologiaHeader).ColumnName("Tecnologia").Orderable(true);
+                            columns.Bound(c => c.Categoria).Header(Resources.HTML_Necesidades_ModalBusquedaPersonaLibre_CategoriaHeader).ColumnName("Categoria").Orderable(true);
+                            columns.Bound(c => c.Linea).Header(Resources.HTML_Necesidades_ModalBusquedaPersonaLibre_LineaHeader).ColumnName("Linea").Orderable(true);
+                            columns.Bound(c => c.Celda).Header(Resources.HTML_Necesidades_ModalBusquedaPersonaLibre_CeldaHeader).ColumnName("Celda").Orderable(true);
+                            columns.Template(@<div>
+
+        </div>).Header(Resources.HTML_Necesidades_ModalBusquedaPersonaLibre_SeleccionarHeader);
+                  });
+
+                }
+                <div id="partialTable">
+                    @Html.Partial("Controls/DataTable", config)
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btnAdd" id="BtnPersonaLibre">@Resources.HTML_BotonGenericoSeleccionar</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,176 @@
+﻿@using RecruitingWeb.Components.DataTable.Helpers
+@using RecruitingWeb.Helpers
+@using Recruiting.Application.Candidatos.ViewModels
+@using RecruitingWeb.Properties
+@using RecruitingWeb.Components.DataTable.Models
+@model Recruiting.Application.Usuarios.ViewModels.CreateEditUsuarioViewModel
+
+
+<div class="row titlePage">
+    <div class="col-lg-6">
+        <h3>@Resources.HTML_Admin_Index_Administracion</h3>
+    </div>
+</div>
+
+<div class="row header-flap">
+    @* Menú de opciones *@
+    <div class="btn-group" role="group">
+        <a class="btn btn-default" href="@Url.Action("Index", new { tab = "tab-user" })">
+            <span class="text">@Resources.HTML_BotonGenericoVolver</span>
+        </a>
+        <a class="btn btn-default" href="#" data-action="guardar">
+            <span class="text">@Resources.HTML_BotonGenericoGuardar</span>
+        </a>
+    </div>
+    @* Pestaña caja superior*@
+    <div class="col-lg-6 removePadding">
+        <h4 class="noMargin headerBox">@Resources.HTML_Admin_CreateUsuarios_CreandoUsuario</h4>
+    </div>
+</div>
+
+<div class="row">
+    <div class="content-box border-top-cero">
+        <!-- Start Content Box -->
+        <div class="content-box-content">
+            @using (Html.BeginForm("Create", "Admin", FormMethod.Post, new Dictionary<string, object> { { "role", "form" }, { "data-parsley-validate", "true" }, { "data-parsley-excluded", ":not([data-validate])" } }))
+            {
+                @Edit.Hidden("guardar", "SubmitType")
+                @Edit.Hidden(Model.UsuarioId, "UsuarioId")
+
+                <div class="section-form-admin-rol margin" data-id="section-form-basicos">
+                    <div class="row form-row">
+                        <div class="form-group col-lg-4">
+                            <div class="col-lg-12 title-form">
+                                <label for="Usuario">@Resources.HTML_Admin_CreateUsuarios_Nombre</label>
+                            </div>
+                            <div class="col-lg-12">
+                                @Edit.Text(Model.Usuario, "Usuario", id: "Usuario", maxLength: 100, htmlClass: "form-control")
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-4">
+                            <div class="col-lg-12 title-form">
+                                <label for="Email">@Resources.HTML_Admin_CreateUsuarios_Email</label>
+                            </div>
+                            <div class="col-lg-12">
+                                @Edit.Text(Model.Email, "Email", id: "Email", maxLength: 100, htmlClass: "form-control", required: false)
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-4">
+                            <div class="col-lg-12 title-form">
+                                <label for="UserName">@Resources.HTML_Admin_CreateUsuarios_NombreUsuario</label>
+                            </div>
+                            <div class="col-lg-12">
+                                @Edit.Text(Model.UserName, "UserName", id: "UserName", maxLength: 100, htmlClass: "form-control")
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row form-row">
+                        <div class="form-group col-lg-4">
+                            <div class="col-lg-12 title-form">
+                                <label for="CentroId">@Resources.HTML_Admin_CreateUsuarios_Centro</label>
+                            </div>
+                            <div class="col-lg-12">
+                                @Edit.DropDownExtend(Model.CentroIdUsuario, "CentroIdUsuario", ViewBag.CentroList, htmlClass: "form-control", id: "CentroId", required: false)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row form-row">
+                        <div class="col-lg-6">
+                            <table class="table table-striped" style="margin-top:20px;">
+                                <thead>
+                                    <tr>
+                                        <th colspan="12"> @Resources.HTML_Admin_CreateUsuarios_Roles</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{ var count = 0; }
+
+                                    @for (int i = 0; i < Model.UsuarioRol.Count(); i++)
+                                    {
+                                        if (count % 6 == 0)
+                                        {
+                                            @:<tr>
+                                                }
+
+                                                <td>@Model.UsuarioRol.ElementAt(i).RolNombre</td>
+                                                <td class="text-center">
+                                                    @Edit.Checkbox(Model.UsuarioRol.ElementAt(i).ContieneRol,
+                                                                       string.Format("UsuarioRol[{0}].ContieneRol", i))
+
+                                                    @Edit.Hidden(Model.UsuarioRol.ElementAt(i).RolId,
+                                                                       string.Format("UsuarioRol[{0}].RolId", i))
+                                                </td>
+
+                                                count++;
+
+                                                if (count % 6 == 0)
+                                                {
+                                                @:</tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div> <!-- End content-box-content -->
+    </div> <!-- End .content-box -->
+</div> <!--End .Row-->
+@section scripts{
+
+    <script type="text/javascript">
+
+		function guardar(source) {
+			var centroNuevo = $('#CentroId').val();
+            var idUsuario = 0
+            var userName = $('#UserName').val();
+
+			if (centroNuevo == "" && ($('[name="UsuarioRol[2].ContieneRol"]').is(':checked') || $('[name="UsuarioRol[4].ContieneRol"]').is(':checked'))) {
+					BootstrapDialog.alert({
+						title: '@Resources.Usuario_ErrorUsuarioMulticentroYPermisosTitulo',
+						message: '@Resources.Usuario_ErrorUsuarioMulticentroYPermisosTexto',
+						type: BootstrapDialog.TYPE_ERROR
+					});
+			}
+
+			else {
+				BootstrapDialog.confirm({
+					title: '@Resources.Usuario_ConfirmacionFinalizarTitulo',
+					message: '@Resources.Usuario_ConfirmacionFinalizarTexto',
+					type: BootstrapDialog.TYPE_CONFIRMFINALICE,
+					callback: function (result) {
+                    if (result) {
+                        $.post('@Url.Action("ComprobarUsernameUsado", "Admin")', { IdUsuario: idUsuario, Username: userName }).
+                    success(function (Data) {
+                        if (Data.IsValid) {
+                            if(Data.Usado == true)
+                            {
+                                BootstrapDialog.show({
+                                    type: BootstrapDialog.TYPE_ERROR,
+                                    title: '@Resources.UserNameEnUsoTitulo',
+                                    message: '@Resources.UserNameEnUsoTexto',
+                                });
+                            }
+                            else
+                            {
+                                $("form").submit();
+                            }
+                        }
+                        else if (Data == "") {
+                            BootstrapDialog.show({
+                                type: BootstrapDialog.TYPE_ERROR,
+                                title: '@Resources.Permiso_Titulo',
+                                message: '@Resources.Permiso_Mensaje',
+                            });
+                        }
+                        })
+                    } else {
+						    BootstrapDialog.closeAll();
+					    }
+				    }
+			    });
+			}
+		}
+    </script>
+}

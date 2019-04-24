@@ -1,0 +1,37 @@
+@using Recruiting.Application.FunnelProcesos.ViewModels
+@using Recruiting.Application.Candidaturas.Enums
+@using RecruitingWeb.Properties
+@using Recruiting.Application.Usuarios.ViewModels
+
+@model Recruiting.Application.Candidatos.ViewModels.BecarioModalRowViewModel
+
+
+@{
+    var UsuarioLogueado = (UsuarioRolPermisoViewModel)HttpContext.Current.Session["Usuario"];
+    var CentroIdUsuarioLogueado = UsuarioLogueado.CentroIdUsuario;
+}
+
+<div class="row">
+    @Edit.Text(Model.BecarioId.ToString(), "BecarioId", id: "BecarioId", htmlClass: "form-control hide")
+
+
+    @if (CentroIdUsuarioLogueado == null || Model.CentroId == CentroIdUsuarioLogueado)
+    {
+        <a href="/Becarios/Details/@Model.BecarioId.ToString()" target="_blank" title="@Resources.HTML_Title_DetalleBecario" id="DetailButton">
+            @Display.GlyphiconButton("glyphicon-eye-open icon action")
+        </a>
+    }
+
+</div>
+
+
+@helper GetDisabledClass(bool disable)
+{
+    var disabled = string.Empty;
+    if (disable)
+    {
+        disabled = "disabled";
+    }
+
+    @disabled
+}

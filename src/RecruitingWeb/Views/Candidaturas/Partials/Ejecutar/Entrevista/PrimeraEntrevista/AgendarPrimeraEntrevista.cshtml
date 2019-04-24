@@ -1,0 +1,32 @@
+﻿@using RecruitingWeb.Properties
+
+@model Recruiting.Application.Candidaturas.ViewModel.AgendarPrimeraEntrevistaViewModel
+
+@{
+    int nSubEntrevistas = (int)HttpContext.Current.Session["NumeroSubEntrevistas"];
+}
+<div class="row">
+    <div class="content-box border-top-cero">
+        <div class="content-box-content">
+            <div class="section-form-entrevista1" data-id="section-form-entrevista1">
+                @Html.Partial("~/Views/Candidaturas/Partials/Ejecutar/Entrevista/PrimeraEntrevista/_AgendarPrimeraEntrevista.cshtml", Model)
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="content-box">
+        <div class="content-box-content">
+            <div class="row section-header">
+                <div class="col-lg-6">
+                    <h4>@Resources.HTML_Candidaturas_AgendarPrimeraEntrevista_Subentrevistas (@Resources.HTML_MaximoSubEntrevistas @(nSubEntrevistas))</h4>
+                </div>
+            </div>
+            <div class="content-box-content">
+                <div class="section-form-subentrevista1" data-id="section-form-subentrevista1">
+                    @Html.Partial("~/Views/Candidaturas/Partials/Ejecutar/Entrevista/PrimeraEntrevista/_AgendarSubEntrevistasPrimeraEntrevista.cshtml", Model)
+                </div>
+            </div> <!-- End content-box-content -->
+        </div> <!-- End .content-box -->
+    </div> <!--End .Row-->
+</div>

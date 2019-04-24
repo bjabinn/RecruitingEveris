@@ -1,0 +1,543 @@
+﻿@using RecruitingWeb.Components.DataTable.Helpers
+@using Recruiting.Application.Necesidades.ViewModels
+@using RecruitingWeb.Properties
+@model Recruiting.Application.Dashboard.ViewModels.InfoAdministradorViewModel
+
+
+
+
+<div id="alert-container" class="col-lg-9 removePadding">
+
+    @if (Model.AlertasAdministradorViewModel == null || Model.AlertasAdministradorViewModel.NecesidadesCreadasModificadas == true)
+    {
+        <div id="NecesidadesCreadasModificadas" class="col-lg-12 content-box removePadding">
+            <div class="content-box-content">
+                <div class="row section-header">
+                    <div class="col-lg-6">
+                        <h4>@Resources.HTML_Dashboard_Administrador_AlertasNecesidadesCreadasModificadas</h4>
+                    </div>
+                    <div class="col-lg-4">
+                        <ul class="small-buttons-set">
+                            <li>
+                                <div class="btn-group">
+                                    <button type="submit" class="btn btn-default btn-sm" name="submit" id="filterDatePeriodMonth" value="30">@Resources.HTML_Dashboard_Administrador_Mes</button>
+                                    <button type="submit" class="btn btn-default btn-sm" name="submit" id="filterDatePeriodBiweekly" value="14">@Resources.HTML_Dashboard_Administrador_DosSemanas</button>
+                                    <button type="submit" class="btn btn-default btn-sm active" name="submit" id="filterDatePeriodWeek" value="7">@Resources.HTML_Dashboard_Administrador_UnaSemana</button>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-2 text-right" style="padding-right:7px">
+                        <span id="btnDescargarExcel" class="icon icon-excel"></span>
+                    </div>
+                </div>
+                <div class="content-box-content">
+                    <div id="tabla" name="tabla" data-id="section-form-Necesidades" class="col-lg-12">
+                        @{
+                            int pagina = ViewBag.Pagina ?? 0;
+                            var config = Html.InitializeDataTable<NecesidadRowViewModel>();
+                            int nElem = Convert.ToUInt16(Resources.NElementosPagina);
+                            config.Name("tablaAlertaNecesidades")
+                                .AjaxLoadUrl(Url.Action("LoadAlertaNecesidades", "Dashboard"))
+                                .CustomFilterAjax("getFiltersAlertaNecesidades")
+                                .PrimaryKey(m => m.NecesidadId.ToString())
+                                .AddPrimaryKeyToName(false)
+                                .Paginable()
+                                .PageSize(nElem)
+                                .InitialPage(pagina)
+                                .Columns(columns =>
+                                {
+                                    columns.Bound(c => c.NecesidadId).Header(Resources.HTML_Dashboard_Administrador_ReferenciaHeader).ColumnName("NecesidadId").Orderable(true);
+                                    columns.Bound(c => c.Proyecto).Header(Resources.HTML_Dashboard_Administrador_ProyectoHeader).ColumnName("Proyecto").Orderable(true);
+                                    columns.Bound(c => c.Cliente).Header(Resources.HTML_Dashboard_Administrador_ClienteHeader).ColumnName("Cliente").Orderable(true);
+                                    columns.Bound(c => c.Estado).Header(Resources.HTML_Dashboard_Administrador_TecnologiaHeader).ColumnName("Tecnologia").Orderable(true);
+                                    columns.Bound(c => c.Estado).Header(Resources.HTML_Dashboard_Administrador_FechaCreacionHeader).ColumnName("FechaCreacion").Orderable(true);
+                                    columns.Bound(c => c.Estado).Header(Resources.HTML_Dashboard_Administrador_FechaModificacionHeader).ColumnName("FehaModificacion").Orderable(true);
+                                    columns.Bound(c => c.FechaSolicitud).Header(Resources.HTML_Dashboard_Administrador_FechaSolicitudHeader).ColumnName("FechaSolicitud").Orderable(true);
+                                    columns.Bound(c => c.FechaCompromiso).Header(Resources.HTML_Dashboard_Administrador_FechaCompromisoHeader).ColumnName("FechaCompromiso").Orderable(true);
+                                    if (string.IsNullOrWhiteSpace(Model.CentroIdUsuarioLogueado))
+                                    {
+                                        columns.Bound(c => c.Centro).Header(Resources.HTML_Dashboard_Administrador_CentroHeader).ColumnName("Centro").Orderable(true);
+                                    }
+                                });
+
+                            @Html.Partial("Controls/DataTable", config)
+                        }
+                    </div>
+                </div>
+            </div>@* content-box-content *@
+        </div> @*  content-box *@
+    }
+
+
+    @if (Model.AlertasAdministradorViewModel == null || Model.AlertasAdministradorViewModel.PrimeraEntrevista == true)
+    {
+        <div id="PrimeraEntrevista" class="col-lg-12 content-box removePadding">
+            <div class="content-box-content">
+                <div class="row section-header">
+                    <div class="col-lg-12">
+                        <h4>@Resources.HTML_Dashboard_Administrador_AlertasEntrevistaPrincipal</h4>
+                    </div>
+                </div>
+                <div class="content-box-content">
+                    <div data-id="section-form-PrimeraEntrevista_" class="col-lg-12 pb-30">
+                        <table class="gridTable dataTable table table-striped no-footer" role="grid">
+                            <thead>
+                                <tr>
+                                    <th>@Resources.HTML_Dashboard_Administrador_ReferenciaHeader</th>
+                                    <th>@Resources.HTML_Dashboard_Administrador_EntrevistadorHeader</th>
+                                    <th>@Resources.HTML_Dashboard_Administrador_CandidatoHeader</th>
+                                    <th>@Resources.HTML_Dashboard_Administrador_PerfilHeader</th>
+                                    <th>@Resources.HTML_Dashboard_Administrador_TecnologiaHeader</th>
+                                    <th>@Resources.HTML_Dashboard_Administrador_AgendadaHeader</th>
+                                    <th>@Resources.HTML_Dashboard_Administrador_CentroHeader</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    for (int x = 0; x < Model.ListPrimeraEntrevistaViewModel.Count; x++)
+                                    {
+                                <tr class="@((x % 2 == 0) ? "even" : "odd")" name="EntrevistaARecolorear">
+                                    <td>
+                                        @Html.ActionLink(Model.ListPrimeraEntrevistaViewModel[x].CandidaturaId.ToString(), "Details", "Candidaturas", new { id = Model.ListPrimeraEntrevistaViewModel[x].CandidaturaId.ToString() }, null)
+                                    </td>
+                                    <td>@Model.ListPrimeraEntrevistaViewModel[x].Entrevistador</td>
+                                    <td>@Model.ListPrimeraEntrevistaViewModel[x].Candidato</td>
+                                    <td>@Model.ListPrimeraEntrevistaViewModel[x].Perfil</td>
+                                    <td>@Model.ListPrimeraEntrevistaViewModel[x].Tecnologia</td>
+                                    <td>@Model.ListPrimeraEntrevistaViewModel[x].Agendada</td>
+                                    <td>
+                                        @Model.ListPrimeraEntrevistaViewModel[x].Centro
+                                        <span>@Edit.Decimal(Model.ListPrimeraEntrevistaViewModel[x].DiasDeRetraso.Value, "DiasRetraso", id: "DiasRetraso" + x, htmlClass: "form-control hide")</span>
+                                    </td>
+                                </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>  <!--End Section form-->
+                </div>
+            </div>@* content-box-content *@
+        </div> @*  content-box *@
+    }
+
+    @if (Model.AlertasAdministradorViewModel == null || Model.AlertasAdministradorViewModel.SubEntrevistaPrimeraEntrevista == true)
+    {
+        <div id="SubEntrevistaPrimeraEntrevista" class="col-lg-12 content-box removePadding">
+            <div class="content-box-content">
+                <div class="row section-header">
+                    <div class="col-lg-12">
+                        <h4>@Resources.HTML_Dashboard_Administrador_AlertasSubentrevistas</h4>
+                    </div>
+                </div>
+                <div class="content-box-content">
+                    <div data-id="section-form-SubEntrevistasPrimeraEntrevista_" class="col-lg-12 pb-30">
+                        <table class="gridTable dataTable table table-striped no-footer" role="grid">
+                            <thead>
+                                <tr>
+                                    <th>@Resources.HTML_Dashboard_Administrador_ReferenciaHeader</th>
+                                    <th>@Resources.HTML_Dashboard_Administrador_EntrevistadorHeader</th>
+                                    <th>@Resources.HTML_Dashboard_Administrador_CandidatoHeader</th>
+                                    <th>@Resources.HTML_Dashboard_Administrador_PerfilHeader</th>
+                                    <th>@Resources.HTML_Dashboard_Administrador_TecnologiaHeader</th>
+                                    <th>@Resources.HTML_Dashboard_Administrador_TipoHeader</th>
+                                    <th>@Resources.HTML_Dashboard_Administrador_AgendadaHeader</th>
+                                    <th>@Resources.HTML_Dashboard_Administrador_CentroHeader</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    for (int x = 0; x < Model.ListSubEntrevistasPrimeraEntrevistaViewModel.Count; x++)
+                                    {
+                                <tr class="@((x % 2 == 0) ? "even" : "odd")" name="EntrevistaARecolorear">
+                                    <td>
+                                        @Html.ActionLink(Model.ListSubEntrevistasPrimeraEntrevistaViewModel[x].CandidaturaId.ToString(), "Details", "Candidaturas", new { id = Model.ListSubEntrevistasPrimeraEntrevistaViewModel[x].CandidaturaId.ToString() }, null)
+                                    </td>
+                                    <td>@Model.ListSubEntrevistasPrimeraEntrevistaViewModel[x].Entrevistador</td>
+                                    <td>@Model.ListSubEntrevistasPrimeraEntrevistaViewModel[x].Candidato</td>
+                                    <td>@Model.ListSubEntrevistasPrimeraEntrevistaViewModel[x].Perfil</td>
+                                    <td>@Model.ListSubEntrevistasPrimeraEntrevistaViewModel[x].Tecnologia</td>
+                                    <td>@Model.ListSubEntrevistasPrimeraEntrevistaViewModel[x].TipoSubEntrevista</td>
+                                    <td>@Model.ListSubEntrevistasPrimeraEntrevistaViewModel[x].Agendada</td>
+                                    <td>
+                                        @Model.ListSubEntrevistasPrimeraEntrevistaViewModel[x].Centro
+                                        <span>@Edit.Decimal(Model.ListSubEntrevistasPrimeraEntrevistaViewModel[x].DiasDeRetraso.Value, "DiasRetraso", id: "DiasRetraso" + x, htmlClass: "form-control hide")</span>
+                                    </td>
+                                </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>  <!--End Section form-->
+                </div> @* content-box*@
+            </div>@* content-box-content *@
+        </div> @*  content-box *@
+    }
+
+    @if (Model.AlertasAdministradorViewModel == null || Model.AlertasAdministradorViewModel.SegundaEntrevista == true)
+    {
+
+        <div id="SegundaEntrevista" class="col-lg-12 content-box removePadding">
+            <div class="content-box-content">
+                <div class="row section-header">
+                    <div class="col-lg-12">
+                        <h4>@Resources.HTML_Dashboard_Administrador_AlertasSegundaEntrevista</h4>
+                    </div>
+                </div>
+                <div class="content-box-content">
+                    <div data-id="section-form-SegundaEntrevista_" class="col-lg-12 pb-30">
+                        <table class="gridTable dataTable table table-striped no-footer" role="grid">
+                            <thead>
+                                <tr>
+                                    <th>@Resources.HTML_Dashboard_Administrador_ReferenciaHeader</th>
+                                    <th>@Resources.HTML_Dashboard_Administrador_EntrevistadorHeader</th>
+                                    <th>@Resources.HTML_Dashboard_Administrador_CandidatoHeader</th>
+                                    <th>@Resources.HTML_Dashboard_Administrador_PerfilHeader</th>
+                                    <th>@Resources.HTML_Dashboard_Administrador_TecnologiaHeader</th>
+                                    <th>@Resources.HTML_Dashboard_Administrador_AgendadaHeader</th>
+                                    <th>@Resources.HTML_Dashboard_Administrador_CentroHeader</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @{
+                                    for (int x = 0; x < Model.ListSegundaEntrevistaViewModel.Count; x++)
+                                    {
+                                <tr class="@((x % 2 == 0) ? "even" : "odd")" name="EntrevistaARecolorear">
+                                    <td>
+                                        @Html.ActionLink(Model.ListSegundaEntrevistaViewModel[x].CandidaturaId.ToString(), "Details", "Candidaturas", new { id = Model.ListSegundaEntrevistaViewModel[x].CandidaturaId.ToString() }, null)
+                                    </td>
+                                    <td>@Model.ListSegundaEntrevistaViewModel[x].Entrevistador</td>
+                                    <td>@Model.ListSegundaEntrevistaViewModel[x].Candidato</td>
+                                    <td>@Model.ListSegundaEntrevistaViewModel[x].Perfil</td>
+                                    <td>@Model.ListSegundaEntrevistaViewModel[x].Tecnologia</td>
+                                    <td>@Model.ListSegundaEntrevistaViewModel[x].Agendada</td>
+                                    <td>
+                                        @Model.ListSegundaEntrevistaViewModel[x].Centro
+                                        <span>@Edit.Decimal(Model.ListSegundaEntrevistaViewModel[x].DiasDeRetraso.Value, "DiasRetraso", id: "DiasRetraso" + x, htmlClass: "form-control hide")</span>
+                                    </td>
+                                </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>  <!--End Section form-->
+                </div>
+            </div>@* content-box-content *@
+        </div> @*  content-box *@
+    }
+
+    @if (Model.AlertasAdministradorViewModel == null || Model.AlertasAdministradorViewModel.SubEntrevistaSegundaEntrevista == true)
+    {
+
+        <div id="SubEntrevistaSegundaEntrevista" class="col-lg-12 content-box removePadding">
+            <div class="content-box-content">
+                <div class="row section-header">
+                    <div class="col-lg-12">
+                        <h4>@Resources.HTML_Dashboard_Administrador_AlertasSubentrevistasSegundaEntrevista</h4>
+                    </div>
+                </div>
+                <div class="content-box-content">
+                    <div data-id="section-form-SubEntrevistasSegundaEntrevista_" class="col-lg-12 pb-30">
+                        <table class="gridTable dataTable table table-striped no-footer" role="grid">
+                            <thead>
+                                <tr>
+                                    <th>@Resources.HTML_Dashboard_Administrador_ReferenciaHeader</th>
+                                    <th>@Resources.HTML_Dashboard_Administrador_EntrevistadorHeader</th>
+                                    <th>@Resources.HTML_Dashboard_Administrador_CandidatoHeader</th>
+                                    <th>@Resources.HTML_Dashboard_Administrador_PerfilHeader</th>
+                                    <th>@Resources.HTML_Dashboard_Administrador_TecnologiaHeader</th>
+                                    <th>@Resources.HTML_Dashboard_Administrador_TipoHeader</th>
+                                    <th>@Resources.HTML_Dashboard_Administrador_AgendadaHeader</th>
+                                    <th>@Resources.HTML_Dashboard_Administrador_CentroHeader</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    for (int x = 0; x < Model.ListSubEntrevistasSegundaEntrevistaViewModel.Count; x++)
+                                    {
+                                <tr class="@((x % 2 == 0) ? "even" : "odd")" name="EntrevistaARecolorear">
+                                    <td>
+                                        @Html.ActionLink(Model.ListSubEntrevistasSegundaEntrevistaViewModel[x].CandidaturaId.ToString(), "Details", "Candidaturas", new { id = Model.ListSubEntrevistasSegundaEntrevistaViewModel[x].CandidaturaId.ToString() }, null)
+                                    </td>
+                                    <td>@Model.ListSubEntrevistasSegundaEntrevistaViewModel[x].Entrevistador</td>
+                                    <td>@Model.ListSubEntrevistasSegundaEntrevistaViewModel[x].Candidato</td>
+                                    <td>@Model.ListSubEntrevistasSegundaEntrevistaViewModel[x].Perfil</td>
+                                    <td>@Model.ListSubEntrevistasSegundaEntrevistaViewModel[x].Tecnologia</td>
+                                    <td>@Model.ListSubEntrevistasSegundaEntrevistaViewModel[x].TipoSubEntrevista</td>
+                                    <td>@Model.ListSubEntrevistasSegundaEntrevistaViewModel[x].Agendada</td>
+                                    <td>
+                                        @Model.ListSubEntrevistasSegundaEntrevistaViewModel[x].Centro
+                                        <span>@Edit.Decimal(Model.ListSubEntrevistasSegundaEntrevistaViewModel[x].DiasDeRetraso.Value, "DiasRetraso", id: "DiasRetraso" + x, htmlClass: "form-control hide")</span>
+                                    </td>
+                                </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>  <!--End Section form-->
+                </div>
+            </div>@* content-box-content *@
+        </div> @*  content-box *@
+    }
+
+    @if (Model.AlertasAdministradorViewModel == null || Model.AlertasAdministradorViewModel.CartaOferta == true)
+    {
+        <div id="CartaOferta" class="col-lg-12 content-box removePadding">
+            <div class="content-box-content">
+                <div class="row section-header">
+                    <div class="col-lg-12">
+                        <h4>@Resources.HTML_Dashboard_Administrador_AlertasCartaOferta</h4>
+                    </div>
+                </div>
+                <div class="content-box-content">
+                    <div data-id="section-form-CartaOferta_" class="col-lg-12 pb-30">
+                        <table id="listSubmitContact" data-id="listSubmit" class="gridTable dataTable table table-striped no-footer" role="grid">
+                            <thead>
+                                <tr>
+                                    <th>@Resources.HTML_Dashboard_Administrador_ReferenciaHeader</th>
+                                    <th>@Resources.HTML_Dashboard_Administrador_EntrevistadorHeader</th>
+                                    <th>@Resources.HTML_Dashboard_Administrador_CandidatoHeader</th>
+                                    <th>@Resources.HTML_Dashboard_Administrador_PerfilHeader</th>
+                                    <th>@Resources.HTML_Dashboard_Administrador_TecnologiaHeader</th>
+                                    <th>@Resources.HTML_Dashboard_Administrador_AgendadaHeader</th>
+                                    <th>@Resources.HTML_Dashboard_Administrador_CentroHeader</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    for (int x = 0; x < Model.ListCartaOfertaViewModel.Count; x++)
+                                    {
+                                <tr class="@((x % 2 == 0) ? "even" : "odd")">
+                                    <td>@Html.ActionLink(Model.ListCartaOfertaViewModel[x].CandidaturaId.ToString(), "Details", "Candidaturas", new { id = Model.ListCartaOfertaViewModel[x].CandidaturaId.ToString() }, null)</td>
+                                    <td>@Model.ListCartaOfertaViewModel[x].Entrevistador</td>
+                                    <td>@Model.ListCartaOfertaViewModel[x].Candidato</td>
+                                    <td>@Model.ListCartaOfertaViewModel[x].Perfil</td>
+                                    <td>@Model.ListCartaOfertaViewModel[x].Tecnologia</td>
+                                    <td>@Model.ListCartaOfertaViewModel[x].Agendada</td>
+                                    <td>@Model.ListCartaOfertaViewModel[x].Centro</td>
+                                </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>  <!--End Section form-->
+                </div>
+            </div>@* content-box-content *@
+        </div> @*  content-box *@
+    }
+
+
+    @if (Model.AlertasAdministradorViewModel == null || Model.AlertasAdministradorViewModel.CvPendienteFiltro == true)
+    {
+        <div id="CvPendienteFiltro" class="col-lg-12 content-box removePadding">
+            <div class="content-box-content">
+                <div class="row section-header">
+                    <div class="col-lg-12">
+                        <h4>@Resources.HTML_Dashboard_Administrador_AlertasCurriculumsPendientesFiltrar</h4>
+                    </div>
+                </div>
+                <div class="content-box-content">
+                    <div data-id="section-form-TodosFiltradoCv_" class="col-lg-12 pb-30">
+                        <table class="gridTable dataTable table table-striped no-footer" role="grid">
+                            <thead>
+                                <tr>
+                                    <th>@Resources.HTML_Dashboard_Administrador_ReferenciaHeader</th>
+                                    <th>@Resources.HTML_Dashboard_Administrador_EntrevistadorHeader</th>
+                                    <th>@Resources.HTML_Dashboard_Administrador_CandidatoHeader</th>
+                                    <th>@Resources.HTML_Dashboard_Administrador_PerfilHeader</th>
+                                    <th>@Resources.HTML_Dashboard_Administrador_TecnologiaHeader</th>
+                                    <th>@Resources.HTML_Dashboard_Administrador_CreadaHeader</th>
+                                    <th>@Resources.HTML_Dashboard_Administrador_CentroHeader</th>
+                                    <th>@Resources.HTML_Dashboard_Administrador_DescargarCVHeader</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    if (Model.ListFiltradoPendienteViewModel != null && Model.ListFiltradoPendienteViewModel.Count > 0)
+                                    {
+                                        for (int x = 0; x < Model.ListFiltradoPendienteViewModel.Count; x++)
+                                        {
+                                <tr class="@((x % 2 == 0) ? "even" : "odd")">
+                                    <td>
+                                        @Html.ActionLink(Model.ListFiltradoPendienteViewModel[x].CandidaturaId.ToString(), "Ejecutar", "Candidaturas", new { CandidaturaId = Model.ListFiltradoPendienteViewModel[x].CandidaturaId.ToString() }, (new { id = "CandidaturaId" }))
+                                    </td>
+                                    <td>@Model.ListFiltradoPendienteViewModel[x].Entrevistador</td>
+                                    <td>@Model.ListFiltradoPendienteViewModel[x].Candidato</td>
+                                    <td>@Model.ListFiltradoPendienteViewModel[x].Perfil</td>
+                                    <td>@Model.ListFiltradoPendienteViewModel[x].Tecnologia</td>
+                                    <td>@Model.ListFiltradoPendienteViewModel[x].Creada</td>
+                                    <td>@Model.ListFiltradoPendienteViewModel[x].Centro</td>
+                                    <td>
+                                        <a title="@Resources.HTML_Title_DescargarCv" id="DonwloadCVButton" class="@GetDisabledClass(!Model.ListFiltradoPendienteViewModel[x].CvAvailable)">
+                                            @Display.GlyphiconButton("glyphicon glyphicon-download-alt icon action")
+                                        </a>
+                                    </td>
+                                </tr>
+                                        }
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>  <!--End Section form-->
+                </div>
+            </div>@* content-box-content *@
+        </div> @*  content-box *@
+    }
+
+    @if (Model.AlertasAdministradorViewModel == null || Model.AlertasAdministradorViewModel.CandidaturaStandBy == true)
+    {
+
+        <div id="CandidaturaStandBy" class="col-lg-12 content-box removePadding">
+            <div class="content-box-content">
+                <div class="row section-header">
+                    <div class="col-lg-12">
+                        <h4>@Resources.HTML_Dashboard_Administrador_CandidaturasPendientesStandBy</h4>
+                    </div>
+                </div>
+                <div class="content-box-content">
+                    <div data-id="section-form-StandByPendientes_" class="col-lg-12 pb-30">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>@Resources.HTML_Dashboard_Administrador_ReferenciaHeader</th>
+                                    <th>@Resources.HTML_Dashboard_Administrador_CandidatoHeader</th>
+                                    <th>@Resources.HTML_Dashboard_Administrador_PerfilHeader</th>
+                                    <th>@Resources.HTML_Dashboard_Administrador_TecnologiaHeader</th>
+                                    <th>@Resources.HTML_Dashboard_Administrador_FechaContactoHeader</th>
+                                    <th>@Resources.HTML_Dashboard_Administrador_CentroHeader</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (int x = 0; x < Model.ListCandidaturasPendienteStandByViewModel.Count; x++)
+                                {
+                                <tr class="@((x % 2 == 0) ? "even" : "odd")" name="EntrevistaARecolorear">
+                                    <td>
+                                        @Html.ActionLink(Model.ListCandidaturasPendienteStandByViewModel[x].CandidaturaId.ToString(), "Details", "Candidaturas", new { id = Model.ListCandidaturasPendienteStandByViewModel[x].CandidaturaId.ToString() }, null)
+                                    </td>
+                                    <td>@Model.ListCandidaturasPendienteStandByViewModel[x].Candidato</td>
+                                    <td>@Model.ListCandidaturasPendienteStandByViewModel[x].Perfil</td>
+                                    <td>@Model.ListCandidaturasPendienteStandByViewModel[x].Tecnologia</td>
+                                    <td>@Model.ListCandidaturasPendienteStandByViewModel[x].FechaMostrar</td>
+                                    <td>
+                                        @Model.ListCandidaturasPendienteStandByViewModel[x].Centro
+                                        <span>@Edit.Decimal(Model.ListCandidaturasPendienteStandByViewModel[x].DiasDeRetraso.Value, "DiasRetraso", id: "DiasRetraso" + x, htmlClass: "form-control hide")</span>
+                                    </td>
+                                </tr>
+                                }
+                            </tbody>
+
+                        </table>
+                    </div>  <!--End Section form-->
+                </div>
+            </div>@* content-box-content *@
+        </div> @*  content-box *@
+    }
+
+    @if (Model.AlertasAdministradorViewModel == null || Model.AlertasAdministradorViewModel.BecarioStandBy == true)
+    {
+
+        @*Becarios pendientes StandBy (Hasta los proximos 15 dias)*@
+        <div id="BecarioStandBy" class="col-lg-12 content-box removePadding">
+            <div class="content-box-content">
+                <div class="row section-header">
+                    <div class="col-lg-12">
+                        <h4>@Resources.HTML_Dashboard_Administrador_BecariosPendientesStandBy</h4>
+                    </div>
+                </div>
+                <div class="content-box-content">
+                    <div data-id="section-form-BecariosStandByPendientes_" class="col-lg-12 pb-30">
+
+                        <table class="gridTable dataTable table table-striped no-footer" role="grid">
+                            <thead>
+                                <tr>
+                                    <th>@Resources.HTML_Dashboard_Administrador_ReferenciaHeader</th>
+                                    <th>@Resources.HTML_Dashboard_Administrador_BecarioHeader</th>
+                                    <th>@Resources.HTML_Dashboard_Administrador_FechaContactoHeader</th>
+                                    <th>@Resources.HTML_Dashboard_Administrador_CentroProcendeciaHeader</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (int x = 0; x < Model.ListBecariosPendientesStandByViewModel.Count; x++)
+                                {
+                                    <tr class="@((x % 2 == 0) ? "even" : "odd")" name="EntrevistaARecolorear">
+                                        <td>
+                                            @Html.ActionLink(Model.ListBecariosPendientesStandByViewModel[x].BecarioId.ToString(), "Details", "Becarios", new { id = Model.ListBecariosPendientesStandByViewModel[x].BecarioId.ToString() }, null)
+                                        </td>
+                                        <td>@Model.ListBecariosPendientesStandByViewModel[x].Candidato</td>
+                                        <td>@Model.ListBecariosPendientesStandByViewModel[x].FechaMostrar</td>
+                                        <td>
+                                            @Model.ListBecariosPendientesStandByViewModel[x].CentroProcedencia
+                                            <span>@Edit.Decimal(Model.ListBecariosPendientesStandByViewModel[x].DiasDeRetraso.Value, "DiasRetraso", id: "DiasRetraso" + x, htmlClass: "form-control hide")</span>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+
+                        </table>
+                    </div>  <!--End Section form-->
+                </div>
+            </div>@* content-box-content *@
+        </div> @*  content-box *@
+    }
+</div>
+<div class="col-lg-3 pr-0">
+    <div class="content-box" id="menuFixed">
+        <div class="content-box-content">
+            <ul class="nav nav-pills nav-stacked">
+
+                @if (Model.AlertasAdministradorViewModel == null || Model.AlertasAdministradorViewModel.NecesidadesCreadasModificadas)
+                {
+                    <li><a href="#NecesidadesCreadasModificadas">@Resources.HTML_Dashboard_Administrador_AlertasNecesidadesCreadasModificadas</a></li>
+                }
+                @if (Model.AlertasAdministradorViewModel == null || Model.AlertasAdministradorViewModel.PrimeraEntrevista)
+                {
+                    <li><a href="#PrimeraEntrevista">@Resources.HTML_Dashboard_Administrador_AlertasEntrevistaPrincipal</a></li>
+                }
+                @if (Model.AlertasAdministradorViewModel == null || Model.AlertasAdministradorViewModel.SubEntrevistaPrimeraEntrevista)
+                {
+                    <li><a href="#SubEntrevistaPrimeraEntrevista">@Resources.HTML_Dashboard_Administrador_AlertasSubentrevistas</a></li>
+                }
+                @if (Model.AlertasAdministradorViewModel == null || Model.AlertasAdministradorViewModel.SegundaEntrevista)
+                {
+                    <li><a href="#SegundaEntrevista">@Resources.HTML_Dashboard_Administrador_AlertasSegundaEntrevista</a></li>
+                }
+                @if (Model.AlertasAdministradorViewModel == null || Model.AlertasAdministradorViewModel.SubEntrevistaSegundaEntrevista)
+                {
+                    <li><a href="#SubEntrevistaSegundaEntrevista">@Resources.HTML_Dashboard_Administrador_AlertasSubentrevistasSegundaEntrevista</a></li>
+                }
+                @if (Model.AlertasAdministradorViewModel == null || Model.AlertasAdministradorViewModel.CartaOferta)
+                {
+                    <li><a href="#CartaOferta">@Resources.HTML_Dashboard_Administrador_AlertasCartaOferta</a></li>
+                }
+                @if (Model.AlertasAdministradorViewModel == null || Model.AlertasAdministradorViewModel.CvPendienteFiltro)
+                {
+                    <li><a href="#CvPendienteFiltro">@Resources.HTML_Dashboard_Administrador_AlertasCurriculumsPendientesFiltrar</a></li>
+                }
+                @if (Model.AlertasAdministradorViewModel == null || Model.AlertasAdministradorViewModel.CandidaturaStandBy)
+                {
+                    <li><a href="#CandidaturaStandBy">@Resources.HTML_Dashboard_Administrador_CandidaturasPendientesStandBy</a></li>
+                }
+                @if (Model.AlertasAdministradorViewModel == null || Model.AlertasAdministradorViewModel.BecarioStandBy)
+                {
+                    <li><a href="#BecarioStandBy">@Resources.HTML_Dashboard_Administrador_BecariosPendientesStandBy</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+</div>
+
+@helper GetDisabledClass(bool disable)
+    {
+        var disabled = string.Empty;
+        if (disable)
+        {
+            disabled = "disabled";
+        }
+
+        @disabled
+}
+
+
+
+

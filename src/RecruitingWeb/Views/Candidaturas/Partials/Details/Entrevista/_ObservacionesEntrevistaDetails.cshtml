@@ -1,0 +1,27 @@
+﻿@using RecruitingWeb.Properties
+
+@model Recruiting.Application.Candidaturas.ViewModel.RangoSalarialesyDisponibilidades
+
+<div class="row form-row">
+    <div class="form-group col-lg-4">
+        <div class="col-lg-12 title-form">
+            <label for="ObservacionesEntrevista">@Resources.HTML_Candidaturas_ObservacionesEntrevista_Observaciones</label>
+        </div>
+        <div class="col-lg-12 content-form">
+            @{
+                if ( string.IsNullOrEmpty(Model.ObservacionesEntrevista) || string.IsNullOrWhiteSpace(Model.ObservacionesEntrevista) )
+                {
+                    @Resources.HTML_General_CampoVacio_Details_NA
+                }
+                else
+                {
+                    @Html.Raw(Model.ObservacionesEntrevista)
+
+                }
+            }
+
+        </div>
+    </div>
+</div>
+
+

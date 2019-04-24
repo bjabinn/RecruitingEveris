@@ -1,0 +1,754 @@
+﻿@using RecruitingWeb.Properties
+@using Recruiting.Application.Maestros.Enums
+@using Recruiting.Application.Candidaturas.Enums
+
+@helper MenuFrontActions()
+    {
+        <script type="text/javascript">
+            //Menu
+
+            var menuItemToSelect = $("#main-nav li a[data-option-name=Staffing]");
+            menuItemToSelect.addClass("current");
+        </script>
+}
+
+@helper IndexFrontActions(System.Web.Mvc.UrlHelper Url)
+    {
+        <script type="text/javascript">
+
+            //Inicializaciones
+
+            var idNecesidadArrastrar;
+            var notificarLiberacion = true;
+            var idProyectoInicial = "";
+
+            $(function () {
+                $('#sortNecesidadesTable').find('tbody').attr('id', 'bodyNecesidades');
+                $('#dragPersonasTable').find('tbody').attr('id', 'bodyPersonas');
+            });
+
+            //Busqueda
+
+            $(window).keydown(function (event) {
+                if (event.keyCode == 13) {
+                    buscarIntro();
+                    return true;
+                }
+
+            });
+
+            function buscarIntro() {
+                var tableNecesidades = $('#dragPersonasTable');
+                tableNecesidades.data("fn-search")();
+                var tablePersonas = $('#sortNecesidadesTable');
+                tablePersonas.data("fn-search")();
+            }
+
+            $(document).on('click', '[name=buscar]', function () {
+                buscarIntro();
+            });
+
+            function getFiltersStaffingNecesidades() {
+
+                var filterTecnologia = $("[name=filterTecnologiaId]").val();
+                var filterEstado = $("[name=filterEstadoId]").val();
+                var filterPrevision = @((int)TipoPrevisionEnum.Confirmado);
+                var filterPerfil = $("[name=filterPerfilId]").val();
+                var filterProyecto = $("[name=filterProyectoId]").val();
+
+                return {
+                    Tecnologia: filterTecnologia, EstadoStaffing : filterEstado,
+                    Prevision: filterPrevision, Perfil: filterPerfil,
+                    Proyecto: filterProyecto
+                };
+            }
+
+            //Sortable Necesidades
+
+            $(function () {
+                $("#bodyNecesidades").sortable({
+                    stop: function (event, ui) {
+                        savePrioridades();
+                    }
+                });
+            });
+
+            //Droppable Necesidades
+
+            $('#sortNecesidadesTable').on('draw.dt', function () {
+                $("#bodyNecesidades tr").each(function () {
+                    $(this).addClass("height-80");
+                    $(this).addClass("cursor-move");
+                    $(this).find('td:last').addClass("hidden");
+                    $(this).find('td:eq(5)').droppable({
+                        classes: {
+                            "ui-droppable-active": "ui-state-active",
+                            "ui-droppable-hover": "ui-state-hover"
+                        },
+                        drop: function (event, ui) {
+                            if ($(this).find('td:last').text() == "") {
+                                if (idNecesidadArrastrar != null && idNecesidadArrastrar != "") {
+                                    notificarLiberacion = false;
+                                    LiberateNecesidad();
+                                }
+                                $(this).closest('tr').find('#TipoPersonaIdNecesidad').val(ui.draggable.closest('tr').find('#TipoPersonaId').val());
+                                $(this).closest('tr').find('#PersonaAsignadaIdNecesidad').val(ui.draggable.closest('tr').find('#PersonaAsignadaId').val());
+                                guardarAsignar($(this).closest("tr").index());
+
+                            }
+                        }
+                    });
+                    $(this).find('td:eq(5)').draggable({
+                        revert: 'invalid',
+                        helper: 'clone',
+                        start: function () {
+                            idNecesidadArrastrar = $(this).closest('tr').find('#NecesidadId').val();
+                        },
+                    });
+
+                });
+            });
+
+            //Droppable Personas
+
+            $('#dragPersonasTable').droppable({
+                classes: {
+                    "ui-droppable-active": "ui-state-active",
+                    "ui-droppable-hover": "ui-state-hover"
+                },
+                drop: function (event, ui) {
+                    LiberateNecesidad();
+                }
+            });
+
+            //Draggable Personas
+
+            $('#dragPersonasTable').on('draw.dt', function () {
+                $("#bodyPersonas tr").draggable({
+                    revert: 'invalid',
+                    helper: 'clone',
+                });
+                $("#bodyPersonas tr").each(function () {
+                    $(this).addClass("cursor-move");
+                    $(this).find('td:last').addClass("hidden");
+                });
+            });
+
+            //Guardar observaciones
+
+            $(document).on('change', '#ObservacionesStaffing', function () {
+                var necesidadId = $(this).closest('tr').find("#NecesidadId").val();
+                var observacionesStaffing = $(this).val();
+
+                saveObservaciones(necesidadId, observacionesStaffing);
+            });
+
+            function saveObservaciones(necesidadId, observacionesStaffing) {
+                $.post('@Url.Action("SaveObservacionesNecesidades", "Necesidades")', { NecesidadId: necesidadId, ObservacionesStaffing: observacionesStaffing }).
+                        success(function (Data) {
+                            if (Data.IsValid == true) {
+                                buscarIntro();
+                            }
+                            else if (Data.IsValid == false) {
+                                BootstrapDialog.show({
+                                    type: BootstrapDialog.TYPE_ERROR,
+                                    title: '@Resources.ErrorSaveStaffingNecesidadesTitulo',
+                                    message: '@Resources.ErrorSaveStaffingNecesidadesTexto',
+                                });
+                            }
+                            else {
+                                BootstrapDialog.show({
+                                    type: BootstrapDialog.TYPE_ERROR,
+                                    title: '@Resources.Permiso_Titulo',
+                                    message: '@Resources.Permiso_Mensaje',
+                                });
+                            }
+                        })
+            }
+
+            //Guardar prioridades
+
+            function savePrioridades()
+            {
+                var staffingNecesidadesList = [];
+                var Prioridad = 1;
+
+                $("#bodyNecesidades tr").each(function () {
+                    var NecesidadId = $(this).find('#NecesidadId').val();
+
+
+                    if (NecesidadId != "" && NecesidadId != null) {
+                        staffingNecesidadesList.push({ NecesidadId: NecesidadId, Prioridad: Prioridad });
+                        Prioridad++;
+                    }
+                });
+
+                if (staffingNecesidadesList == "")
+                {
+                    BootstrapDialog.show({
+                        type: BootstrapDialog.TYPE_ERROR,
+                        title: '@Resources.HTML_Necesidades_StaffingNecesidades_NecesidadesVaciasTitulo',
+                        message: '@Resources.HTML_Necesidades_StaffingNecesidades_NecesidadesVaciasTexto',
+                    });
+                }
+                else
+                {
+                        $.post('@Url.Action("SavePrioridadesNecesidades", "Necesidades")', { ListaStaffingNecesidades: staffingNecesidadesList }).
+                            success(function (Data) {
+                                if (Data.IsValid == true) {
+                                        @*BootstrapDialog.show({
+                                        type: BootstrapDialog.TYPE_NOTIFY,
+                                        title: '@Resources.HTML_Necesidades_StaffingNecesidades_GuardarNecesidadesSuccessTitulo',
+                                        message: '@Resources.HTML_Necesidades_StaffingNecesidades_GuardarNecesidadesSuccessTexto',
+                                    });*@
+                                    buscarIntro();
+                                }
+                                else if (Data.IsValid == false) {
+                                    BootstrapDialog.show({
+                                        type: BootstrapDialog.TYPE_ERROR,
+                                        title: '@Resources.ErrorSaveStaffingNecesidadesTitulo',
+                                        message: '@Resources.ErrorSaveStaffingNecesidadesTexto',
+                                    });
+                                }
+                                else {
+                                    BootstrapDialog.show({
+                                        type: BootstrapDialog.TYPE_ERROR,
+                                        title: '@Resources.Permiso_Titulo',
+                                        message: '@Resources.Permiso_Mensaje',
+                                    });
+                                }
+                            })
+                }
+            }
+
+
+
+            //Guardar asignaciones
+
+            function guardarAsignar(index)
+            {
+
+                var tr = $('#bodyNecesidades tr').eq(index);
+
+                var NecesidadId = tr.closest('tr').find('#NecesidadId').val();
+                var PersonaAsignadaId = tr.find('#PersonaAsignadaIdNecesidad').val();
+                var TipoPersonaId = tr.find('#TipoPersonaIdNecesidad').val();
+
+
+                if (NecesidadId == "" || NecesidadId == null)
+                {
+                    BootstrapDialog.show({
+                        type: BootstrapDialog.TYPE_ERROR,
+                        title: '@Resources.HTML_Necesidades_StaffingNecesidades_NecesidadesVaciasTitulo',
+                        message: '@Resources.HTML_Necesidades_StaffingNecesidades_NecesidadesVaciasTexto',
+                    });
+                }
+                else
+                {
+
+                    $.post('@Url.Action("SaveStaffingNecesidades", "Necesidades")', { NecesidadId: NecesidadId, PersonaAsignadaId: PersonaAsignadaId, TipoPersonaId: TipoPersonaId }).
+                        success(function (Data) {
+                            if (Data.IsValid == true) {
+                                    @*BootstrapDialog.show({
+                                    type: BootstrapDialog.TYPE_NOTIFY,
+                                    title: '@Resources.HTML_Necesidades_StaffingNecesidades_GuardarNecesidadesSuccessTitulo',
+                                    message: '@Resources.HTML_Necesidades_StaffingNecesidades_GuardarNecesidadesSuccessTexto',
+                                });*@
+                                buscarIntro();
+                            }
+                            else if (Data.IsValid == false) {
+                                BootstrapDialog.show({
+                                    type: BootstrapDialog.TYPE_ERROR,
+                                    title: '@Resources.ErrorSaveStaffingNecesidadesTitulo',
+                                    message: '@Resources.ErrorSaveStaffingNecesidadesTexto',
+                                });
+                            }
+                            else {
+                                BootstrapDialog.show({
+                                    type: BootstrapDialog.TYPE_ERROR,
+                                    title: '@Resources.Permiso_Titulo',
+                                    message: '@Resources.Permiso_Mensaje',
+                                });
+                            }
+                        })
+                }
+            }
+
+            //Guardar liberaciones
+
+            function LiberateNecesidad()
+            {
+
+                var NecesidadId = idNecesidadArrastrar;
+
+
+                if (NecesidadId == "" || NecesidadId == null)
+                {
+                    BootstrapDialog.show({
+                        type: BootstrapDialog.TYPE_ERROR,
+                        title: '@Resources.HTML_Necesidades_StaffingNecesidades_NecesidadesVaciasTitulo',
+                        message: '@Resources.HTML_Necesidades_StaffingNecesidades_NecesidadesVaciasTexto',
+                    });
+                }
+                else
+                {
+                    idNecesidadArrastrar = "";
+
+
+                    $.post('@Url.Action("LiberateStaffingNecesidades", "Necesidades")', { necesidadId: NecesidadId }).
+                        success(function (Data) {
+                            if (Data.IsValid == true) {
+                                if (notificarLiberacion == true) {
+                                    @*BootstrapDialog.show({
+                                        type: BootstrapDialog.TYPE_NOTIFY,
+                                        title: '@Resources.HTML_Necesidades_StaffingNecesidades_GuardarNecesidadesSuccessTitulo',
+                                        message: '@Resources.HTML_Necesidades_StaffingNecesidades_GuardarNecesidadesSuccessTexto',
+                                    });*@
+                                    buscarIntro();
+                                }
+                                else {
+                                    notificarLiberacion = true;
+                                }
+                            }
+                            else if (Data.IsValid == false) {
+                                BootstrapDialog.show({
+                                    type: BootstrapDialog.TYPE_ERROR,
+                                    title: '@Resources.ErrorSaveStaffingNecesidadesTitulo',
+                                    message: '@Resources.ErrorSaveStaffingNecesidadesTexto',
+                                });
+                            }
+                            else {
+                                BootstrapDialog.show({
+                                    type: BootstrapDialog.TYPE_ERROR,
+                                    title: '@Resources.Permiso_Titulo',
+                                    message: '@Resources.Permiso_Mensaje',
+                                });
+                            }
+                        })
+
+
+
+
+                }
+            }
+
+            $(document).on('click', '#btnDescargarExcel', function () {
+                var pageFilter = $('#sortNecesidadesTable').data('filters');
+
+                var filters = {
+                    filterTecnologia: pageFilter['custom-filter-Tecnologia'],
+                    filterEstado: pageFilter['custom-filter-EstadoStaffing'],
+                    filterPerfil: pageFilter['custom-filter-Perfil'],
+                    filterPrevision: pageFilter['custom-filter-Prevision'],
+
+            };
+
+            var strFiltros = jQuery.param(filters);
+            var url = '@Url.Action("ExportToExcelStaffingNecesidades", "Necesidades")?' + strFiltros;
+            window.location.assign(url);
+
+            });
+
+            //Logica modal edit necesidades
+
+            $(document).on('click', '[name="NecesidadId"]', function () {
+                var necesidadId = $(this).text();
+
+
+                if (necesidadId != null && necesidadId != "")
+                {
+                    var url = '@Url.Action("GetNecesidadEditar", "Necesidades")';
+                    $('#NecesidadId').val(necesidadId);
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        data: { necesidadId: necesidadId },
+                        success: function (data) {
+                            var fechaCompromiso = new Date(parseInt(data.FechaCompromiso.substr(6)));
+                            data.FechaCompromiso = (fechaCompromiso.getDate() + '/' + (fechaCompromiso.getMonth() + 1) + '/' + fechaCompromiso.getFullYear());
+                            var fechaSolicitud = new Date(parseInt(data.FechaSolicitud.substr(6)));
+                            data.FechaSolicitud = (fechaSolicitud.getDate() + '/' + (fechaSolicitud.getMonth() + 1) + '/' + fechaSolicitud.getFullYear());
+                            if(data.FechaCierre != null)
+                            {
+                                var fechaCierre = new Date(parseInt(data.FechaCierre.substr(6)));
+                                data.FechaCierre = (fechaCierre.getDate() + '/' + (fechaCierre.getMonth() + 1) + '/' + fechaCierre.getFullYear());
+                            }
+                            cargarNecesidadModal(data);
+                            $("#modalEditNecesidad").modal('show');
+                            if (data.GrupoNecesidad != null && data.GrupoNecesidad != "")
+                            {
+                                putDisabled();
+                            }
+
+                            var element = document.getElementById('ClienteId');
+                            var event = new Event('change');
+                            element.dispatchEvent(event);
+                            checkAndShowModulo();
+                            idProyectoInicial = data.ProyectoId;
+                        },
+                        error: function () {
+                            alert('Error occured');
+                        }
+                    });
+
+
+                }
+
+            });
+
+            $(document).on('click', '[name=limpiar]', function () {
+                resetFields('#form-filter');
+                buscarIntro();
+            });
+
+            function MantenerEstadosNecesidad(EstadoNecesidadId, TipoContratacionId)
+            {
+                ComprobarEstadosNecesidadAbierta(EstadoNecesidadId);
+                ComprobarEstadosNecesidadPreasignada(EstadoNecesidadId);
+                ComprobarEstadosNecesidadCerrada(EstadoNecesidadId, TipoContratacionId);
+            }
+
+            function ComprobarEstadosNecesidadAbierta(EstadoNecesidadId)
+            {
+                var abierta = @((int)EstadoNecesidadEnum.Abierta);
+                var preasignada = @((int)EstadoNecesidadEnum.Preasignada);
+
+                var abiertaTexto = "@(EstadoNecesidadEnum.Abierta.ToString())";
+
+                if (EstadoNecesidadId == abierta)
+                {
+                    $('#Estado option[value=' + preasignada + ']').remove();   //si la Necesidad tiene el Estado "Abierta" quitar "Preasignada"
+
+                    if ($('#Estado option[value=' + abierta + ']').length == 0)  //si la opción "Abierta" no está se añade la primera
+                    {
+                        $('#Estado option:first').after($('<option />', { "value": abierta, text: abiertaTexto }));
+                    }
+                }
+            }
+
+            function ComprobarEstadosNecesidadPreasignada(EstadoNecesidadId)
+            {
+                var abierta = @((int)EstadoNecesidadEnum.Abierta);
+                var preasignada = @((int)EstadoNecesidadEnum.Preasignada);
+
+                var preasignadaTexto = "@(EstadoNecesidadEnum.Preasignada.ToString())";
+
+                if (EstadoNecesidadId == preasignada)
+                {
+                    $('#Estado option[value='+ abierta +']').remove(); //si la Necesidad tiene el Estado "Preasignada" quitar "Abierta"
+
+                    if ($('#Estado option[value='+ preasignada +']').length == 0)  //si la opción "Preasignada" no está se añade la última
+                    {
+                        $("#Estado").append("<option value=" + preasignada + ">" + preasignadaTexto + "</option>");
+                    }
+                }
+            }
+
+            function ComprobarEstadosNecesidadCerrada(EstadoNecesidadId, TipoContratacionId)
+            {
+                var cerrada = @((int)EstadoNecesidadEnum.Cerrada);
+                var cerradaTexto = "@(EstadoNecesidadEnum.Cerrada.ToString())";
+                var preasignada = @((int)EstadoNecesidadEnum.Preasignada);
+                var preasignadaTexto = "@(EstadoNecesidadEnum.Preasignada.ToString())";
+                var cambioInterno = @((int)TipoContratacionEnum.CambioInterno);
+
+                if (EstadoNecesidadId == preasignada && TipoContratacionId == cambioInterno) // si la necesidad tiene el estado "Cerrada" o "Preasignada" asegurarse que existe la opcion
+                {
+                    if ($("#Estado option[value=" + cerrada + "]").length == 0)
+                    {
+                        $("#Estado").append("<option value=" + cerrada + ">" + cerradaTexto + "</option>");
+                    }
+
+                    if($("#Estado option[value=" + preasignada + "]").length == 0)
+                    {
+                        $("#Estado").append("<option value=" + preasignada + ">" + preasignadaTexto + "</option>");
+                    }
+                }else{ //si no eliminar la opción "Cerrada"
+                    $('#Estado option[value=' + cerrada + ']').remove();
+                }
+            }
+
+
+            function gestionarSelectorFechaCierre()
+            {
+                var fechaCierreDiv = $('[data-FechaCierre="FechaCierreDiv"]');
+                var estadoNecesidad = $('[name="EstadoNecesidadId"]').val();
+                var cerrada = @((int)EstadoNecesidadEnum.Cerrada);
+                var cancelada = @((int)EstadoNecesidadEnum.Cancelado);
+
+                if (estadoNecesidad == cerrada || estadoNecesidad == cancelada) {
+
+                    fechaCierreDiv.removeClass('hide');
+                    fechaCierreDiv.find('input').removeAttr('disabled');
+                    fechaCierreDiv.find('input').removeAttr('required');
+                    fechaCierreDiv.find('input').removeAttr('validate');
+                    fechaCierreDiv.find('input').attr('required', 'true');
+
+                } else {
+                    fechaCierreDiv.find('input').removeAttr('required');
+                    fechaCierreDiv.find('input').removeAttr('validate');
+                    fechaCierreDiv.find('input').attr('validate', 'false');
+                    fechaCierreDiv.find('input').attr('disabled', 'disabled');
+                    fechaCierreDiv.addClass('hide');
+                }
+            }
+
+            function cargarNecesidadModal(necesidad)
+            {
+                MantenerEstadosNecesidad(necesidad.EstadoNecesidadId, necesidad.TipoContratacionId);
+
+                $('[name="Nombre"]').val(necesidad.Nombre);
+                $('[name="OficinaId"]').val(necesidad.OficinaId);
+                $('[name="Estado"]').val(necesidad.EstadoNecesidadId);
+                $('[name="SectorId"]').val(necesidad.SectorId);
+                $('[name="ClienteId"]').val(necesidad.ClienteId);
+                $('[name="ProyectoId"]').val(necesidad.ProyectoId);
+                $('[name="TipoTecnologiaId"]').val(necesidad.TipoTecnologiaId);
+                $('[name="TipoServicioId"]').val(necesidad.TipoServicioId);
+                $('[name="TipoPerfilId"]').val(necesidad.TipoPerfilId);
+                $('[name="MesesAsignacionId"]').val(necesidad.MesesAsignacionId);
+                $('[name="TipoContratacionId"]').val(necesidad.TipoContratacionId);
+                $('[name="TipoPrevisionId"]').val(necesidad.TipoPrevisionId);
+                $('[name="FechaSolicitud"]').val(necesidad.FechaSolicitud);
+                $('[name="FechaCompromiso"]').val(necesidad.FechaCompromiso);
+                $('[name="Modulo"]').val(necesidad.Modulo);
+                $('[name="DetalleTecnologia"]').val(necesidad.DetalleTecnologia);
+                $('#dispViaje').val(necesidad.DisponibilidadViajes);
+                $('#dispReubicacion').val(necesidad.DisponibilidadReubicacion);
+                $('#NecesidadIdioma').val(necesidad.NecesidadIdioma);
+                $('#NecesidadIdModal').val(necesidad.NecesidadId);
+                $('[name="CentroId"]').val(necesidad.CentroId);
+                $('[name="FechaCierre"]').val(necesidad.FechaCierre);
+                $('[name="EstadoNecesidadId"]').val(necesidad.EstadoNecesidadId);
+                $('[name=GrupoNecesidad]').val(necesidad.GrupoNecesidad);
+                $('[name=PersonaAsignada]').val(necesidad.PersonaAsignada);
+                $('[name=PersonaAsignadaId]').val(necesidad.PersonaAsignadaId);
+
+                gestionarSelectorFechaCierre();
+
+                if (necesidad.GrupoNecesidad != null) {
+                    $("#dispViaje").prop("disabled", true);
+                    $("#dispReubicacion").prop("disabled", true);
+                    $("#NecesidadIdioma").prop("disabled", true);
+                }
+
+                if(necesidad.DisponibilidadViajes == true)
+                {
+                    $("#dispViaje").prop("checked", true);
+                }
+                if (necesidad.DisponibilidadReubicacion == true)
+                {
+                    $("#dispReubicacion").prop("checked", true);
+                }
+                if (necesidad.NecesidadIdioma == true)
+                {
+                    $("#NecesidadIdioma").prop("checked", true);
+                }
+            }
+
+            $('[name="Estado"]').on('change', function (e) {
+                var optionSelected = $("option:selected", this);
+                var valueSelected = this.value;
+                $('[name="EstadoNecesidadId"]').val(valueSelected);
+                gestionarSelectorFechaCierre();
+            });
+
+            function checkAndShowModulo() {
+                var tecnologia = $('[id="TipoTecnologiaId"]');
+                var perfil = $('[id="TipoPerfilId"]');
+                var seccionModulo = $('[data-section="Modulo"]');
+                var modulo = $('[id="Modulo"]');
+
+                modulo.attr('disabled', 'disabled');
+                modulo.removeAttr('required');
+                seccionModulo.addClass('hide');
+                //Estado: Cerrada y Contratacion: Cambio Interno
+                if ((tecnologia.val() == @((int)TipoTecnologiaEnum.Sap))
+                    && ((perfil.val() == @((int)TipoPerfilCandidaturaEnum.FunctionalSpecialist))
+                    || (perfil.val() == @((int)TipoPerfilCandidaturaEnum.FunctionalSeniorSpecialist))
+                    || (perfil.val() == @((int)TipoPerfilCandidaturaEnum.FunctionalLeaderSpecialist))
+                    || (perfil.val() == @((int)TipoPerfilCandidaturaEnum.FunctionalExpertSpecialist)))) {
+                    modulo.removeAttr('disabled');
+                    modulo.attr('required', 'required');
+                    seccionModulo.removeClass('hide');
+                }
+                else
+                {
+                    modulo.val("");
+                    modulo.change();
+                }
+            }
+
+
+
+            $(document).on('change', '[id="TipoTecnologiaId"]', function () {
+                checkAndShowModulo();
+            });
+
+            $(document).on('change', '[id="TipoPerfilId"]', function () {
+                checkAndShowModulo();
+            });
+
+            $("#ClienteId").on("change", function (event) {
+
+                var clienteIdSeleccionado = $("#ClienteId").val();
+
+
+                $.post('@Url.Action("GeneraProyectosFromClientes", "Necesidades")', { clienteId: clienteIdSeleccionado }).done(function (data) {
+
+                    var $select = $('#ProyectoId');
+                    $select.empty();
+
+                    $.each(data, function (indice, elementoActual) {
+                        $('<option>', {
+                            value: elementoActual.ProyectoId
+                        }).html(elementoActual.Nombre).appendTo($select);
+                    });
+
+                    if (idProyectoInicial != "") {
+                        $select.val(idProyectoInicial);
+                        idProyectoInicial = "";
+                    }
+
+                });
+
+            });
+
+
+
+            function compruebaRadios(){
+                if($('#dispViaje').prop("checked") == true)
+                {
+                    $('[name="DisponibilidadViajes"]').val(true);
+                }
+                else
+                {
+                    $('[name="DisponibilidadViajes"]').val(false);
+                }
+                if($('#dispReubicacion').prop("checked") == true)
+                {
+                    $('[name="DisponibilidadReubicacion"]').val(true);
+                }
+                else
+                {
+                    $('[name="DisponibilidadReubicacion"]').val(false);
+                }
+                if($('#NecesidadIdioma').prop("checked") == true)
+                {
+                    $('[name="NecesidadIdioma"]').val(true);
+                }
+                else
+                {
+                    $('[name="NecesidadIdioma"]').val(false);
+                }
+
+            }
+
+
+
+            $("#BtnAceptarNecesidad").on("click", function(event) {
+                var cerrada = @((int)EstadoNecesidadEnum.Cerrada);
+                var cambioInterno = @((int)TipoContratacionEnum.CambioInterno);
+                var tipoPrevisionConfirmado = @((int)TipoPrevisionEnum.Confirmado);
+                var necesidadId = $('#NecesidadIdModal').val();
+
+                if($('[name="Estado"]').val() == cerrada)
+                {
+                    if($('[name="TipoContratacionId"]').val() == cambioInterno )
+                    {
+                        mostrarDialogoCerrarModal();
+                    }
+                    else{
+                        BootstrapDialog.closeAll();
+                    }
+
+                }else{
+                    mostrarDialogoCerrarModal();
+                }
+            });
+
+            function mostrarDialogoCerrarModal()
+            {
+                BootstrapDialog.confirm({
+                    title: '@Resources.Necesidad_ConfirmacionFinalizarTitulo',
+                    message: '@Resources.Necesidad_ConfirmacionFinalizarTexto',
+                    type: BootstrapDialog.TYPE_CONFIRMFINALICE,
+                    callback: function (result) {
+                        if (result) {
+                            quitDisabled();
+                            compruebaRadios();
+                            if ($('#necesidadForm').parsley().validate() == true) {
+                                $.ajax({
+                                    url: '@Url.Action("EditarNecesidadModal", "Necesidades")',
+                                    type: 'POST',
+                                    cache: false,
+                                    data: jQuery("#necesidadForm").serialize(),
+                                    success: function (result) {
+                                        if (result == "error")
+                                        {
+                                            BootstrapDialog.alert({
+                                                title: '@Resources.Necesidad_ErrorTitulo',
+                                                message: '@Resources.Necesidad_ErrorTexto',
+                                                type: BootstrapDialog.TYPE_ERROR,
+                                                callback: function (result) {
+                                                    if (result) {
+                                                        BootstrapDialog.closeAll();
+                                                    } else {
+                                                        BootstrapDialog.closeAll();
+                                                    }
+                                                }
+                                            });
+                                        }
+                                        if (result == "success")
+                                        {
+                                            BootstrapDialog.alert({
+                                                title: '@Resources.Necesidad_ExitoTitulo',
+                                                message: '@Resources.Necesidad_ExitoTexto',
+                                                type: BootstrapDialog.TYPE_CONFIRMFINALICE,
+                                                callback: function (result) {
+                                                    if (result) {
+                                                        BootstrapDialog.closeAll();
+                                                        $("#modalEditNecesidad").modal('hide');
+                                                        buscarIntro();
+                                                    } else {
+                                                        BootstrapDialog.closeAll();
+                                                    }
+                                                }
+                                            });
+                                        }
+                                    }
+                                });
+                            }
+                        } else {
+                            BootstrapDialog.closeAll();
+                        }
+                    }
+                });
+            }
+
+
+            function putDisabled(){
+
+                $('[name="OficinaId"]').attr("disabled", true);
+                $('[name="SectorId"]').attr("disabled", true);
+                $('[name="ClienteId"]').attr("disabled", true);
+                $('[name="ProyectoId"]').attr("disabled", true);
+                $('[name="MesesAsignacionId"]').attr("disabled", true);
+                $('[name="TipoPrevisionId"]').attr("disabled", true);
+                $('[name="TipoContratacionId"]').attr("disabled", true);
+                $('[name="FechaSolicitud"]').attr("disabled", true);
+                $('[name="DisponibilidadViajes"]').attr("disabled", true);
+                $('[name="DisponibilidadReubicacion"]').attr("disabled", true);
+                $('[name="NecesidadIdioma"]').attr("disabled", true);
+
+            }
+            function quitDisabled(){
+                $(':disabled').each(function(e) {
+                    $(this).removeAttr('disabled');
+                    $(this).attr("readonly", true);
+                })
+            }
+
+        </script>
+}
+

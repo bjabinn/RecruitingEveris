@@ -1,0 +1,527 @@
+﻿@using System.Web.Mvc
+@using RecruitingWeb.Helpers
+@using RecruitingWeb.Properties
+@using Recruiting.Application.Becarios.Enums
+
+@helper MenuFrontActions()
+{
+    <script type="text/javascript">        
+        var menuItemToSelect = $("#main-nav li a[data-option-name=PersonasLibres]");
+        menuItemToSelect.addClass("current");
+    </script>
+}
+
+@helper IndexFrontActions(System.Web.Mvc.UrlHelper Url, string nUsuario, string tiempoExpiracionCookie)
+{
+    <script type="text/javascript">
+         //Navegacion Filtro
+
+        $(window).keydown(function (event) {
+            if (event.keyCode == 13) {
+                buscarIntro();
+                return true;
+            }
+        });
+
+        $(document).on('click', '[name=buscar]', function () { 
+            buscarIntro();            
+        });
+
+        function buscarIntro() {
+            var table = $('#tablaPersonasLibres');
+            table.data("fn-search")();
+        }
+
+         $(document).on('click', '#limpiar', function () {
+            resetFields('#form-filter');
+            var url = '@Url.Action("Limpiar", "PersonasLibres")';
+            window.location.href = url;
+        });   
+
+
+        //Carga Tabla
+        $('#tablaPersonasLibres').on('draw.dt', function (event, data) {
+            var total = $('#tempdataPersonasLibres');
+            colorearPersonasLibresVisitadas();
+            total.html(data._iRecordsTotal);
+        });
+
+        function getFiltersPersonasLibres() {
+            var filterNombre = $("[name=filterNombre]").val();
+            var filterApellidos = $("[name=filterApellidos]").val();
+            var filterCategoria = $("[name=filterCategoria]").val();
+            var filterLinea = $("[name=filterLinea]").val();
+            var filterCelda = $("[name=filterCelda]").val();
+            var filterTipoTecnologiaId = $("[name=filterTipoTecnologiaId]").val();
+            var filterNroEmpleado = $("[name=filterNumeroEmpleado]").val();
+            var filterSinNecesidadAsignada = $("[name=filterSinNecesidadAsignada]").val();
+            var filterCentro = $("[name=filterCentro]").val();
+            var filterNivelIdioma = $("[name=filterNivelIdioma]").val();
+            return {
+                Nombre: filterNombre,
+                Apellidos: filterApellidos,
+                Categoria: filterCategoria,
+                Linea: filterLinea,
+                Celda: filterCelda,
+                TipoTecnologiaId: filterTipoTecnologiaId,
+                NroEmpleado: filterNroEmpleado,
+                SinNecesidadAsignada: filterSinNecesidadAsignada,
+                CentroSearch: filterCentro,
+                NivelIdioma: filterNivelIdioma
+            };
+        };
+
+        //Navegacion Buttons
+
+        $(document).on('click', '#EditButton', function () {
+            var item = $(this).closest("tr").find("#PersonaLibreId").val();
+            saveCookie(item);           
+        });
+
+        $(document).on('click', '#DeleteButton', function () {
+
+            var item = $(this).closest("tr").find("#PersonaLibreId").val();
+
+            BootstrapDialog.confirm({
+                title: '@Resources.Eliminar_PersonaLibre_Title',
+                message: '@Resources.Eliminar_PersonaLibre_Message',
+                type: BootstrapDialog.TYPE_CONFIRMDELETE,
+                callback: function (result) {
+                    if (result) {
+                        $.post('@Url.Action("Delete", "PersonasLibres")', { id: item }).
+                            success(function (Data) {
+                                if (Data.IsValid) {
+                                    var tableComponent = $('#tablaPersonasLibres').DataTable();
+                                    tableComponent.ajax.reload(null, true);
+                                } else if (Data == "") {
+                                    BootstrapDialog.show({
+                                        type: BootstrapDialog.TYPE_ERROR,
+                                        title: '@Resources.Permiso_Titulo',
+                                        message: '@Resources.Permiso_Mensaje',
+                                    });
+                                }
+                            });
+                    } else {
+                        BootstrapDialog.closeAll();
+                    }
+                }
+            });
+        });
+
+        $(document).on('click', '#DetailButton', function () {
+            var item = $(this).closest("tr").find("#PersonaLibreId").val();
+            saveCookie(item);          
+        });
+
+        $(document).on('click', '#btnDescargarExcel', function () {
+            var pageFilter = $('#tablaPersonasLibres').data('filters');
+            var filters = {
+                filterNroEmpleado: pageFilter['custom-filter-NroEmpleado'],
+                filterNombre: pageFilter['custom-filter-Nombre'],
+                filterApellidos: pageFilter['custom-filter-Apellidos'],
+                filterCategoria: pageFilter['custom-filter-Categoria'],
+                filterLinea: pageFilter['custom-filter-Linea'],
+                filterCelda: pageFilter['custom-filter-Celda'],
+                filterFechaLiberacion: pageFilter['custom-filter-FechaLiberacion'],
+                filterTipoTecnologiaId: pageFilter['custom-filter-TipoTecnologiaId'],
+                filterCentro: pageFilter['custom-filter-CentroSearch'],
+                filterSinNecesidadAsignada: pageFilter['custom-filter-SinNecesidadAsignada'],
+                filterNivelIdioma: pageFilter['custom-filter-NivelIdioma']
+            };
+
+            var strFiltros = jQuery.param(filters);
+            var url = '@Url.Action("ExportToExcel", "PersonasLibres")?' + strFiltros;
+            window.location.assign(url);
+        });
+     
+        $(document).on('click', '#SearchButton', function () {
+            var id = $(this).closest("tr").find("#PersonaLibreId").val();
+            $('#idPersonaAAsignar').val(id);
+        });                 
+
+        $(document).on('click', '#SelectNecesidades', function () {
+            $("#myModal input:checkbox").prop('checked', false);
+            $(this).prop('checked', true);
+        });
+
+        $(document).on('click', '#BtnNecesidades', function () {
+            var idNecesidad = $("#myModal input:radio:checked").closest("tr").find("#NecesidadId").val();
+            var estadoNuevo = $("#myModal input:radio:checked").closest("tr").find("#selectEstado").val();
+            var idPersonaLibre = $('#idPersonaAAsignar').val();
+            if (!(idNecesidad == null && estadoNuevo == null))
+            {
+                var parametro = {
+                    "idNecesidad": idNecesidad,
+                    "estadoNuevo": estadoNuevo,
+                    "idPersonaLibre": idPersonaLibre
+                }
+                var stringParam = JSON.stringify(parametro);
+                $('#myModal').modal('hide');
+                $.ajax({
+                    type: "POST",
+                    url: "/PersonasLibres/EnlazaNecesidadConPersonaLibre", // the URL of the controller action method
+                    data: { jsonData: stringParam },
+                    success: function (result) {
+                        if (result.IsValid)
+                        {
+                            var table = $('#tablaPersonasLibres');
+                            table.data("fn-search")();
+                        }
+                        else
+                        {
+                            BootstrapDialog.show({
+                                type: BootstrapDialog.TYPE_ERROR,
+                                title: '@Resources.Permiso_Titulo',
+                                message: '@Resources.Permiso_Mensaje',
+                            });
+                        }
+                    },
+                    error: function (req, status, error) {
+                        // do something with error
+                    }
+                });
+            }
+        });
+
+
+        //Funciones
+
+        function saveCookie(item)
+        {
+            var cookieActual = getCookies();
+            if(cookieActual != null)
+            {
+                if(!cookieActual.includes(item))
+                {
+                    cookieActual += "," + item;
+                }
+            }
+            else
+            {
+                cookieActual = item;
+            }
+
+            $.cookie('@nUsuario' + '-personasLibres', cookieActual, {expires : @tiempoExpiracionCookie});
+        }
+        function getCookies()
+        {
+            var cookieActual = $.cookie('@nUsuario' + '-personasLibres');
+            return cookieActual;
+        }
+        function colorearPersonasLibresVisitadas()
+        {
+            var listaCandidaturas = getCookies();
+            if (listaCandidaturas != null)
+            {
+                $('#tablaPersonasLibres tr:not(:first)').each(function(){
+                    if($(this).find("#PersonaLibreId") != null)
+                    {
+                        if(listaCandidaturas.includes($(this).find("#PersonaLibreId").val()))
+                        {
+                            $(this).addClass("linkVisitado");
+                        }
+                    }
+                });
+            }
+        }
+    </script>
+}
+
+@helper EditFrontActions()
+{
+    //Finalizar
+
+    <script type="text/javascript">
+          function finalizar(source) {
+            if ($("form").parsley().validate()) {
+                BootstrapDialog.confirm({
+                    title: '@Resources.PersonaLibre_ConfirmacionGuardarTitulo',
+                    message: '@Resources.PersonaLibre_ConfirmacionGuardarTexto',
+                    type: BootstrapDialog.TYPE_CONFIRMFINALICE,
+                    callback: function (result) {
+                        if (result) {
+                            var submitType = $("[name=SubmitType]");
+                            submitType.val("finalizar");
+                            $("form").submit();
+
+                        } else {
+                            BootstrapDialog.closeAll();
+                        }
+                    }
+                });
+            }
+        }
+    </script>
+}
+
+@helper CreateFrontActions(System.Web.Mvc.UrlHelper Url)
+{
+    <script type="text/javascript">
+
+        //Logica tabla
+
+        $(window).keydown(function (event) {
+            if (event.keyCode == 13) {
+                buscarIntro();
+                return true;
+            }
+        });
+
+        $('#tablaEmpleadosFenix').on('draw.dt', function (event, data) {
+            var total = $('#tempdataEmpleadosFenix');               
+            total.html(data._iRecordsTotal);
+        });                
+
+        $(document).on('click', '[name=buscar]', function () {
+            buscarIntro();
+        });
+
+        $(document).on('click', '[name=limpiar]', function () { 
+            resetFields('#form-filter');
+            var table = $('#tablaEmpleadosFenix');                
+            var url = '@Url.Action("LimpiarTablaCreacionEmpleadosFenix", "PersonasLibres")';
+            window.location.href = url;
+
+        });    
+
+        function buscarIntro() {
+            var table = $('#tablaEmpleadosFenix');
+            table.data("fn-search")();
+            $('#buscar').val(true);
+        }
+
+        function getFiltersEmpleadosFenix() {
+            var filterNombre = $("[name=filterNombre]").val();
+            var filterApellidos = $("[name=filterApellidos]").val();
+            var filterCategoria = $("[name=filterCategoria]").val();
+            var filterLinea = $("[name=filterLinea]").val();
+            var filterCelda = $("[name=filterCelda]").val();
+            var filterNumeroEmpleado = $("[name=filterNumeroEmpleado]").val();
+            var filterCentro = $("[name=filterCentro]").val();            
+            var buscar = $('#buscar').val();
+            $('#buscar').val(false);
+            return {
+                Nombre: filterNombre,
+                Apellidos: filterApellidos,
+                Categoria: filterCategoria,
+                Linea: filterLinea,
+                Celda: filterCelda,
+                NumeroEmpleado: filterNumeroEmpleado,
+                CentroSearch: filterCentro,
+                Buscar: buscar
+            };
+        };
+
+        //Actualizar Linea/Categoria/Celda Buttons
+
+        $(document).on('click', '#botonActualizarBd', function () {
+            loadingDialog = BootstrapDialog.show({
+                type: BootstrapDialog.TYPE_INFO,
+                title: 'Actualizando listas de categoria, linea y celda',
+                closable: false,
+                closeByBackdrop: false,
+                closeByKeyboard: false,
+                message: '<div class="progress progress-striped active" style="margin-bottom:0;"><div class="progress-bar" style="width: 100%"></div></div>'
+            });
+            $.ajax({
+                type: "GET",
+                url: "/PersonasLibres/UpdateCategoriaLineaCeldaInRecruitingDb", // the URL of the controller action method
+                data: null,
+                success: function (result) {
+                    BootstrapDialog.closeAll();
+                },
+                error: function (req, status, error) {
+                    // do something with error
+                    BootstrapDialog.closeAll();
+                    BootstrapDialog.show({
+                        type: BootstrapDialog.TYPE_ERROR,
+                        title: 'Error al actualizar BD',
+                        message: 'No se pudo completar la actualziacion de las listas de Categoria, Línea y Celda',
+                    });
+                }
+            });
+        });
+
+        //Finalizar
+
+        function finalizar(source) {
+            if ($("form input:checkbox:checked").length > 0) {
+                if ($("form").parsley().validate()) {
+                    BootstrapDialog.confirm({
+                        title: '@Resources.PersonaLibre_ConfirmacionGuardarTitulo',
+                        message: '@Resources.PersonaLibre_ConfirmacionGuardarTexto',
+                        type: BootstrapDialog.TYPE_CONFIRMFINALICE,
+                        callback: function (result) {
+                            if (result) {
+                                $("input:checkbox").each(function (index) {
+                                    if ($(this).prop("checked")) {
+                                        forTable();
+                                        var submitType = $("[name=SubmitType]");
+                                        submitType.val("finalizar");
+                                        $("form").submit();
+                                    }
+                                });
+                                BootstrapDialog.closeAll();
+                            } else {
+                                BootstrapDialog.closeAll();
+                            }
+                        }
+                    });
+                }
+            }
+            else {
+                BootstrapDialog.alert({
+                    type: BootstrapDialog.TYPE_ERROR,
+                    title: '@Resources.PersonaLibre_NingunEmpleadoFenixSeleccionadoTitulo',
+                    message: '@Resources.PersonaLibre_NingunEmpleadoFenixSeleccionadoTexto'
+                });
+            }
+        }
+
+       
+        
+    </script>
+}
+
+@helper CreateStepTwoFrontActions()
+{
+    <script type="text/javascript">
+
+        //Finalizar
+
+         function finalizar(source) {
+            if ($("form").parsley().validate()) {
+                BootstrapDialog.confirm({
+                    title: '@Resources.PersonaLibre_ConfirmacionGuardarTitulo',
+                    message: '@Resources.PersonaLibre_ConfirmacionGuardarTexto',
+                    type: BootstrapDialog.TYPE_CONFIRMFINALICE,
+                    callback: function (result) {
+                        if (result) {
+                            $("form").submit();
+
+                        } else {
+                            BootstrapDialog.closeAll();
+                        }
+                    }
+                });
+            }
+        }
+    </script>
+}
+
+@helper ModalNecesidadesFrontActions(System.Web.Mvc.UrlHelper Url)
+{
+    <script type="text/javascript">
+
+        //Busqueda tabla
+
+        $(document).on('click', '#buscarModal', function () {            
+            var table = $('#tablaNecesidadesPersonasLibres');
+            table.data("fn-search")();
+        });
+
+        $(document).on('click', '#limpiarModal', function () {
+            resetFields('#form-filterNecesidades')
+            var table = $('#tablaNecesidadesPersonasLibres');
+            table.data("fn-clear")();
+        });
+
+        function getFiltersNecesidadesPersonasLibres() {
+            var filterCliente = $("[name=filterCliente]").val();
+            var filterProyecto = $("[name=filterProyecto]").val();
+            var filterTecnologia = $("[name=filterTecnologia]").val();
+            var filterPerfil = $("[name=filterPerfil]").val();
+            var filterSolicitadoDesde = $("[name=filterSolicitadoEntreDesde]").val();
+            var filterSolicitadoHasta = $("[name=filterSolicitadoEntreHasta]").val();
+
+            return {
+                Cliente: filterCliente, Proyecto: filterProyecto,
+                Tecnologia: filterTecnologia, Perfil: filterPerfil,
+                SolicitadoDesde: filterSolicitadoDesde,
+                SolicitadoHasta: filterSolicitadoHasta,
+            };
+        }
+
+        //Comprobaciones y restricciones
+
+        $("#filterProyecto").on("change", function (event) {
+            generaSectorYServicioFromProyecto($(this).val(), true);
+        });
+
+        $("#filterCliente").on("change", function (event) {
+            checkCliente();
+
+        });
+
+        //Funciones
+
+        function generaSectorYServicioFromProyecto(ProyectoId, actualizaCliente) {
+
+            if (ProyectoId != null && ProyectoId != '') {
+                $.post('@Url.Action("GeneraSectorYServicioFromProyecto", "Necesidades")', { proyectoId: ProyectoId }).done(function (data) {
+
+                    var clienteId = data.ClienteId;
+                    if (clienteId != null && clienteId != '' && actualizaCliente) {
+                        $('#filterCliente').val(clienteId);
+                    }
+                });
+            }
+        };
+
+        function checkCliente() {
+
+            var clienteIdSeleccionado = $("#filterCliente").val();
+            var $select = $('#filterProyecto');
+            $select.empty();
+
+            $.post('@Url.Action("GeneraProyectosFromClientes", "Necesidades")', { clienteId: clienteIdSeleccionado }).done(function (data) {
+
+                $('<option>', {
+                    value: ''
+                }).html('(select an option)').appendTo($select);
+
+                $.each(data, function (indice, elementoActual) {
+                    $('<option>', {
+                        value: elementoActual.ProyectoId
+                    }).html(elementoActual.Nombre).appendTo($select);
+
+                });
+
+                if (clienteIdSeleccionado != '') {
+                    generaSectorYServicioFromProyecto($('#filterProyecto').val(), false);
+                }
+            });
+        }
+
+    </script>
+}
+
+@helper ForTable()
+{
+    <script type="text/javascript">
+        //For table
+
+        String.format = function (format) {
+            var args = Array.prototype.slice.call(arguments, 1);
+            return format.replace(/{(\d+)}/g, function (match, number) {
+                return typeof args[number] != 'undefined'
+                    ? args[number]
+                    : match
+                    ;
+            });
+        };
+
+        function forTable() {
+            var $cont = 0;
+            $("table tbody tr").each(function () {
+                var item = $(this);
+                item.find('input').each(function () {
+                    var input = $(this);
+                    input.attr('name', String.format(input.attr('name'), $cont));
+                });
+                $cont++;
+            });
+
+        }
+    </script>
+}

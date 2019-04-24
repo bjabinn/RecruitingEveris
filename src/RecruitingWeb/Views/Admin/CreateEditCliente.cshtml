@@ -1,0 +1,139 @@
+﻿@using RecruitingWeb.Components.DataTable.Helpers
+@using RecruitingWeb.Helpers
+@using Recruiting.Application.Candidatos.ViewModels
+@using RecruitingWeb.Properties
+@using RecruitingWeb.Components.DataTable.Models
+
+@model Recruiting.Application.Clientes.ViewModels.ClienteRowViewModel
+
+@{
+
+    if (Model.ClienteId != 0)
+    {
+        var Activo = Model.Activo;
+        if (Activo == false)
+        {
+            Response.Redirect("/Shared/Borrado");
+
+        }
+    }
+}
+
+<div class="row titlePage">
+    <div class="col-lg-6">
+        <h3>@Resources.HTML_Admin_Index_Administracion</h3>
+    </div>
+</div>
+
+<div class="row header-flap">
+    @* Menú de opciones *@
+    <div class="btn-group" role="group">
+        <a class="btn btn-default" href="@Url.Action("Index", new { tab = "tab-user" })">
+            <span class="text">@Resources.HTML_BotonGenericoVolver</span>
+        </a>
+        <a class="btn btn-default" href="#" data-action="guardar">
+            <span class="text">@Resources.HTML_BotonGenericoGuardar</span>
+        </a>
+    </div>
+    @* Pestaña caja superior*@
+    @if (Model.ClienteId == 0)
+    {
+        <div class="col-lg-6 removePadding">
+            <h4 class="noMargin headerBox">@Resources.HTML_Admin_CreateEditCliente_CreandoCliente</h4>
+        </div>
+    }
+    else
+    {
+        <div class="col-lg-6 removePadding">
+            <h4 class="noMargin headerBox">@Resources.HTML_Admin_CreateEditCliente_EditandoCliente</h4>
+        </div>
+    }
+</div>
+<div class="row">
+    <div class="content-box border-top-cero">
+        <div class="content-box-content">
+            @using (Html.BeginForm("CreateEditCliente", "Admin", FormMethod.Post, new Dictionary<string, object> { { "role", "form" }, { "data-parsley-validate", "true" }, { "data-parsley-excluded", ":not([data-validate])" } }))
+            {
+                @Edit.Hidden(Model.ClienteId, "ClienteId")
+
+                <div class="section-form-admin-rol margin" data-id="section-form-basicos">
+                    <div class="row form-row">
+                        <div class="form-group col-lg-4">
+                            <div class="col-lg-12 title-form">
+                                <label for="Nombre">@Resources.HTML_Admin_CreateEditCliente_Nombre</label>
+                            </div>
+                            <div class="col-lg-12">
+                                @Edit.Text(Model.Nombre, "Nombre", id: "Nombre", maxLength: 100, htmlClass: "form-control")
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div> <!-- End content-box-content -->
+    </div> <!-- End .content-box -->
+</div> <!--End .Row-->
+@section scripts{
+
+    <script type="text/javascript">
+
+        $(document).ready(function ()  {
+              $(window).keydown(function (event) {
+                  if (event.keyCode == 13) {
+                      CheckClienteRepetido();
+                      return false;
+                    }
+              });
+        });
+
+        function guardar(source) {
+            CheckClienteRepetido();
+
+        }
+
+        function confirmarGuardar()
+        {
+            BootstrapDialog.confirm({
+                title: '@Resources.Cliente_ConfirmFinalizarTitulo',
+                message: '@Resources.Cliente_ConfirmFinalizarTexto',
+                type: BootstrapDialog.TYPE_CONFIRMFINALICE,
+                callback: function (result) {
+                    if (result) {
+                        $("form").submit();
+                    } else {
+                        BootstrapDialog.closeAll();
+                    }
+                }
+            });
+        }
+
+        function CheckClienteRepetido()
+        {
+            var clienteId = $('[name="ClienteId"]').val();
+            var nombreCliente = $('#Nombre').val();
+            var url = '@Url.Action("CheckClienteRepetido", "Admin")';
+
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: { clienteId: clienteId, nombreCliente: nombreCliente },
+                    cache: false,
+                    success: function (data) {
+                        if (data == false) {
+                            confirmarGuardar();
+                        }
+                        else {
+                            BootstrapDialog.show({
+                                type: BootstrapDialog.TYPE_ERROR,
+                                title: '@Resources.Error',
+                                message: '@Resources.ErrorClienteYaExiste',
+                            });
+                        }
+                    },
+                    error: function (data) {
+                        console.log("ha fallado");
+                    }
+                });
+
+        }
+    </script>
+}

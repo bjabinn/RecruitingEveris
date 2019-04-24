@@ -1,0 +1,848 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{7986448E-47F3-4E0E-BAB0-BA2F1CDD08F4}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>RecruitingWeb</RootNamespace>
+    <AssemblyName>RecruitingWeb</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <UseGlobalApplicationHostFile />
+    <Use64BitIISExpress />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Oracle.ManagedDataAccess, Version=4.121.2.0, Culture=neutral, PublicKeyToken=89b483f429c47342, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Oracle.ManagedDataAccess.12.1.24160719\lib\net40\Oracle.ManagedDataAccess.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Swashbuckle.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cd1bb07a5ac7c7bc, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Swashbuckle.Core.5.6.0\lib\net40\Swashbuckle.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.AspNet.WebPages.3.2.2\lib\net45\System.Web.Helpers.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Http, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.3\lib\net45\System.Web.Http.WebHost.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.AspNet.Mvc.5.2.2\lib\net45\System.Web.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.AspNet.Razor.3.2.2\lib\net45\System.Web.Razor.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.AspNet.WebPages.3.2.2\lib\net45\System.Web.WebPages.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.AspNet.WebPages.3.2.2\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.AspNet.WebPages.3.2.2\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http">
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest">
+    </Reference>
+    <Reference Include="System.Web.Optimization">
+      <HintPath>..\..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="WebActivatorEx, Version=2.0.0.0, Culture=neutral, PublicKeyToken=7b26dc2a43f6a0d4, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\WebActivatorEx.2.0\lib\net40\WebActivatorEx.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="WebGrease">
+      <Private>True</Private>
+      <HintPath>..\..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
+    </Reference>
+    <Reference Include="Antlr3.Runtime">
+      <Private>True</Private>
+      <HintPath>..\..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework">
+      <HintPath>..\..\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\..\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core">
+      <HintPath>..\..\packages\Microsoft.AspNet.Identity.Core.2.1.0\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Owin">
+      <HintPath>..\..\packages\Microsoft.AspNet.Identity.Owin.2.1.0\lib\net45\Microsoft.AspNet.Identity.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.EntityFramework">
+      <HintPath>..\..\packages\Microsoft.AspNet.Identity.EntityFramework.2.1.0\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="Owin">
+      <HintPath>..\..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin">
+      <HintPath>..\..\packages\Microsoft.Owin.3.0.0\lib\net45\Microsoft.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Host.SystemWeb">
+      <HintPath>..\..\packages\Microsoft.Owin.Host.SystemWeb.3.0.0\lib\net45\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security">
+      <HintPath>..\..\packages\Microsoft.Owin.Security.3.0.0\lib\net45\Microsoft.Owin.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Facebook">
+      <HintPath>..\..\packages\Microsoft.Owin.Security.Facebook.3.0.0\lib\net45\Microsoft.Owin.Security.Facebook.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Cookies">
+      <HintPath>..\..\packages\Microsoft.Owin.Security.Cookies.3.0.0\lib\net45\Microsoft.Owin.Security.Cookies.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.OAuth">
+      <HintPath>..\..\packages\Microsoft.Owin.Security.OAuth.3.0.0\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Google">
+      <HintPath>..\..\packages\Microsoft.Owin.Security.Google.3.0.0\lib\net45\Microsoft.Owin.Security.Google.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Twitter">
+      <HintPath>..\..\packages\Microsoft.Owin.Security.Twitter.3.0.0\lib\net45\Microsoft.Owin.Security.Twitter.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.MicrosoftAccount">
+      <HintPath>..\..\packages\Microsoft.Owin.Security.MicrosoftAccount.3.0.0\lib\net45\Microsoft.Owin.Security.MicrosoftAccount.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\IdentityConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="App_Start\SwaggerConfig.cs" />
+    <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Binding\DecimalModelBinder.cs" />
+    <Compile Include="Components\DataTable\Helpers\DataTablesHelper.cs" />
+    <Compile Include="Components\DataTable\Models\BaseColumn.cs" />
+    <Compile Include="Components\DataTable\Models\Column.cs" />
+    <Compile Include="Components\DataTable\Models\ColumnDefinition.cs" />
+    <Compile Include="Components\DataTable\Models\ColumnDefinitionFactory.cs" />
+    <Compile Include="Components\DataTable\Models\FooterTemplateDefinition.cs" />
+    <Compile Include="Components\DataTable\Models\FooterTemplateFactory.cs" />
+    <Compile Include="Components\DataTable\Models\GridModel.cs" />
+    <Compile Include="Components\DataTable\Models\RowTemplateDefinition.cs" />
+    <Compile Include="Components\DataTable\Models\RowTemplateFactory.cs" />
+    <Compile Include="Components\DataTable\Models\RowTemplateType.cs" />
+    <Compile Include="Components\DataTable\Models\TemplatedColumn.cs" />
+    <Compile Include="Components\DataTable\ServerSide\Column.cs" />
+    <Compile Include="Components\DataTable\ServerSide\ColumnCollection.cs" />
+    <Compile Include="Components\DataTable\ServerSide\DataTableMapper.cs" />
+    <Compile Include="Components\DataTable\ServerSide\DataTablesBinder.cs" />
+    <Compile Include="Components\DataTable\ServerSide\DataTablesJsonBinder.cs" />
+    <Compile Include="Components\DataTable\ServerSide\DataTablesResponse.cs" />
+    <Compile Include="Components\DataTable\ServerSide\DefaultDataTablesRequest.cs" />
+    <Compile Include="Components\DataTable\ServerSide\IDataTablesRequest.cs" />
+    <Compile Include="Components\DataTable\ServerSide\NameValueCollectionExtensions.cs" />
+    <Compile Include="Components\DataTable\ServerSide\Search.cs" />
+    <Compile Include="Components\HttpClient\HttpClientGlobal.cs" />
+    <Compile Include="Components\Searchable\Searchable.cs" />
+    <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\ApiControllers\DatosCandidatosApiController.cs" />
+    <Compile Include="Controllers\ApiControllers\OtherInfoContactarApiController.cs" />
+    <Compile Include="Controllers\ApiControllers\OtherInfoDropdownsApiController.cs" />
+    <Compile Include="Controllers\BitacorasBecariosController.cs" />
+    <Compile Include="Controllers\BitacorasNecesidadesController.cs" />
+    <Compile Include="Controllers\BitacorasController.cs" />
+    <Compile Include="Controllers\BecariosController.cs" />
+    <Compile Include="Controllers\ApiControllers\OtherInfoApiController.cs" />
+    <Compile Include="Controllers\ApiControllers\EnviarCorreosApiController.cs" />
+    <Compile Include="Controllers\ErrorController.cs" />
+    <Compile Include="Controllers\GraphController.cs" />
+    <Compile Include="Controllers\FunnelProcesosController.cs" />
+    <Compile Include="Controllers\PersonasLibresController.cs" />
+    <Compile Include="Controllers\CandidatosController.cs" />
+    <Compile Include="Controllers\CandidaturasController.cs" />
+    <Compile Include="Controllers\DashboardController.cs" />
+    <Compile Include="Controllers\MaquetasController.cs" />
+    <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\NecesidadesController.cs" />
+    <Compile Include="Controllers\OfertasController.cs" />
+    <Compile Include="Constantes\PermisosEnum.cs" />
+    <Compile Include="Controllers\SharedController.cs" />
+    <Compile Include="Enums\TypeMessageEnum.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="Helpers\ControllerHelper.cs" />
+    <Compile Include="Helpers\FormatHelper.cs" />
+    <Compile Include="Helpers\MvcHelper.cs" />
+    <Compile Include="Models\DatosCandidatoConsultaApiModel.cs" />
+    <Compile Include="Models\DatosCandidaturaApiModel.cs" />
+    <Compile Include="Models\OtherInfoDropdownsModel.cs" />
+    <Compile Include="Models\ContactarCandidatoModel.cs" />
+    <Compile Include="Models\DatosCandidatoApiModel.cs" />
+    <Compile Include="Models\OtherInfoRowModel.cs" />
+    <Compile Include="Models\OtherInfoModel.cs" />
+    <Compile Include="Models\EverisUserValidatorModel.cs" />
+    <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\CandidaturaIdYTipoEntrevistaViewModel.cs" />
+    <Compile Include="Models\EstadoNecesidadSelectViewModel.cs" />
+    <Compile Include="Models\FiltroBitacoraBecarioModels.cs" />
+    <Compile Include="Models\FunnelProcesoGraficasModels.cs" />
+    <Compile Include="Models\FiltroBitacoraNecesidadModels.cs" />
+    <Compile Include="Models\FiltroFunnelModel.cs" />
+    <Compile Include="Models\FiltroGrupoNecesidadesModels.cs" />
+    <Compile Include="Models\FiltroBecarioModels.cs" />
+    <Compile Include="Models\FiltroStaffingNecesidadesViewModel.cs" />
+    <Compile Include="Models\ModalEdicionNecesidadViewModel.cs" />
+    <Compile Include="Models\FiltroBitacoraModels.cs" />
+    <Compile Include="Models\FiltroEmpleadosFenixModels.cs" />
+    <Compile Include="Models\SectorIdServicioIdClienteIdModel.cs" />
+    <Compile Include="Models\FiltroPersonaLibreModels .cs" />
+    <Compile Include="Models\FiltrousuarioModels.cs" />
+    <Compile Include="Models\FiltroCandidatoModels.cs" />
+    <Compile Include="Models\FiltroCandidaturaModels.cs" />
+    <Compile Include="Models\FiltroNecesidadesModels.cs" />
+    <Compile Include="Models\FiltroOfertaModels.cs" />
+    <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\ListasModalNecesidadesViewModel.cs" />
+    <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Security\RecruitingAuthorizeAttribute.cs" />
+    <Compile Include="Security\UserIdentity.cs" />
+    <Compile Include="Startup.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\app\form.css" />
+    <Content Include="Content\app\menu.css" />
+    <Content Include="Content\app\notification.css" />
+    <Content Include="Content\app\table.css" />
+    <Content Include="Content\bootstrapDialog\bootstrap-dialog.css" />
+    <Content Include="Content\bootstrap\bootstrap-theme.css" />
+    <Content Include="Content\bootstrap\bootstrap-theme.min.css" />
+    <Content Include="Content\bootstrap\bootstrap.css" />
+    <Content Include="Content\bootstrap\bootstrap.min.css" />
+    <Content Include="Content\calendar\fullcalendar.css" />
+    <Content Include="Content\font-awesome.css" />
+    <Content Include="Content\font-awesome.min.css" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Content\ie.css" />
+    <Content Include="Content\images\4.png" />
+    <Content Include="Content\images\b.png" />
+    <Content Include="Content\images\bg-body.gif" />
+    <Content Include="Content\images\bg-button-green.gif" />
+    <Content Include="Content\images\bg-content-box.gif" />
+    <Content Include="Content\images\bg-field.gif" />
+    <Content Include="Content\images\bg-form-field.gif" />
+    <Content Include="Content\images\bg-login-top.png" />
+    <Content Include="Content\images\bg-login.gif" />
+    <Content Include="Content\images\bg-menu-item-current.gif" />
+    <Content Include="Content\images\bg-menu-item-green.gif" />
+    <Content Include="Content\images\bg-radial-gradient.gif" />
+    <Content Include="Content\images\bg-sidebar.gif" />
+    <Content Include="Content\images\bl.png" />
+    <Content Include="Content\images\br.png" />
+    <Content Include="Content\images\cabecera.png" />
+    <Content Include="Content\images\CabeceraPlantillaCorreo.png" />
+    <Content Include="Content\images\closelabel.gif" />
+    <Content Include="Content\images\copy_disabled.png" />
+    <Content Include="Content\images\copyHover.png" />
+    <Content Include="Content\images\copy.png" />
+    <Content Include="Content\images\firma.png" />
+    <Content Include="Content\images\FirmaPlantillaCorreo.png" />
+    <Content Include="Content\images\fondo_Selector.fw.png" />
+    <Content Include="Content\images\icons\alert.png" />
+    <Content Include="Content\images\icons\decision.png" />
+    <Content Include="Content\images\icons\delete.png" />
+    <Content Include="Content\images\icons\error.png" />
+    <Content Include="Content\images\everis.png" />
+    <Content Include="Content\images\icons\add-notes-32x32.png" />
+    <Content Include="Content\images\icons\Add-User-32x32.png" />
+    <Content Include="Content\images\icons\addmenu.png" />
+    <Content Include="Content\images\icons\bullet_black.png" />
+    <Content Include="Content\images\icons\calendario.jpg" />
+    <Content Include="Content\images\icons\candidature-32x32.png" />
+    <Content Include="Content\images\icons\clone.png" />
+    <Content Include="Content\images\icons\cross.png" />
+    <Content Include="Content\images\icons\cross_circle.png" />
+    <Content Include="Content\images\icons\cross_grey_small.png" />
+    <Content Include="Content\images\icons\cross_small.png" />
+    <Content Include="Content\images\icons\addfile.png" />
+    <Content Include="Content\images\icons\detail.png" />
+    <Content Include="Content\images\icons\document_add.png" />
+    <Content Include="Content\images\icons\Download.png" />
+    <Content Include="Content\images\icons\excel-icon.png" />
+    <Content Include="Content\images\icons\exclamation.png" />
+    <Content Include="Content\images\icons\finalizar.png" />
+    <Content Include="Content\images\icons\gear.png" />
+    <Content Include="Content\images\icons\guardar.png" />
+    <Content Include="Content\images\icons\hammer_screwdriver.png" />
+    <Content Include="Content\images\icons\icon-comment-green.png" />
+    <Content Include="Content\images\icons\information.png" />
+    <Content Include="Content\images\icons\jquery.wysiwyg.gif" />
+    <Content Include="Content\images\icons\mail-dark.png" />
+    <Content Include="Content\images\icons\modal_finalizar.png" />
+    <Content Include="Content\images\icons\modal_guardar.png" />
+    <Content Include="Content\images\icons\msg-success.png" />
+    <Content Include="Content\images\icons\need-32x32.png" />
+    <Content Include="Content\images\icons\Offer-32x32.png" />
+    <Content Include="Content\images\icons\pdf-icon.png" />
+    <Content Include="Content\images\icons\pencil.png" />
+    <Content Include="Content\images\icons\search.png" />
+    <Content Include="Content\images\icons\stars.png" />
+    <Content Include="Content\images\icons\tick-blue.png" />
+    <Content Include="Content\images\icons\tick-gray.png" />
+    <Content Include="Content\images\icons\tick-green.png" />
+    <Content Include="Content\images\icons\tick-red.png" />
+    <Content Include="Content\images\icons\tick.png" />
+    <Content Include="Content\images\icons\tick_circle.png" />
+    <Content Include="Content\images\icons\trash.png" />
+    <Content Include="Content\images\icons\unnamed.png" />
+    <Content Include="Content\images\icons\user.png" />
+    <Content Include="Content\images\icons\utils-padlock.png" />
+    <Content Include="Content\images\icons\view_detail.png" />
+    <Content Include="Content\images\icons\volver_36x36.png" />
+    <Content Include="Content\images\loading.gif" />
+    <Content Include="Content\images\logo-small.png" />
+    <Content Include="Content\images\logo.png" />
+    <Content Include="Content\images\logoEveris.png" />
+    <Content Include="Content\images\logo_everis.png" />
+    <Content Include="Content\images\logo_Everis1.png" />
+    <Content Include="Content\images\logo_Everis2.png" />
+    <Content Include="Content\images\logo_everis_blanco.png" />
+    <Content Include="Content\images\logo_everis_sm.png" />
+    <Content Include="Content\images\menu-current-arrow.gif" />
+    <Content Include="Content\images\mock.JPG" />
+    <Content Include="Content\images\reagendar.png" />
+    <Content Include="Content\images\shortcut-button-bg.gif" />
+    <Content Include="Content\images\tl.png" />
+    <Content Include="Content\images\tr.png" />
+    <Content Include="Content\images\video.jpg" />
+    <Content Include="Content\jointJs\joint.css" />
+    <Content Include="Content\reset.css" />
+    <Content Include="Content\error.css" />
+    <Content Include="Content\style.css" />
+    <Content Include="Content\summernote\summernote.css" />
+    <Content Include="Content\themes\base\core.css" />
+    <Content Include="Content\themes\base\datepicker.css" />
+    <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="Content\themes\base\images\ui-icons_222222_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_454545_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_888888_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Content\themes\base\jquery-ui-timepicker-addon.css" />
+    <Content Include="Content\themes\base\jquery-ui.css" />
+    <Content Include="Content\themes\base\theme.css" />
+    <Content Include="favicon.ico" />
+    <Content Include="fonts\fontawesome-webfont.svg" />
+    <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Global.asax" />
+    <Content Include="Scripts\plugins\Chart.js" />
+    <Content Include="Scripts\plugins\jquery-ui-sliderAccess.js" />
+    <Content Include="Scripts\plugins\jquery-ui-timepicker-addon.js" />
+    <Content Include="Scripts\plugins\loadingoverlay.js" />
+    <Content Include="Scripts\plugins\Moment.js" />
+    <Content Include="Scripts\plugins\summernote.js" />
+    <Content Include="Scripts\recruiting\Load.js" />
+    <Content Include="Scripts\recruiting\menu.js" />
+    <Content Include="Scripts\recruiting\plugins.js" />
+    <Content Include="Scripts\recruiting\framework.js" />
+    <Content Include="Scripts\plugins\autoNumeric.js" />
+    <Content Include="Scripts\base\bootstrap-toggle.js" />
+    <Content Include="Scripts\base\bootstrap-dialog.js" />
+    <Content Include="Scripts\base\bootstrap.js" />
+    <Content Include="App_Code\Edit.cshtml" />
+    <Content Include="App_Code\Display.cshtml" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Content\bootstrap-toggle.css" />
+    <Content Include="fonts\FontAwesome.otf" />
+    <Content Include="fonts\fontawesome-webfont.woff2" />
+    <Content Include="fonts\fontawesome-webfont.woff" />
+    <Content Include="fonts\fontawesome-webfont.ttf" />
+    <Content Include="fonts\fontawesome-webfont.eot" />
+    <Content Include="App_Code\BecariosFrontActions.cshtml" />
+    <Content Include="App_Code\CandidatosFrontActions.cshtml" />
+    <Content Include="App_Code\PersonasLibresFrontActions.cshtml" />
+    <Content Include="Content\summernote\font\summernote.eot" />
+    <Content Include="Content\summernote\font\summernote.ttf" />
+    <Content Include="Content\summernote\font\summernote.woff" />
+    <Content Include="App_Code\CandidaturasFrontActions.cshtml" />
+    <Content Include="App_Code\StaffingNecesidadesFrontActions.cshtml" />
+    <Content Include="App_Code\NecesidadesFrontActions.cshtml" />
+    <Content Include="App_Code\GrupoNecesidadesFrontActions.cshtml" />
+    <Content Include="App_Code\DashboardFrontActions.cshtml" />
+    <Content Include="App_Code\FunnelProcesosFrontActions.cshtml" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
+    <None Include="Properties\PublishProfiles\FolderProfile1.pubxml" />
+    <None Include="Properties\PublishProfiles\Preproduccion.pubxml" />
+    <None Include="Properties\PublishProfiles\publica.pubxml" />
+    <None Include="Properties\PublishProfiles\Release.pubxml" />
+    <Content Include="Scripts\base\jquery-1.12.4.min.js" />
+    <Content Include="Scripts\base\jquery-1.12.4.min.map" />
+    <Content Include="Scripts\plugins\fullcalendar.min.js" />
+    <Content Include="Scripts\plugins\moment.min.js" />
+    <Content Include="Scripts\plugins\jquery.dataTables.js" />
+    <Content Include="Scripts\recruiting\init.js" />
+    <Content Include="Scripts\jointJsAndDependencies\backbone.js" />
+    <Content Include="Scripts\jointJsAndDependencies\dagre.js" />
+    <Content Include="Scripts\jointJsAndDependencies\graphlib.js" />
+    <Content Include="Scripts\jointJsAndDependencies\joint.js" />
+    <Content Include="Scripts\jointJsAndDependencies\lodash.js" />
+    <Content Include="Scripts\jointJsAndDependencies\underscore.js" />
+    <Content Include="Scripts\base\jquery.cookie-1.4.1.min.js" />
+    <Content Include="Scripts\base\jquery-ui-1.10.4.min.js" />
+    <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\plugins\parsley.js" />
+    <Content Include="Scripts\plugins\parsley.remote.js" />
+    <Content Include="Scripts\base\respond.js" />
+    <Content Include="Scripts\plugins\TweenMax.min.js" />
+    <Content Include="Scripts\_references.js" />
+    <Content Include="Views\Candidatos\Create.cshtml" />
+    <Content Include="Views\Candidaturas\Create.cshtml" />
+    <Content Include="Views\Candidaturas\Details.cshtml" />
+    <Content Include="Views\Candidaturas\FiltradoCv.cshtml" />
+    <Content Include="Views\Candidaturas\Partials\Ejecutar\Entrevista\PrimeraEntrevista\_AgendarPrimeraEntrevista.cshtml" />
+    <Content Include="Views\Candidaturas\Partials\Ejecutar\Entrevista\PrimeraEntrevista\_ResultadoPrimeraEntrevista.cshtml" />
+    <Content Include="Views\Candidaturas\Partials\Ejecutar\Entrevista\SegundaEntrevista\_AgendarSegundaEntrevista.cshtml" />
+    <Content Include="Views\Candidaturas\Partials\Ejecutar\Entrevista\SegundaEntrevista\_ResultadoSegundaEntrevista.cshtml" />
+    <Content Include="Views\Candidaturas\Partials\Ejecutar\Entrevista\_RangoSalarialesyDisponibilidades.cshtml" />
+    <Content Include="Views\Candidaturas\AgendarPrimeraEntrevista.cshtml" />
+    <Content Include="Views\Candidaturas\CompletarPrimeraEntrevista.cshtml" />
+    <Content Include="Views\Candidaturas\AgendarSegundaEntrevista.cshtml" />
+    <Content Include="Views\Candidaturas\CompletarSegundaEntrevista.cshtml" />
+    <Content Include="Views\Candidaturas\AgendarCartaOferta.cshtml" />
+    <Content Include="Views\Candidaturas\CompletarCartaOferta.cshtml" />
+    <Content Include="Views\Candidaturas\Partials\Ejecutar\Entrevista\PrimeraEntrevista\AgendarPrimeraEntrevista.cshtml" />
+    <Content Include="Views\Candidaturas\Partials\Ejecutar\Entrevista\SegundaEntrevista\AgendarSegundaEntrevista.cshtml" />
+    <Content Include="Views\Candidaturas\Partials\Ejecutar\Entrevista\PrimeraEntrevista\CompletarPrimeraEntrevista.cshtml" />
+    <Content Include="Views\Candidaturas\Partials\Ejecutar\Entrevista\SegundaEntrevista\CompletarSegundaEntrevista.cshtml" />
+    <Content Include="Views\Candidaturas\Modal\_ModalBusquedaCandidato.cshtml" />
+    <Content Include="Views\Account\Login.cshtml" />
+    <Content Include="Views\Candidatos\Table\actionColumn.cshtml" />
+    <Content Include="Views\Necesidades\Table\actionColumn.cshtml" />
+    <Content Include="Views\Candidaturas\Table\actionColumn.cshtml" />
+    <Content Include="Views\Candidatos\Details.cshtml" />
+    <Content Include="Views\Candidaturas\Table\actionColumnModal.cshtml" />
+    <Content Include="Views\Candidatos\Edit.cshtml" />
+    <Content Include="Views\Admin\Index.cshtml" />
+    <Content Include="Views\Admin\actionColumnUsuarios.cshtml" />
+    <Content Include="Views\Admin\actionColumnRoles.cshtml" />
+    <Content Include="Views\Admin\EditUsuarios.cshtml" />
+    <Content Include="Views\Admin\CreateUsuarios.cshtml" />
+    <Content Include="Views\Admin\EditRoles.cshtml" />
+    <Content Include="Views\Admin\CreateRoles.cshtml" />
+    <Content Include="Views\Candidatos\Index.cshtml" />
+    <Content Include="Views\Candidaturas\Index.cshtml" />
+    <Content Include="Views\Maquetas\index.cshtml" />
+    <Content Include="Views\Necesidades\Edit.cshtml" />
+    <Content Include="Views\Necesidades\Index.cshtml" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Views\Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Home\About.cshtml" />
+    <Content Include="Views\Home\Contact.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Manage\AddPhoneNumber.cshtml" />
+    <Content Include="Views\Manage\ChangePassword.cshtml" />
+    <Content Include="Views\Manage\Index.cshtml" />
+    <Content Include="Views\Manage\ManageLogins.cshtml" />
+    <Content Include="Views\Manage\SetPassword.cshtml" />
+    <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
+    <Content Include="Views\Shared\Lockout.cshtml" />
+    <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\Shared\Controls\DataTable.cshtml" />
+    <Content Include="Views\Home\IntegrationExamples.cshtml" />
+    <Content Include="Views\Shared\_LayoutLogin.cshtml" />
+    <Content Include="Views\Necesidades\Details.cshtml" />
+    <Content Include="Views\Candidaturas\Modal\_ModalBusquedaNecesida.cshtml" />
+    <Content Include="Views\Candidaturas\Table\actionColumnN.cshtml" />
+    <Content Include="Views\Dashboard\Index.cshtml" />
+    <Content Include="Views\Dashboard\Partials\_Administrador.cshtml" />
+    <Content Include="Views\Dashboard\Partials\_Entrevistador.cshtml" />
+    <Content Include="Views\Bitacoras\Index.cshtml" />
+    <Content Include="Views\Bitacoras\Modal\_ModalAddComentario.cshtml" />
+    <Content Include="Views\Bitacoras\Partials\_DatosCandidatura.cshtml" />
+    <Content Include="Views\Candidaturas\EditExtend.cshtml" />
+    <Content Include="Views\Admin\actionColumnClientes.cshtml" />
+    <Content Include="Views\Admin\CreateEditCliente.cshtml" />
+    <Content Include="Views\Admin\actionColumnProyecto.cshtml" />
+    <Content Include="Views\Admin\CreateEditProyecto.cshtml" />
+    <Content Include="Views\Dashboard\actionColumn.cshtml" />
+    <Content Include="Views\PersonasLibres\Table\actionColumn.cshtml" />
+    <Content Include="Views\PersonasLibres\Details.cshtml" />
+    <Content Include="Views\PersonasLibres\Edit.cshtml" />
+    <Content Include="Views\PersonasLibres\Index.cshtml" />
+    <Content Include="Views\PersonasLibres\Create.cshtml" />
+    <Content Include="Views\PersonasLibres\Table\actionColumnEmpleadosFenix.cshtml" />
+    <Content Include="Views\PersonasLibres\CreateStepTwo.cshtml" />
+    <Content Include="Views\Necesidades\Modals\_ModalBusquedaPersonaLibre.cshtml" />
+    <Content Include="Views\Necesidades\Table\actionColumnModalPersonaLibre.cshtml" />
+    <Content Include="Views\PersonasLibres\Modal\_ModalBusquedaNecesidad.cshtml" />
+    <Content Include="Views\PersonasLibres\Table\actionRadioButton.cshtml" />
+    <Content Include="Views\PersonasLibres\Table\actionSeleccionadorNecesidad.cshtml" />
+    <Content Include="Views\Necesidades\Modals\_ModalCandidatosQueCumplenPerfil.cshtml" />
+    <Content Include="Views\Necesidades\Table\actionColumnCandidatosQueCumplenPerfil.cshtml" />
+    <Content Include="Views\Candidaturas\Partials\Ejecutar\Entrevista\PrimeraEntrevista\_AgendarSubEntrevistasPrimeraEntrevista.cshtml" />
+    <Content Include="Views\Candidaturas\Partials\Ejecutar\Entrevista\SegundaEntrevista\_AgendarSubEntrevistasSegundaEntrevista.cshtml" />
+    <Content Include="Views\Candidaturas\EditSubEntrevistas.cshtml" />
+    <Content Include="Views\Candidaturas\Modal\_ModalAniadirSubEntrevista.cshtml" />
+    <Content Include="Views\Candidaturas\Modal\_ModalRenuncia.cshtml" />
+    <Content Include="Views\Necesidades\CreateGrupoNecesidad.cshtml" />
+    <Content Include="Views\Necesidades\SeguimientoGrupoNecesidad.cshtml" />
+    <Content Include="Views\Necesidades\SeguimientoGrupoNecesidadTable.cshtml" />
+    <Content Include="Views\Candidaturas\Modal\_ModalStandBy.cshtml" />
+    <Content Include="Views\Candidaturas\Modal\_ModalEditNecesidad.cshtml" />
+    <Content Include="Views\Necesidades\GrupoNecesidades.cshtml" />
+    <Content Include="Views\Necesidades\Table\actionColumnGrupoNecesidades.cshtml" />
+    <Content Include="Views\Necesidades\Modals\_ModalCreatePerfil.cshtml" />
+    <Content Include="Views\Necesidades\Modals\_ModalEditPerfil.cshtml" />
+    <Content Include="Views\Shared\Borrado.cshtml" />
+    <Content Include="Views\Error\GenericError.cshtml" />
+    <Content Include="Views\BitacorasNecesidades\Index.cshtml" />
+    <Content Include="Views\BitacorasNecesidades\Partials\_DatosNecesidad.cshtml" />
+    <Content Include="Views\BitacorasNecesidades\Modal\_ModalAddComentario.cshtml" />
+    <Content Include="Views\Candidaturas\Partials\Create\_DatosBasicos.cshtml" />
+    <Content Include="Views\Becarios\Create.cshtml" />
+    <Content Include="Views\Becarios\Partials\Edit\_DatosBasicos.cshtml" />
+    <Content Include="Views\Becarios\Table\actionColumnIndex.cshtml" />
+    <Content Include="Views\Becarios\Table\actionColumnCandidato.cshtml" />
+    <Content Include="Views\Becarios\Table\actionColumnCentro.cshtml" />
+    <Content Include="Views\Becarios\EnProceso.cshtml" />
+    <Content Include="Views\Becarios\Partials\Edit\EnProceso.cshtml" />
+    <Content Include="Views\Becarios\Details.cshtml" />
+    <Content Include="Views\Becarios\Seleccion.cshtml" />
+    <Content Include="Views\Becarios\Partials\Edit\GestionDocumental.cshtml" />
+    <Content Include="Views\Becarios\Partials\Edit\Asignacion.cshtml" />
+    <Content Include="Views\BitacorasBecarios\Index.cshtml" />
+    <Content Include="Views\BitacorasBecarios\Modal\_ModalAddComentario.cshtml" />
+    <Content Include="Views\BitacorasBecarios\Partials\_DatosBecario.cshtml" />
+    <Content Include="Views\Becarios\Partials\Edit\Practicas.cshtml" />
+    <Content Include="Views\Becarios\Practicas.cshtml" />
+    <Content Include="Views\Becarios\Partials\Edit\DatosRenuncia.cshtml" />
+    <Content Include="Views\Becarios\Edit.cshtml" />
+    <Content Include="Views\Becarios\Index.cshtml" />
+    <Content Include="Views\Dashboard\Modal\_ModalAlertasAdmin.cshtml" />
+    <Content Include="Views\Graph\ExcludedRooms.cshtml" />
+    <Content Include="Views\Becarios\Table\actionColumnConvocatoria.cshtml" />
+    <Content Include="Views\Necesidades\StaffingNecesidades.cshtml" />
+    <Content Include="Views\Necesidades\Table\personaAsignadaColumnStaffingNecesidad.cshtml" />
+    <Content Include="Views\Candidaturas\Partials\Details\_DatosBasicosDetails.cshtml" />
+    <Content Include="Views\Candidaturas\Table\stateColumn.cshtml" />
+    <Content Include="Views\Becarios\Table\stateColumnIndex.cshtml" />
+    <Content Include="Views\Becarios\Modals\_ModalBusquedaCandidato.cshtml" />
+    <Content Include="Views\Becarios\Modals\_ModalBusquedaCentro.cshtml" />
+    <Content Include="Views\Becarios\Modals\_ModalBusquedaConvocatoria.cshtml" />
+    <Content Include="Views\Becarios\Modals\_ModalCrearEditCentros.cshtml" />
+    <Content Include="Views\Becarios\Modals\_ModalCrearEditConvocatorias.cshtml" />
+    <Content Include="Views\Becarios\Modals\_ModalRenuncia.cshtml" />
+    <Content Include="Views\Becarios\Modals\_ModalStandBy.cshtml" />
+    <Content Include="Views\Becarios\Partials\Details\EnProceso.cshtml" />
+    <Content Include="Views\Becarios\Partials\Details\Practicas.cshtml" />
+    <Content Include="Views\Becarios\Partials\Details\DatosRenuncia.cshtml" />
+    <Content Include="Views\Becarios\Partials\Details\Asignacion.cshtml" />
+    <Content Include="Views\Becarios\Partials\Details\GestionDocumental.cshtml" />
+    <Content Include="Views\Becarios\Partials\Details\_DatosBasicos.cshtml" />
+    <Content Include="Views\Becarios\Partials\Create\_DatosBasicos.cshtml" />
+    <Content Include="Views\Candidaturas\DetailsSubEntrevistas.cshtml" />
+    <Content Include="Views\Necesidades\Table\hiddenDataColumnStaffingNecesidad.cshtml" />
+    <Content Include="Views\Necesidades\Table\hiddenDataColumnStaffingPersona.cshtml" />
+    <Content Include="Views\Necesidades\Table\observacionesColumnStaffingNecesidad.cshtml" />
+    <Content Include="Views\Candidaturas\Modal\_ModalBusquedaOferta.cshtml" />
+    <Content Include="Views\Candidaturas\Modal\_ModalCrearEditOfertas.cshtml" />
+    <Content Include="Views\Candidaturas\Table\actionColumnOferta.cshtml" />
+    <Content Include="Views\Candidaturas\Partials\Edit\FiltradoCv\FiltradoCv.cshtml" />
+    <Content Include="Views\Candidaturas\Partials\Edit\Entrevista\PrimeraEntrevista\_AgendarPrimeraEntrevista.cshtml" />
+    <Content Include="Views\Candidaturas\Partials\Edit\Entrevista\PrimeraEntrevista\_ResultadoPrimeraEntrevista.cshtml" />
+    <Content Include="Views\Candidaturas\Partials\Edit\Entrevista\PrimeraEntrevista\CompletarPrimeraEntrevista.cshtml" />
+    <Content Include="Views\Candidaturas\Partials\Edit\Entrevista\SegundaEntrevista\_AgendarSegundaEntrevista.cshtml" />
+    <Content Include="Views\Candidaturas\Partials\Edit\Entrevista\SegundaEntrevista\_ResultadoSegundaEntrevista.cshtml" />
+    <Content Include="Views\Candidaturas\Partials\Edit\Entrevista\SegundaEntrevista\CompletarSegundaEntrevista.cshtml" />
+    <Content Include="Views\Candidaturas\Partials\Edit\Entrevista\PrimeraEntrevista\_AgendarSubEntrevistasPrimeraEntrevista.cshtml" />
+    <Content Include="Views\Candidaturas\Partials\Edit\Entrevista\SegundaEntrevista\_AgendarSubEntrevistasSegundaEntrevista.cshtml" />
+    <Content Include="Views\Candidaturas\Partials\Edit\Entrevista\_ObservacionesEntrevista.cshtml" />
+    <Content Include="Views\Candidaturas\Partials\Edit\Entrevista\_RangoSalarialesyDisponibilidades.cshtml" />
+    <Content Include="Views\Candidaturas\Partials\Edit\CartaOferta\_CompletarCartaOferta.cshtml" />
+    <Content Include="Views\Candidaturas\Partials\Edit\CartaOferta\_DatosCartaOferta.cshtml" />
+    <Content Include="Views\Candidaturas\Partials\Edit\CartaOferta\_EntregaCartaOferta.cshtml" />
+    <Content Include="Views\Candidaturas\Partials\Edit\CartaOferta\AgendarCartaOferta.cshtml" />
+    <Content Include="Views\Candidaturas\Partials\Edit\CartaOferta\CompletarCartaOferta.cshtml" />
+    <Content Include="Views\Candidaturas\Partials\Edit\CartaOferta\EntregaCartaOferta.cshtml" />
+    <Content Include="Views\Candidaturas\Partials\Edit\Descarte\DatosDescarte.cshtml" />
+    <Content Include="Views\Candidaturas\Partials\Edit\Renuncia\DatosRenuncia.cshtml" />
+    <Content Include="Views\Candidaturas\Partials\Details\FiltradoCv\FiltradoCvDetails.cshtml" />
+    <Content Include="Views\Candidaturas\Partials\Details\Entrevista\PrimeraEntrevista\_AgendarPrimeraEntrevistaDetails.cshtml" />
+    <Content Include="Views\Candidaturas\Partials\Details\Entrevista\SegundaEntrevista\_AgendarSegundaEntrevistaDetails.cshtml" />
+    <Content Include="Views\Candidaturas\Partials\Details\Entrevista\_ObservacionesEntrevistaDetails.cshtml" />
+    <Content Include="Views\Candidaturas\Partials\Details\Entrevista\_RangoSalarialesyDisponibilidadesDetails.cshtml" />
+    <Content Include="Views\Candidaturas\Partials\Details\Entrevista\PrimeraEntrevista\_ResultadoPrimeraEntrevistaDetails.cshtml" />
+    <Content Include="Views\Candidaturas\Partials\Details\Entrevista\SegundaEntrevista\_ResultadoSegundaEntrevistaDetails.cshtml" />
+    <Content Include="Views\Candidaturas\Partials\Details\Entrevista\PrimeraEntrevista\CompletarPrimeraEntrevistaDetails.cshtml" />
+    <Content Include="Views\Candidaturas\Partials\Details\Entrevista\SegundaEntrevista\CompletarSegundaEntrevistaDetails.cshtml" />
+    <Content Include="Views\Candidaturas\Partials\Details\CartaOferta\_CompletarCartaOfertaDetails.cshtml" />
+    <Content Include="Views\Candidaturas\Partials\Details\CartaOferta\_DatosCartaOfertaDetails.cshtml" />
+    <Content Include="Views\Candidaturas\Partials\Details\CartaOferta\_EntregaCartaOfertaDetails.cshtml" />
+    <Content Include="Views\Candidaturas\Partials\Details\CartaOferta\CompletarCartaOfertaDetails.cshtml" />
+    <Content Include="Views\Candidaturas\Partials\Details\Renuncia\DatosRenunciaDetails.cshtml" />
+    <Content Include="Views\Candidaturas\Partials\Details\Descarte\DatosDescarteDetails.cshtml" />
+    <Content Include="Views\Becarios\Modals\_ModalCrearCandidatura.cshtml" />
+    <Content Include="Views\Necesidades\Modals\_ModalEditNecesidad.cshtml" />
+    <Content Include="Views\FunnelProcesos\Index.cshtml" />
+    <Content Include="Views\FunnelProcesos\Modals\_ModalTablaCandidaturas.cshtml" />
+    <Content Include="Views\FunnelProcesos\Table\dataCategoria.cshtml" />
+    <Content Include="Views\FunnelProcesos\Table\dataTecnologia.cshtml" />
+    <Content Include="Views\FunnelProcesos\Table\dataTecnologiaCategoria.cshtml" />
+    <Content Include="Views\FunnelProcesos\Table\actionColumnModalCandidatura.cshtml" />
+    <Content Include="Views\Candidatos\Modals\_ModalTablaCandidaturas.cshtml" />
+    <Content Include="Views\Candidatos\Table\actionColumnModalCandidatura.cshtml" />
+    <Content Include="Views\Candidatos\Table\actionColumnModalBecario.cshtml" />
+    <Content Include="Views\Candidatos\Modals\_ModalTablaBecarios.cshtml" />
+    <Content Include="Views\Candidaturas\Partials\Ejecutar\FiltradoCv\FiltradoCv.cshtml" />
+    <Content Include="Views\Candidaturas\Partials\Edit\_DatosBasicos.cshtml" />
+    <Content Include="Views\Candidaturas\Partials\Ejecutar\CartaOferta\_CompletarCartaOferta.cshtml" />
+    <Content Include="Views\Candidaturas\Partials\Ejecutar\CartaOferta\_DatosCartaOferta.cshtml" />
+    <Content Include="Views\Candidaturas\Partials\Ejecutar\CartaOferta\_EntregaCartaOferta.cshtml" />
+    <Content Include="Views\Candidaturas\Partials\Ejecutar\CartaOferta\AgendarCartaOferta.cshtml" />
+    <Content Include="Views\Candidaturas\Partials\Ejecutar\CartaOferta\CompletarCartaOferta.cshtml" />
+    <Content Include="Views\Candidaturas\Partials\Ejecutar\CartaOferta\EntregaCartaOferta.cshtml" />
+    <Content Include="Views\Becarios\Partials\Ejecutar\EnProceso\EnProceso.cshtml" />
+    <Content Include="Views\Becarios\Partials\Ejecutar\Practicas\Practicas.cshtml" />
+    <Content Include="Views\Becarios\Partials\Ejecutar\Seleccion\GestionDocumental.cshtml" />
+    <Content Include="Views\Becarios\Partials\Ejecutar\Seleccion\Asignacion.cshtml" />
+    <Content Include="Views\Candidaturas\Modal\_ModalEleccionCartaOferta.cshtml" />
+    <Content Include="Views\Candidatos\Modals\_ModalBusquedaCentro.cshtml" />
+    <Content Include="Views\Candidatos\Modals\_ModalCrearEditCentros.cshtml" />
+    <Content Include="Views\Candidatos\Table\actionColumnCentro.cshtml" />
+    <Content Include="Views\Candidaturas\Modal\_ModalGenerarDescargarCartaOferta.cshtml" />
+    <Content Include="Views\Candidaturas\Partials\Create\Idiomas\_IdiomasCandidato.cshtml" />
+    <Content Include="Views\Candidaturas\Partials\Create\Tecnologias\_ExperienciaCandidato.cshtml" />
+    <None Include="Web.Preproduction.config">
+      <DependentUpon>Web.config</DependentUpon>
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="packages.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <None Include="Project_Readme.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Recruiting.Application\Recruiting.Application.csproj">
+      <Project>{9500862e-e4e5-4b8c-82a3-2939449d1853}</Project>
+      <Name>Recruiting.Application</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Recruiting.Business\Recruiting.Business.csproj">
+      <Project>{2994b963-0181-4a1f-bb84-fde37e46d920}</Project>
+      <Name>Recruiting.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Recruiting.Data\Recruiting.Data.csproj">
+      <Project>{b2d0f6ac-a65c-4c5e-a093-8e644d93b5a9}</Project>
+      <Name>Recruiting.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Recruiting.Infra\Recruiting.Infra.csproj">
+      <Project>{b32595b8-4298-416e-89d2-d255710c6a33}</Project>
+      <Name>Recruiting.Infra</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Recruiting.SendMailsService\Recruiting.SendMailsService.csproj">
+      <Project>{2af84fc4-a406-43f1-b248-ea8b674cff1d}</Project>
+      <Name>Recruiting.SendMailsService</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="Microsoft.Office.Core">
+      <Guid>{2DF8D04C-5BFA-101B-BDE5-00AA0044DE52}</Guid>
+      <VersionMajor>2</VersionMajor>
+      <VersionMinor>7</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="Microsoft.Office.Interop.Outlook">
+      <Guid>{00062FFF-0000-0000-C000-000000000046}</Guid>
+      <VersionMajor>9</VersionMajor>
+      <VersionMinor>5</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="stdole">
+      <Guid>{00020430-0000-0000-C000-000000000046}</Guid>
+      <VersionMajor>2</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="..\..\packages\SonarAnalyzer.CSharp.7.3.0.5690\analyzers\Google.Protobuf.dll" />
+    <Analyzer Include="..\..\packages\SonarAnalyzer.CSharp.7.3.0.5690\analyzers\SonarAnalyzer.CSharp.dll" />
+    <Analyzer Include="..\..\packages\SonarAnalyzer.CSharp.7.3.0.5690\analyzers\SonarAnalyzer.dll" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Preproduction|AnyCPU'">
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>51040</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:51040/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+</Project>

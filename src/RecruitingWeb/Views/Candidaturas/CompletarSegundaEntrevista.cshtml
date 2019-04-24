@@ -1,0 +1,59 @@
+﻿@using RecruitingWeb.Properties
+
+@using Recruiting.Application.Usuarios.ViewModels
+@using Recruiting.Application.Dashboard.Enums
+
+@model Recruiting.Application.Candidaturas.ViewModel.SegundaEntrevistaViewModel
+
+@{
+    UsuarioRolPermisoViewModel Usuario = (HttpContext.Current.Session["Usuario"] != null) ? (UsuarioRolPermisoViewModel)HttpContext.Current.Session["Usuario"] : null;
+    bool mostrarFinalizar = true;
+    if (Usuario != null)
+    {
+        if (Usuario.UsuarioRol.Any(x => x.RolId == (int)TipoRolUsuario.Entrevistador)
+            && !Usuario.UsuarioRol.Any(x => x.RolId != (int)TipoRolUsuario.Entrevistador
+                                            && x.RolId != (int)TipoRolUsuario.Supervisor))
+        {
+            mostrarFinalizar = false;
+        }
+    }
+}
+<div class="row titlePage">
+    <div class="col-lg-6">
+        <h3>@Resources.HTML_Candidaturas_CompletarSegundaEntrevista_CompletarSegundaEntrevista - @Model.AgendarSegundaEntrevista.AgendarSegundaEntrevista.NombreCandidato</h3>
+    </div>
+</div>
+
+<div class="row header-flap">    
+    <div class="btn-group" role="group">
+        <a href="@Url.Action("Volver", "Candidaturas")" class="btn btn-default">
+            <span class="text">@Resources.HTML_BotonGenericoVolver</span>
+        </a>
+        <a href="#" data-action="aniadirSubEntrevista" class="btn btn-default">
+            <span class="text">@Resources.HTML_Candidaturas_CompletarPrimeraEntrevista_AniadirSubentrevista</span>
+        </a>
+        <a href="#" data-action="guardar" class="btn btn-default">
+            <span class="text">@Resources.HTML_BotonGenericoGuardar</span>
+        </a>
+        <a href="#" data-action="finalizar" class="btn btn-default">
+            <span class="text">@Resources.HTML_BotonGenericoFinalizar</span>
+        </a>
+    </div>    
+    <div class="col-lg-6 removePadding">
+        <h4 class="noMargin headerBox">@Resources.HTML_Candidaturas_CompletarSegundaEntrevista_DatosSegundaEntrevista</h4>
+    </div>
+</div>
+@using (Html.BeginForm("CompletarSegundaEntrevista", "Candidaturas", FormMethod.Post, new Dictionary<string, object> { { "role", "form" }, { "data-parsley-validate", "true" }, { "enctype", "multipart/form-data" } , { "data-parsley-excluded", ":not([data-validate]) , [disabled]" } }))
+{
+    @Edit.Hidden("guardar", "SubmitType")
+    @Edit.Hidden(Model.AgendarSegundaEntrevista.AgendarSegundaEntrevista.CandidaturaId, "AgendarSegundaEntrevista.AgendarSegundaEntrevista.CandidaturaId", attributes: new Dictionary<string, string> { { "id", "CandidaturaId" } })
+    
+    @Html.Partial("~/Views/Candidaturas/Partials//Ejecutar/Entrevista/SegundaEntrevista/CompletarSegundaEntrevista.cshtml", Model)
+}
+
+@Html.Partial("~/Views/Candidaturas/Modal/_ModalAniadirSubEntrevista.cshtml", Model.AgendarSegundaEntrevista)
+@section scripts{
+    @CandidaturasFrontActions.MenuFrontActions()
+    @CandidaturasFrontActions.CompletarSegundaEntrevistaPartialFrontActions()
+    @CandidaturasFrontActions.CompletarSegundaEntrevistaFrontActions(Url, Model)
+}

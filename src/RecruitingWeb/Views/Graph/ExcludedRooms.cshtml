@@ -1,0 +1,81 @@
+﻿@using RecruitingWeb.Properties
+
+@model Recruiting.Application.Graph.ViewModels.ExcludedRoomsViewModel
+
+<div class="row titlePage">
+    <div class="col-lg-6">
+        <h3>@Resources.HTML_Graph_ExcluirSalas_ExcluirSalas</h3>
+    </div>
+</div>
+<div class="row header-flap">
+    <div class="btn-group" role="group">
+        <a href="@Url.Action("Volver", "Candidaturas")" class="btn btn-default">
+            <span class="text">@Resources.HTML_BotonGenericoVolver</span>
+        </a>
+        <a href="#" data-action="finalizar" id="finalizar" class="btn btn-default">
+            <span class="text">@Resources.HTML_BotonGenericoFinalizar</span>
+        </a>
+    </div>
+    <div class="col-lg-6 removePadding">
+        <h4 class="noMargin headerBox">@Resources.HTML_Graph_ExcluirSalas_SalasExcluidas</h4>
+    </div>
+</div>
+@using (Html.BeginForm("SaveExcludedRooms", "Graph", FormMethod.Post, new Dictionary<string, object> { { "role", "form" }, { "data-parsley-validate", "true" }, { "id", "FormExcludedRooms" } }))
+{
+    <div class="row">
+        <div class="content-box border-top-cero">
+            <div class="content-box-content">
+                @Edit.Hidden(Model.CentroId, "CentroId")
+                @Edit.Hidden(Model.OficinaId, "OficinaId")
+                @{
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th class="col-lg-1">@Resources.HTML_Graph_ExcluirSalas_ExcluirHeader</th>
+                                        <th class="col-lg-4">@Resources.HTML_Graph_ExcluirSalas_NombreHeader</th>
+                                        <th class="col-lg-1">@Resources.HTML_Graph_ExcluirSalas_ExcluirHeader</th>
+                                        <th class="col-lg-4">@Resources.HTML_Graph_ExcluirSalas_NombreHeader</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @for (int i = 0; i < Model.ExcludedRooms.Count; i++)
+                                    {
+                                        <tr>
+                                            <td class="col-lg-1">
+                                                @Edit.Checkbox(Model.ExcludedRooms[i].excluded, "ExcludedRooms[" + i + "].excluded", "Excluded", htmlClass: "col-lg-1")
+                                            </td>
+                                            <td class="col-lg-4">
+                                                @Edit.Text(Model.ExcludedRooms[i].name, "ExcludedRooms[" + i + "].name", htmlClass: "col-lg-12 margin-top-10", isReadOnly: true)
+                                            </td>
+                                            @if (i + 1 < Model.ExcludedRooms.Count)
+                                            {
+                                                i++;
+                                                <td class="col-lg-1">
+                                                    @Edit.Checkbox(Model.ExcludedRooms[i].excluded, "ExcludedRooms[" + i + "].excluded", "Excluded", htmlClass: "col-lg-1")
+                                                </td>
+                                                <td class="col-lg-4">
+                                                    @Edit.Text(Model.ExcludedRooms[i].name, "ExcludedRooms[" + i + "].name", htmlClass: "col-lg-12 margin-top-10", isReadOnly: true)
+                                                </td>
+                                            }
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+}
+@section scripts{
+    <script type="text/javascript">
+        $(document).on('click', '#finalizar', function () {
+            $('#FormExcludedRooms').submit();
+
+        });
+    </script>
+}

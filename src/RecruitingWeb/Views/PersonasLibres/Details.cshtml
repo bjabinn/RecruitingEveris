@@ -1,0 +1,154 @@
+﻿@using RecruitingWeb.Helpers
+@using RecruitingWeb.Properties
+
+@model Recruiting.Application.PersonasLibres.ViewModels.CreateEditPersonaLibreViewModel
+
+@{
+    var Activo = Model.Activo;
+    if (Activo == false)
+    {
+        Response.Redirect("/Shared/Borrado");
+    }
+}
+<div class="row titlePage">
+    <div class="col-lg-6">
+        <h3>@Resources.HTML_PersonasLibres_Details_VerPersonaLibre</h3>
+    </div>
+</div>
+<div class="row header-flap">
+    <div class="btn-group" role="group">
+        <a class="btn btn-default" href="@Url.Action("Volver", "PersonasLibres")">
+            <span class="text">@Resources.HTML_BotonGenericoVolver</span>
+        </a>
+        <a href="@Url.Action("Edit", "PersonasLibres", new {  id = Model.PersonaLibreId })" class="btn btn-default">
+            <span class="text">@Resources.HTML_PersonasLibres_Details_BotonEditarPersonaLibre</span>
+        </a>
+    </div>
+    <div class="col-lg-6 removePadding">
+        <h4 class="noMargin headerBox">@Resources.HTML_PersonasLibres_Datos_PersonaLibre</h4>
+    </div>
+</div>
+
+<div class="row">
+    <div class="content-box border-top-cero">
+        <div class="content-box-content" id="form-filter">
+            <div class="section-form-basicos margin" data-id="section-form-basicos">
+                <div class="row form-row">
+                    <div class="form-group col-lg-4">
+                        <div class="col-lg-12 title-form">
+                            <label>@Resources.HTML_PersonasLibres_Details_Nombre</label>
+                        </div>
+                        <div class="col-lg-12 content-form">
+                            @Model.Nombre @Model.Apellidos
+                        </div>
+                    </div>
+                    <div class="form-group col-lg-4">
+                        <div class="col-lg-12 title-form">
+                            <label>@Resources.HTML_PersonasLibres_Details_Categoria</label>
+                        </div>
+                        <div class="col-lg-12 content-form">
+                            @Model.Categoria
+                        </div>
+                    </div>
+                    <div class="form-group col-lg-4">
+                        <div class="col-lg-12 title-form">
+                            <label>@Resources.HTML_PersonasLibres_Details_Tecnologia</label>
+                        </div>
+                        <div class="col-lg-12 content-form">
+                            @{
+                                if (string.IsNullOrEmpty(Model.TipoTecnologiaNombre))
+                                {
+                                    @Resources.HTML_General_CampoVacio_Details_NA
+                                }
+                                else
+                                {
+                                    @Model.TipoTecnologiaNombre
+
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-row">
+                    <div class="form-group col-lg-4">
+                        <div class="col-lg-12 title-form">
+                            <label>@Resources.HTML_PersonasLibres_Details_FechaLiberacion</label>
+                        </div>
+                        <div class="col-lg-12 content-form">
+                            @FormatHelper.Format(Model.FechaLiberacion, "dd/MM/yyyy")
+                        </div>
+                    </div>
+                    <div class="form-group col-lg-4">
+                        <div class="col-lg-12 title-form">
+                            <label>@Resources.HTML_PersonasLibres_Details_Linea</label>
+                        </div>
+                        <div class="col-lg-12 content-form">
+                            @Model.Linea
+                        </div>
+                    </div>
+                    <div class="form-group col-lg-4">
+                        <div class="col-lg-12 title-form">
+                            <label>@Resources.HTML_PersonasLibres_Details_Celda</label>
+                        </div>
+                        <div class="col-lg-12 content-form">
+                            @{
+                                if (string.IsNullOrEmpty(Model.Celda))
+                                {
+                                    @Resources.HTML_General_CampoVacio_Details_NA
+                                }
+                                else
+                                {
+                                    @Model.Celda
+
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-row">   
+                    <div class="form-group col-lg-4">
+                        <div class="col-lg-12 title-form">
+                            <label>@Resources.HTML_PersonasLibres_Details_Comentario</label>
+                        </div>
+                        <div class="col-lg-12 content-form">
+                            @{
+                                if (string.IsNullOrEmpty(Model.Comentario))
+                                {
+                                    @Resources.HTML_General_CampoVacio_Details_NA
+                                }
+                                else
+                                {
+                                    @Model.Comentario
+
+                                }
+                            }
+                        </div>
+                    </div>
+                    <div class="form-group col-lg-4">
+                        <div class="col-lg-12 title-form">
+                            <label>@Resources.HTML_PersonasLibres_Details_Ingles</label>
+                        </div>
+                        <div class="col-lg-12 content-form">
+                            @{
+                                if (string.IsNullOrEmpty(Model.NivelIdioma))
+                                {
+                                    @Resources.HTML_General_CampoVacio_Details_NA
+                                }
+                                else
+                                {
+                                    @Model.NivelIdioma
+
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>        
+    </div>   
+</div>
+@section scripts{
+
+    @PersonasLibresFrontActions.MenuFrontActions()
+
+}

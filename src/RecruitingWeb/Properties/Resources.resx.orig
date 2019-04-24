@@ -1,0 +1,3812 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Candidato_ConfirmacionFinalizarTexto" xml:space="preserve">
+    <value>¿Está seguro de guardar el candidato y finalizar el proceso?</value>
+  </data>
+  <data name="Candidato_ConfirmacionFinalizarTitulo" xml:space="preserve">
+    <value>GUARDAR Y FINALIZAR CANDIDATO</value>
+  </data>
+  <data name="Candidato_ConfirmacionGuardarTexto" xml:space="preserve">
+    <value>¿Está seguro de guardar el candidato?</value>
+  </data>
+  <data name="Candidato_ConfirmacionGuardarTitutlo" xml:space="preserve">
+    <value>GUARDAR CANDIDATO</value>
+  </data>
+  <data name="Candidato_ErrorTitulo" xml:space="preserve">
+    <value>ERROR CANDIDATO</value>
+  </data>
+  <data name="Candidato_NotificacionTitulo" xml:space="preserve">
+    <value>NOTIFICACIÓN CANDIDATO</value>
+  </data>
+  <data name="Candidatura_ConfirmacionFinalizarTexto" xml:space="preserve">
+    <value>¿Está seguro de guardar la candidatura y finalizar el proceso?</value>
+  </data>
+  <data name="Candidatura_ConfirmacionFinalizarTitulo" xml:space="preserve">
+    <value>GUARDAR Y FINALIZAR CANDIDATURA</value>
+  </data>
+  <data name="Candidatura_ConfirmacionGuardarTexto" xml:space="preserve">
+    <value>¿Está seguro de guardar la candidatura?</value>
+  </data>
+  <data name="Candidatura_ConfirmacionGuardarTitulo" xml:space="preserve">
+    <value>GUARDAR CANDIDATURA</value>
+  </data>
+  <data name="Candidatura_ErrorTitulo" xml:space="preserve">
+    <value>ERROR CANDIDATURA</value>
+  </data>
+  <data name="Candidatura_NotificacionTitulo" xml:space="preserve">
+    <value>NOTIFICACIÓN CANDIDATURA</value>
+  </data>
+  <data name="ExisteCandidato" xml:space="preserve">
+    <value>CANDIDATO YA EXISTE EN LA APLICACION</value>
+  </data>
+  <data name="Necesidad_ConfirmacionFinalizarTexto" xml:space="preserve">
+    <value>¿Está seguro de guardar la necesidad y finalizar el proceso?</value>
+  </data>
+  <data name="Necesidad_ConfirmacionFinalizarTitulo" xml:space="preserve">
+    <value>GUARDAR Y FINALIZAR NECESIDAD</value>
+  </data>
+  <data name="Necesidad_ConfirmacionGuardarTexto" xml:space="preserve">
+    <value>¿Está seguro de guardar la necesidad?</value>
+  </data>
+  <data name="Necesidad_ConfirmacionGuardarTitulo" xml:space="preserve">
+    <value>GUARDAR NECESIDAD</value>
+  </data>
+  <data name="Necesidad_ErrorTitulo" xml:space="preserve">
+    <value>ERROR NECESIDAD</value>
+  </data>
+  <data name="Necesidad_NotificacionTitulo" xml:space="preserve">
+    <value>NOTIFICACIÓN NECESIDAD</value>
+  </data>
+  <data name="NElementosPagina" xml:space="preserve">
+    <value>10</value>
+  </data>
+  <data name="Oferta_ConfirmacionFinalizarTexto" xml:space="preserve">
+    <value>¿Está seguro de guardar la oferta y finalizar el proceso?</value>
+  </data>
+  <data name="Oferta_ConfirmacionFinalizarTitulo" xml:space="preserve">
+    <value>GUARDAR Y FINALIZAR OFERTA</value>
+  </data>
+  <data name="Oferta_ConfirmacionGuardarTexto" xml:space="preserve">
+    <value>¿Está seguro de guardar la oferta?</value>
+  </data>
+  <data name="Oferta_ConfirmacionGuardarTitulo" xml:space="preserve">
+    <value>GUARDAR OFERTA</value>
+  </data>
+  <data name="Oferta_ErrorTitulo" xml:space="preserve">
+    <value>ERROR OFERTA</value>
+  </data>
+  <data name="Oferta_NotificacionTitulo" xml:space="preserve">
+    <value>NOTIFICACIÓN OFERTA</value>
+  </data>
+  <data name="Rol_ConfirmacionFinalizarTexto" xml:space="preserve">
+    <value>¿Está seguro de guardar el rol y finalizar el proceso?</value>
+  </data>
+  <data name="Rol_ConfirmacionFinalizarTitulo" xml:space="preserve">
+    <value>GUARDAR Y FINALIZAR ROL</value>
+  </data>
+  <data name="Rol_ConfirmacionGuardarTexto" xml:space="preserve">
+    <value>¿Está seguro de guardar el rol?</value>
+  </data>
+  <data name="Rol_ConfirmacionGuardarTitutlo" xml:space="preserve">
+    <value>GUARDAR ROL</value>
+  </data>
+  <data name="Usuario_ConfirmacionFinalizarTexto" xml:space="preserve">
+    <value>¿Está seguro de guardar el usuario y finalizar el proceso?</value>
+  </data>
+  <data name="Usuario_ConfirmacionFinalizarTitulo" xml:space="preserve">
+    <value>GUARDAR Y FINALIZAR USUARIO</value>
+  </data>
+  <data name="Usuario_ConfirmacionGuardarTexto" xml:space="preserve">
+    <value>¿Está seguro de guardar el usuario?</value>
+  </data>
+  <data name="Usuario_ConfirmacionGuardarTitulo" xml:space="preserve">
+    <value>GUARDAR USUARIO</value>
+  </data>
+  <data name="Usuario_ErrorTitulo" xml:space="preserve">
+    <value>ERROR USUARIO</value>
+  </data>
+  <data name="Usuario_NotificacionTitulo" xml:space="preserve">
+    <value>NOTIFICACIÓN USUARIO</value>
+  </data>
+  <data name="MailTo" xml:space="preserve">
+    <value>Spain.Personal.Candidate@everis.com</value>
+  </data>
+  <data name="Bitacora_ErrorTitulo" xml:space="preserve">
+    <value>ERROR BITACORA</value>
+  </data>
+  <data name="Bitacora_NotificacionTitulo" xml:space="preserve">
+    <value>NOTIFICACIÓN BITACORA</value>
+  </data>
+  <data name="Candidatura_ConfirmacionModificarTexto" xml:space="preserve">
+    <value>¿Está seguro de guardar los cambios en la candidatura?</value>
+  </data>
+  <data name="Candidatura_ConfirmacionModificarTitulo" xml:space="preserve">
+    <value>GUARDAR CAMBIOS CANDIDATURA</value>
+  </data>
+  <data name="Notificaciones_DiasAntesEntrevista" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="urlRecruiting" xml:space="preserve">
+    <value>http://www.everis.com/spain/es-ES/inicio/Paginas/inicio.aspx</value>
+  </data>
+  <data name="Cliente_ConfirmFinalizarTexto" xml:space="preserve">
+    <value>¿Está seguro de guardar el cliente y salir?</value>
+  </data>
+  <data name="Cliente_ConfirmFinalizarTitulo" xml:space="preserve">
+    <value>GUARDAR CLIENTE Y SALIR</value>
+  </data>
+  <data name="Cliente_ConfirmGuardarTexto" xml:space="preserve">
+    <value>¿Está seguro de guardar el cliente?</value>
+  </data>
+  <data name="Cliente_ConfirmGuardarTitulo" xml:space="preserve">
+    <value>GUARDAR CLIENTE</value>
+  </data>
+  <data name="Cliente_ConfirmEliminarTexto" xml:space="preserve">
+    <value>¿Está seguro de eliminar el cliente?</value>
+  </data>
+  <data name="Cliente_ConfirmEliminarTitulo" xml:space="preserve">
+    <value>ELIMINAR CLIENTE</value>
+  </data>
+  <data name="Proyecto_ConfirmEliminarTexto" xml:space="preserve">
+    <value>¿Está seguro de eliminar el proyecto?</value>
+  </data>
+  <data name="Proyecto_ConfirmEliminarTitulo" xml:space="preserve">
+    <value>ELIMINAR PROYECTO</value>
+  </data>
+  <data name="Proyecto_ConfirmFinalizarTexto" xml:space="preserve">
+    <value>¿Está seguro de guardar el proyecto y salir?</value>
+  </data>
+  <data name="Proyecto_ConfirmFinalizarTitulo" xml:space="preserve">
+    <value>GUARDAR PROYECTO Y SALIR</value>
+  </data>
+  <data name="PersonaLibre_ConfirmacionFinalizar" xml:space="preserve">
+    <value>¿Está seguro de guardar el candidato y finalizar el proceso?</value>
+  </data>
+  <data name="PersonaLibre_ConfirmacionFinalizarTitulo" xml:space="preserve">
+    <value>GUARDAR Y FINALIZAR PERSONA LIBRE</value>
+  </data>
+  <data name="PersonaLibre_ConfirmacionGuardarTexto" xml:space="preserve">
+    <value>¿Está seguro de guardar la persona libre?</value>
+  </data>
+  <data name="PersonaLibre_ConfirmacionGuardarTitulo" xml:space="preserve">
+    <value>GUARDAR PERSONA LIBRE</value>
+  </data>
+  <data name="PersonaLibre_ErrorTitulo" xml:space="preserve">
+    <value>ERROR PERSONA LIBRE</value>
+  </data>
+  <data name="PersonaLibre_NotificacionTitulo" xml:space="preserve">
+    <value>NOTIFICACIÓN PERSONA LIBRE</value>
+  </data>
+  <data name="ExistePersonaLibre" xml:space="preserve">
+    <value>PERSONA LIBRE YA EXISTE EN LA APLICACION</value>
+  </data>
+  <data name="Admin_EliminarRolMensaje" xml:space="preserve">
+    <value>¿Está seguro de que desea eliminar este rol?</value>
+  </data>
+  <data name="Admin_EliminarRolTitulo" xml:space="preserve">
+    <value>ELIMINA ROL</value>
+  </data>
+  <data name="Admin_EliminarUsuarioMensaje" xml:space="preserve">
+    <value>¿Está seguro de eliminar el usuario?</value>
+  </data>
+  <data name="Admin_EliminarUsuarioTitulo" xml:space="preserve">
+    <value>ELIMINAR USUARIO</value>
+  </data>
+  <data name="Boton_Aceptar" xml:space="preserve">
+    <value>Aceptar</value>
+  </data>
+  <data name="Boton_Cancelar" xml:space="preserve">
+    <value>Cancelar</value>
+  </data>
+  <data name="Boton_CandidaturaNoSaltar" xml:space="preserve">
+    <value>Ir a entrevista comp.</value>
+  </data>
+  <data name="Boton_CandidaturaSaltar" xml:space="preserve">
+    <value>Ir a carta oferta</value>
+  </data>
+  <data name="Boton_Cargar" xml:space="preserve">
+    <value>Cargar</value>
+  </data>
+  <data name="Boton_Cerrar" xml:space="preserve">
+    <value>Cerrar</value>
+  </data>
+  <data name="Boton_Confirmar" xml:space="preserve">
+    <value>Confirmar</value>
+  </data>
+  <data name="Boton_Ok" xml:space="preserve">
+    <value>Ok</value>
+  </data>
+  <data name="Candidato_EliminarMensaje" xml:space="preserve">
+    <value>¿Está seguro de eliminarlo?</value>
+  </data>
+  <data name="Candidato_EliminarTitulo" xml:space="preserve">
+    <value>ELIMINAR CANDIDATO</value>
+  </data>
+  <data name="Candidatura_CandidaturaGuardadaMensaje" xml:space="preserve">
+    <value>Cambios de la candidatura guardados correctamente.</value>
+  </data>
+  <data name="Candidatura_CandidaturaGuardadaTitulo" xml:space="preserve">
+    <value>Candidatura guardada.</value>
+  </data>
+  <data name="Candidatura_CartaOfertaGeneradaMensaje" xml:space="preserve">
+    <value>¿Desea descargar la carta oferta generada?</value>
+  </data>
+  <data name="Candidatura_CartaOfertaGeneradaTitulo" xml:space="preserve">
+    <value>CARTA OFERTA OFERTA GENERADA</value>
+  </data>
+  <data name="Candidatura_EliminarCandidaturaMensaje" xml:space="preserve">
+    <value>¿Está seguro de eliminar la candidatura?</value>
+  </data>
+  <data name="Candidatura_EliminarCandidaturaTitulo" xml:space="preserve">
+    <value>ELIMINAR CANDIDATURA</value>
+  </data>
+  <data name="Candidatura_ReagendarCartaOfertaTitulo" xml:space="preserve">
+    <value>Reagendar Carta Oferta</value>
+  </data>
+  <data name="Candidatura_ReagendarSegundaEntrevistaTitulo" xml:space="preserve">
+    <value>Reagendar Entrevista Complementaria</value>
+  </data>
+  <data name="Candidatura_RenunciarMensaje" xml:space="preserve">
+    <value>¿Estas seguro que desea renunciar a esta candidatura?</value>
+  </data>
+  <data name="Candidatura_RenunciarMensaje2" xml:space="preserve">
+    <value>Seleccione un motivo:</value>
+  </data>
+  <data name="Candidatura_RenunciarTitulo" xml:space="preserve">
+    <value>RENUNCIAR CANDIDATURA</value>
+  </data>
+  <data name="Candidatura_RetrocederMensaje" xml:space="preserve">
+    <value>¿Está seguro retroceder el estado de la candidatura?</value>
+  </data>
+  <data name="Candidatura_RetrocederTitulo" xml:space="preserve">
+    <value>RETROCEDER ESTADO CANDIDATURA</value>
+  </data>
+  <data name="Candidatura_SaltarEntrevistaMensaje" xml:space="preserve">
+    <value>¿quiere saltar la entrevista complementaria e ir directamente a la carta oferta?</value>
+  </data>
+  <data name="Candidatura_SaltarEntrevistaTitulo" xml:space="preserve">
+    <value>¿SALTAR ENTREVISTA COMPLEMENTARIA?</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="Error_GenerarCartaOferta" xml:space="preserve">
+    <value>Error al generar la carta oferta</value>
+  </data>
+  <data name="Error_Guardado" xml:space="preserve">
+    <value>Error guardado.</value>
+  </data>
+  <data name="Necesidad_ClonarMensaje" xml:space="preserve">
+    <value>¿Está seguro de clonar la necesidad?</value>
+  </data>
+  <data name="Necesidad_ClonarTitulo" xml:space="preserve">
+    <value>CLONAR NECESIDAD</value>
+  </data>
+  <data name="Necesidad_EliminarMensaje" xml:space="preserve">
+    <value>¿Está seguro de eliminar la necesidad?</value>
+  </data>
+  <data name="Necesidad_EliminarTitulo" xml:space="preserve">
+    <value>ELIMINAR NECESIDAD</value>
+  </data>
+  <data name="Oferta_EliminarMensaje" xml:space="preserve">
+    <value>¿Está seguro de eliminar la oferta?</value>
+  </data>
+  <data name="Oferta_EliminarTitulo" xml:space="preserve">
+    <value>ELIMINAR OFERTA</value>
+  </data>
+  <data name="Permiso_Mensaje" xml:space="preserve">
+    <value>Usted no tiene permisos para realizar esta acción.</value>
+  </data>
+  <data name="Permiso_Titulo" xml:space="preserve">
+    <value>PERMISO</value>
+  </data>
+  <data name="Eliminar_PersonaLibre_Message" xml:space="preserve">
+    <value>¿Está seguro de eliminar la Persona Libre?</value>
+  </data>
+  <data name="Eliminar_PersonaLibre_Title" xml:space="preserve">
+    <value>ELIMINAR PERSONA LIBRE</value>
+  </data>
+  <data name="Eliminar_Generico_Message" xml:space="preserve">
+    <value>¿Está seguro de eliminarlo?</value>
+  </data>
+  <data name="Eliminar_Generico_Title" xml:space="preserve">
+    <value>ELIMINAR</value>
+  </data>
+  <data name="Eliminar_SubEntrevista_Message" xml:space="preserve">
+    <value>¿Está seguro de eliminar la subentrevista?</value>
+  </data>
+  <data name="Eliminar_SubEntrevista_Title" xml:space="preserve">
+    <value>ELIMINAR</value>
+  </data>
+  <data name="SubEntrevista_GuardarTexto" xml:space="preserve">
+    <value>¿Guardar todas las subentrevistas modificadas?</value>
+  </data>
+  <data name="SubEntrevista_GuardarTitulo" xml:space="preserve">
+    <value>GUARDAR SUBENTREVISTAS</value>
+  </data>
+  <data name="Candidatura_EntrevistasSinCompletarGuardarTexto" xml:space="preserve">
+    <value>Hay subentrevistas sin completar o no superadas. ¿Seguro que quiere finalizar?</value>
+  </data>
+  <data name="Candidatura_EntrevistasSinCompletarGuardarTitulo" xml:space="preserve">
+    <value>¡ATENCIÓN!</value>
+  </data>
+  <data name="Subentrevista_ErrorTexto" xml:space="preserve">
+    <value>error al guardar subentrevista.</value>
+  </data>
+  <data name="Subentrevista_ErrorTitulo" xml:space="preserve">
+    <value>ERROR</value>
+  </data>
+  <data name="SubEntrevista_ExitoGuardarTexto" xml:space="preserve">
+    <value>subentrevista/s guardada/s correctamente.</value>
+  </data>
+  <data name="Subentrevista_ExitoGuardarTitulo" xml:space="preserve">
+    <value>ÉXITO AL GUARDAR</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="Si" xml:space="preserve">
+    <value>Si</value>
+  </data>
+  <data name="Subentrevista_FechasCoincidenErrorTexto" xml:space="preserve">
+    <value>Hay varias notificaciones automáticas al candidato asignadas para la misma fecha. \n\nTenga en cuenta que es posible que en la entrevista principal tenga marcado el aviso automático al candidato.</value>
+  </data>
+  <data name="Subentrevista_FechasCoincidenErrorTitulo" xml:space="preserve">
+    <value>ERROR</value>
+  </data>
+  <data name="Necesidad_ErrorAbrirNecesidadCerradaTexto" xml:space="preserve">
+    <value>Una necesidad previamente cerrada no se puede abrir desde el menú de editar necesidades. \n\nPara abrir dicha necesidad debe hacerlo desde la candidatura correspondiente y asignar una necesidad diferente.</value>
+  </data>
+  <data name="Necesidad_ErrorAbrirNecesidadCerradaTitulo" xml:space="preserve">
+    <value>ERROR AL ABRIR NECESIDAD</value>
+  </data>
+  <data name="Necesidad_ErrorCerrarNecesidadContratacionTexto" xml:space="preserve">
+    <value>Una necesidad de tipo contratacion no se puede cerrar desde el menú de editar necesidades. \n\nPara hacerlo esta necesidad debe ser asignada desde una candidatura.</value>
+  </data>
+  <data name="Necesidad_ErrorCerrarNecesidadContratacionTitulo" xml:space="preserve">
+    <value>ERROR AL CERRAR NECESIDAD</value>
+  </data>
+  <data name="PersonaLibre_NingunEmpleadoFenixSeleccionadoTexto" xml:space="preserve">
+    <value>Debe seleccionar al menos un empleado de fenix a liberar.</value>
+  </data>
+  <data name="PersonaLibre_NingunEmpleadoFenixSeleccionadoTitulo" xml:space="preserve">
+    <value>ERROR</value>
+  </data>
+  <data name="Subentrevista_MaximoDeSubentrevistasAlcanzadoTexto" xml:space="preserve">
+    <value>Esta candidatura ya tiene el número máximo de subentrevistas.</value>
+  </data>
+  <data name="Subentrevista_MaximoDeSubentrevistasAlcanzadoTitulo" xml:space="preserve">
+    <value>ERROR</value>
+  </data>
+  <data name="HTML_BotonGenericoBuscar" xml:space="preserve">
+    <value>Buscar</value>
+  </data>
+  <data name="HTML_BotonGenericoExcel" xml:space="preserve">
+    <value>Excel</value>
+  </data>
+  <data name="HTML_BotonGenericoFinalizar" xml:space="preserve">
+    <value>Finalizar</value>
+  </data>
+  <data name="HTML_BotonGenericoGuardar" xml:space="preserve">
+    <value>Guardar</value>
+  </data>
+  <data name="HTML_BotonGenericoLimpiar" xml:space="preserve">
+    <value>Limpiar</value>
+  </data>
+  <data name="HTML_BotonGenericoSeleccionar" xml:space="preserve">
+    <value>Seleccionar</value>
+  </data>
+  <data name="HTML_BotonGenericoVolver" xml:space="preserve">
+    <value>Volver</value>
+  </data>
+  <data name="HTML_BotonGenerico_Aniadir" xml:space="preserve">
+    <value>Añadir</value>
+  </data>
+  <data name="HTML_Candidatos_Create_Apellidos" xml:space="preserve">
+    <value>Apellidos:</value>
+  </data>
+  <data name="HTML_Candidatos_Create_ContactoHeader" xml:space="preserve">
+    <value>Contacto</value>
+  </data>
+  <data name="HTML_Candidatos_Create_CrearCandidato" xml:space="preserve">
+    <value>Crear Candidato</value>
+  </data>
+  <data name="HTML_Candidatos_Create_DatosBasicosContacto" xml:space="preserve">
+    <value>Datos Básicos y de contacto</value>
+  </data>
+  <data name="HTML_Candidatos_Create_DatosExperienciaIdiomas" xml:space="preserve">
+    <value>Datos Experiencia e Idiomas</value>
+  </data>
+  <data name="HTML_Candidatos_Create_DetalleTitulacion" xml:space="preserve">
+    <value>Detalle Titulación:</value>
+  </data>
+  <data name="HTML_Candidatos_Create_EliminarHeader" xml:space="preserve">
+    <value>Eliminar</value>
+  </data>
+  <data name="HTML_Candidatos_Create_ExperienciaPtsHeader" xml:space="preserve">
+    <value>Experiencia (pts)</value>
+  </data>
+  <data name="HTML_Candidatos_Create_FechaNacimiento" xml:space="preserve">
+    <value>Fecha Nacimiento:</value>
+  </data>
+  <data name="HTML_Candidatos_Create_IdiomaHeader" xml:space="preserve">
+    <value>Idioma</value>
+  </data>
+  <data name="HTML_Candidatos_Create_NivelExperienciaHeader" xml:space="preserve">
+    <value>Nivel Experiencia</value>
+  </data>
+  <data name="HTML_Candidatos_Create_NivelHeader" xml:space="preserve">
+    <value>Nivel</value>
+  </data>
+  <data name="HTML_Candidatos_Create_Nombre" xml:space="preserve">
+    <value>Nombre:</value>
+  </data>
+  <data name="HTML_Candidatos_Create_NumeroIdentificacion" xml:space="preserve">
+    <value>Nº Identificación:</value>
+  </data>
+  <data name="HTML_Candidatos_Create_TipoContactoHeader" xml:space="preserve">
+    <value>Tipo Contacto</value>
+  </data>
+  <data name="HTML_Candidatos_Create_TipoIdentificacion" xml:space="preserve">
+    <value>Tipo Identificación:</value>
+  </data>
+  <data name="HTML_Candidatos_Create_TipoTecnologiaHeader" xml:space="preserve">
+    <value>Tipo Tecnología</value>
+  </data>
+  <data name="HTML_Candidatos_Create_Titulacion" xml:space="preserve">
+    <value>Titulación:</value>
+  </data>
+  <data name="HTML_Candidatos_Details_Apellidos" xml:space="preserve">
+    <value>Apellidos:</value>
+  </data>
+  <data name="HTML_Candidatos_Details_ContactoHeader" xml:space="preserve">
+    <value>Contacto</value>
+  </data>
+  <data name="HTML_Candidatos_Details_DatosBasicosContacto" xml:space="preserve">
+    <value>Datos Básicos y de contacto</value>
+  </data>
+  <data name="HTML_Candidatos_Details_DatosExperienciaIdiomas" xml:space="preserve">
+    <value>Datos Experiencia e Idiomas</value>
+  </data>
+  <data name="HTML_Candidatos_Details_DetallesCandidato" xml:space="preserve">
+    <value>Detalles Candidato</value>
+  </data>
+  <data name="HTML_Candidatos_Details_DetalleTitulacion" xml:space="preserve">
+    <value>Detalle Titulación:</value>
+  </data>
+  <data name="HTML_Candidatos_Details_EliminarHeader" xml:space="preserve">
+    <value>Eliminar</value>
+  </data>
+  <data name="HTML_Candidatos_Details_ExperienciaPtsHeader" xml:space="preserve">
+    <value>Experiencia (Pts)</value>
+  </data>
+  <data name="HTML_Candidatos_Details_FechaNacimiento" xml:space="preserve">
+    <value>Fecha Nacimiento:</value>
+  </data>
+  <data name="HTML_Candidatos_Details_IdiomaHeader" xml:space="preserve">
+    <value>Idioma</value>
+  </data>
+  <data name="HTML_Candidatos_Details_NivelExperienciaHeader" xml:space="preserve">
+    <value>Nivel Experiencia</value>
+  </data>
+  <data name="HTML_Candidatos_Details_NivelHeader" xml:space="preserve">
+    <value>Nivel</value>
+  </data>
+  <data name="HTML_Candidatos_Details_Nombre" xml:space="preserve">
+    <value>Nombre:</value>
+  </data>
+  <data name="HTML_Candidatos_Details_NumeroIdentificacion" xml:space="preserve">
+    <value>Nº Identificación:</value>
+  </data>
+  <data name="HTML_Candidatos_Details_TipoContactoHeader" xml:space="preserve">
+    <value>Tipo Contacto</value>
+  </data>
+  <data name="HTML_Candidatos_Details_TipoIdentificacion" xml:space="preserve">
+    <value>Tipo Identificación:</value>
+  </data>
+  <data name="HTML_Candidatos_Details_TipoTecnologiaHeader" xml:space="preserve">
+    <value>Tipo Tecnología</value>
+  </data>
+  <data name="HTML_Candidatos_Details_Titulacion" xml:space="preserve">
+    <value>Titulación:</value>
+  </data>
+  <data name="HTML_Candidatos_Details_DatosdelCandidato" xml:space="preserve">
+    <value>Datos del Candidato</value>
+  </data>
+  <data name="HTML_Candidatos_Details_VerCandidato" xml:space="preserve">
+    <value>Ver Candidato</value>
+  </data>
+  <data name="HTML_Candidatos_Edit_Apellidos" xml:space="preserve">
+    <value>Apellidos:</value>
+  </data>
+  <data name="HTML_Candidatos_Edit_ContactoHeader" xml:space="preserve">
+    <value>Contacto</value>
+  </data>
+  <data name="HTML_Candidatos_Edit_DatosBasicosContacto" xml:space="preserve">
+    <value>Datos Básicos y de contacto</value>
+  </data>
+  <data name="HTML_Candidatos_Edit_DatosExperienciaIdiomas" xml:space="preserve">
+    <value>Datos Experiencia e Idiomas</value>
+  </data>
+  <data name="HTML_Candidatos_Edit_DetalleTitulacion" xml:space="preserve">
+    <value>Detalle Titulación:</value>
+  </data>
+  <data name="HTML_Candidatos_Edit_EditandoCandidato" xml:space="preserve">
+    <value>Editar Candidato</value>
+  </data>
+  <data name="HTML_Candidatos_Edit_EliminarHeader" xml:space="preserve">
+    <value>Eliminar</value>
+  </data>
+  <data name="HTML_Candidatos_Edit_ExperienciaPtsHeader" xml:space="preserve">
+    <value>Experiencia (Pts)</value>
+  </data>
+  <data name="HTML_Candidatos_Edit_FechaNacimiento" xml:space="preserve">
+    <value>Fecha Nacimiento:</value>
+  </data>
+  <data name="HTML_Candidatos_Edit_IdiomaHeader" xml:space="preserve">
+    <value>Idioma</value>
+  </data>
+  <data name="HTML_Candidatos_Edit_NivelExperienciaHeader" xml:space="preserve">
+    <value>Nivel Experiencia</value>
+  </data>
+  <data name="HTML_Candidatos_Edit_NivelHeader" xml:space="preserve">
+    <value>Nivel</value>
+  </data>
+  <data name="HTML_Candidatos_Edit_Nombre" xml:space="preserve">
+    <value>Nombre:</value>
+  </data>
+  <data name="HTML_Candidatos_Edit_NumeroIdentificacion" xml:space="preserve">
+    <value>Nº Identificación:</value>
+  </data>
+  <data name="HTML_Candidatos_Edit_TipoContactoHeader" xml:space="preserve">
+    <value>Tipo Contacto</value>
+  </data>
+  <data name="HTML_Candidatos_Edit_TipoIdentificacion" xml:space="preserve">
+    <value>Tipo Identificación:</value>
+  </data>
+  <data name="HTML_Candidatos_Edit_TipoTecnologiaHeader" xml:space="preserve">
+    <value>Tipo Tecnología</value>
+  </data>
+  <data name="HTML_Candidatos_Edit_Titulacion" xml:space="preserve">
+    <value>Titulación:</value>
+  </data>
+  <data name="HTML_Candidatos_Index_AccionesHeader" xml:space="preserve">
+    <value>Acciones</value>
+  </data>
+  <data name="HTML_Candidatos_Index_AniadirCandidato" xml:space="preserve">
+    <value>Añadir Candidato</value>
+  </data>
+  <data name="HTML_Candidatos_Index_Apellidos" xml:space="preserve">
+    <value>Apellidos:</value>
+  </data>
+  <data name="HTML_Candidatos_Index_ApellidosHeader" xml:space="preserve">
+    <value>Apellidos</value>
+  </data>
+  <data name="HTML_Candidatos_Index_AsignadoCandidaturasHeader" xml:space="preserve">
+    <value>Asignado a Candidaturas</value>
+  </data>
+  <data name="HTML_Candidatos_Index_Centro" xml:space="preserve">
+    <value>Centro:</value>
+  </data>
+  <data name="HTML_Candidatos_Index_CentroHeader" xml:space="preserve">
+    <value>Centro</value>
+  </data>
+  <data name="HTML_Candidatos_Index_FechaNacimientoHeader" xml:space="preserve">
+    <value>Fecha Nacimiento</value>
+  </data>
+  <data name="HTML_Candidatos_Index_GestionCandidatos" xml:space="preserve">
+    <value>Gestión Candidatos</value>
+  </data>
+  <data name="HTML_Candidatos_Index_IdentificacionHeader" xml:space="preserve">
+    <value>Identificación</value>
+  </data>
+  <data name="HTML_Candidatos_Index_Nombre" xml:space="preserve">
+    <value>Nombre:</value>
+  </data>
+  <data name="HTML_Candidatos_Index_NombreHeader" xml:space="preserve">
+    <value>Nombre</value>
+  </data>
+  <data name="HTML_Candidatos_Index_NumeroIdentificacion" xml:space="preserve">
+    <value>Nº Identificación:</value>
+  </data>
+  <data name="HTML_Candidatos_Index_TipoIdentificacion" xml:space="preserve">
+    <value>Tipo Identificación:</value>
+  </data>
+  <data name="HTML_Candidatos_Index_TipoTitulacion" xml:space="preserve">
+    <value>Tipo Titulación:</value>
+  </data>
+  <data name="HTML_Candidatos_Index_TitulacionHeader" xml:space="preserve">
+    <value>Titulación</value>
+  </data>
+  <data name="HTML_Candidatos_Index_TotalCandidatos" xml:space="preserve">
+    <value>Total de Candidatos:</value>
+  </data>
+  <data name="HTML_DataTable_Anterior" xml:space="preserve">
+    <value> </value>
+  </data>
+  <data name="HTML_DataTable_Buscar" xml:space="preserve">
+    <value>Buscar:</value>
+  </data>
+  <data name="HTML_DataTable_Cargando" xml:space="preserve">
+    <value>Cargando...</value>
+  </data>
+  <data name="HTML_DataTable_NingunDato" xml:space="preserve">
+    <value>Ningún dato disponible para esta tabla</value>
+  </data>
+  <data name="HTML_DataTable_NoResultados" xml:space="preserve">
+    <value>No se encontraron resultados</value>
+  </data>
+  <data name="HTML_DataTable_OrdenarAscendente" xml:space="preserve">
+    <value>: Activar para ordenar la columna de manera ascendente</value>
+  </data>
+  <data name="HTML_DataTable_OrdenarDescendente" xml:space="preserve">
+    <value>: Activar para ordenar la columna de manera descendente</value>
+  </data>
+  <data name="HTML_DataTable_Primero" xml:space="preserve">
+    <value>Primero</value>
+  </data>
+  <data name="HTML_DataTable_Siguiente" xml:space="preserve">
+    <value> </value>
+  </data>
+  <data name="HTML_DataTable_Ultimo" xml:space="preserve">
+    <value>Último</value>
+  </data>
+  <data name="HTML_Layout_Candidatos" xml:space="preserve">
+    <value>Candidatos</value>
+  </data>
+  <data name="HTML_Layout_Candidaturas" xml:space="preserve">
+    <value>Candidaturas</value>
+  </data>
+  <data name="HTML_Layout_Configuracion" xml:space="preserve">
+    <value>Configuración</value>
+  </data>
+  <data name="HTML_Layout_Dashboard" xml:space="preserve">
+    <value>Dashboard</value>
+  </data>
+  <data name="HTML_Layout_MisRoles" xml:space="preserve">
+    <value>Mis roles:</value>
+  </data>
+  <data name="HTML_Layout_Necesidades" xml:space="preserve">
+    <value>Necesidades</value>
+  </data>
+  <data name="HTML_Layout_Ofertas" xml:space="preserve">
+    <value>Ofertas</value>
+  </data>
+  <data name="HTML_Layout_PersonasLibres" xml:space="preserve">
+    <value>Personas Libres</value>
+  </data>
+  <data name="HTML_Layout_SignOut" xml:space="preserve">
+    <value>Sign Out</value>
+  </data>
+  <data name="HTML_Necesidades_Create_Centro" xml:space="preserve">
+    <value>Centro:</value>
+  </data>
+  <data name="HTML_Necesidades_Create_Cliente" xml:space="preserve">
+    <value>Cliente:</value>
+  </data>
+  <data name="HTML_Necesidades_Create_Contratacion" xml:space="preserve">
+    <value>Contratación:</value>
+  </data>
+  <data name="HTML_Necesidades_Create_CreandoNecesidad" xml:space="preserve">
+    <value>Creando Necesidad</value>
+  </data>
+  <data name="HTML_Necesidades_Create_DetalleTecnologia" xml:space="preserve">
+    <value>Detalle Tecnología:</value>
+  </data>
+  <data name="HTML_Necesidades_Create_DisponibilidadReubicacion" xml:space="preserve">
+    <value>Disp. Reubicación:</value>
+  </data>
+  <data name="HTML_Necesidades_Create_DisponibilidadViaje" xml:space="preserve">
+    <value>Disp. Viaje:</value>
+  </data>
+  <data name="HTML_Necesidades_Create_Duracion" xml:space="preserve">
+    <value>Duración:</value>
+  </data>
+  <data name="HTML_Necesidades_Create_FechaCompromiso" xml:space="preserve">
+    <value>Fec.Compromiso:</value>
+  </data>
+  <data name="HTML_Necesidades_Create_FechaSolicitud" xml:space="preserve">
+    <value>Fec.Solicitud:</value>
+  </data>
+  <data name="HTML_Necesidades_Create_Modulo" xml:space="preserve">
+    <value>Módulo:</value>
+  </data>
+  <data name="HTML_Necesidades_Create_NecesidadIdioma" xml:space="preserve">
+    <value>Necesidad Idioma:</value>
+  </data>
+  <data name="HTML_Necesidades_Create_Nombre" xml:space="preserve">
+    <value>Nombre:</value>
+  </data>
+  <data name="HTML_Necesidades_Create_Oficina" xml:space="preserve">
+    <value>Oficina:</value>
+  </data>
+  <data name="HTML_Necesidades_Create_Perfil" xml:space="preserve">
+    <value>Perfil:</value>
+  </data>
+  <data name="HTML_Necesidades_Create_Prevision" xml:space="preserve">
+    <value>Previsión:</value>
+  </data>
+  <data name="HTML_Necesidades_Create_Proyecto" xml:space="preserve">
+    <value>Proyecto:</value>
+  </data>
+  <data name="HTML_Necesidades_Create_Sector" xml:space="preserve">
+    <value>Sector:</value>
+  </data>
+  <data name="HTML_Necesidades_Create_Servicio" xml:space="preserve">
+    <value>Servicio:</value>
+  </data>
+  <data name="HTML_Necesidades_Create_Tecnologia" xml:space="preserve">
+    <value>Tecnología:</value>
+  </data>
+  <data name="HTML_Necesidades_Index_AccionesHeader" xml:space="preserve">
+    <value>Acciones</value>
+  </data>
+  <data name="HTML_Necesidades_Index_CentroHeader" xml:space="preserve">
+    <value>Centro</value>
+  </data>
+  <data name="HTML_Necesidades_Index_CerradoEntre" xml:space="preserve">
+    <value>Cerrado entre:</value>
+  </data>
+  <data name="HTML_Necesidades_Index_CerradoHasta" xml:space="preserve">
+    <value>Cerrado hasta:</value>
+  </data>
+  <data name="HTML_Necesidades_Index_Cliente" xml:space="preserve">
+    <value>Cliente:</value>
+  </data>
+  <data name="HTML_Necesidades_Index_ClienteHeader" xml:space="preserve">
+    <value>Cliente</value>
+  </data>
+  <data name="HTML_Necesidades_Index_Contratacion" xml:space="preserve">
+    <value>Contratación:</value>
+  </data>
+  <data name="HTML_Necesidades_Index_ContratacionHeader" xml:space="preserve">
+    <value>Contratación</value>
+  </data>
+  <data name="HTML_Necesidades_Index_Estado" xml:space="preserve">
+    <value>Estado:</value>
+  </data>
+  <data name="HTML_Necesidades_Index_EstadoHeader" xml:space="preserve">
+    <value>Estado</value>
+  </data>
+  <data name="HTML_Necesidades_Index_FechaCierreHeader" xml:space="preserve">
+    <value>F.Cierre</value>
+  </data>
+  <data name="HTML_Necesidades_Index_FechaCompromisoHeader" xml:space="preserve">
+    <value>F.Compromiso</value>
+  </data>
+  <data name="HTML_Necesidades_Index_GestionNecesidades" xml:space="preserve">
+    <value>Gestión Necesidades</value>
+  </data>
+  <data name="HTML_Necesidades_Index_Perfil" xml:space="preserve">
+    <value>Perfil:</value>
+  </data>
+  <data name="HTML_Necesidades_Index_PerfilHeader" xml:space="preserve">
+    <value>Perfil</value>
+  </data>
+  <data name="HTML_Necesidades_Index_PersonaAsignadaHeader" xml:space="preserve">
+    <value>P. Asignada</value>
+  </data>
+  <data name="HTML_Necesidades_Index_Prevision" xml:space="preserve">
+    <value>Previsión:</value>
+  </data>
+  <data name="HTML_Necesidades_Index_PrevisionHeader" xml:space="preserve">
+    <value>Previsión</value>
+  </data>
+  <data name="HTML_Necesidades_Index_Proyecto" xml:space="preserve">
+    <value>Proyecto:</value>
+  </data>
+  <data name="HTML_Necesidades_Index_ProyectoHeader" xml:space="preserve">
+    <value>Proyecto</value>
+  </data>
+  <data name="HTML_Necesidades_Index_Referencia" xml:space="preserve">
+    <value>Referencia:</value>
+  </data>
+  <data name="HTML_Necesidades_Index_RefHeader" xml:space="preserve">
+    <value>Ref.</value>
+  </data>
+  <data name="HTML_Necesidades_Index_SolicitadoEntre" xml:space="preserve">
+    <value>Solicitado entre:</value>
+  </data>
+  <data name="HTML_Necesidades_Index_SolicitadoHasta" xml:space="preserve">
+    <value>Solicitado hasta:</value>
+  </data>
+  <data name="HTML_Necesidades_Index_Tecnologia" xml:space="preserve">
+    <value>Tecnología:</value>
+  </data>
+  <data name="HTML_Necesidades_Index_TecnologiaHeader" xml:space="preserve">
+    <value>Tecnología</value>
+  </data>
+  <data name="HTML_Necesidades_Index_TotalNecesidades" xml:space="preserve">
+    <value>Total de Necesidades:</value>
+  </data>
+  <data name="HTML_Ofertas_Create_CreandoOferta" xml:space="preserve">
+    <value>Creando Oferta</value>
+  </data>
+  <data name="HTML_Ofertas_Create_Descripcion" xml:space="preserve">
+    <value>Descripción:</value>
+  </data>
+  <data name="HTML_Ofertas_Create_FechaPublicacion" xml:space="preserve">
+    <value>Fecha publicación:</value>
+  </data>
+  <data name="HTML_Ofertas_Create_Nombre" xml:space="preserve">
+    <value>Nombre:</value>
+  </data>
+  <data name="HTML_Ofertas_Details_Descripcion" xml:space="preserve">
+    <value>Descripción:</value>
+  </data>
+  <data name="HTML_Ofertas_Details_DetallesOferta" xml:space="preserve">
+    <value>Detalles Oferta</value>
+  </data>
+  <data name="HTML_Ofertas_Details_Estado" xml:space="preserve">
+    <value>Estado:</value>
+  </data>
+  <data name="HTML_Ofertas_Details_FechaPublicacion" xml:space="preserve">
+    <value>Fecha Publicación:</value>
+  </data>
+  <data name="HTML_Ofertas_Details_Nombre" xml:space="preserve">
+    <value>Nombre:</value>
+  </data>
+  <data name="HTML_Ofertas_Edit_Descripcion" xml:space="preserve">
+    <value>Descripción:</value>
+  </data>
+  <data name="HTML_Ofertas_Edit_EditandoOferta" xml:space="preserve">
+    <value>Editando Oferta</value>
+  </data>
+  <data name="HTML_Ofertas_Edit_Estado" xml:space="preserve">
+    <value>Estado:</value>
+  </data>
+  <data name="HTML_Ofertas_Edit_FechaPublicacion" xml:space="preserve">
+    <value>Fecha Publicación:</value>
+  </data>
+  <data name="HTML_Ofertas_Edit_Nombre" xml:space="preserve">
+    <value>Nombre:</value>
+  </data>
+  <data name="HTML_Ofertas_Index_AccionesHeader" xml:space="preserve">
+    <value>Acciones</value>
+  </data>
+  <data name="HTML_Ofertas_Index_AniadirOferta" xml:space="preserve">
+    <value>Añadir oferta</value>
+  </data>
+  <data name="HTML_Ofertas_Index_CandidatosHeader" xml:space="preserve">
+    <value>Candidatos Inscritos</value>
+  </data>
+  <data name="HTML_Ofertas_Index_Centro" xml:space="preserve">
+    <value>Centro:</value>
+  </data>
+  <data name="HTML_Ofertas_Index_CentroHeader" xml:space="preserve">
+    <value>Centro</value>
+  </data>
+  <data name="HTML_Ofertas_Index_Descripcion" xml:space="preserve">
+    <value>Descripción:</value>
+  </data>
+  <data name="HTML_Ofertas_Index_Estado" xml:space="preserve">
+    <value>Estado:</value>
+  </data>
+  <data name="HTML_Ofertas_Index_EstadoHeader" xml:space="preserve">
+    <value>Estado</value>
+  </data>
+  <data name="HTML_Ofertas_Index_FechaPublicacionHeader" xml:space="preserve">
+    <value>Fecha Publicación</value>
+  </data>
+  <data name="HTML_Ofertas_Index_GestionOfertas" xml:space="preserve">
+    <value>Gestión de ofertas</value>
+  </data>
+  <data name="HTML_Ofertas_Index_Nombre" xml:space="preserve">
+    <value>Nombre:</value>
+  </data>
+  <data name="HTML_Ofertas_Index_NombreHeader" xml:space="preserve">
+    <value>Nombre</value>
+  </data>
+  <data name="HTML_Ofertas_Index_PublicadaEntre" xml:space="preserve">
+    <value>Publicada entre:</value>
+  </data>
+  <data name="HTML_Ofertas_Index_PublicadaHasta" xml:space="preserve">
+    <value>Publicada hasta:</value>
+  </data>
+  <data name="HTML_Ofertas_Index_TotalOfertas" xml:space="preserve">
+    <value>Total de Ofertas:</value>
+  </data>
+  <data name="HTML_PersonasLibres_CreateStepTwo_Aniadir" xml:space="preserve">
+    <value>Añadir</value>
+  </data>
+  <data name="HTML_PersonasLibres_CreateStepTwo_Categoria" xml:space="preserve">
+    <value>Categoria:</value>
+  </data>
+  <data name="HTML_PersonasLibres_CreateStepTwo_Celda" xml:space="preserve">
+    <value>Celda:</value>
+  </data>
+  <data name="HTML_PersonasLibres_CreateStepTwo_Comentario" xml:space="preserve">
+    <value>Comentario:</value>
+  </data>
+  <data name="HTML_PersonasLibres_CreateStepTwo_FechaLiberacion" xml:space="preserve">
+    <value>Fecha Liberación:</value>
+  </data>
+  <data name="HTML_PersonasLibres_CreateStepTwo_GuardarPersonasLibres" xml:space="preserve">
+    <value>Guardar Personas Libres</value>
+  </data>
+  <data name="HTML_PersonasLibres_CreateStepTwo_Linea" xml:space="preserve">
+    <value>Linea:</value>
+  </data>
+  <data name="HTML_PersonasLibres_CreateStepTwo_NumeroEmpleado" xml:space="preserve">
+    <value>Numero Empleado:</value>
+  </data>
+  <data name="HTML_PersonasLibres_CreateStepTwo_Tecnologia" xml:space="preserve">
+    <value>Tecnologia:</value>
+  </data>
+  <data name="HTML_PersonasLibres_Create_ActualizarListas" xml:space="preserve">
+    <value>Actualizar listas de Categoria, Linea y Celda</value>
+  </data>
+  <data name="HTML_PersonasLibres_Create_Apellidos" xml:space="preserve">
+    <value>Apellidos:</value>
+  </data>
+  <data name="HTML_PersonasLibres_Create_ApellidosHeader" xml:space="preserve">
+    <value>Apellidos</value>
+  </data>
+  <data name="HTML_PersonasLibres_Create_Categoria" xml:space="preserve">
+    <value>Categoria:</value>
+  </data>
+  <data name="HTML_PersonasLibres_Create_CategoriaHeader" xml:space="preserve">
+    <value>Categoria</value>
+  </data>
+  <data name="HTML_PersonasLibres_Create_Celda" xml:space="preserve">
+    <value>Celda:</value>
+  </data>
+  <data name="HTML_PersonasLibres_Create_CeldaHeader" xml:space="preserve">
+    <value>Celda</value>
+  </data>
+  <data name="HTML_PersonasLibres_Create_Centro" xml:space="preserve">
+    <value>Centro:</value>
+  </data>
+  <data name="HTML_PersonasLibres_Create_EleccionEmpleadosFenix" xml:space="preserve">
+    <value>Elección de Empleados Fenix</value>
+  </data>
+  <data name="HTML_PersonasLibres_Create_Linea" xml:space="preserve">
+    <value>Linea:</value>
+  </data>
+  <data name="HTML_PersonasLibres_Create_LineaHeader" xml:space="preserve">
+    <value>Linea</value>
+  </data>
+  <data name="HTML_PersonasLibres_Create_Nombre" xml:space="preserve">
+    <value>Nombre:</value>
+  </data>
+  <data name="HTML_PersonasLibres_Create_NombreHeader" xml:space="preserve">
+    <value>Nombre</value>
+  </data>
+  <data name="HTML_PersonasLibres_Create_NumeroEmpleado" xml:space="preserve">
+    <value>Nº Empleado:</value>
+  </data>
+  <data name="HTML_PersonasLibres_Create_NumeroEmpleadoHeader" xml:space="preserve">
+    <value>Nro Empleado</value>
+  </data>
+  <data name="HTML_PersonasLibres_Create_TotalEmpleadosFenix" xml:space="preserve">
+    <value>Total de Empleados Fenix:</value>
+  </data>
+  <data name="HTML_PersonasLibres_Details_Nombre" xml:space="preserve">
+    <value>Nombre y Apellidos:</value>
+  </data>
+  <data name="HTML_PersonasLibres_Details_Categoria" xml:space="preserve">
+    <value>Categoria:</value>
+  </data>
+  <data name="HTML_PersonasLibres_Details_Celda" xml:space="preserve">
+    <value>Celda:</value>
+  </data>
+  <data name="HTML_PersonasLibres_Details_Comentario" xml:space="preserve">
+    <value>Comentario:</value>
+  </data>
+  <data name="HTML_PersonasLibres_Details_FechaLiberacion" xml:space="preserve">
+    <value>Fecha Liberacion:</value>
+  </data>
+  <data name="HTML_PersonasLibres_Details_VerPersonaLibre" xml:space="preserve">
+    <value>Ver Persona Libre</value>
+  </data>
+  <data name="HTML_PersonasLibres_Details_Linea" xml:space="preserve">
+    <value>Linea:</value>
+  </data>
+  <data name="HTML_PersonasLibres_Details_Tecnologia" xml:space="preserve">
+    <value>Tecnologia:</value>
+  </data>
+  <data name="HTML_PersonasLibres_Edit_Categoria" xml:space="preserve">
+    <value>Categoria:</value>
+  </data>
+  <data name="HTML_PersonasLibres_Edit_Celda" xml:space="preserve">
+    <value>Celda:</value>
+  </data>
+  <data name="HTML_PersonasLibres_Edit_Comentario" xml:space="preserve">
+    <value>Comentario:</value>
+  </data>
+  <data name="HTML_PersonasLibres_Edit_EditarPersonaLibre" xml:space="preserve">
+    <value>Editar Persona Libre</value>
+  </data>
+  <data name="HTML_PersonasLibres_Datos_PersonaLibre" xml:space="preserve">
+    <value>Datos de Persona Libre</value>
+  </data>
+  <data name="HTML_PersonasLibres_Edit_Nombre" xml:space="preserve">
+    <value>Nombre y Apellidos:</value>
+  </data>
+  <data name="HTML_PersonasLibres_Edit_FechaLiberacion" xml:space="preserve">
+    <value>Fecha Liberacion:</value>
+  </data>
+  <data name="HTML_PersonasLibres_Edit_Linea" xml:space="preserve">
+    <value>Linea:</value>
+  </data>
+  <data name="HTML_PersonasLibres_Edit_Tecnologia" xml:space="preserve">
+    <value>Tecnologia:</value>
+  </data>
+  <data name="HTML_PersonasLibres_Index_AccionesHeader" xml:space="preserve">
+    <value>Acciones</value>
+  </data>
+  <data name="HTML_PersonasLibres_Index_AniadirPersona" xml:space="preserve">
+    <value>Añadir Persona</value>
+  </data>
+  <data name="HTML_PersonasLibres_Index_Filtro" xml:space="preserve">
+    <value>Filtro</value>
+  </data>
+  <data name="HTML_PersonasLibres_Index_Apellidos" xml:space="preserve">
+    <value>Apellidos:</value>
+  </data>
+  <data name="HTML_PersonasLibres_Index_ApellidosHeader" xml:space="preserve">
+    <value>Apellidos</value>
+  </data>
+  <data name="HTML_PersonasLibres_Index_Categoria" xml:space="preserve">
+    <value>Categoria:</value>
+  </data>
+  <data name="HTML_PersonasLibres_Index_CategoriaHeader" xml:space="preserve">
+    <value>Categoria</value>
+  </data>
+  <data name="HTML_PersonasLibres_Index_Celda" xml:space="preserve">
+    <value>Celda:</value>
+  </data>
+  <data name="HTML_PersonasLibres_Index_CeldaHeader" xml:space="preserve">
+    <value>Celda</value>
+  </data>
+  <data name="HTML_PersonasLibres_Index_Centro" xml:space="preserve">
+    <value>Centro:</value>
+  </data>
+  <data name="HTML_PersonasLibres_Index_FechaLiberacionHeader" xml:space="preserve">
+    <value>Fecha Liberación</value>
+  </data>
+  <data name="HTML_PersonasLibres_Index_GestionPersonasLibres" xml:space="preserve">
+    <value>Gestión Personas Libres</value>
+  </data>
+  <data name="HTML_PersonasLibres_Index_Linea" xml:space="preserve">
+    <value>Linea:</value>
+  </data>
+  <data name="HTML_PersonasLibres_Index_LineaHeader" xml:space="preserve">
+    <value>Linea</value>
+  </data>
+  <data name="HTML_PersonasLibres_Index_NecesidadAsignada" xml:space="preserve">
+    <value>Necesidad Asignada:</value>
+  </data>
+  <data name="HTML_PersonasLibres_Index_NecesidadHeader" xml:space="preserve">
+    <value>Necesidad</value>
+  </data>
+  <data name="HTML_PersonasLibres_Index_Nombre" xml:space="preserve">
+    <value>Nombre:</value>
+  </data>
+  <data name="HTML_PersonasLibres_Index_NombreHeader" xml:space="preserve">
+    <value>Nombre</value>
+  </data>
+  <data name="HTML_PersonasLibres_Index_NumeroEmpleado" xml:space="preserve">
+    <value>Nº Empleado:</value>
+  </data>
+  <data name="HTML_PersonasLibres_Index_NumeroEmpleadoHeader" xml:space="preserve">
+    <value>Nro Empleado</value>
+  </data>
+  <data name="HTML_PersonasLibres_Index_Tecnologia" xml:space="preserve">
+    <value>Tecnologia:</value>
+  </data>
+  <data name="HTML_PersonasLibres_Index_TecnologiaHeader" xml:space="preserve">
+    <value>Tecnologia</value>
+  </data>
+  <data name="HTML_PersonasLibres_Index_TotalPersonasLibres" xml:space="preserve">
+    <value>Total de Personas Libres:</value>
+  </data>
+  <data name="HTML_PersonasLibres_ModalBusquedaNecesidad_BusquedaNecesidades" xml:space="preserve">
+    <value>Búsqueda de Necesidades Abiertas</value>
+  </data>
+  <data name="HTML_PersonasLibres_ModalBusquedaNecesidad_Cliente" xml:space="preserve">
+    <value>Cliente:</value>
+  </data>
+  <data name="HTML_PersonasLibres_ModalBusquedaNecesidad_ClienteHeader" xml:space="preserve">
+    <value>Cliente</value>
+  </data>
+  <data name="HTML_PersonasLibres_ModalBusquedaNecesidad_FechaCompromisoHeader" xml:space="preserve">
+    <value>Fecha compromiso</value>
+  </data>
+  <data name="HTML_PersonasLibres_ModalBusquedaNecesidad_FechaSolicitudHeader" xml:space="preserve">
+    <value>Fecha solicitud</value>
+  </data>
+  <data name="HTML_PersonasLibres_ModalBusquedaNecesidad_NuevoEstadoHeader" xml:space="preserve">
+    <value>Nuevo Estado</value>
+  </data>
+  <data name="HTML_PersonasLibres_ModalBusquedaNecesidad_Perfil" xml:space="preserve">
+    <value>Perfil:</value>
+  </data>
+  <data name="HTML_PersonasLibres_ModalBusquedaNecesidad_PerfilHeader" xml:space="preserve">
+    <value>Perfil</value>
+  </data>
+  <data name="HTML_PersonasLibres_ModalBusquedaNecesidad_Proyecto" xml:space="preserve">
+    <value>Proyecto:</value>
+  </data>
+  <data name="HTML_PersonasLibres_ModalBusquedaNecesidad_ProyectoHeader" xml:space="preserve">
+    <value>Proyecto</value>
+  </data>
+  <data name="HTML_PersonasLibres_ModalBusquedaNecesidad_RefHeader" xml:space="preserve">
+    <value>Ref</value>
+  </data>
+  <data name="HTML_PersonasLibres_ModalBusquedaNecesidad_SeleccionarHeader" xml:space="preserve">
+    <value>Seleccionar</value>
+  </data>
+  <data name="HTML_PersonasLibres_ModalBusquedaNecesidad_SolicitadoDesde" xml:space="preserve">
+    <value>Solicitado desde:</value>
+  </data>
+  <data name="HTML_PersonasLibres_ModalBusquedaNecesidad_SolicitadoHasta" xml:space="preserve">
+    <value>Solicitado hasta:</value>
+  </data>
+  <data name="HTML_PersonasLibres_ModalBusquedaNecesidad_Tecnologia" xml:space="preserve">
+    <value>Tecnologia:</value>
+  </data>
+  <data name="HTML_PersonasLibres_ModalBusquedaNecesidad_TecnologiaHeader" xml:space="preserve">
+    <value>Tecnologia</value>
+  </data>
+  <data name="HTML_Candidaturas_AgendarCartaOferta_AgendarCartaOferta" xml:space="preserve">
+    <value>Agendar Carta Oferta</value>
+  </data>
+  <data name="HTML_Candidaturas_AgendarPrimeraEntrevista_AgendarEntrevistas" xml:space="preserve">
+    <value>Agendar Entrevistas</value>
+  </data>
+  <data name="HTML_Candidaturas_AgendarPrimeraEntrevista_DatosEntrevistaPrincipal" xml:space="preserve">
+    <value>Datos Entrevista Principal</value>
+  </data>
+  <data name="HTML_Candidaturas_AgendarPrimeraEntrevista_Subentrevistas" xml:space="preserve">
+    <value>Subentrevistas</value>
+  </data>
+  <data name="HTML_Candidaturas_AgendarSegundaEntrevista_AgendarSegundaEntrevista" xml:space="preserve">
+    <value>Agendar Entrevista Complementaria</value>
+  </data>
+  <data name="HTML_Candidaturas_AgendarSegundaEntrevista_DatosSegundaEntrevista" xml:space="preserve">
+    <value>Datos Entrevista Complementaria</value>
+  </data>
+  <data name="HTML_Candidaturas_CompletarCartaOferta_FeedbackCartaOferta" xml:space="preserve">
+    <value>Feedback Carta Oferta</value>
+  </data>
+  <data name="HTML_Candidaturas_CompletarCartaOferta_GenerarCartaOferta" xml:space="preserve">
+    <value>Generar C.O</value>
+  </data>
+  <data name="HTML_Candidaturas_CompletarPrimeraEntrevista_AniadirSubentrevista" xml:space="preserve">
+    <value>Añadir Subentrevista</value>
+  </data>
+  <data name="HTML_Candidaturas_CompletarPrimeraEntrevista_DatosEntrevistaPrincipal" xml:space="preserve">
+    <value>Datos Entrevista Principal</value>
+  </data>
+  <data name="HTML_Candidaturas_CompletarPrimeraEntrevista_FeedbackEntrevistas" xml:space="preserve">
+    <value>Feedback Entrevistas</value>
+  </data>
+  <data name="HTML_Candidaturas_CompletarPrimeraEntrevista_VerSubentrevistas" xml:space="preserve">
+    <value>Ver Subentrevistas</value>
+  </data>
+  <data name="HTML_Candidaturas_CompletarSegundaEntrevista_CompletarSegundaEntrevista" xml:space="preserve">
+    <value>Feedback Entrevista Complementaria</value>
+  </data>
+  <data name="HTML_Candidaturas_CompletarSegundaEntrevista_DatosSegundaEntrevista" xml:space="preserve">
+    <value>Datos Entrevista Complementaria</value>
+  </data>
+  <data name="HTML_Candidaturas_CompletarSegundaEntrevista_VerSubentrevistas" xml:space="preserve">
+    <value>Ver Subentrevistas</value>
+  </data>
+  <data name="HTML_Candidaturas_Create_DatosCandidatura" xml:space="preserve">
+    <value>Creando Candidatura</value>
+  </data>
+  <data name="HTML_Candidaturas_DatosBasicos_Archivos" xml:space="preserve">
+    <value>Archivos Word, Pdf, Txt, Excel</value>
+  </data>
+  <data name="HTML_Candidaturas_DatosBasicos_Candidato" xml:space="preserve">
+    <value>Candidato:</value>
+  </data>
+  <data name="HTML_Candidaturas_DatosBasicos_Filtrador" xml:space="preserve">
+    <value>Filtrador:</value>
+  </data>
+  <data name="HTML_Candidaturas_DatosBasicos_Modulo" xml:space="preserve">
+    <value>Módulo:</value>
+  </data>
+  <data name="HTML_Candidaturas_DatosBasicos_Oferta" xml:space="preserve">
+    <value>Oferta:</value>
+  </data>
+  <data name="HTML_Candidaturas_DatosBasicos_OtrosDatos" xml:space="preserve">
+    <value>Otros Datos CV/Filtro Telefónico</value>
+  </data>
+  <data name="HTML_Candidaturas_DatosBasicos_SalarioDeseado" xml:space="preserve">
+    <value>Salario Deseado:</value>
+  </data>
+  <data name="HTML_Candidaturas_DatosBasicos_SubidoCV" xml:space="preserve">
+    <value>¿Subido CV?</value>
+  </data>
+  <data name="HTML_Candidaturas_DatosBasicos_TipoPerfil" xml:space="preserve">
+    <value>Tipo Perfil:</value>
+  </data>
+  <data name="HTML_Candidaturas_DatosBasicos_TipoTecnologia" xml:space="preserve">
+    <value>Tipo Tecnología:</value>
+  </data>
+  <data name="HTML_Candidaturas_Details_VerCandidatura" xml:space="preserve">
+    <value>Ver Candidatura</value>
+  </data>
+  <data name="HTML_Candidaturas_EditExtend_EditarCandidatura" xml:space="preserve">
+    <value>Editar Candidatura</value>
+  </data>
+  <data name="HTML_Candidaturas_EntregaCartaOferta_EntregaCartaOferta" xml:space="preserve">
+    <value>Entrega Carta Oferta</value>
+  </data>
+  <data name="HTML_Candidaturas_EntregaCartaOferta_GenerarCartaOferta" xml:space="preserve">
+    <value>Generar C.O</value>
+  </data>
+  <data name="HTML_Candidaturas_FiltradoCv_DescartarFuturasCandidaturas" xml:space="preserve">
+    <value>¿Descartar en futuras candidaturas?</value>
+  </data>
+  <data name="HTML_Candidaturas_FiltradoCv_FiltradoCv" xml:space="preserve">
+    <value>Filtrado CV</value>
+  </data>
+  <data name="HTML_Candidaturas_FiltradoCv_Filtrar" xml:space="preserve">
+    <value>Filtrar</value>
+  </data>
+  <data name="HTML_Candidaturas_FiltradoCv_MotivosObservaciones" xml:space="preserve">
+    <value>Motivos/Observaciones</value>
+  </data>
+  <data name="HTML_Candidaturas_FiltradoCv_SuperaFiltrado" xml:space="preserve">
+    <value>Supera Filtrado</value>
+  </data>
+  <data name="HTML_Candidaturas_Index_AccionesEstadosHeader" xml:space="preserve">
+    <value>Acciones/Estados</value>
+  </data>
+  <data name="HTML_Candidaturas_Index_AgendadaEntre" xml:space="preserve">
+    <value>Agendada entre:</value>
+  </data>
+  <data name="HTML_Candidaturas_Index_AgendadaHasta" xml:space="preserve">
+    <value>Agendada hasta:</value>
+  </data>
+  <data name="HTML_Candidaturas_Index_AgendadaHeader" xml:space="preserve">
+    <value>Agendada</value>
+  </data>
+  <data name="HTML_Candidaturas_Index_AniadirCandidatura" xml:space="preserve">
+    <value>Añadir Candidatura</value>
+  </data>
+  <data name="HTML_Candidaturas_Index_Archivos" xml:space="preserve">
+    <value>Archivos Word, Pdf, Txt, Excel</value>
+  </data>
+  <data name="HTML_Candidaturas_Index_Candidato" xml:space="preserve">
+    <value>Candidato:</value>
+  </data>
+  <data name="HTML_Candidaturas_Index_CandidatoHeader" xml:space="preserve">
+    <value>Candidato</value>
+  </data>
+  <data name="HTML_Candidaturas_Index_Centro" xml:space="preserve">
+    <value>Centro:</value>
+  </data>
+  <data name="HTML_Candidaturas_Index_CentroHeader" xml:space="preserve">
+    <value>Centro</value>
+  </data>
+  <data name="HTML_Candidaturas_Index_Entrevistador" xml:space="preserve">
+    <value>Entrevistador:</value>
+  </data>
+  <data name="HTML_Candidaturas_Index_EntrevistadorHeader" xml:space="preserve">
+    <value>Entrevistador</value>
+  </data>
+  <data name="HTML_Candidaturas_Index_Estado" xml:space="preserve">
+    <value>Estado:</value>
+  </data>
+  <data name="HTML_Candidaturas_Index_EstadoHeader" xml:space="preserve">
+    <value>Estado</value>
+  </data>
+  <data name="HTML_Candidaturas_Index_Fase" xml:space="preserve">
+    <value>Fase:</value>
+  </data>
+  <data name="HTML_Candidaturas_Index_FaseHeader" xml:space="preserve">
+    <value>Fase</value>
+  </data>
+  <data name="HTML_Candidaturas_Index_GestionCandidaturas" xml:space="preserve">
+    <value>Gestión Candidaturas</value>
+  </data>
+  <data name="HTML_Candidaturas_Index_Idioma" xml:space="preserve">
+    <value>Idioma:</value>
+  </data>
+  <data name="HTML_Candidaturas_Index_Modulo" xml:space="preserve">
+    <value>Módulo:</value>
+  </data>
+  <data name="HTML_Candidaturas_Index_ModuloHeader" xml:space="preserve">
+    <value>Módulo</value>
+  </data>
+  <data name="HTML_Candidaturas_Index_NivelMinimoIdioma" xml:space="preserve">
+    <value>Nivel Mínimo Idioma:</value>
+  </data>
+  <data name="HTML_Candidaturas_Index_Oferta" xml:space="preserve">
+    <value>Oferta:</value>
+  </data>
+  <data name="HTML_Candidaturas_Index_OfertaHeader" xml:space="preserve">
+    <value>Oferta</value>
+  </data>
+  <data name="HTML_Candidaturas_Index_Perfil" xml:space="preserve">
+    <value>Perfil:</value>
+  </data>
+  <data name="HTML_Candidaturas_Index_PerfilHeader" xml:space="preserve">
+    <value>Perfil</value>
+  </data>
+  <data name="HTML_Candidaturas_Index_Referencia" xml:space="preserve">
+    <value>Referencia:</value>
+  </data>
+  <data name="HTML_Candidaturas_Index_ReferenciaHeader" xml:space="preserve">
+    <value>Ref.</value>
+  </data>
+  <data name="HTML_Candidaturas_Index_Tecnologia" xml:space="preserve">
+    <value>Tecnología:</value>
+  </data>
+  <data name="HTML_Candidaturas_Index_TecnologiaHeader" xml:space="preserve">
+    <value>Tecnología</value>
+  </data>
+  <data name="HTML_Candidaturas_Index_TotalCandidaturas" xml:space="preserve">
+    <value>Total de Candidaturas:</value>
+  </data>
+  <data name="HTML_Candidaturas_ModalAniadirSubEntrevista_Aniadir" xml:space="preserve">
+    <value>Añadir</value>
+  </data>
+  <data name="HTML_Candidaturas_ModalAniadirSubEntrevista_AniadirNuevaSubentrevista" xml:space="preserve">
+    <value>Añadir Nueva Subentrevista</value>
+  </data>
+  <data name="HTML_Candidaturas_ModalAniadirSubEntrevista_EntrevistadorHeader" xml:space="preserve">
+    <value>Entrevistador</value>
+  </data>
+  <data name="HTML_Candidaturas_ModalAniadirSubEntrevista_FechaSubentrevistaHeader" xml:space="preserve">
+    <value>Fecha Subentrevista</value>
+  </data>
+  <data name="HTML_Candidaturas_ModalAniadirSubEntrevista_NotificarCandidato" xml:space="preserve">
+    <value>Notificar al candidato</value>
+  </data>
+  <data name="HTML_Candidaturas_ModalAniadirSubEntrevista_Presencial" xml:space="preserve">
+    <value>Presencial</value>
+  </data>
+  <data name="HTML_Candidaturas_ModalAniadirSubEntrevista_TipoSubentrevista" xml:space="preserve">
+    <value>Tipo subentrevista</value>
+  </data>
+  <data name="HTML_Candidaturas_ModalBusquedaCandidato_Apellidos" xml:space="preserve">
+    <value>Apellidos:</value>
+  </data>
+  <data name="HTML_Candidaturas_ModalBusquedaCandidato_ApellidosHeader" xml:space="preserve">
+    <value>Apellidos</value>
+  </data>
+  <data name="HTML_Candidaturas_ModalBusquedaCandidato_BusquedaCandidatos" xml:space="preserve">
+    <value>Búsqueda de Candidatos</value>
+  </data>
+  <data name="HTML_Candidaturas_ModalBusquedaCandidato_CentroHeader" xml:space="preserve">
+    <value>Centro</value>
+  </data>
+  <data name="HTML_Candidaturas_ModalBusquedaCandidato_Nombre" xml:space="preserve">
+    <value>Nombre:</value>
+  </data>
+  <data name="HTML_Candidaturas_ModalBusquedaCandidato_NombresHeader" xml:space="preserve">
+    <value>Nombres</value>
+  </data>
+  <data name="HTML_Candidaturas_ModalBusquedaCandidato_NumeroIdentificacion" xml:space="preserve">
+    <value>Nº Identific:</value>
+  </data>
+  <data name="HTML_Candidaturas_ModalBusquedaCandidato_NumeroIdentificacionHeader" xml:space="preserve">
+    <value>Nº Identificación</value>
+  </data>
+  <data name="HTML_Candidaturas_ModalBusquedaCandidato_SeleccionarHeader" xml:space="preserve">
+    <value>Seleccionar</value>
+  </data>
+  <data name="HTML_Candidaturas_ModalBusquedaCandidato_TipoIdentificacion" xml:space="preserve">
+    <value>Tipo Identific:</value>
+  </data>
+  <data name="HTML_Candidaturas_ModalBusquedaNecesida_Cliente" xml:space="preserve">
+    <value>Cliente:</value>
+  </data>
+  <data name="HTML_Candidaturas_ModalBusquedaNecesida_ClienteHeader" xml:space="preserve">
+    <value>Cliente</value>
+  </data>
+  <data name="HTML_Candidaturas_ModalBusquedaNecesida_Desde" xml:space="preserve">
+    <value>Desde:</value>
+  </data>
+  <data name="HTML_Candidaturas_ModalBusquedaNecesida_EstadoHeader" xml:space="preserve">
+    <value>Estado</value>
+  </data>
+  <data name="HTML_Candidaturas_ModalBusquedaNecesida_FechaCompromisoHeader" xml:space="preserve">
+    <value>Fecha compromiso</value>
+  </data>
+  <data name="HTML_Candidaturas_ModalBusquedaNecesida_FechaSolicitudHeader" xml:space="preserve">
+    <value>Fecha solicitud</value>
+  </data>
+  <data name="HTML_Candidaturas_ModalBusquedaNecesida_Hasta" xml:space="preserve">
+    <value>Hasta:</value>
+  </data>
+  <data name="HTML_Candidaturas_ModalBusquedaNecesida_Perfil" xml:space="preserve">
+    <value>Perfil:</value>
+  </data>
+  <data name="HTML_Candidaturas_ModalBusquedaNecesida_PerfilHeader" xml:space="preserve">
+    <value>Perfil</value>
+  </data>
+  <data name="HTML_Candidaturas_ModalBusquedaNecesida_Proyecto" xml:space="preserve">
+    <value>Proyecto:</value>
+  </data>
+  <data name="HTML_Candidaturas_ModalBusquedaNecesida_ProyectoHeader" xml:space="preserve">
+    <value>Proyecto</value>
+  </data>
+  <data name="HTML_Candidaturas_ModalBusquedaNecesida_ReferenciaHeader" xml:space="preserve">
+    <value>Ref.</value>
+  </data>
+  <data name="HTML_Candidaturas_ModalBusquedaNecesida_SeleccionarHeader" xml:space="preserve">
+    <value>Seleccionar</value>
+  </data>
+  <data name="HTML_Candidaturas_ModalBusquedaNecesida_Tecnologia" xml:space="preserve">
+    <value>Tecnología:</value>
+  </data>
+  <data name="HTML_Candidaturas_ModalBusquedaNecesida_TecnologiaHeader" xml:space="preserve">
+    <value>Tecnología</value>
+  </data>
+  <data name="HTML_Candidaturas_ResultadoPrimeraEntrevista_SubidoTest" xml:space="preserve">
+    <value>¿Subido Test?</value>
+  </data>
+  <data name="HTML_Candidaturas_ResultadoSegundaEntrevista_Motivo" xml:space="preserve">
+    <value>Motivo</value>
+  </data>
+  <data name="HTML_Candidaturas_ResultadoSegundaEntrevista_SuperaSegundaEntrevista" xml:space="preserve">
+    <value>¿Supera entrevista comp?</value>
+  </data>
+  <data name="HTML_Candidaturas_VerEditarSubEntrevistas_CambioResidencia" xml:space="preserve">
+    <value>¿Cambio Residencia?</value>
+  </data>
+  <data name="HTML_Candidaturas_VerEditarSubEntrevistas_Categoria" xml:space="preserve">
+    <value>Categoría:</value>
+  </data>
+  <data name="HTML_Candidaturas_VerEditarSubEntrevistas_Completada" xml:space="preserve">
+    <value>Completada:</value>
+  </data>
+  <data name="HTML_Candidaturas_VerEditarSubEntrevistas_DisponibilidadViajes" xml:space="preserve">
+    <value>¿Disp. Viajes?</value>
+  </data>
+  <data name="HTML_Candidaturas_VerEditarSubEntrevistas_EditarTodas" xml:space="preserve">
+    <value>Editar todas</value>
+  </data>
+  <data name="HTML_Candidaturas_VerEditarSubEntrevistas_EntrevistaTipo" xml:space="preserve">
+    <value>Entrevista tipo:</value>
+  </data>
+  <data name="HTML_Candidaturas_VerEditarSubEntrevistas_Incorporacion" xml:space="preserve">
+    <value>Incorporación:</value>
+  </data>
+  <data name="HTML_Candidaturas_VerEditarSubEntrevistas_NotificarCandidatoAutomaticamente" xml:space="preserve">
+    <value>Notificar al candidato automáticamente:</value>
+  </data>
+  <data name="HTML_Candidaturas_VerEditarSubEntrevistas_Observaciones" xml:space="preserve">
+    <value>Observaciones:</value>
+  </data>
+  <data name="HTML_Candidaturas_VerEditarSubEntrevistas_Presencial" xml:space="preserve">
+    <value>¿Presencial?</value>
+  </data>
+  <data name="HTML_Candidaturas_VerEditarSubEntrevistas_SalarioActual" xml:space="preserve">
+    <value>Salario Actual:</value>
+  </data>
+  <data name="HTML_Candidaturas_VerEditarSubEntrevistas_SalarioDeseado" xml:space="preserve">
+    <value>Salario Deseado:</value>
+  </data>
+  <data name="HTML_Candidaturas_VerEditarSubEntrevistas_SalarioPropuesto" xml:space="preserve">
+    <value>Salario Propuesto:</value>
+  </data>
+  <data name="HTML_Candidaturas_VerEditarSubEntrevistas_SuperaEntrevista" xml:space="preserve">
+    <value>Supera la entrevista:</value>
+  </data>
+  <data name="HTML_Dashboard_Administrador_Administrador" xml:space="preserve">
+    <value>Administrador</value>
+  </data>
+  <data name="HTML_Dashboard_Administrador_AgendadaHeader" xml:space="preserve">
+    <value>Agendada</value>
+  </data>
+  <data name="HTML_Dashboard_Administrador_AlertasCartaOferta" xml:space="preserve">
+    <value>Alertas Carta Oferta</value>
+  </data>
+  <data name="HTML_Dashboard_Administrador_AlertasCurriculumsPendientesFiltrar" xml:space="preserve">
+    <value>Alerta Currículums Pendientes a Filtrar</value>
+  </data>
+  <data name="HTML_Dashboard_Administrador_AlertasEntrevistaPrincipal" xml:space="preserve">
+    <value>Alertas Entrevista Principal</value>
+  </data>
+  <data name="HTML_Dashboard_Administrador_AlertasNecesidadesCreadasModificadas" xml:space="preserve">
+    <value>Alertas Necesidades Creadas y/o Modificadas</value>
+  </data>
+  <data name="HTML_Dashboard_Administrador_AlertasSegundaEntrevista" xml:space="preserve">
+    <value>Alertas Entrevista Complementaria</value>
+  </data>
+  <data name="HTML_Dashboard_Administrador_AlertasSubentrevistas" xml:space="preserve">
+    <value>Alertas Subentrevistas Entrevista Principal</value>
+  </data>
+  <data name="HTML_Dashboard_Administrador_CandidatoHeader" xml:space="preserve">
+    <value>Candidato</value>
+  </data>
+  <data name="HTML_Dashboard_Administrador_CandidaturasPendientesCartaOferta" xml:space="preserve">
+    <value>Candidaturas Pendientes Carta Oferta  (Últimos 15 días)</value>
+  </data>
+  <data name="HTML_Dashboard_Administrador_CandidaturasPendientesEntrevista" xml:space="preserve">
+    <value>Candidaturas Pendientes Entrevista (Últimos 15 días)</value>
+  </data>
+  <data name="HTML_Dashboard_Administrador_CentroHeader" xml:space="preserve">
+    <value>Centro</value>
+  </data>
+  <data name="HTML_Dashboard_Administrador_ClienteHeader" xml:space="preserve">
+    <value>Cliente</value>
+  </data>
+  <data name="HTML_Dashboard_Administrador_CreadaHeader" xml:space="preserve">
+    <value>Creada</value>
+  </data>
+  <data name="HTML_Dashboard_Administrador_DescargarCVHeader" xml:space="preserve">
+    <value>Descargar CV</value>
+  </data>
+  <data name="HTML_Dashboard_Administrador_DosSemanas" xml:space="preserve">
+    <value>2 Semanas</value>
+  </data>
+  <data name="HTML_Dashboard_Administrador_EntrevistadorHeader" xml:space="preserve">
+    <value>Entrevistador</value>
+  </data>
+  <data name="HTML_Dashboard_Administrador_FechaCompromisoHeader" xml:space="preserve">
+    <value>F. Compromiso</value>
+  </data>
+  <data name="HTML_Dashboard_Administrador_FechaCreacionHeader" xml:space="preserve">
+    <value>F. Creación</value>
+  </data>
+  <data name="HTML_Dashboard_Administrador_FechaModificacionHeader" xml:space="preserve">
+    <value>F. Modificación</value>
+  </data>
+  <data name="HTML_Dashboard_Administrador_FechaSolicitudHeader" xml:space="preserve">
+    <value>F. Solicitud</value>
+  </data>
+  <data name="HTML_Dashboard_Administrador_Mes" xml:space="preserve">
+    <value>Mes</value>
+  </data>
+  <data name="HTML_Dashboard_Administrador_PendienteDesdeHeader" xml:space="preserve">
+    <value>Pendiente Desde</value>
+  </data>
+  <data name="HTML_Dashboard_Administrador_ProyectoHeader" xml:space="preserve">
+    <value>Proyecto</value>
+  </data>
+  <data name="HTML_Dashboard_Administrador_ReferenciaHeader" xml:space="preserve">
+    <value>Ref.</value>
+  </data>
+  <data name="HTML_Dashboard_Administrador_TecnologiaHeader" xml:space="preserve">
+    <value>Tecnología</value>
+  </data>
+  <data name="HTML_Dashboard_Administrador_TipoHeader" xml:space="preserve">
+    <value>Tipo</value>
+  </data>
+  <data name="HTML_Dashboard_Administrador_UnaSemana" xml:space="preserve">
+    <value>1 Semana</value>
+  </data>
+  <data name="HTML_Dashboard_Entrevistador_CalendarioEntrevistas" xml:space="preserve">
+    <value>Calendario de Entrevistas</value>
+  </data>
+  <data name="HTML_Dashboard_Entrevistador_CandidatoHeader" xml:space="preserve">
+    <value>Candidato</value>
+  </data>
+  <data name="HTML_Dashboard_Entrevistador_CentroHeader" xml:space="preserve">
+    <value>Centro</value>
+  </data>
+  <data name="HTML_Dashboard_Entrevistador_CreadaHeader" xml:space="preserve">
+    <value>Creada</value>
+  </data>
+  <data name="HTML_Dashboard_Entrevistador_CurriculumPendientesFiltrar" xml:space="preserve">
+    <value>Currículums Pendientes a Filtrar</value>
+  </data>
+  <data name="HTML_Dashboard_Entrevistador_DescargarCVHeader" xml:space="preserve">
+    <value>Descargar CV</value>
+  </data>
+  <data name="HTML_Dashboard_Entrevistador_EntrevistadorHeader" xml:space="preserve">
+    <value>Entrevistador</value>
+  </data>
+  <data name="HTML_Dashboard_Entrevistador_EntrevistaPrincipal" xml:space="preserve">
+    <value>Entrevista Principal</value>
+  </data>
+  <data name="HTML_Dashboard_Entrevistador_EntrevistaPrincipalCompletada" xml:space="preserve">
+    <value>Entrevista Principal Completada</value>
+  </data>
+  <data name="HTML_Dashboard_Entrevistador_Leyenda" xml:space="preserve">
+    <value>Leyenda:</value>
+  </data>
+  <data name="HTML_Dashboard_Entrevistador_ReferenciaHeader" xml:space="preserve">
+    <value>Ref.</value>
+  </data>
+  <data name="HTML_Dashboard_Entrevistador_SegundaEntrevista" xml:space="preserve">
+    <value>Entrevista Complementaria</value>
+  </data>
+  <data name="HTML_Dashboard_Entrevistador_Subentrevista" xml:space="preserve">
+    <value>SubEntrevista Competencial</value>
+  </data>
+  <data name="HTML_Dashboard_Entrevistador_SubentrevistaCompletada" xml:space="preserve">
+    <value>SubEntrevista Competencial Completada</value>
+  </data>
+  <data name="HTML_Dashboard_Entrevistador_SubentrevistaGerente" xml:space="preserve">
+    <value>SubEntrevista Gerente</value>
+  </data>
+  <data name="HTML_Dashboard_Entrevistador_SubentrevistaGerenteCompletada" xml:space="preserve">
+    <value>SubEntrevista Gerente Completada</value>
+  </data>
+  <data name="HTML_Dashboard_Entrevistador_SubentrevistaTecnica" xml:space="preserve">
+    <value>SubEntrevista Técnica</value>
+  </data>
+  <data name="HTML_Dashboard_Entrevistador_SubentrevistaTecnicaCompletada" xml:space="preserve">
+    <value>SubEntrevista Técnica Completada</value>
+  </data>
+  <data name="HTML_Dashboard_Index_Dashboard" xml:space="preserve">
+    <value>Dashboard</value>
+  </data>
+  <data name="HTML_Dashboard_Index_Entrevistas" xml:space="preserve">
+    <value>Entrevistas</value>
+  </data>
+  <data name="HTML_Dashboard_Index_EnviarCorreosPrueba" xml:space="preserve">
+    <value>Enviar Correos de prueba</value>
+  </data>
+  <data name="HTML_Necesidades_DatosBasicos_Cliente" xml:space="preserve">
+    <value>Cliente:</value>
+  </data>
+  <data name="HTML_Necesidades_DatosBasicos_Oferta" xml:space="preserve">
+    <value>Oferta:</value>
+  </data>
+  <data name="HTML_Necesidades_DatosBasicos_OtrosDatosCV" xml:space="preserve">
+    <value>Otros Datos CV:</value>
+  </data>
+  <data name="HTML_Necesidades_DatosBasicos_SalarioDeseado" xml:space="preserve">
+    <value>Salario deseado:</value>
+  </data>
+  <data name="HTML_Necesidades_DatosBasicos_TipoPerfil" xml:space="preserve">
+    <value>Tipo Perfil:</value>
+  </data>
+  <data name="HTML_Necesidades_Details_Centro" xml:space="preserve">
+    <value>Centro:</value>
+  </data>
+  <data name="HTML_Necesidades_Details_Cliente" xml:space="preserve">
+    <value>Cliente:</value>
+  </data>
+  <data name="HTML_Necesidades_Details_Contratacion" xml:space="preserve">
+    <value>Contratación:</value>
+  </data>
+  <data name="HTML_Necesidades_Details_VerNecesidad" xml:space="preserve">
+    <value>Ver Necesidad </value>
+  </data>
+  <data name="HTML_Necesidades_Details_DetalleTecnologia" xml:space="preserve">
+    <value>Detalle Tecnología:</value>
+  </data>
+  <data name="HTML_Necesidades_Details_DisponibilidadReubicacion" xml:space="preserve">
+    <value>Disp. Reubicación:</value>
+  </data>
+  <data name="HTML_Necesidades_Details_DisponibilidadViaje" xml:space="preserve">
+    <value>Disp. Viaje:</value>
+  </data>
+  <data name="HTML_Necesidades_Details_Duracion" xml:space="preserve">
+    <value>Duración:</value>
+  </data>
+  <data name="HTML_Necesidades_Details_Estado" xml:space="preserve">
+    <value>Estado:</value>
+  </data>
+  <data name="HTML_Necesidades_Details_FechaCierre" xml:space="preserve">
+    <value>Fec.Cierre:</value>
+  </data>
+  <data name="HTML_Necesidades_Details_FechaCompromiso" xml:space="preserve">
+    <value>Fec.Compromiso:</value>
+  </data>
+  <data name="HTML_Necesidades_Details_FechaSolicitud" xml:space="preserve">
+    <value>Fec.Solicitud:</value>
+  </data>
+  <data name="HTML_Necesidades_Details_Modulo" xml:space="preserve">
+    <value>Módulo:</value>
+  </data>
+  <data name="HTML_Necesidades_Details_NecesidadIdioma" xml:space="preserve">
+    <value>Necesidad idioma:</value>
+  </data>
+  <data name="HTML_Necesidades_Details_Nombre" xml:space="preserve">
+    <value>Nombre:</value>
+  </data>
+  <data name="HTML_Necesidades_Details_Oficina" xml:space="preserve">
+    <value>Oficina:</value>
+  </data>
+  <data name="HTML_Necesidades_Details_Perfil" xml:space="preserve">
+    <value>Perfil:</value>
+  </data>
+  <data name="HTML_Necesidades_Details_PersonaAsignada" xml:space="preserve">
+    <value>Persona Asignada:</value>
+  </data>
+  <data name="HTML_Necesidades_Details_Prevision" xml:space="preserve">
+    <value>Previsión:</value>
+  </data>
+  <data name="HTML_Necesidades_Details_Proyecto" xml:space="preserve">
+    <value>Proyecto:</value>
+  </data>
+  <data name="HTML_Necesidades_Details_Sector" xml:space="preserve">
+    <value>Sector:</value>
+  </data>
+  <data name="HTML_Necesidades_Details_Servicio" xml:space="preserve">
+    <value>Servicio:</value>
+  </data>
+  <data name="HTML_Necesidades_Details_Tecnologia" xml:space="preserve">
+    <value>Tecnología:</value>
+  </data>
+  <data name="HTML_Necesidades_Edit_Centro" xml:space="preserve">
+    <value>Centro:</value>
+  </data>
+  <data name="HTML_Necesidades_Edit_Cliente" xml:space="preserve">
+    <value>Cliente:</value>
+  </data>
+  <data name="HTML_Necesidades_Edit_Contratacion" xml:space="preserve">
+    <value>Contratación:</value>
+  </data>
+  <data name="HTML_Necesidades_Edit_DetalleTecnologia" xml:space="preserve">
+    <value>Detalle Tecnología:</value>
+  </data>
+  <data name="HTML_Necesidades_Edit_DisponibilidadReubicacion" xml:space="preserve">
+    <value>Disp. Reubicación:</value>
+  </data>
+  <data name="HTML_Necesidades_Edit_DisponibilidadViaje" xml:space="preserve">
+    <value>Disp. Viaje:</value>
+  </data>
+  <data name="HTML_Necesidades_Edit_Duracion" xml:space="preserve">
+    <value>Duración:</value>
+  </data>
+  <data name="HTML_Necesidades_Edit_EditarNecesidad" xml:space="preserve">
+    <value>Editar Necesidad</value>
+  </data>
+  <data name="HTML_Necesidades_Edit_Estado" xml:space="preserve">
+    <value>Estado:</value>
+  </data>
+  <data name="HTML_Necesidades_Edit_FechaCierre" xml:space="preserve">
+    <value>Fec.Cierre:</value>
+  </data>
+  <data name="HTML_Necesidades_Edit_FechaCompromiso" xml:space="preserve">
+    <value>Fec.Compromiso:</value>
+  </data>
+  <data name="HTML_Necesidades_Edit_FechaSolicitud" xml:space="preserve">
+    <value>Fec.Solicitud:</value>
+  </data>
+  <data name="HTML_Necesidades_Edit_Modulo" xml:space="preserve">
+    <value>Módulo:</value>
+  </data>
+  <data name="HTML_Necesidades_Edit_NecesidadIdioma" xml:space="preserve">
+    <value>Necesidad idioma:</value>
+  </data>
+  <data name="HTML_Necesidades_Edit_Nombre" xml:space="preserve">
+    <value>Nombre:</value>
+  </data>
+  <data name="HTML_Necesidades_Edit_Oficina" xml:space="preserve">
+    <value>Oficina:</value>
+  </data>
+  <data name="HTML_Necesidades_Edit_Perfil" xml:space="preserve">
+    <value>Perfil:</value>
+  </data>
+  <data name="HTML_Necesidades_Edit_PersonaAsignada" xml:space="preserve">
+    <value>Persona Asignada:</value>
+  </data>
+  <data name="HTML_Necesidades_Edit_Prevision" xml:space="preserve">
+    <value>Previsión:</value>
+  </data>
+  <data name="HTML_Necesidades_Edit_Proyecto" xml:space="preserve">
+    <value>Proyecto:</value>
+  </data>
+  <data name="HTML_Necesidades_Edit_Sector" xml:space="preserve">
+    <value>Sector:</value>
+  </data>
+  <data name="HTML_Necesidades_Edit_Servicio" xml:space="preserve">
+    <value>Servicio:</value>
+  </data>
+  <data name="HTML_Necesidades_Edit_Tecnologia" xml:space="preserve">
+    <value>Tecnología:</value>
+  </data>
+  <data name="HTML_Necesidades_Index_AniadirNecesidad" xml:space="preserve">
+    <value>Añadir necesidad</value>
+  </data>
+  <data name="HTML_Necesidades_ModalBusquedaPersonaLibre_Apellidos" xml:space="preserve">
+    <value>Apellidos:</value>
+  </data>
+  <data name="HTML_Necesidades_ModalBusquedaPersonaLibre_ApellidosHeader" xml:space="preserve">
+    <value>Apellidos</value>
+  </data>
+  <data name="HTML_Necesidades_ModalBusquedaPersonaLibre_BusquedaPersonasLibres" xml:space="preserve">
+    <value>Búsqueda de personas libres</value>
+  </data>
+  <data name="HTML_Necesidades_ModalBusquedaPersonaLibre_Categoria" xml:space="preserve">
+    <value>Categoría:</value>
+  </data>
+  <data name="HTML_Necesidades_ModalBusquedaPersonaLibre_CategoriaHeader" xml:space="preserve">
+    <value>Categoría</value>
+  </data>
+  <data name="HTML_Necesidades_ModalBusquedaPersonaLibre_Celda" xml:space="preserve">
+    <value>Celda:</value>
+  </data>
+  <data name="HTML_Necesidades_ModalBusquedaPersonaLibre_CeldaHeader" xml:space="preserve">
+    <value>Celda</value>
+  </data>
+  <data name="HTML_Necesidades_ModalBusquedaPersonaLibre_Linea" xml:space="preserve">
+    <value>Linea:</value>
+  </data>
+  <data name="HTML_Necesidades_ModalBusquedaPersonaLibre_LineaHeader" xml:space="preserve">
+    <value>Linea</value>
+  </data>
+  <data name="HTML_Necesidades_ModalBusquedaPersonaLibre_Nombre" xml:space="preserve">
+    <value>Nombre:</value>
+  </data>
+  <data name="HTML_Necesidades_ModalBusquedaPersonaLibre_NombreHeader" xml:space="preserve">
+    <value>Nombre</value>
+  </data>
+  <data name="HTML_Necesidades_ModalBusquedaPersonaLibre_NumeroEmpleado" xml:space="preserve">
+    <value>NroEmpleado:</value>
+  </data>
+  <data name="HTML_Necesidades_ModalBusquedaPersonaLibre_SeleccionarHeader" xml:space="preserve">
+    <value>Seleccionar</value>
+  </data>
+  <data name="HTML_Necesidades_ModalBusquedaPersonaLibre_Tecnologia" xml:space="preserve">
+    <value>Tecnología:</value>
+  </data>
+  <data name="HTML_Necesidades_ModalBusquedaPersonaLibre_TecnologiaHeader" xml:space="preserve">
+    <value>Tecnología</value>
+  </data>
+  <data name="HTML_Necesidades_ModalCandidatosQueCumplenPerfil_Apellidos" xml:space="preserve">
+    <value>Apellidos:</value>
+  </data>
+  <data name="HTML_Necesidades_ModalCandidatosQueCumplenPerfil_ApellidosHeader" xml:space="preserve">
+    <value>Apellidos</value>
+  </data>
+  <data name="HTML_Necesidades_ModalCandidatosQueCumplenPerfil_CandidatosCumplenPerfil" xml:space="preserve">
+    <value>Candidatos que cumplen el perfil</value>
+  </data>
+  <data name="HTML_Necesidades_ModalCandidatosQueCumplenPerfil_CandidaturaHeader" xml:space="preserve">
+    <value>Candidatura</value>
+  </data>
+  <data name="HTML_Necesidades_ModalCandidatosQueCumplenPerfil_FaseCandidaturaHeader" xml:space="preserve">
+    <value>Fase Candidatura</value>
+  </data>
+  <data name="HTML_Necesidades_ModalCandidatosQueCumplenPerfil_IdentificacionHeader" xml:space="preserve">
+    <value>Identificación</value>
+  </data>
+  <data name="HTML_Necesidades_ModalCandidatosQueCumplenPerfil_Nombre" xml:space="preserve">
+    <value>Nombre:</value>
+  </data>
+  <data name="HTML_Necesidades_ModalCandidatosQueCumplenPerfil_NombreHeader" xml:space="preserve">
+    <value>Nombre</value>
+  </data>
+  <data name="HTML_Necesidades_ModalCandidatosQueCumplenPerfil_ReferenciaHeader" xml:space="preserve">
+    <value>Referencia</value>
+  </data>
+  <data name="HTML_Admin_CreateRoles_Descripcion" xml:space="preserve">
+    <value>Descripción:</value>
+  </data>
+  <data name="HTML_Admin_CreateRoles_Nombre" xml:space="preserve">
+    <value>Nombre:</value>
+  </data>
+  <data name="HTML_Admin_CreateRoles_Permisos" xml:space="preserve">
+    <value>Permisos</value>
+  </data>
+  <data name="HTML_Admin_CreateUsuarios_Centro" xml:space="preserve">
+    <value>Centro:</value>
+  </data>
+  <data name="HTML_Admin_CreateUsuarios_CreandoUsuario" xml:space="preserve">
+    <value>Creando Usuario</value>
+  </data>
+  <data name="HTML_Admin_CreateUsuarios_Email" xml:space="preserve">
+    <value>Email:</value>
+  </data>
+  <data name="HTML_Admin_CreateUsuarios_Nombre" xml:space="preserve">
+    <value>Nombre:</value>
+  </data>
+  <data name="HTML_Admin_CreateUsuarios_NombreUsuario" xml:space="preserve">
+    <value>Nombre Usuario:</value>
+  </data>
+  <data name="HTML_Admin_CreateUsuarios_Roles" xml:space="preserve">
+    <value>Roles</value>
+  </data>
+  <data name="HTML_Admin_EditRoles_Descripcion" xml:space="preserve">
+    <value>Descripción:</value>
+  </data>
+  <data name="HTML_Admin_EditRoles_EditandoRol" xml:space="preserve">
+    <value>Editando Rol</value>
+  </data>
+  <data name="HTML_Admin_EditRoles_Nombre" xml:space="preserve">
+    <value>Nombre:</value>
+  </data>
+  <data name="HTML_Admin_EditRoles_Permisos" xml:space="preserve">
+    <value>Permisos</value>
+  </data>
+  <data name="HTML_Admin_EditUsuarios_Centro" xml:space="preserve">
+    <value>Centro:</value>
+  </data>
+  <data name="HTML_Admin_EditUsuarios_EditandoUsuario" xml:space="preserve">
+    <value>Editando Usuario</value>
+  </data>
+  <data name="HTML_Admin_EditUsuarios_Email" xml:space="preserve">
+    <value>Email:</value>
+  </data>
+  <data name="HTML_Admin_EditUsuarios_Nombre" xml:space="preserve">
+    <value>Nombre:</value>
+  </data>
+  <data name="HTML_Admin_EditUsuarios_NombreUsuario" xml:space="preserve">
+    <value>Nombre Usuario:</value>
+  </data>
+  <data name="HTML_Admin_EditUsuarios_Roles" xml:space="preserve">
+    <value>Roles:</value>
+  </data>
+  <data name="HTML_Admin_Index_Administracion" xml:space="preserve">
+    <value>Administración</value>
+  </data>
+  <data name="HTML_Admin_Index_AniadirCliente" xml:space="preserve">
+    <value>Añadir Cliente</value>
+  </data>
+  <data name="HTML_Admin_Index_AniadirProyecto" xml:space="preserve">
+    <value>Añadir Proyecto</value>
+  </data>
+  <data name="HTML_Admin_Index_AniadirRol" xml:space="preserve">
+    <value>Añadir Rol</value>
+  </data>
+  <data name="HTML_Admin_Index_AniadirUsuario" xml:space="preserve">
+    <value>Añadir Usuario</value>
+  </data>
+  <data name="HTML_Admin_Index_Centro" xml:space="preserve">
+    <value>Centro:</value>
+  </data>
+  <data name="HTML_Admin_Index_CentroHeader" xml:space="preserve">
+    <value>Centro</value>
+  </data>
+  <data name="HTML_Admin_Index_Cliente" xml:space="preserve">
+    <value>Cliente:</value>
+  </data>
+  <data name="HTML_Admin_Index_ClienteHeader" xml:space="preserve">
+    <value>Cliente</value>
+  </data>
+  <data name="HTML_Admin_Index_GestionClientes" xml:space="preserve">
+    <value>Gestión Clientes</value>
+  </data>
+  <data name="HTML_Admin_Index_GestionProyectos" xml:space="preserve">
+    <value>GestiónProyectos</value>
+  </data>
+  <data name="HTML_Admin_Index_GestionRoles" xml:space="preserve">
+    <value>Gestión Roles</value>
+  </data>
+  <data name="HTML_Admin_Index_GestionUsuarios" xml:space="preserve">
+    <value>Gestión Usuarios</value>
+  </data>
+  <data name="HTML_Admin_Index_Nombre" xml:space="preserve">
+    <value>Nombre</value>
+  </data>
+  <data name="HTML_Admin_Index_NombreHeader" xml:space="preserve">
+    <value>Nombre</value>
+  </data>
+  <data name="HTML_Admin_Index_OpcionesHeader" xml:space="preserve">
+    <value>Opciones</value>
+  </data>
+  <data name="HTML_Admin_Index_Permiso" xml:space="preserve">
+    <value>Permiso</value>
+  </data>
+  <data name="HTML_Admin_Index_PermisosHeader" xml:space="preserve">
+    <value>Permisos</value>
+  </data>
+  <data name="HTML_Admin_Index_PersonaHeader" xml:space="preserve">
+    <value>Persona</value>
+  </data>
+  <data name="HTML_Admin_Index_ProyectoHeader" xml:space="preserve">
+    <value>Proyecto</value>
+  </data>
+  <data name="HTML_Admin_Index_Rol" xml:space="preserve">
+    <value>Rol</value>
+  </data>
+  <data name="HTML_Admin_Index_RolesHeader" xml:space="preserve">
+    <value>Roles</value>
+  </data>
+  <data name="HTML_Admin_Index_Usuario" xml:space="preserve">
+    <value>Usuario</value>
+  </data>
+  <data name="HTML_Admin_Index_UsuarioHeader" xml:space="preserve">
+    <value>Usuario</value>
+  </data>
+  <data name="HTML_Bitacoras_DatosCandidatura_Candidato" xml:space="preserve">
+    <value>Candidato:</value>
+  </data>
+  <data name="HTML_Bitacoras_DatosCandidatura_Centro" xml:space="preserve">
+    <value>Centro:</value>
+  </data>
+  <data name="HTML_Bitacoras_DatosCandidatura_Entrevistador" xml:space="preserve">
+    <value>Entrevistador:</value>
+  </data>
+  <data name="HTML_Bitacoras_DatosCandidatura_Estado" xml:space="preserve">
+    <value>Estado:</value>
+  </data>
+  <data name="HTML_Bitacoras_DatosCandidatura_Fase" xml:space="preserve">
+    <value>Fase:</value>
+  </data>
+  <data name="HTML_Bitacoras_DatosCandidatura_Perfil" xml:space="preserve">
+    <value>Perfil:</value>
+  </data>
+  <data name="HTML_Bitacoras_DatosCandidatura_Tecnologia" xml:space="preserve">
+    <value>Tecnología:</value>
+  </data>
+  <data name="HTML_Bitacoras_Index_AniadirComentario" xml:space="preserve">
+    <value>Añadir comentario</value>
+  </data>
+  <data name="HTML_Bitacoras_Index_BitacoraHeader" xml:space="preserve">
+    <value>Bitácora</value>
+  </data>
+  <data name="HTML_Bitacoras_Index_CentroHeader" xml:space="preserve">
+    <value>Centro</value>
+  </data>
+  <data name="HTML_Bitacoras_Index_FechaHeader" xml:space="preserve">
+    <value>Fecha</value>
+  </data>
+  <data name="HTML_Bitacoras_Index_GestionBitacoras" xml:space="preserve">
+    <value>Gestión de Bitácoras</value>
+  </data>
+  <data name="HTML_Bitacoras_Index_MensajeHeader" xml:space="preserve">
+    <value>Mensaje</value>
+  </data>
+  <data name="HTML_Bitacoras_Index_TipoHeader" xml:space="preserve">
+    <value>Tipo</value>
+  </data>
+  <data name="HTML_Bitacoras_Index_TotalBitacoras" xml:space="preserve">
+    <value>Total de Bitácoras:</value>
+  </data>
+  <data name="HTML_Bitacoras_Index_UsuarioHeader" xml:space="preserve">
+    <value>Usuario</value>
+  </data>
+  <data name="HTML_Bitacoras_ModalAddComentario_AniadirBitacora" xml:space="preserve">
+    <value>Añadir Bitácora</value>
+  </data>
+  <data name="HTML_Bitacoras_ModalAddComentario_Mensaje" xml:space="preserve">
+    <value>Mensaje</value>
+  </data>
+  <data name="HTML_Candidaturas_AgendarCartaOferta_DatosCartaOferta" xml:space="preserve">
+    <value>Datos Carta Oferta</value>
+  </data>
+  <data name="HTML_Candidaturas_AgendarPrimeraEntrevista_Entrevistador" xml:space="preserve">
+    <value>Entrevistador</value>
+  </data>
+  <data name="HTML_Candidaturas_AgendarPrimeraEntrevista_FechaPrimeraEntrevista" xml:space="preserve">
+    <value>Fecha 1ª Entrevista</value>
+  </data>
+  <data name="HTML_Candidaturas_AgendarPrimeraEntrevista_NotificarCandidato" xml:space="preserve">
+    <value>Notificar al candidato</value>
+  </data>
+  <data name="HTML_Candidaturas_AgendarPrimeraEntrevista_Presencial" xml:space="preserve">
+    <value>¿Presencial?</value>
+  </data>
+  <data name="HTML_Candidaturas_AgendarSegundaEntrevista_Entrevistador" xml:space="preserve">
+    <value>Entrevistador</value>
+  </data>
+  <data name="HTML_Candidaturas_AgendarSegundaEntrevista_FechaSegundaEntrevista" xml:space="preserve">
+    <value>Fecha Entr. Comp:</value>
+  </data>
+  <data name="HTML_Candidaturas_AgendarSegundaEntrevista_NotificarCandidato" xml:space="preserve">
+    <value>Notificar al candidato</value>
+  </data>
+  <data name="HTML_Candidaturas_AgendarSegundaEntrevista_Presencial" xml:space="preserve">
+    <value>¿Presencial?</value>
+  </data>
+  <data name="HTML_Candidaturas_AgendarSubEntrevistasPrimeraEntrevista_Aniadir" xml:space="preserve">
+    <value>Añadir</value>
+  </data>
+  <data name="HTML_Candidaturas_AgendarSubEntrevistasPrimeraEntrevista_EliminarHeader" xml:space="preserve">
+    <value>Eliminar</value>
+  </data>
+  <data name="HTML_Candidaturas_AgendarSubEntrevistasPrimeraEntrevista_EntrevistadorHeader" xml:space="preserve">
+    <value>Entrevistador</value>
+  </data>
+  <data name="HTML_Candidaturas_AgendarSubEntrevistasPrimeraEntrevista_FechaSubentrevistaHeader" xml:space="preserve">
+    <value>Fecha subentrevista</value>
+  </data>
+  <data name="HTML_Candidaturas_AgendarSubEntrevistasPrimeraEntrevista_NotificarCandidatoHeader" xml:space="preserve">
+    <value>Notificar al candidato</value>
+  </data>
+  <data name="HTML_Candidaturas_AgendarSubEntrevistasPrimeraEntrevista_PresencialHeader" xml:space="preserve">
+    <value>Presencial</value>
+  </data>
+  <data name="HTML_Candidaturas_AgendarSubEntrevistasPrimeraEntrevista_TipoSubentrevistaHeader" xml:space="preserve">
+    <value>Tipo subentrevista</value>
+  </data>
+  <data name="HTML_Candidaturas_AgendarSubEntrevistasSegundaEntrevista_Aniadir" xml:space="preserve">
+    <value>Añadir</value>
+  </data>
+  <data name="HTML_Candidaturas_AgendarSubEntrevistasSegundaEntrevista_EliminarHeader" xml:space="preserve">
+    <value>Eliminar</value>
+  </data>
+  <data name="HTML_Candidaturas_AgendarSubEntrevistasSegundaEntrevista_EntrevistadorHeader" xml:space="preserve">
+    <value>Entrevistador</value>
+  </data>
+  <data name="HTML_Candidaturas_AgendarSubEntrevistasSegundaEntrevista_FechaSubentrevistaHeader" xml:space="preserve">
+    <value>Fecha subentrevista</value>
+  </data>
+  <data name="HTML_Candidaturas_AgendarSubEntrevistasSegundaEntrevista_NotificarCandidatoHeader" xml:space="preserve">
+    <value>Notificar al candidato</value>
+  </data>
+  <data name="HTML_Candidaturas_AgendarSubEntrevistasSegundaEntrevista_PresencialHeader" xml:space="preserve">
+    <value>Presencial</value>
+  </data>
+  <data name="HTML_Candidaturas_AgendarSubEntrevistasSegundaEntrevista_TipoSubentrevistaHeader" xml:space="preserve">
+    <value>Tipo subentrevista</value>
+  </data>
+  <data name="HTML_Candidaturas_CompletarCartaOferta_Acepta" xml:space="preserve">
+    <value>¿Acepta?</value>
+  </data>
+  <data name="HTML_Candidaturas_CompletarCartaOferta_DatosCartaOferta" xml:space="preserve">
+    <value>Datos Carta Oferta</value>
+  </data>
+  <data name="HTML_Candidaturas_CompletarCartaOferta_FechaIncorporacion" xml:space="preserve">
+    <value>Fecha Incorporación</value>
+  </data>
+  <data name="HTML_Candidaturas_CompletarCartaOferta_MotivoRechazo" xml:space="preserve">
+    <value>Motivo Rechazo</value>
+  </data>
+  <data name="HTML_Candidaturas_CompletarCartaOferta_NecesidadCubre" xml:space="preserve">
+    <value>Necesidad que cubre</value>
+  </data>
+  <data name="HTML_Candidaturas_DatosCartaOferta_Entrevistador" xml:space="preserve">
+    <value>Entrevistador</value>
+  </data>
+  <data name="HTML_Candidaturas_DatosCartaOferta_FechaAgendarCarta" xml:space="preserve">
+    <value>Fec. Agendar Carta</value>
+  </data>
+  <data name="HTML_Candidaturas_EntregaCartaOferta_DatosCartaOferta" xml:space="preserve">
+    <value>Datos Carta Oferta</value>
+  </data>
+  <data name="HTML_Candidaturas_EntregaCartaOferta_Observaciones" xml:space="preserve">
+    <value>Observaciones</value>
+  </data>
+  <data name="HTML_Candidaturas_EntregaCartaOferta_SalarioActual" xml:space="preserve">
+    <value>Salario Actual</value>
+  </data>
+  <data name="HTML_Candidaturas_EntregaCartaOferta_SalarioDeseado" xml:space="preserve">
+    <value>Salario Deseado</value>
+  </data>
+  <data name="HTML_Candidaturas_EntregaCartaOferta_SalarioPropuesto" xml:space="preserve">
+    <value>Salario Propuesto</value>
+  </data>
+  <data name="HTML_Candidaturas_ObservacionesEntrevista_Observaciones" xml:space="preserve">
+    <value>Observaciones</value>
+  </data>
+  <data name="HTML_Candidaturas_RangoSalarialesyDisponibilidades_CambioResidencia" xml:space="preserve">
+    <value>¿Cambio Residencia?</value>
+  </data>
+  <data name="HTML_Candidaturas_RangoSalarialesyDisponibilidades_Categoria" xml:space="preserve">
+    <value>Categoría</value>
+  </data>
+  <data name="HTML_Candidaturas_RangoSalarialesyDisponibilidades_DisponibilidadViajes" xml:space="preserve">
+    <value>¿Disp. Viajes?</value>
+  </data>
+  <data name="HTML_Candidaturas_RangoSalarialesyDisponibilidades_Incorporacion" xml:space="preserve">
+    <value>Incorporación</value>
+  </data>
+  <data name="HTML_Candidaturas_RangoSalarialesyDisponibilidades_Observaciones" xml:space="preserve">
+    <value>Observaciones</value>
+  </data>
+  <data name="HTML_Candidaturas_RangoSalarialesyDisponibilidades_SalarioActual" xml:space="preserve">
+    <value>Salario Actual</value>
+  </data>
+  <data name="HTML_Candidaturas_RangoSalarialesyDisponibilidades_SalarioDeseado" xml:space="preserve">
+    <value>Salario Deseado</value>
+  </data>
+  <data name="HTML_Candidaturas_RangoSalarialesyDisponibilidades_SalarioPropuesto" xml:space="preserve">
+    <value>Salario Propuesto</value>
+  </data>
+  <data name="HTML_Candidaturas_ResultadoPrimeraEntrevista_Archivos" xml:space="preserve">
+    <value>Archivos Word, Pdf, Txt, Excel</value>
+  </data>
+  <data name="HTML_Candidaturas_ResultadoPrimeraEntrevista_Motivo" xml:space="preserve">
+    <value>Motivo</value>
+  </data>
+  <data name="HTML_Candidaturas_ResultadoPrimeraEntrevista_SuperaPrimeraEntrevista" xml:space="preserve">
+    <value>¿Supera Entrevista 1?</value>
+  </data>
+  <data name="HTML_Login_DatosAcceso" xml:space="preserve">
+    <value>Por favor, introduce tus datos de acceso</value>
+  </data>
+  <data name="HTML_Login_RecruitingTool" xml:space="preserve">
+    <value>RecruitingTool</value>
+  </data>
+  <data name="HTML_Login_UsuarioContraseniaIncorrectos" xml:space="preserve">
+    <value>Usuario o Contraseña Incorrectos.</value>
+  </data>
+  <data name="HTML_Admin_CreateEditCliente_Centro" xml:space="preserve">
+    <value>Centro:</value>
+  </data>
+  <data name="HTML_Admin_CreateEditCliente_CreandoCliente" xml:space="preserve">
+    <value>Creando Cliente</value>
+  </data>
+  <data name="HTML_Admin_CreateEditCliente_Nombre" xml:space="preserve">
+    <value>Nombre:</value>
+  </data>
+  <data name="HTML_Admin_CreateEditProyecto_Centro" xml:space="preserve">
+    <value>Centro:</value>
+  </data>
+  <data name="HTML_Admin_CreateEditProyecto_Cliente" xml:space="preserve">
+    <value>Cliente:</value>
+  </data>
+  <data name="HTML_Admin_CreateEditProyecto_CreandoProyecto" xml:space="preserve">
+    <value>Creando Proyecto</value>
+  </data>
+  <data name="HTML_Admin_CreateEditProyecto_CuentaCargo" xml:space="preserve">
+    <value>Cuenta de Cargo:</value>
+  </data>
+  <data name="HTML_Admin_CreateEditProyecto_Nombre" xml:space="preserve">
+    <value>Nombre:</value>
+  </data>
+  <data name="HTML_Admin_CreateEditProyecto_Persona" xml:space="preserve">
+    <value>Persona:</value>
+  </data>
+  <data name="HTML_Candidaturas_EditExtend_VerCandidato" xml:space="preserve">
+    <value>Ver Candidato:</value>
+  </data>
+  <data name="HTML_Title_AccesoDashboard" xml:space="preserve">
+    <value>Acceso Dashboard</value>
+  </data>
+  <data name="HTML_Title_Aniadir" xml:space="preserve">
+    <value>Añadir</value>
+  </data>
+  <data name="HTML_Title_BitacoraCandidatura" xml:space="preserve">
+    <value>Bitácora de la candidatura</value>
+  </data>
+  <data name="HTML_Title_BuscarNecesidad" xml:space="preserve">
+    <value>Buscar Necesidad</value>
+  </data>
+  <data name="HTML_Title_Candidaturas" xml:space="preserve">
+    <value>Candidaturas</value>
+  </data>
+  <data name="HTML_Title_CandidaturasCentro" xml:space="preserve">
+    <value>Candidaturas en mi centro</value>
+  </data>
+  <data name="HTML_Title_CargarCurriculum" xml:space="preserve">
+    <value>Cargar Curriculum</value>
+  </data>
+  <data name="HTML_Title_Clonar" xml:space="preserve">
+    <value>Clonar</value>
+  </data>
+  <data name="HTML_Title_ConsultaCreaCandidatos" xml:space="preserve">
+    <value>Consulta o crea nuevos Candidatos.</value>
+  </data>
+  <data name="HTML_Title_ConsultaCreaCandidaturas" xml:space="preserve">
+    <value>Consulta o crea nuevas Candidaturas.</value>
+  </data>
+  <data name="HTML_Title_ConsultaCreaNecesidades" xml:space="preserve">
+    <value>Consulta o crea Necesidades.</value>
+  </data>
+  <data name="HTML_Title_ConsultaCreaOfertas" xml:space="preserve">
+    <value>Consulta o crea nuevas Ofertas.</value>
+  </data>
+  <data name="HTML_Title_ConsultaCreaPersonasLibres" xml:space="preserve">
+    <value>Consulta o crea nuevas Personas Libres.</value>
+  </data>
+  <data name="HTML_Title_ConsultaCreaUsuariosRoles" xml:space="preserve">
+    <value>Consulta o crea nuevos Usuarios o Roles.</value>
+  </data>
+  <data name="HTML_Title_CrearCandidatura" xml:space="preserve">
+    <value>Crear Candidatura</value>
+  </data>
+  <data name="HTML_Title_DescargarCartaOferta" xml:space="preserve">
+    <value>Descargar Carta Oferta</value>
+  </data>
+  <data name="HTML_Title_DescargarCv" xml:space="preserve">
+    <value>Descargar CV</value>
+  </data>
+  <data name="HTML_Title_DescargarTest" xml:space="preserve">
+    <value>Descargar test</value>
+  </data>
+  <data name="HTML_Title_DescargarUltimoCv" xml:space="preserve">
+    <value>Descargar Último CV</value>
+  </data>
+  <data name="HTML_Title_DetalleCandidato" xml:space="preserve">
+    <value>Detalle Candidato</value>
+  </data>
+  <data name="HTML_Title_DetalleCandidatura" xml:space="preserve">
+    <value>Detalle Candidatura</value>
+  </data>
+  <data name="HTML_Title_DetalleNecesidad" xml:space="preserve">
+    <value>Detalle Necesidad</value>
+  </data>
+  <data name="HTML_Title_DetalleOferta" xml:space="preserve">
+    <value>Detalle Oferta</value>
+  </data>
+  <data name="HTML_Title_DetallePersonaLibre" xml:space="preserve">
+    <value>Detalle Persona Libre</value>
+  </data>
+  <data name="HTML_Title_Editar" xml:space="preserve">
+    <value>Editar</value>
+  </data>
+  <data name="HTML_Title_EditarCandidatura" xml:space="preserve">
+    <value>Editar Candidatura</value>
+  </data>
+  <data name="HTML_Title_Ejecutar" xml:space="preserve">
+    <value>Ejecutar</value>
+  </data>
+  <data name="HTML_Title_Eliminar" xml:space="preserve">
+    <value>Eliminar</value>
+  </data>
+  <data name="HTML_Title_Pausar" xml:space="preserve">
+    <value>Pausar</value>
+  </data>
+  <data name="HTML_Title_PersonasLibres" xml:space="preserve">
+    <value>Personas Libres</value>
+  </data>
+  <data name="HTML_Title_Renunciar" xml:space="preserve">
+    <value>Renunciar</value>
+  </data>
+  <data name="HTML_Title_Retornar" xml:space="preserve">
+    <value>Retornar</value>
+  </data>
+  <data name="HTML_Title_Retroceder" xml:space="preserve">
+    <value>Retroceder</value>
+  </data>
+  <data name="HTML_Title_SalirAplicacion" xml:space="preserve">
+    <value>Salir Aplicacion.</value>
+  </data>
+  <data name="HTML_Title_SubirUltimoCv" xml:space="preserve">
+    <value>Subir Último CV</value>
+  </data>
+  <data name="HTML_Title_SubirUltimoTs" xml:space="preserve">
+    <value>Subir Último TS</value>
+  </data>
+  <data name="HTML_Title_VerCandidato" xml:space="preserve">
+    <value>Ver Candidato</value>
+  </data>
+  <data name="HTML_Candidaturas_CompletarCartaOferta_CumpleNecesidad" xml:space="preserve">
+    <value>Cumple necesidad</value>
+  </data>
+  <data name="HTML_Necesidades_Index_AsignadaCorrectamenteHeader" xml:space="preserve">
+    <value>Correcta</value>
+  </data>
+  <data name="HTML_Necesidades_Index_AsignadoCorrectamente" xml:space="preserve">
+    <value>Asignado correctamente</value>
+  </data>
+  <data name="HTML_Necesidades_Index_Centro" xml:space="preserve">
+    <value>Centro:</value>
+  </data>
+  <data name="HTML_MaximoSubEntrevistas" xml:space="preserve">
+    <value>Máximo</value>
+  </data>
+  <data name="HTML_Candidaturas_Index_NumeroEntrevistasHeader" xml:space="preserve">
+    <value>Nº Entr.</value>
+  </data>
+  <data name="HTML_Candidaturas_Index_NumeroEntrevistasMinimas" xml:space="preserve">
+    <value>Nº Entrevistas desde:</value>
+  </data>
+  <data name="HTML_Candidaturas_Index_NumeroEntrevistasMaximas" xml:space="preserve">
+    <value>Nº Entrevistas Hasta:</value>
+  </data>
+  <data name="HTML_Candidaturas_ModalRenuncia_MotivoRenuncia" xml:space="preserve">
+    <value>Motivo de Renuncia</value>
+  </data>
+  <data name="HTML_Candidaturas_ModalRenuncia_SeguroRenunciar" xml:space="preserve">
+    <value>¿Seguro que quieres renunciar a esta candidatura?</value>
+  </data>
+  <data name="HTML_Candidaturas_ModalRenuncia_SeleccionarMotivo" xml:space="preserve">
+    <value>Seleccione un motivo de renuncia: </value>
+  </data>
+  <data name="HTML_Candidaturas_ModalRenuncia_Comentarios" xml:space="preserve">
+    <value>Comentarios:</value>
+  </data>
+  <data name="HTML_Candidaturas_Renuncia_ComentariosRenuncia" xml:space="preserve">
+    <value>Comentarios renuncia:</value>
+  </data>
+  <data name="HTML_Candidaturas_Renuncia_DatosRenuncia" xml:space="preserve">
+    <value>Datos Renuncia</value>
+  </data>
+  <data name="HTML_Candidatos_Index_Tecnologia" xml:space="preserve">
+    <value>Tecnología:</value>
+  </data>
+  <data name="HTML_Candidaturas_CompletarPrimeraEntrevista_Completada" xml:space="preserve">
+    <value>Completada</value>
+  </data>
+  <data name="HTML_Candidaturas_CompletarPrimeraEntrevista_EntrevistaDebeSerCompletada" xml:space="preserve">
+    <value>Error, la entrevista debe ser completada para continuar</value>
+  </data>
+  <data name="HTML_Candidaturas_CompletarPrimeraEntrevista_Error" xml:space="preserve">
+    <value>ERROR</value>
+  </data>
+  <data name="HTML_Candidaturas_CompletarPrimeraEntrevista_ErrorComprobandoSubEntrevistas" xml:space="preserve">
+    <value>Error comprobando si tiene subentrevistas</value>
+  </data>
+  <data name="HTML_Candidaturas_DatosRenuncia_MotivoRenuncia" xml:space="preserve">
+    <value>Motivo renuncia:</value>
+  </data>
+  <data name="HTML_Candidaturas_CompletarCartaOferta_Error" xml:space="preserve">
+    <value>ERROR</value>
+  </data>
+  <data name="HTML_Candidaturas_CompletarCartaOferta_FechaDebeTenerValor" xml:space="preserve">
+    <value>Error, la fecha de agendado debe tener algún valor para continuar, vuelva atrás para agendarla correctamente</value>
+  </data>
+  <data name="HTML_Candidaturas_CompletarCartaOferta_Alerta" xml:space="preserve">
+    <value>ALERTA</value>
+  </data>
+  <data name="HTML_Candidaturas_CompletarCartaOferta_NecesidadSinAsignarContinuar" xml:space="preserve">
+    <value>No va a cerrarse ninguna necesidad. Deberá completar la necesidad que cubre para poder finalizar la candidatura.</value>
+  </data>
+  <data name="HTML_Candidaturas_VerEditarSubEntrevistas_EditarMias" xml:space="preserve">
+    <value>Editar mias</value>
+  </data>
+  <data name="HTML_Candidaturas_AgendarPrimeraEntrevista_PlantillaCorreos" xml:space="preserve">
+    <value>Plantilla correos:</value>
+  </data>
+  <data name="HTML_Candidaturas_DatosCartaOferta_PlantillaCorreos" xml:space="preserve">
+    <value>Plantilla correos:</value>
+  </data>
+  <data name="HTML_Admin_CreateEditProyecto_Sector" xml:space="preserve">
+    <value>Sector:</value>
+  </data>
+  <data name="HTML_Admin_CreateEditProyecto_Servicio" xml:space="preserve">
+    <value>Servicio:</value>
+  </data>
+  <data name="HTML_Necesidades_Details_GrupoNecesidad" xml:space="preserve">
+    <value>Grupo Necesidad:</value>
+  </data>
+  <data name="HTML_Necesidades_Index_CrearGrupoNecesidades" xml:space="preserve">
+    <value>Crear Grupo de Necesidades</value>
+  </data>
+  <data name="HTML_Necesidades_CreateGrupoNecesidad_Centro" xml:space="preserve">
+    <value>Centro:</value>
+  </data>
+  <data name="HTML_Necesidades_CreateGrupoNecesidad_Cliente" xml:space="preserve">
+    <value>Cliente:</value>
+  </data>
+  <data name="HTML_Necesidades_CreateGrupoNecesidad_Contratacion" xml:space="preserve">
+    <value>Contratación:</value>
+  </data>
+  <data name="HTML_Necesidades_CreateGrupoNecesidad_CreandoGrupoNecesidad" xml:space="preserve">
+    <value>Creando Grupo de Necesidades</value>
+  </data>
+  <data name="HTML_Necesidades_CreateGrupoNecesidad_DetalleTecnologia" xml:space="preserve">
+    <value>Detalle Tecnología:</value>
+  </data>
+  <data name="HTML_Necesidades_CreateGrupoNecesidad_DisponibilidadReubicacion" xml:space="preserve">
+    <value>Disp. Reubicación:</value>
+  </data>
+  <data name="HTML_Necesidades_CreateGrupoNecesidad_DisponibilidadViaje" xml:space="preserve">
+    <value>Disp. Viaje:</value>
+  </data>
+  <data name="HTML_Necesidades_CreateGrupoNecesidad_Duracion" xml:space="preserve">
+    <value>Duración:</value>
+  </data>
+  <data name="HTML_Necesidades_CreateGrupoNecesidad_FechaCompromiso" xml:space="preserve">
+    <value>F. Compromiso:</value>
+  </data>
+  <data name="HTML_Necesidades_CreateGrupoNecesidad_FechaSolicitud" xml:space="preserve">
+    <value>Fecha Solicitud:</value>
+  </data>
+  <data name="HTML_Necesidades_CreateGrupoNecesidad_Modulo" xml:space="preserve">
+    <value>Módulo:</value>
+  </data>
+  <data name="HTML_Necesidades_CreateGrupoNecesidad_NecesidadIdioma" xml:space="preserve">
+    <value>Necesidad Idioma:</value>
+  </data>
+  <data name="HTML_Necesidades_CreateGrupoNecesidad_Nombre" xml:space="preserve">
+    <value>Nombre:</value>
+  </data>
+  <data name="HTML_Necesidades_CreateGrupoNecesidad_Oficina" xml:space="preserve">
+    <value>Oficina:</value>
+  </data>
+  <data name="HTML_Necesidades_CreateGrupoNecesidad_Perfil" xml:space="preserve">
+    <value>Perfil:</value>
+  </data>
+  <data name="HTML_Necesidades_CreateGrupoNecesidad_Prevision" xml:space="preserve">
+    <value>Previsión:</value>
+  </data>
+  <data name="HTML_Necesidades_CreateGrupoNecesidad_Proyecto" xml:space="preserve">
+    <value>Proyecto:</value>
+  </data>
+  <data name="HTML_Necesidades_CreateGrupoNecesidad_Sector" xml:space="preserve">
+    <value>Sector:</value>
+  </data>
+  <data name="HTML_Necesidades_CreateGrupoNecesidad_Servicio" xml:space="preserve">
+    <value>Servicio:</value>
+  </data>
+  <data name="HTML_Necesidades_CreateGrupoNecesidad_Tecnologia" xml:space="preserve">
+    <value>Tecnología:</value>
+  </data>
+  <data name="HTML_Necesidades_CreateGrupoNecesidad_DescripcionGrupo" xml:space="preserve">
+    <value>Descripción Grupo:</value>
+  </data>
+  <data name="HTML_Necesidades_CreateGrupoNecesidad_EstadoGrupo" xml:space="preserve">
+    <value>Estado Grupo:</value>
+  </data>
+  <data name="HTML_Necesidades_CreateGrupoNecesidad_NombreGrupo" xml:space="preserve">
+    <value>Nombre Grupo:</value>
+  </data>
+  <data name="HTML_Dashboard_Entrevistador_SubentrevistaIdioma" xml:space="preserve">
+    <value>Prueba Idioma</value>
+  </data>
+  <data name="HTML_Dashboard_Entrevistador_SubentrevistaIdiomaCompletada" xml:space="preserve">
+    <value>Prueba Idioma Completada</value>
+  </data>
+  <data name="HTML_Necesidades_CreateGrupoNecesidad_NumeroPerfiles" xml:space="preserve">
+    <value>Nº Perfiles:</value>
+  </data>
+  <data name="HTML_Necesidades_CreateGrupoNecesidad_CreandoPerfil" xml:space="preserve">
+    <value>Creando Perfil</value>
+  </data>
+  <data name="HTML_Necesidades_SeguimientoGrupoNecesidad_Centro" xml:space="preserve">
+    <value>Centro:</value>
+  </data>
+  <data name="HTML_Necesidades_SeguimientoGrupoNecesidad_Cliente" xml:space="preserve">
+    <value>Cliente:</value>
+  </data>
+  <data name="HTML_Necesidades_SeguimientoGrupoNecesidad_DescripcionGrupo" xml:space="preserve">
+    <value>Descripción Grupo:</value>
+  </data>
+  <data name="HTML_Necesidades_SeguimientoGrupoNecesidad_DetalleTecnologia" xml:space="preserve">
+    <value>DetalleTecnología:</value>
+  </data>
+  <data name="HTML_Necesidades_SeguimientoGrupoNecesidad_DisponibilidadReubicacion" xml:space="preserve">
+    <value>Disp. Reubicación:</value>
+  </data>
+  <data name="HTML_Necesidades_SeguimientoGrupoNecesidad_DisponibilidadViaje" xml:space="preserve">
+    <value>Disp. Viaje:</value>
+  </data>
+  <data name="HTML_Necesidades_SeguimientoGrupoNecesidad_Duracion" xml:space="preserve">
+    <value>Duración:</value>
+  </data>
+  <data name="HTML_Necesidades_SeguimientoGrupoNecesidad_EditandoGrupo" xml:space="preserve">
+    <value>Editando Grupo Necesidad</value>
+  </data>
+  <data name="HTML_Necesidades_SeguimientoGrupoNecesidad_FechaSolicitud" xml:space="preserve">
+    <value>Fecha Solicitud:</value>
+  </data>
+  <data name="HTML_Necesidades_SeguimientoGrupoNecesidad_NecesidadIdioma" xml:space="preserve">
+    <value>Necesidad Idioma:</value>
+  </data>
+  <data name="HTML_Necesidades_SeguimientoGrupoNecesidad_Nombre" xml:space="preserve">
+    <value>Nombre:</value>
+  </data>
+  <data name="HTML_Necesidades_SeguimientoGrupoNecesidad_NombreGrupo" xml:space="preserve">
+    <value>Nombre Grupo:</value>
+  </data>
+  <data name="HTML_Necesidades_SeguimientoGrupoNecesidad_Oficina" xml:space="preserve">
+    <value>Oficina:</value>
+  </data>
+  <data name="HTML_Necesidades_SeguimientoGrupoNecesidad_Prevision" xml:space="preserve">
+    <value>Previsión:</value>
+  </data>
+  <data name="HTML_Necesidades_SeguimientoGrupoNecesidad_Proyecto" xml:space="preserve">
+    <value>Proyecto:</value>
+  </data>
+  <data name="HTML_Necesidades_SeguimientoGrupoNecesidad_Sector" xml:space="preserve">
+    <value>Sector:</value>
+  </data>
+  <data name="HTML_Dashboard_Administrador_AlertasSubentrevistasSegundaEntrevista" xml:space="preserve">
+    <value>Alertas Subentrevistas Entrevista Complementaria</value>
+  </data>
+  <data name="HTML_Dashboard_Entrevistador_SegundaEntrevista_Completada" xml:space="preserve">
+    <value>Entrevista Complementaria Completada</value>
+  </data>
+  <data name="HTML_Dashboard_SubEntrevistaPrimeraEntrevista" xml:space="preserve">
+    <value>SubEntrevista Primera Entrevista</value>
+  </data>
+  <data name="HTML_Dashboard_SubEntrevistaSegundaEntrevista" xml:space="preserve">
+    <value>SubEntrevista Entrevista Complementaria</value>
+  </data>
+  <data name="HTML_Necesidades_SeguimientoGrupoNecesidad_Grupo" xml:space="preserve">
+    <value>Grupo: </value>
+  </data>
+  <data name="HTML_Candidaturas_ModalStandBy_AsigneFechaLimite" xml:space="preserve">
+    <value>Asigne una fecha limite para contactar al candidato si lo desea</value>
+  </data>
+  <data name="HTML_Candidaturas_ModalStandBy_Fecha" xml:space="preserve">
+    <value>Fecha:</value>
+  </data>
+  <data name="HTML_Candidaturas_ModalStandBy_Pausarandidatura" xml:space="preserve">
+    <value>Pausar Candidatura</value>
+  </data>
+  <data name="HTML_Dashboard_Administrador_CandidaturasPendientesStandBy" xml:space="preserve">
+    <value>Candidaturas Pendientes StandBy (Hasta Los Próximos 15 días)</value>
+  </data>
+  <data name="HTML_Dashboard_Administrador_FechaContactoHeader" xml:space="preserve">
+    <value>Fecha de Contacto</value>
+  </data>
+  <data name="HTML_Candidaturas_ModalEditNecesidad_Cliente" xml:space="preserve">
+    <value>Cliente:</value>
+  </data>
+  <data name="HTML_Candidaturas_ModalEditNecesidad_Contratacion" xml:space="preserve">
+    <value>Contratación:</value>
+  </data>
+  <data name="HTML_Candidaturas_ModalEditNecesidad_DisponibilidadReubicacion" xml:space="preserve">
+    <value>Disp. Reub:</value>
+  </data>
+  <data name="HTML_Candidaturas_ModalEditNecesidad_DisponibilidadViaje" xml:space="preserve">
+    <value>Disp. Viaje:</value>
+  </data>
+  <data name="HTML_Candidaturas_ModalEditNecesidad_Duracion" xml:space="preserve">
+    <value>Duración:</value>
+  </data>
+  <data name="HTML_Candidaturas_ModalEditNecesidad_EditandoNecesidad" xml:space="preserve">
+    <value>Editando Necesidad</value>
+  </data>
+  <data name="HTML_Candidaturas_ModalEditNecesidad_FechaCompromiso" xml:space="preserve">
+    <value>Fec. Compro:</value>
+  </data>
+  <data name="HTML_Candidaturas_ModalEditNecesidad_FechaSolicitud" xml:space="preserve">
+    <value>Fec. Solicitud:</value>
+  </data>
+  <data name="HTML_Candidaturas_ModalEditNecesidad_Modulo" xml:space="preserve">
+    <value>Módulo:</value>
+  </data>
+  <data name="HTML_Candidaturas_ModalEditNecesidad_NecesidadIdioma" xml:space="preserve">
+    <value>Nec. Idioma:</value>
+  </data>
+  <data name="HTML_Candidaturas_ModalEditNecesidad_Nombre" xml:space="preserve">
+    <value>Nombre:</value>
+  </data>
+  <data name="HTML_Candidaturas_ModalEditNecesidad_Oficina" xml:space="preserve">
+    <value>Oficina:</value>
+  </data>
+  <data name="HTML_Candidaturas_ModalEditNecesidad_Perfil" xml:space="preserve">
+    <value>Perfil:</value>
+  </data>
+  <data name="HTML_Candidaturas_ModalEditNecesidad_Prevision" xml:space="preserve">
+    <value>Previsión:</value>
+  </data>
+  <data name="HTML_Candidaturas_ModalEditNecesidad_Proyecto" xml:space="preserve">
+    <value>Proyecto:</value>
+  </data>
+  <data name="HTML_Candidaturas_ModalEditNecesidad_Sector" xml:space="preserve">
+    <value>Sector:</value>
+  </data>
+  <data name="HTML_Candidaturas_ModalEditNecesidad_Servicio" xml:space="preserve">
+    <value>Servicio:</value>
+  </data>
+  <data name="HTML_Candidaturas_ModalEditNecesidad_Tecnologia" xml:space="preserve">
+    <value>Tecnología:</value>
+  </data>
+  <data name="Necesidad_ErrorTexto" xml:space="preserve">
+    <value>Error al guardar la necesidad</value>
+  </data>
+  <data name="Necesidad_ExitoTexto" xml:space="preserve">
+    <value>La necesidad se ha guardado correctamente</value>
+  </data>
+  <data name="Necesidad_ExitoTitulo" xml:space="preserve">
+    <value>Guardada correctamente</value>
+  </data>
+  <data name="HTML_SubentrevistasParaSegundaEntrevista" xml:space="preserve">
+    <value>Subentrevistas para la entrevista complementaria</value>
+  </data>
+  <data name="NecesidadGrupo_PersonaAsignadaDuplicadaTexto" xml:space="preserve">
+    <value>La persona seleccionada ya ha sido asignada en este grupo de necesidades.</value>
+  </data>
+  <data name="NecesidadGrupo_PersonaAsignadaDuplicadaTitulo" xml:space="preserve">
+    <value>PERSONA YA ASIGNADA</value>
+  </data>
+  <data name="HTML_Necesidades_Index_SeguimientoGrupo" xml:space="preserve">
+    <value>Seguimiento Grupo</value>
+  </data>
+  <data name="HTML_Necesidades_GrupoNecesidades_Filtro" xml:space="preserve">
+    <value>Filtro</value>
+  </data>
+  <data name="HTML_Necesidades_GrupoNecesidades_Cliente" xml:space="preserve">
+    <value>Cliente:</value>
+  </data>
+  <data name="HTML_Necesidades_GrupoNecesidades_EstadoGrupoNecesidades" xml:space="preserve">
+    <value>Estado grupo:</value>
+  </data>
+  <data name="HTML_Necesidades_GrupoNecesidades_IdGrupoNecesidades" xml:space="preserve">
+    <value>Id grupo:</value>
+  </data>
+  <data name="HTML_Necesidades_GrupoNecesidades_NombreGrupoNecesidades" xml:space="preserve">
+    <value>Nombre grupo:</value>
+  </data>
+  <data name="HTML_Necesidades_GrupoNecesidades_Proyecto" xml:space="preserve">
+    <value>Proyecto:</value>
+  </data>
+  <data name="HTML_Necesidades_GrupoNecesidades_ClienteHeader" xml:space="preserve">
+    <value>Cliente</value>
+  </data>
+  <data name="HTML_Necesidades_GrupoNecesidades_DescipcionGrupoNecesidadesHeader" xml:space="preserve">
+    <value>Descripción</value>
+  </data>
+  <data name="HTML_Necesidades_GrupoNecesidades_EstadoAbierto" xml:space="preserve">
+    <value>Abierto</value>
+  </data>
+  <data name="HTML_Necesidades_GrupoNecesidades_EstadoCerrado" xml:space="preserve">
+    <value>Cerrado</value>
+  </data>
+  <data name="HTML_Necesidades_GrupoNecesidades_EstadoGrupoNecesidadesHeader" xml:space="preserve">
+    <value>Estado</value>
+  </data>
+  <data name="HTML_Necesidades_GrupoNecesidades_IdGrupoNecesidadesHeader" xml:space="preserve">
+    <value>Ref</value>
+  </data>
+  <data name="HTML_Necesidades_GrupoNecesidades_NecesidadesAsignadasHeader" xml:space="preserve">
+    <value>Nº Necesidades</value>
+  </data>
+  <data name="HTML_Necesidades_GrupoNecesidades_NombreGrupoNecesidadesHeader" xml:space="preserve">
+    <value>Nombre</value>
+  </data>
+  <data name="HTML_Necesidades_GrupoNecesidades_ProyectoHeader" xml:space="preserve">
+    <value>Proyecto</value>
+  </data>
+  <data name="Necesidad_ConfirmacionFinalizarCerrarGrupoTexto" xml:space="preserve">
+    <value>ATENCION! Se cerrará el grupo automáticamente porque todas las necesidades están cerradas/canceladas y NO SE PODRÁN REALIZAR MÁS CAMBIOS. ¿Está seguro de querer finalizar la operación?</value>
+  </data>
+  <data name="HTML_Necesidades_SeguimientoGrupoNecesidadesModal_Contratacion" xml:space="preserve">
+    <value>Contratación:</value>
+  </data>
+  <data name="HTML_Necesidades_SeguimientoGrupoNecesidadesModal_CreandoPerfil" xml:space="preserve">
+    <value>CREANDO PERFIL</value>
+  </data>
+  <data name="HTML_Necesidades_SeguimientoGrupoNecesidadesModal_EditandoPerfil" xml:space="preserve">
+    <value>EDITANDO PERFIL</value>
+  </data>
+  <data name="HTML_Necesidades_SeguimientoGrupoNecesidadesModal_Estado" xml:space="preserve">
+    <value>Estado:</value>
+  </data>
+  <data name="HTML_Necesidades_SeguimientoGrupoNecesidadesModal_FechaCierre" xml:space="preserve">
+    <value>F.Cierre:</value>
+  </data>
+  <data name="HTML_Necesidades_SeguimientoGrupoNecesidadesModal_FechaCompromiso" xml:space="preserve">
+    <value>F.Comp:</value>
+  </data>
+  <data name="HTML_Necesidades_SeguimientoGrupoNecesidadesModal_Modulo" xml:space="preserve">
+    <value>Módulo:</value>
+  </data>
+  <data name="HTML_Necesidades_SeguimientoGrupoNecesidadesModal_Perfil" xml:space="preserve">
+    <value>Perfil:</value>
+  </data>
+  <data name="HTML_Necesidades_SeguimientoGrupoNecesidadesModal_PersonaAsignada" xml:space="preserve">
+    <value>Persona As:</value>
+  </data>
+  <data name="HTML_Necesidades_SeguimientoGrupoNecesidadesModal_Servicio" xml:space="preserve">
+    <value>Servicio:</value>
+  </data>
+  <data name="HTML_Necesidades_SeguimientoGrupoNecesidadesModal_Tecnologia" xml:space="preserve">
+    <value>Tecnología:</value>
+  </data>
+  <data name="HTML_Necesidades_SeguimientoGrupoNecesidad_Columnas" xml:space="preserve">
+    <value>Columnas:</value>
+  </data>
+  <data name="HTML_Necesidades_SeguimientoGrupoNecesidad_Perfiles" xml:space="preserve">
+    <value>Perfiles</value>
+  </data>
+  <data name="HTML_Necesidades_Edit_DelGrupo" xml:space="preserve">
+    <value>del Grupo </value>
+  </data>
+  <data name="ErrorGrupoNecesidadSinNecesidadesText" xml:space="preserve">
+    <value>No se puede  tener un grupo sin ninguna necesidad</value>
+  </data>
+  <data name="ErrorCandidaturaAbierta" xml:space="preserve">
+    <value>Esta candidatura no puede volver atrás ya que existe otra candidatura viva del mismo candidato.</value>
+  </data>
+  <data name="Necesidad_ConfirmarFinalizarConfirmadoTexto" xml:space="preserve">
+    <value>Al continuar se cambiara la previsión automáticamente a Confirmado; ¿Continuar?</value>
+  </data>
+  <data name="Necesidad_ConfirmarFinalizarConfirmadoTitulo" xml:space="preserve">
+    <value>ATENCIÓN</value>
+  </data>
+  <data name="HTML_Candidaturas_ModalRenuncia_CabeceraDescarte" xml:space="preserve">
+    <value>MOTIVO DE DESCARTE</value>
+  </data>
+  <data name="HTML_Candidaturas_ModalRenuncia_SeguroDescartar" xml:space="preserve">
+    <value>¿Seguro que desea descartar esta candidatura?</value>
+  </data>
+  <data name="HTML_Candidaturas_ModalRenuncia_SeleccionarMotivoDescarte" xml:space="preserve">
+    <value>Seleccione un motivo de descarte:</value>
+  </data>
+  <data name="HTML_Candidaturas_ModalRenuncia_SeleccionarMotivoRenuncia" xml:space="preserve">
+    <value>Seleccione un motivo de renuncia:</value>
+  </data>
+  <data name="Candidatura_CandidaturaGuardarRequeridosMensaje" xml:space="preserve">
+    <value>Hay campos requeridos sin rellenar, por favor, rellénelos para continuar.</value>
+  </data>
+  <data name="Usuario_ErrorMulticentroCrearCandidaturaTexto" xml:space="preserve">
+    <value>Un usuario multicentro no puede crear una candidatura.</value>
+  </data>
+  <data name="Usuario_ErrorMulticentroCrearCandidaturaTitulo" xml:space="preserve">
+    <value>ERROR USUARIO</value>
+  </data>
+  <data name="Usuario_ErrorUsuarioMulticentroYPermisosTexto" xml:space="preserve">
+    <value>Un usuario multicentro no puede tener permisos de super administrador o people.</value>
+  </data>
+  <data name="Usuario_ErrorUsuarioMulticentroYPermisosTitulo" xml:space="preserve">
+    <value>ERROR USUARIO</value>
+  </data>
+  <data name="Candidatura_ConfirmacionRecontactarTexto" xml:space="preserve">
+    <value>Se pasará la candidatura a Recontactado y se creará otra para el mismo candidato con sus datos en Entrevista -&gt; Filtrado Telefónico. Esta acción no es reversible, ¿continuar?</value>
+  </data>
+  <data name="Candidatura_ConfirmacionRecontactarTitulo" xml:space="preserve">
+    <value>RECONTACTAR CANDIDATO</value>
+  </data>
+  <data name="HTML_Title_Descartar" xml:space="preserve">
+    <value>Descartar</value>
+  </data>
+  <data name="HTML_Title_Recontactar" xml:space="preserve">
+    <value>Recontactar</value>
+  </data>
+  <data name="Error_ElementoBorradoText" xml:space="preserve">
+    <value>Este elemento ha sido eliminado y no puede ser accedido.</value>
+  </data>
+  <data name="HTML_Candidaturas_DatosDescarte_DatosDescarte" xml:space="preserve">
+    <value>Datos Descarte</value>
+  </data>
+  <data name="HTML_Candidaturas_DatosDescarte_ComentariosDescarte" xml:space="preserve">
+    <value>Comentarios descarte:</value>
+  </data>
+  <data name="HTML_Necesidades_CreateGrupoNecesidad_Estado" xml:space="preserve">
+    <value>Estado:</value>
+  </data>
+  <data name="HTML_Necesidades_CreateGrupoNecesidad_FechaCierre" xml:space="preserve">
+    <value>F.Cierre:</value>
+  </data>
+  <data name="HTML_Necesidades_SeguimientoGrupoNecesidadesModal_Prevision" xml:space="preserve">
+    <value>Prevision:</value>
+  </data>
+  <data name="Necesidad_ConfirmarFinalizarPlanificadasTexto" xml:space="preserve">
+    <value>Si hay perfiles en cambio interno cerrados se pasaran a confirmado si no lo están, ¿continuar?</value>
+  </data>
+  <data name="HTML_Necesidades_GrupoNecesidades_NumeroNecesidadesAbiertas" xml:space="preserve">
+    <value>Nº Abiertas</value>
+  </data>
+  <data name="HTML_Necesidades_GrupoNecesidades_NumeroNecesidadesCerradas" xml:space="preserve">
+    <value>Nº Cerradas</value>
+  </data>
+  <data name="HTML_Necesidades_GrupoNecesidades_NumeroNecesidadesPreasignadas" xml:space="preserve">
+    <value>Nº Preasig.</value>
+  </data>
+  <data name="HTML_Title_BitacoraNecesidad" xml:space="preserve">
+    <value>Bitácora de la necesidad</value>
+  </data>
+  <data name="HTML_BitacorasNecesidades_Centro" xml:space="preserve">
+    <value>Centro:</value>
+  </data>
+  <data name="HTML_BitacorasNecesidades_Estado" xml:space="preserve">
+    <value>Estado:</value>
+  </data>
+  <data name="HTML_BitacorasNecesidades_Necesidad" xml:space="preserve">
+    <value>Necesidad </value>
+  </data>
+  <data name="HTML_BitacorasNecesidades_Perfil" xml:space="preserve">
+    <value>Perfil:</value>
+  </data>
+  <data name="HTML_BitacorasNecesidades_PersonaAsignada" xml:space="preserve">
+    <value>Persona Asignada:</value>
+  </data>
+  <data name="HTML_BitacorasNecesidades_Tecnologia" xml:space="preserve">
+    <value>Tecnología:</value>
+  </data>
+  <data name="Necesidad_EliminarUltimaNecesidadTexto" xml:space="preserve">
+    <value>Essta necesidad es la única del grupo. ¿Borrar la necesidad junto con el grupo?</value>
+  </data>
+  <data name="Necesidad_EliminarUltimaNecesidadTitulo" xml:space="preserve">
+    <value>BORRAR NECESIDAD Y GRUPO</value>
+  </data>
+  <data name="HTML_Candidaturas_Index_OrigenCvHeader" xml:space="preserve">
+    <value>OrigenCv</value>
+  </data>
+  <data name="HTML_Title_Renunciar_Descartar_FiltradoTelefonico" xml:space="preserve">
+    <value>Renunciar/Descartar</value>
+  </data>
+  <data name="ErrorClienteYaExiste" xml:space="preserve">
+    <value>Ya existe un cliente con ese nombre</value>
+  </data>
+  <data name="Candidatura_DejarSeguirTexto" xml:space="preserve">
+    <value>¿Dejar de recibir notificaciones de los cambios en esta candidatura?</value>
+  </data>
+  <data name="Candidatura_DejarSeguirTitulo" xml:space="preserve">
+    <value>Dejar de Seguir Candidatura</value>
+  </data>
+  <data name="Candidatura_SeguirTexto" xml:space="preserve">
+    <value>¿Recibir notificaciones por correo de los cambios en esta candidatura?</value>
+  </data>
+  <data name="Candidatura_SeguirTitulo" xml:space="preserve">
+    <value>Seguir Candidatura</value>
+  </data>
+  <data name="HTML_Title_DejarSeguir" xml:space="preserve">
+    <value>Dejar de seguir</value>
+  </data>
+  <data name="HTML_Title_Seguir" xml:space="preserve">
+    <value>Seguir</value>
+  </data>
+  <data name="HTML_Candidaturas_Referenciado_ContactoHeader" xml:space="preserve">
+    <value>Contacto</value>
+  </data>
+  <data name="HTML_Candidaturas_Referenciado_EliminarHeader" xml:space="preserve">
+    <value>Eliminar</value>
+  </data>
+  <data name="Candidatura_EliminarEmail_Texto" xml:space="preserve">
+    <value>¿Quitar este email de la lista de notificados?</value>
+  </data>
+  <data name="Candidatura_EliminarEmail_Titulo" xml:space="preserve">
+    <value>ELIMINAR EMAIL REFERENCIADO</value>
+  </data>
+  <data name="HTML_Layout_Becarios" xml:space="preserve">
+    <value>Becarios</value>
+  </data>
+  <data name="HTML_Title_ConsultaCreaBecarios" xml:space="preserve">
+    <value>Consulta o crea nuevos Becarios</value>
+  </data>
+  <data name="ExisteGrupo" xml:space="preserve">
+    <value>GRUPO YA EXISTE EN LA APLICACION</value>
+  </data>
+  <data name="HTML_Becarios_Index_AniadirBecario" xml:space="preserve">
+    <value>Añadir Becario</value>
+  </data>
+  <data name="HTML_Becarios_Index_GestionBecarios" xml:space="preserve">
+    <value>Gestión de Becarios</value>
+  </data>
+  <data name="HTML_Becarios_Index_Filtro" xml:space="preserve">
+    <value>Filtro</value>
+  </data>
+  <data name="HTML_Becarios_Create_CreandoBecario" xml:space="preserve">
+    <value>Creando Becario:</value>
+  </data>
+  <data name="HTML_Becarios_Index_CandidatoRef" xml:space="preserve">
+    <value>Ref. Candidato:</value>
+  </data>
+  <data name="HTML_Becarios_Index_CentroProcedencia" xml:space="preserve">
+    <value>Centro Procedencia:</value>
+  </data>
+  <data name="HTML_Becarios_Index_NombreBecario" xml:space="preserve">
+    <value>Nombre Becario:</value>
+  </data>
+  <data name="HTML_Becarios_Index_Referencia" xml:space="preserve">
+    <value>Referencia:</value>
+  </data>
+  <data name="HTML_Becarios_Index_TipoBecario" xml:space="preserve">
+    <value>Tipo Becario:</value>
+  </data>
+  <data name="HTML_Becarios_Index_TipoEstadoBecario" xml:space="preserve">
+    <value>Estado Becario:</value>
+  </data>
+  <data name="HTML_Becarios_Index_CandidatoIdHeader" xml:space="preserve">
+    <value>CandidatoId</value>
+  </data>
+  <data name="HTML_Becarios_Index_CentroProcedenciaHeader" xml:space="preserve">
+    <value>Centro Proc.</value>
+  </data>
+  <data name="HTML_Becarios_Index_EstadoBecarioHeader" xml:space="preserve">
+    <value>Estado</value>
+  </data>
+  <data name="HTML_Becarios_Index_NombreBecarioHeader" xml:space="preserve">
+    <value>Nombre</value>
+  </data>
+  <data name="HTML_Becarios_Index_RefHeader" xml:space="preserve">
+    <value>Ref.</value>
+  </data>
+  <data name="HTML_Becarios_Index_TipoBecarioHeader" xml:space="preserve">
+    <value>Tipo Becario</value>
+  </data>
+  <data name="HTML_Becarios_Index_TotalBecarios" xml:space="preserve">
+    <value>Total de Becarios:</value>
+  </data>
+  <data name="HTML_Becarios_DatosBasicos_Archivos" xml:space="preserve">
+    <value>Archivos Word, Pdf, Txt, Excel</value>
+  </data>
+  <data name="HTML_Becarios_DatosBasicos_Candidato" xml:space="preserve">
+    <value>Candidato:</value>
+  </data>
+  <data name="HTML_Becarios_DatosBasicos_CentroProcedencia" xml:space="preserve">
+    <value>Centro:</value>
+  </data>
+  <data name="HTML_Becarios_DatosBasicos_SubidoCV" xml:space="preserve">
+    <value>¿Subido CV?</value>
+  </data>
+  <data name="HTML_Becarios_DatosBasicos_TipoBecario" xml:space="preserve">
+    <value>Tipo Beca:</value>
+  </data>
+  <data name="HTML_Becarios_ModalBusquedaCentro_BusquedaCentro" xml:space="preserve">
+    <value>BÚSQUEDA DE CENTROS</value>
+  </data>
+  <data name="HTML_Becarios_ModalBusquedaCentro_Centro" xml:space="preserve">
+    <value>Centro:</value>
+  </data>
+  <data name="HTML_Becarios_ModalBusquedaCentro_CentroHeader" xml:space="preserve">
+    <value>Centro</value>
+  </data>
+  <data name="HTML_Becarios_ModalBusquedaCentro_CentroIdHeader" xml:space="preserve">
+    <value>Ref.</value>
+  </data>
+  <data name="HTML_Becarios_ModalBusquedaCentro_Ciudad" xml:space="preserve">
+    <value>Ciudad:</value>
+  </data>
+  <data name="HTML_Becarios_ModalBusquedaCentro_CiudadHeader" xml:space="preserve">
+    <value>Ciudad</value>
+  </data>
+  <data name="HTML_Becarios_ModalBusquedaCentro_Pais" xml:space="preserve">
+    <value>País:</value>
+  </data>
+  <data name="HTML_Becarios_ModalBusquedaCentro_PaisHeader" xml:space="preserve">
+    <value>Pais</value>
+  </data>
+  <data name="HTML_Becarios_ModalCrearCentro_Centro" xml:space="preserve">
+    <value>Centro:</value>
+  </data>
+  <data name="HTML_Becarios_ModalCrearCentro_Ciudad" xml:space="preserve">
+    <value>Ciudad:</value>
+  </data>
+  <data name="HTML_Becarios_ModalCrearCentro_CrearCentro" xml:space="preserve">
+    <value>NUEVO CENTRO</value>
+  </data>
+  <data name="HTML_Becarios_ModalCrearCentro_Pais" xml:space="preserve">
+    <value>País:</value>
+  </data>
+  <data name="Becario_ConfirmacionGuardarCentroTexto" xml:space="preserve">
+    <value>¿Está seguro de guardar el centro?</value>
+  </data>
+  <data name="Becario_ConfirmacionGuardarCentroTitulo" xml:space="preserve">
+    <value>GUARDAR CENTRO</value>
+  </data>
+  <data name="Becario_BecarioGuardadoMensaje" xml:space="preserve">
+    <value>Cambios del becario guardados correctamente.</value>
+  </data>
+  <data name="Becario_BecarioGuardadoTitulo" xml:space="preserve">
+    <value>BECARIO GUARDADO</value>
+  </data>
+  <data name="Becario_ConfirmacionGuardarTexto" xml:space="preserve">
+    <value>¿Está seguro de guardar el becario?</value>
+  </data>
+  <data name="Becario_ConfirmacionGuardarTitulo" xml:space="preserve">
+    <value>GUARDAR BECARIO</value>
+  </data>
+  <data name="Becario_ConfirmacionModificarTexto" xml:space="preserve">
+    <value>¿Está seguro de guardar los cambios en el becario?</value>
+  </data>
+  <data name="Becario_ConfirmacionModificarTitulo" xml:space="preserve">
+    <value>GUARDAR CAMBIOS BECARIO</value>
+  </data>
+  <data name="Becario_EliminarTexto" xml:space="preserve">
+    <value>¿Está seguro de eliminar el becario?</value>
+  </data>
+  <data name="Becario_EliminarTitulo" xml:space="preserve">
+    <value>ELIMINAR BECARIO</value>
+  </data>
+  <data name="HTML_Becarios_ModalStandBy_AsigneFechaLimite" xml:space="preserve">
+    <value>Asigne una fecha límite para contactar al becario si lo desea</value>
+  </data>
+  <data name="HTML_Becarios_ModalStandBy_Pausarandidatura" xml:space="preserve">
+    <value>PAUSAR BECARIO</value>
+  </data>
+  <data name="HTML_Title_DetalleBecario" xml:space="preserve">
+    <value>Detalle Becario</value>
+  </data>
+  <data name="HTML_Dashboard_Administrador_BecarioHeader" xml:space="preserve">
+    <value>Becario</value>
+  </data>
+  <data name="HTML_Dashboard_Administrador_BecariosPendientesStandBy" xml:space="preserve">
+    <value>Becarios Pendientes StandBy (Hasta los próximos 15 días)</value>
+  </data>
+  <data name="HTML_Dashboard_Administrador_CentroProcendeciaHeader" xml:space="preserve">
+    <value>Centro de Procedencia</value>
+  </data>
+  <data name="HTML_Becarios_Details_DetallesBecario" xml:space="preserve">
+    <value>Detalles Becario</value>
+  </data>
+  <data name="HTML_Becarios_Details_VerCandidato" xml:space="preserve">
+    <value>Ver Candidato</value>
+  </data>
+  <data name="HTML_BitacorasBecarios_Becario" xml:space="preserve">
+    <value>Becario</value>
+  </data>
+  <data name="HTML_BitacorasBecarios_CentroProcedencia" xml:space="preserve">
+    <value>Centro Procedencia:</value>
+  </data>
+  <data name="HTML_BitacorasBecarios_EstadoBecario" xml:space="preserve">
+    <value>Estado:</value>
+  </data>
+  <data name="HTML_BitacorasBecarios_NombreBecario" xml:space="preserve">
+    <value>Becario:</value>
+  </data>
+  <data name="HTML_BitacorasBecarios_TipoBecario" xml:space="preserve">
+    <value>Tipo Beca:</value>
+  </data>
+  <data name="HTML_BitacorasBecarios_Centro" xml:space="preserve">
+    <value>Centro:</value>
+  </data>
+  <data name="Becario_ConfirmacionFinalizarTexto" xml:space="preserve">
+    <value>¿Está seguro de guardar el becario y finalizar el proceso?</value>
+  </data>
+  <data name="Becario_ConfirmacionFinalizarTitulo" xml:space="preserve">
+    <value>GUARDAR Y FINALIZAR BECARIO</value>
+  </data>
+  <data name="HTML_Becarios_Edit_EditandoBecario" xml:space="preserve">
+    <value>Editando Becario:</value>
+  </data>
+  <data name="HTML_Becarios_Proceso_Proceso" xml:space="preserve">
+    <value>Proceso</value>
+  </data>
+  <data name="HTML_Title_BitacoraBecario" xml:space="preserve">
+    <value>Bitácora del becario</value>
+  </data>
+  <data name="Becario_NotificacionTitulo" xml:space="preserve">
+    <value>NOTIFICACIÓN BECARIO</value>
+  </data>
+  <data name="HTML_Becarios_GestionDocumental_CompletadaGestion" xml:space="preserve">
+    <value>Completado</value>
+  </data>
+  <data name="HTML_Becarios_GestionDocumental_DatosGestionDocumental" xml:space="preserve">
+    <value>Datos Gestión Documental</value>
+  </data>
+  <data name="HTML_Becarios_GestionDocumental_FechaFin" xml:space="preserve">
+    <value>Fecha Fin:</value>
+  </data>
+  <data name="HTML_Becarios_GestionDocumental_FechaFinReal" xml:space="preserve">
+    <value>Fecha Fin Real:</value>
+  </data>
+  <data name="HTML_Becarios_GestionDocumental_FechaInicio" xml:space="preserve">
+    <value>Fecha Inicio:</value>
+  </data>
+  <data name="HTML_Becarios_GestionDocumental_NumHoras" xml:space="preserve">
+    <value>Número Horas:</value>
+  </data>
+  <data name="HTML_Becarios_GestionDocumental_SubidoAnexo" xml:space="preserve">
+    <value>¿Subido Anexo?</value>
+  </data>
+  <data name="HTML_Becarios_Practicas_DatosPracticas" xml:space="preserve">
+    <value>Datos Prácticas</value>
+  </data>
+  <data name="HTML_Becarios_Practicas_DecisionFinal" xml:space="preserve">
+    <value>Decisión final:</value>
+  </data>
+  <data name="HTML_Becarios_Practicas_ObservacionFinal" xml:space="preserve">
+    <value>Observación final:</value>
+  </data>
+  <data name="HTML_Becarios_Practicas_Practicas" xml:space="preserve">
+    <value>Practicas</value>
+  </data>
+  <data name="HTML_Becarios_Proceso_DatosProceso" xml:space="preserve">
+    <value>Datos Proceso</value>
+  </data>
+  <data name="HTML_Becarios_Proceso_Eliminar" xml:space="preserve">
+    <value>Eliminar</value>
+  </data>
+  <data name="HTML_Becarios_Proceso_EliminarObservacionTexto" xml:space="preserve">
+    <value>¿Desea eliminar esta observación?</value>
+  </data>
+  <data name="HTML_Becarios_Proceso_EliminarObservacionTitulo" xml:space="preserve">
+    <value>ELIMINAR OBSERVACION</value>
+  </data>
+  <data name="HTML_Becarios_Proceso_Fecha" xml:space="preserve">
+    <value>Fecha</value>
+  </data>
+  <data name="HTML_Becarios_Proceso_Observaciones" xml:space="preserve">
+    <value>Observaciones</value>
+  </data>
+  <data name="HTML_Becarios_Proceso_ObservacionFinal" xml:space="preserve">
+    <value>Observación final:</value>
+  </data>
+  <data name="HTML_Becarios_Proceso_PersonaConvocatoria" xml:space="preserve">
+    <value>Persona Convocatoria</value>
+  </data>
+  <data name="HTML_Becarios_Proceso_Responsable" xml:space="preserve">
+    <value>Responsable</value>
+  </data>
+  <data name="HTML_Becarios_Proceso_Resultado" xml:space="preserve">
+    <value>Resultado</value>
+  </data>
+  <data name="HTML_Becarios_Proceso_Tipo" xml:space="preserve">
+    <value>Tipo</value>
+  </data>
+  <data name="HTML_Becarios_Seleccion_Asignacion" xml:space="preserve">
+    <value>Asignación</value>
+  </data>
+  <data name="HTML_Becarios_Seleccion_GestionDocumental" xml:space="preserve">
+    <value>Gestión Documental</value>
+  </data>
+  <data name="HTML_Candidaturas_Asignacion_Cliente" xml:space="preserve">
+    <value>Cliente:</value>
+  </data>
+  <data name="HTML_Candidaturas_Asignacion_CompletadoAsignacion" xml:space="preserve">
+    <value>Completado</value>
+  </data>
+  <data name="HTML_Candidaturas_Asignacion_DatosAsignacion" xml:space="preserve">
+    <value>Datos Asignación</value>
+  </data>
+  <data name="HTML_Candidaturas_Asignacion_Proyecto" xml:space="preserve">
+    <value>Proyecto:</value>
+  </data>
+  <data name="HTML_Candidaturas_Asignacion_Responsable" xml:space="preserve">
+    <value>Responsable:</value>
+  </data>
+  <data name="HTML_Candidaturas_Asignacion_Jornada" xml:space="preserve">
+    <value>Jornada:</value>
+  </data>
+  <data name="HTML_Candidaturas_Asignacion_Tutor" xml:space="preserve">
+    <value>Tutor:</value>
+  </data>
+  <data name="HTML_Candidaturas_Proceso_SuperaProceso" xml:space="preserve">
+    <value>Supera Proceso</value>
+  </data>
+  <data name="Becario_Proceso_ErrorObservacionesTexto" xml:space="preserve">
+    <value>Un becario debe tener al menos una observacion y si supera el proceso todas las observaciones deben tener superado el resultado final para continuar.</value>
+  </data>
+  <data name="Becario_Proceso_ErrorObservacionesTitulo" xml:space="preserve">
+    <value>ERROR OBSERVACIONES</value>
+  </data>
+  <data name="HTML_Becarios_ModalRenuncia_MotivoRenuncia" xml:space="preserve">
+    <value>Motivo de Renuncia</value>
+  </data>
+  <data name="HTML_Becarios_ModalRenuncia_SeguroRenunciar" xml:space="preserve">
+    <value>¿Seguro que quiere renunciar con este becario?</value>
+  </data>
+  <data name="Becario_RetrocederTexto" xml:space="preserve">
+    <value>¿Quiere retroceder el estado de este becario?</value>
+  </data>
+  <data name="Becario_RetrocederTitulo" xml:space="preserve">
+    <value>RETROCEDER BECARIO</value>
+  </data>
+  <data name="ErrorBecaAbierta" xml:space="preserve">
+    <value>Este becario ya tiene otra beca abierta por lo que no puede volver atrás.</value>
+  </data>
+  <data name="ErrorBecario" xml:space="preserve">
+    <value>ERROR BECARIO</value>
+  </data>
+  <data name="ErrorBecarioSeleccionTexto" xml:space="preserve">
+    <value>Si desea avanzar tanto la gestión documental como la asignación deben estar completas.</value>
+  </data>
+  <data name="ErrorBecarioSeleccionTitulo" xml:space="preserve">
+    <value>ERROR GUARDADO BECARIO</value>
+  </data>
+  <data name="HTML_Becarios_Proceso_FechaConvocatoria" xml:space="preserve">
+    <value>Fecha Convocatoria</value>
+  </data>
+  <data name="HTML_Becarios_Index_Cliente" xml:space="preserve">
+    <value>Cliente</value>
+  </data>
+  <data name="HTML_Becarios_Index_FechaFin" xml:space="preserve">
+    <value>F.Fin</value>
+  </data>
+  <data name="HTML_Becarios_Index_FechaFinReal" xml:space="preserve">
+    <value>F.FinReal</value>
+  </data>
+  <data name="HTML_Becarios_Index_FechaInicio" xml:space="preserve">
+    <value>F.Inicio</value>
+  </data>
+  <data name="HTML_Becarios_Index_Proyecto" xml:space="preserve">
+    <value>Proyecto</value>
+  </data>
+  <data name="HTML_Becarios_Index_FechaFinBusqueda" xml:space="preserve">
+    <value>Fecha Fin:</value>
+  </data>
+  <data name="HTML_Becarios_Index_FechaFinRealBusqueda" xml:space="preserve">
+    <value>Fecha Fin Real:</value>
+  </data>
+  <data name="HTML_Becarios_Index_FechaInicioBusqueda" xml:space="preserve">
+    <value>Fecha Inicio:</value>
+  </data>
+  <data name="HTML_Becarios_Index_ClienteBusqueda" xml:space="preserve">
+    <value>Cliente:</value>
+  </data>
+  <data name="HTML_Becarios_Index_ProyectoBusqueda" xml:space="preserve">
+    <value>Proyecto:</value>
+  </data>
+  <data name="HTML_Candidaturas_AgendarPrimeraEntrevista_NotificarEntrevistaCandidato" xml:space="preserve">
+    <value>Notificar Entrevista al Candidato</value>
+  </data>
+  <data name="HTML_Candidaturas_AgendarSegundaEntrevista_NotificarEntrevistaCandidato" xml:space="preserve">
+    <value>Notificar Entrevista al Candidato</value>
+  </data>
+  <data name="HTML_Candidaturas_FeedbackPrimeraEntrevista_NotificarDescarteCandidato" xml:space="preserve">
+    <value>Notificar Descarte al Candidato</value>
+  </data>
+  <data name="HTML_Candidaturas_FeedbackSegundaEntrevista_NotificarDescarteCandidato" xml:space="preserve">
+    <value>Notificar Descarte al Candidato</value>
+  </data>
+  <data name="HTML_Dashboard_ModalAlertasAdmin_BecariosStandBy" xml:space="preserve">
+    <value>Becarios StandBy</value>
+  </data>
+  <data name="HTML_Dashboard_ModalAlertasAdmin_CandidaturasStandBy" xml:space="preserve">
+    <value>Candidaturas StandBy</value>
+  </data>
+  <data name="HTML_Dashboard_ModalAlertasAdmin_CartaOferta" xml:space="preserve">
+    <value>Carta Oferta</value>
+  </data>
+  <data name="HTML_Dashboard_ModalAlertasAdmin_CvPendienteFiltro" xml:space="preserve">
+    <value>CV Pendientes Filtro</value>
+  </data>
+  <data name="HTML_Dashboard_ModalAlertasAdmin_Elegiralertas" xml:space="preserve">
+    <value>ELEGIR ALERTAS</value>
+  </data>
+  <data name="HTML_Dashboard_ModalAlertasAdmin_EntrevistasComplementarias" xml:space="preserve">
+    <value>Entrevistas Comp.</value>
+  </data>
+  <data name="HTML_Dashboard_ModalAlertasAdmin_NecesidadesCreadasModificadas" xml:space="preserve">
+    <value>Necesidades Creadas o Modificadas</value>
+  </data>
+  <data name="HTML_Dashboard_ModalAlertasAdmin_PrimerasEntrevistas" xml:space="preserve">
+    <value>Primeras Entrevistas</value>
+  </data>
+  <data name="HTML_Dashboard_ModalAlertasAdmin_SeleccioneAlertasDashboard" xml:space="preserve">
+    <value>Seleccione las alertas que desea que se muestren en su dashboard.</value>
+  </data>
+  <data name="HTML_Dashboard_ModalAlertasAdmin_SubEntrevistasEntrevistaComplementaria" xml:space="preserve">
+    <value>SubEntrevistas Entrevista Comp.</value>
+  </data>
+  <data name="HTML_Dashboard_ModalAlertasAdmin_SubEntrevistasPrimeraEntrevista" xml:space="preserve">
+    <value>SubEntrevistas Primera Entrevista</value>
+  </data>
+  <data name="CentroVacioTexto" xml:space="preserve">
+    <value>Debe rellenar todos los campos para guardar el centro</value>
+  </data>
+  <data name="CentroVacioTitulo" xml:space="preserve">
+    <value>ERROR CENTRO</value>
+  </data>
+  <data name="ExisteCentro" xml:space="preserve">
+    <value>CENTRO YA EXISTENTE</value>
+  </data>
+  <data name="Becario_ConfirmacionGuardarDiscrepanciaTexto" xml:space="preserve">
+    <value>Los resultados de las pruebas individuales no concuerdan con el resultado final; ¿continuar igualmente?</value>
+  </data>
+  <data name="Becario_ConfirmacionGuardarDiscrepanciaTitulo" xml:space="preserve">
+    <value>DISCREPANCIA RESULTADOS</value>
+  </data>
+  <data name="HTML_Becarios_Index_DecisionFinal" xml:space="preserve">
+    <value>Decisión final:</value>
+  </data>
+  <data name="HTML_Becarios_Index_GestionDocumentalCompleta" xml:space="preserve">
+    <value>Gestión Doc. Completa:</value>
+  </data>
+  <data name="HTML_Becarios_Index_Centro" xml:space="preserve">
+    <value>Centro:</value>
+  </data>
+  <data name="HTML_Becarios_ModalEditCentro_EditarCentro" xml:space="preserve">
+    <value>EDITAR CENTRO</value>
+  </data>
+  <data name="HTML_BotonGenerico_Editar" xml:space="preserve">
+    <value>Editar</value>
+  </data>
+  <data name="Becarios_EliminarCentroTexto" xml:space="preserve">
+    <value>¿Seguro que desea eliminar el centro?</value>
+  </data>
+  <data name="Becarios_EliminarCentroTitulo" xml:space="preserve">
+    <value>ELIMINAR CENTRO PROCEDENCIA</value>
+  </data>
+  <data name="HTML_Candidaturas_ModalBusquedaCandidato_AccionesHeader" xml:space="preserve">
+    <value>Acciones</value>
+  </data>
+  <data name="ErrorGraph_CandidatoMail" xml:space="preserve">
+    <value>El candidato no tiene un mail válido</value>
+  </data>
+  <data name="ErrorGraph_Disponibilidad" xml:space="preserve">
+    <value>No hay salas disponibles en esa fecha o el entrevistador no está disponible</value>
+  </data>
+  <data name="ErrorGraph_EntrevistadorMail" xml:space="preserve">
+    <value>El entrevistador no tiene un mail válido</value>
+  </data>
+  <data name="ErrorGraph_ListaSalas" xml:space="preserve">
+    <value>La aplicación no ha podido acceder a la lista de salas</value>
+  </data>
+  <data name="ErrorGraph_Sugerencias" xml:space="preserve">
+    <value>No se han encontrado sugerencias</value>
+  </data>
+  <data name="HTML_BotonExcluirSalas" xml:space="preserve">
+    <value>Excluir Salas</value>
+  </data>
+  <data name="HTML_Candidaturas_AgendarEntrevista_BuscarSala" xml:space="preserve">
+    <value>Buscar Sala</value>
+  </data>
+  <data name="HTML_Candidaturas_AgendarEntrevista_EnviarConvocatoria" xml:space="preserve">
+    <value>Enviar Convocatoria</value>
+  </data>
+  <data name="HTML_Candidaturas_AgendarEntrevista_NombreSala" xml:space="preserve">
+    <value>Nombre Sala:</value>
+  </data>
+  <data name="HTML_Graph_ExcluirSalas_SalasExcluidas" xml:space="preserve">
+    <value>Salas Excluidas</value>
+  </data>
+  <data name="HTML_Becarios_DatosBasicos_Convocatoria" xml:space="preserve">
+    <value>Convocatoria:</value>
+  </data>
+  <data name="HTML_Becarios_Proceso_FechaProceso" xml:space="preserve">
+    <value>Fecha Proceso</value>
+  </data>
+  <data name="Becarios_EliminarConvocatoriaTexto" xml:space="preserve">
+    <value>¿Seguro que desea eliminar la convocatoria?</value>
+  </data>
+  <data name="Becarios_EliminarConvocatoriaTitulo" xml:space="preserve">
+    <value>Eliminar Convocatoria</value>
+  </data>
+  <data name="Becario_ConfirmacionGuardarConvocatoriaTexto" xml:space="preserve">
+    <value>¿Está seguro de guardar la convocatoria?</value>
+  </data>
+  <data name="Becario_ConfirmacionGuardarConvocatoriaTitulo" xml:space="preserve">
+    <value>Guardar Convocatoria</value>
+  </data>
+  <data name="ConvocatoriaVaciaTexto" xml:space="preserve">
+    <value>Debe rellenar todos los campos para crear la convocatoria</value>
+  </data>
+  <data name="ConvocatoriaVaciaTitulo" xml:space="preserve">
+    <value>Error Crear Convocatoria</value>
+  </data>
+  <data name="HTML_Becarios_ModalBusquedaConvocatoria_BusquedaConvocatoria" xml:space="preserve">
+    <value>Busqueda Convocatoria</value>
+  </data>
+  <data name="HTML_Becarios_ModalBusquedaConvocatoria_Nombre" xml:space="preserve">
+    <value>Convocatoria:</value>
+  </data>
+  <data name="HTML_Becarios_ModalBusquedaConvocatoria_NombreConvocatoriaHeader" xml:space="preserve">
+    <value>Nombre Convocatoria</value>
+  </data>
+  <data name="HTML_Becarios_ModalCrearConvocatoria_Ciudad" xml:space="preserve">
+    <value>Ciudad:</value>
+  </data>
+  <data name="HTML_Becarios_ModalCrearConvocatoria_CrearConvocatoria" xml:space="preserve">
+    <value>Crear Convocatoria</value>
+  </data>
+  <data name="HTML_Becarios_ModalCrearConvocatoria_Nombre" xml:space="preserve">
+    <value>Nombre:</value>
+  </data>
+  <data name="HTML_Becarios_ModalCrearConvocatoria_Pais" xml:space="preserve">
+    <value>País:</value>
+  </data>
+  <data name="HTML_Becarios_ModalEditConvocatoria_EditarConvocatoria" xml:space="preserve">
+    <value>Editar Convocatoria</value>
+  </data>
+  <data name="Becario_CandidaturaCreadaTexto" xml:space="preserve">
+    <value>Candidatura del becario creada con éxito</value>
+  </data>
+  <data name="Becario_CandidaturaCreadaTitulo" xml:space="preserve">
+    <value>CANDIDATURA CREADA</value>
+  </data>
+  <data name="Becario_PasarCandidaturaTexto" xml:space="preserve">
+    <value>¿Seguro que quiere crear una candidatura para este becario?</value>
+  </data>
+  <data name="Becario_PasarCandidaturaTitulo" xml:space="preserve">
+    <value>PASAR A CANDIDATURAS</value>
+  </data>
+  <data name="CentroEnUsoTexto" xml:space="preserve">
+    <value>El centro está asignado a algún becario y no puede ser borrado.</value>
+  </data>
+  <data name="CentroEnUsoTitulo" xml:space="preserve">
+    <value>ERROR BORRAR CENTRO</value>
+  </data>
+  <data name="ConvocatoriaEnUsoTexto" xml:space="preserve">
+    <value>La convocatoria está asignada a algún becario y no puede ser borrada.</value>
+  </data>
+  <data name="ConvocatoriaEnUsoTitulo" xml:space="preserve">
+    <value>ERROR BORRAR CONVOCATORIA</value>
+  </data>
+  <data name="HTML_Title_PasarCandidatura" xml:space="preserve">
+    <value>Pasar a Candidaturas</value>
+  </data>
+  <data name="HTML_Graph_ExcluirSalas_ExcluirHeader" xml:space="preserve">
+    <value>Excluir</value>
+  </data>
+  <data name="HTML_Graph_ExcluirSalas_NombreHeader" xml:space="preserve">
+    <value>Nombre</value>
+  </data>
+  <data name="HTML_Candidaturas_Edit_EditandoCandidatura" xml:space="preserve">
+    <value>Editando Candidatura:</value>
+  </data>
+  <data name="HTML_Becarios_Datos_Becario" xml:space="preserve">
+    <value>Datos Básicos del becario</value>
+  </data>
+  <data name="HTML_AsignaNecesidadesPersonas" xml:space="preserve">
+    <value>Asigna personas a necesidades de forma ágil</value>
+  </data>
+  <data name="HTML_Layout_StaffingNecesidades" xml:space="preserve">
+    <value>Staffing Necesidades</value>
+  </data>
+  <data name="HTML_Necesidades_CreateGrupoNecesidad_Clonar" xml:space="preserve">
+    <value>Clonar</value>
+  </data>
+  <data name="HTML_Necesidades_CreateGrupoNecesidad_Eliminar" xml:space="preserve">
+    <value>Eliminar</value>
+  </data>
+  <data name="HTML_Necesidades_StaffingNecesidades_NombreHeader" xml:space="preserve">
+    <value>Nombre</value>
+  </data>
+  <data name="HTML_Necesidades_StaffingNecesidades_Referencia" xml:space="preserve">
+    <value>Ref.</value>
+  </data>
+  <data name="HTML_Necesidades_StaffingNecesidades_TipoPersonaHeader" xml:space="preserve">
+    <value>Tipo</value>
+  </data>
+  <data name="HTML_Necesidades_StaffingNecesidades_GuardarNecesidadesTexto" xml:space="preserve">
+    <value>¿Seguro que quiere guardar y asignar las necesidades?</value>
+  </data>
+  <data name="HTML_Necesidades_StaffingNecesidades_GuardarNecesidadesTitulo" xml:space="preserve">
+    <value>GUARDAR Y ASIGNAR NECESIDADES</value>
+  </data>
+  <data name="HTML_Necesidades_StaffingNecesidades_GuardarNecesidadesSuccessTexto" xml:space="preserve">
+    <value>Necesidades guardadas correctamente</value>
+  </data>
+  <data name="HTML_Necesidades_StaffingNecesidades_GuardarNecesidadesSuccessTitulo" xml:space="preserve">
+    <value>NECESIDADES GUARDADAS</value>
+  </data>
+  <data name="HTML_Necesidades_StaffingNecesidades_NecesidadesVaciasTexto" xml:space="preserve">
+    <value>No hay necesidades para guardar, por favor compruebe que la tabla de necesidades tiene resultados.</value>
+  </data>
+  <data name="HTML_Necesidades_StaffingNecesidades_NecesidadesVaciasTitulo" xml:space="preserve">
+    <value>ERROR GUARDAR NECESIDADES</value>
+  </data>
+  <data name="HTML_Becarios_Index_Convocatoria" xml:space="preserve">
+    <value>Convocatoria: </value>
+  </data>
+  <data name="HTML_Necesidades_StaffingNecesidades_PerfilHeader" xml:space="preserve">
+    <value>Perfil</value>
+  </data>
+  <data name="EstadoStaffingEnum_SoloAbiertas" xml:space="preserve">
+    <value>Sólo abiertas</value>
+  </data>
+  <data name="EstadoStaffingEnum_Todas" xml:space="preserve">
+    <value>Todas</value>
+  </data>
+  <data name="HTML_Necesidades_StaffingNecesidades_ClienteHeader" xml:space="preserve">
+    <value>Cliente</value>
+  </data>
+  <data name="HTML_Necesidades_StaffingNecesidades_DatosPersonaAsignadaHeader" xml:space="preserve">
+    <value>Datos Persona Asig.</value>
+  </data>
+  <data name="HTML_Necesidades_StaffingNecesidades_Estado" xml:space="preserve">
+    <value>Estado:</value>
+  </data>
+  <data name="HTML_Necesidades_StaffingNecesidades_FechaCompromisoHeader" xml:space="preserve">
+    <value>F.Compromiso</value>
+  </data>
+  <data name="HTML_Necesidades_StaffingNecesidades_Necesidades" xml:space="preserve">
+    <value>Necesidades</value>
+  </data>
+  <data name="HTML_Necesidades_StaffingNecesidades_Perfil" xml:space="preserve">
+    <value>Perfil:</value>
+  </data>
+  <data name="HTML_Necesidades_StaffingNecesidades_Personas" xml:space="preserve">
+    <value>Personas</value>
+  </data>
+  <data name="HTML_Necesidades_StaffingNecesidades_ProyectoHeader" xml:space="preserve">
+    <value>Proyecto</value>
+  </data>
+  <data name="HTML_Necesidades_StaffingNecesidades_RefHeader" xml:space="preserve">
+    <value>Ref.</value>
+  </data>
+  <data name="HTML_Necesidades_StaffingNecesidades_Tecnologia" xml:space="preserve">
+    <value>Tecnología:</value>
+  </data>
+  <data name="HTML_Necesidades_StaffingNecesidades_Candidatura" xml:space="preserve">
+    <value>Candidatura</value>
+  </data>
+  <data name="HTML_Necesidades_StaffingNecesidades_PersonaLibre" xml:space="preserve">
+    <value>Persona Libre</value>
+  </data>
+  <data name="HTML_Candidatos_Create_ConocimientosIdiomas" xml:space="preserve">
+    <value>Conocimientos Idiomas</value>
+  </data>
+  <data name="HTML_Candidatos_Create_ConocimientosTecnologicos" xml:space="preserve">
+    <value>Conocimientos Tecnológicos</value>
+  </data>
+  <data name="HTML_Candidatos_Create_DatosCandidato" xml:space="preserve">
+    <value>Datos del Candidato</value>
+  </data>
+  <data name="HTML_Candidatos_Create_DatosContacto" xml:space="preserve">
+    <value>Datos Contacto</value>
+  </data>
+  <data name="HTML_Candidatos_Edit_ConocimientosIdiomas" xml:space="preserve">
+    <value>Conocimientos Idiomas</value>
+  </data>
+  <data name="HTML_Candidatos_Edit_ConocimientosTecnologicos" xml:space="preserve">
+    <value>Conocimientos Tecnológicos</value>
+  </data>
+  <data name="HTML_Candidatos_Edit_DatosCandidato" xml:space="preserve">
+    <value>Datos del Candidato</value>
+  </data>
+  <data name="HTML_Candidatos_Edit_DatosContacto" xml:space="preserve">
+    <value>Datos Contacto</value>
+  </data>
+  <data name="HTML_Candidaturas_Index_AccionesHeader" xml:space="preserve">
+    <value>Acciones</value>
+  </data>
+  <data name="HTML_Candidaturas_Index_EstadosHeader" xml:space="preserve">
+    <value>Estados</value>
+  </data>
+  <data name="HTML_General_No" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="HTML_General_Si" xml:space="preserve">
+    <value>Si</value>
+  </data>
+  <data name="HTML_Candidatos_Details_ConocimientosIdiomas" xml:space="preserve">
+    <value>Conocimientos Idiomas</value>
+  </data>
+  <data name="HTML_Candidatos_Details_ConocimientosTecnologicos" xml:space="preserve">
+    <value>Conocimientos Tecnológicos</value>
+  </data>
+  <data name="HTML_Candidatos_Details_DatosContacto" xml:space="preserve">
+    <value>Datos Contacto</value>
+  </data>
+  <data name="HTML_Candidaturas_Index_Filtro" xml:space="preserve">
+    <value>Filtro</value>
+  </data>
+  <data name="HTML_Candidaturas_AgendarSegundaEntrevista_Generica" xml:space="preserve">
+    <value>Genérica</value>
+  </data>
+  <data name="HTML_Candidaturas_Create_CrearCandidatura" xml:space="preserve">
+    <value>Crear Candidatura</value>
+  </data>
+  <data name="HTML_Candidaturas_Details_DatosBasicosDetails_NA" xml:space="preserve">
+    <value>N/A</value>
+  </data>
+  <data name="HTML_Candidaturas_Details_DatosCandidatura" xml:space="preserve">
+    <value>Datos Candidatura</value>
+  </data>
+  <data name="HTML_Candidaturas_EditExtend_DatosCandidatura" xml:space="preserve">
+    <value>Datos Candidatura</value>
+  </data>
+  <data name="HTML_Necesidades_CreateGrupoNecesidad_CrearGrupoNecesidades" xml:space="preserve">
+    <value>Crear Grupo Necesidades</value>
+  </data>
+  <data name="HTML_Necesidades_CreateGrupoNecesidad_DatosGrupoNecesidades" xml:space="preserve">
+    <value>Datos Grupo Necesidades</value>
+  </data>
+  <data name="HTML_Necesidades_Details_DatosNecesidad" xml:space="preserve">
+    <value>Datos Necesidad</value>
+  </data>
+  <data name="HTML_Necesidades_Edit_DatosNecesidad" xml:space="preserve">
+    <value>Datos Necesidad</value>
+  </data>
+  <data name="HTML_Necesidades_GrupoNecesidades_GestionGrupoNecesidades" xml:space="preserve">
+    <value>Gestión Grupo Necesidades</value>
+  </data>
+  <data name="HTML_Necesidades_Index_Filtro" xml:space="preserve">
+    <value>Filtro</value>
+  </data>
+  <data name="HTML_Dashboard_Index_Alertas" xml:space="preserve">
+    <value>Alertas</value>
+  </data>
+  <data name="HTML_PersonasLibres_CreateStepTwo_CrearPersonasLibres" xml:space="preserve">
+    <value>Crear Personas Libres</value>
+  </data>
+  <data name="HTML_PersonasLibres_CreateStepTwo_DatosPersonasLibres" xml:space="preserve">
+    <value>Datos Personas Libres</value>
+  </data>
+  <data name="HTML_Necesidades_Index_MisNecesidades" xml:space="preserve">
+    <value>Mis Necesidades</value>
+  </data>
+  <data name="HTML_Necesidades_Index_NecesidadIdioma" xml:space="preserve">
+    <value>Necesidad Idioma</value>
+  </data>
+  <data name="HTML_Necesidades_StaffingNecesidades_Filtro" xml:space="preserve">
+    <value>Filtro</value>
+  </data>
+  <data name="HTML_Necesidades_StaffingNecesidades_GestionStaffingNecesidades" xml:space="preserve">
+    <value>Gestión Staffing Necesidades</value>
+  </data>
+  <data name="ClienteEnUsoTexto" xml:space="preserve">
+    <value>Este cliente está asignado a uno o varios proyectos activos y no puede ser eliminado</value>
+  </data>
+  <data name="ClienteEnUsoTitulo" xml:space="preserve">
+    <value>ERROR CLIENTE USADO</value>
+  </data>
+  <data name="ProyectoEnUsoTexto" xml:space="preserve">
+    <value>Este proyecto está asignado a una o varias necesidades activas y no puede ser borrado</value>
+  </data>
+  <data name="ProyectoEnUsoTitulo" xml:space="preserve">
+    <value>ERROR PROYECTO USADO</value>
+  </data>
+<<<<<<< HEAD
+  <data name="HTML_Candidaturas_DatosBasicos_CorreosReferenciador" xml:space="preserve">
+    <value>Añadir Correos Referenciador:</value>
+  </data>
+  <data name="HTML_Candidaturas_DatosBasicos_FuenteReclutamiento" xml:space="preserve">
+    <value>FuenteReclutamiento:</value>
+  </data>
+  <data name="HTML_Candidaturas_DatosBasicos_OrigenCV" xml:space="preserve">
+    <value>Origen CV:</value>
+  </data>
+  <data name="HTML_Candidaturas_Index_OrigenCV" xml:space="preserve">
+    <value>Origen CV:</value>
+=======
+  <data name="CandidatoEnUsoTexto" xml:space="preserve">
+    <value>Este candidato existe en alguna candidatura o beca activa</value>
+  </data>
+  <data name="CandidatoEnUsoTitulo" xml:space="preserve">
+    <value>ERROR CANDIDATO</value>
+  </data>
+  <data name="UserNameEnUsoTexto" xml:space="preserve">
+    <value>Ya existe un usuario creado con ese username</value>
+  </data>
+  <data name="UserNameEnUsoTitulo" xml:space="preserve">
+    <value>ERROR USUARIO</value>
+>>>>>>> 5877d46e263fbd2f541512ef2e073996b41b9df7
+  </data>
+</root>

@@ -1,0 +1,57 @@
+﻿@using RecruitingWeb.Properties
+@using Recruiting.Application.Candidaturas.Enums;
+
+@model Recruiting.Application.Candidaturas.ViewModel.PrimeraEntrevistaViewModel
+
+@{
+    var candidaturaId = (Model.AgendarPrimeraEntrevista != null) ? Model.AgendarPrimeraEntrevista.AgendarPrimeraEntrevista.CandidaturaId : 0;
+}
+@if (Model.AgendarPrimeraEntrevista != null)
+{
+    <div class="row">
+        <div class="content-box border-top-cero">
+            <div class="content-box-content">
+
+                @if (Model.AgendarPrimeraEntrevista.SubEntrevistaList != null)
+                {
+                    var TengoSubEntrevistas = false;
+                    foreach (var subEntrevista in Model.AgendarPrimeraEntrevista.SubEntrevistaList)
+                    {
+                        if (subEntrevista.SubEntrevistaId != null)
+                        {
+                            TengoSubEntrevistas = true;
+                            break;
+                        }
+                    }
+                    if (TengoSubEntrevistas)
+                    {
+                        <div class="row form-row">
+                            <div class="col-lg-12 text-right">
+                                <a class="btn btn-default"
+                                   href="@Url.Action("VerSubEntrevistasPrimeraEntrevista", "Candidaturas", new { candidaturaId = candidaturaId })"
+                                   target="_blank">
+                                    <span class="text">@Resources.HTML_Candidaturas_CompletarPrimeraEntrevista_VerSubentrevistas</span>
+                                </a>
+                            </div>
+                        </div>
+                    }
+                }
+
+                <div class="content-box-content">
+                    <div class="section-form-entrevista" data-id="section-form-entrevista1">
+                        <div>
+                            @Html.Partial("~/Views/Candidaturas/Partials/Ejecutar/Entrevista/PrimeraEntrevista/_AgendarPrimeraEntrevista.cshtml", Model.AgendarPrimeraEntrevista)
+                        </div>
+                        @if (Model.RangoSalarialesyDisponibilidades != null && Model.ResultadoPrimeraEntrevista != null)
+                        {
+                            @Html.Partial("~/Views/Candidaturas/Partials/Ejecutar/Entrevista/_RangoSalarialesyDisponibilidades.cshtml", Model.RangoSalarialesyDisponibilidades)
+                            @Html.Partial("~/Views/Candidaturas/Partials/Ejecutar/Entrevista/PrimeraEntrevista/_ResultadoPrimeraEntrevista.cshtml", Model.ResultadoPrimeraEntrevista)
+                        }
+                    </div>
+                </div>
+            </div><!-- End content-box-content -->
+        </div><!-- End .content-box -->
+    </div><!--End .Row-->
+
+}
+

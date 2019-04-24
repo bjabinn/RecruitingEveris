@@ -1,0 +1,70 @@
+﻿@using RecruitingWeb.Properties
+
+
+@model Recruiting.Application.Candidaturas.ViewModel.CandidaturaDatosBasicos
+
+
+<div class="form-group col-lg-4" id="expTecnologias" hidden="hidden">
+    <div class="row" style="margin-top:15px;margin-bottom:5px;">
+        <div class="col-lg-12">
+            <div class="col-lg-8 title-form removePadding">
+                <label>@Resources.HTML_Candidatos_Create_ConocimientosTecnologicos</label>
+            </div>
+            <div class="col-lg-4 removePadding" style="text-align:right;">
+                <button type="button" class="btn btn-default" id="btncreateExperiencia">
+                    <span class="text">@Resources.HTML_BotonGenerico_Aniadir</span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="row form-row">
+        <div class="col-lg-12">
+            <table id="listSubmitExp" data-id="listSubmit">
+                <thead>
+                    <tr role="row">
+                        <th>@Resources.HTML_Candidatos_Edit_TipoTecnologiaHeader</th>
+                        <th>@Resources.HTML_Candidatos_Edit_NivelExperienciaHeader</th>
+                        <th>@Resources.HTML_Candidatos_Edit_ExperienciaPtsHeader</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr role="row" class="hidden" id="templateExperiencia">
+                        <td>@Edit.DropDownExtend((String)null, "DatosBasicos.ExpCandidatoViewModel[{0}].TipoTecnologiaId", Model.TipoTecnologiaList, validate: true, multiple: false, htmlClass: "form-control", showEmptyOption: true, required: false, disabled: true)</td>
+                        <td>@Edit.DropDownExtend((String)null, "DatosBasicos.ExpCandidatoViewModel[{0}].NivelTecnologiaId", Model.NivelExpList, validate: true, multiple: false, htmlClass: "form-control", showEmptyOption: true, required: false, disabled: true)</td>
+                        <td>@Edit.DropDownExtend((String)null, "DatosBasicos.ExpCandidatoViewModel[{0}].Experiencia", Model.ExperienciaList, validate: true, multiple: false, htmlClass: "form-control", showEmptyOption: true, required: false, disabled: true)</td>
+                        <td>
+                            <a id="btnDeleteExp"> @Display.GlyphiconButton("glyphicon-trash icon action")</a>
+                        </td>
+                    </tr>
+                    @{
+
+                            for (int x = 0; x < Model.ExpCandidatoViewModel.Count; x++)
+                            {
+                                var candId = "DatosBasicos.ExpCandidatoViewModel[{0}].CandidatoId";
+                                var nameId = "DatosBasicos.ExpCandidatoViewModel[{0}].CandidatoExperienciaId";
+                                var nameTipo = "DatosBasicos.ExpCandidatoViewModel[{0}].TipoTecnologiaId";
+                                var nameNivel = "DatosBasicos.ExpCandidatoViewModel[{0}].NivelTecnologiaId";
+                                var nameExp = "DatosBasicos.ExpCandidatoViewModel[{0}].Experiencia";
+
+                            <tr role="row" class="odd">
+                                <td class="hidden">@Edit.Hidden(@Model.ExpCandidatoViewModel[x].CandidatoId, candId)</td>
+                                <td class="hidden">@Edit.Hidden(@Model.ExpCandidatoViewModel[x].CandidatoExperienciaId, nameId)</td>
+                                <td class="hidden">@Edit.Hidden(@Model.ExpCandidatoViewModel[x].TipoTecnologiaId, nameTipo) @Model.ExpCandidatoViewModel[x].TipoTecnologiaId</td>
+                                <td>@Display.DropDownExtend(Model.ExpCandidatoViewModel[x].TipoTecnologiaId, Model.TipoTecnologiaList)</td>
+                                <td class="hidden">@Edit.Hidden(@Model.ExpCandidatoViewModel[x].NivelTecnologiaId, nameNivel) @Model.ExpCandidatoViewModel[x].NivelTecnologiaId</td>
+                                <td>@Display.DropDownExtend(Model.ExpCandidatoViewModel[x].NivelTecnologiaId, Model.NivelExpList)</td>
+                                <td>@Edit.Hidden(@Model.ExpCandidatoViewModel[x].Experiencia, nameExp) @Model.ExpCandidatoViewModel[x].Experiencia</td>
+                                <td>
+                                    <a id="btnDeleteExp"> @Display.GlyphiconButton("glyphicon-trash icon action")</a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+            
+                   

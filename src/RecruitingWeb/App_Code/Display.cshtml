@@ -1,0 +1,113 @@
+﻿@using System.Web.Mvc
+@using RecruitingWeb.Helpers
+
+
+@helper Decimal(decimal? value, string htmlClass = null, string format = null, Dictionary<string, string> attributes = null)
+{
+    <span class="@htmlClass"
+        @if ((attributes != null) && attributes.Any()) 
+        { 
+            foreach (var attr in attributes) 
+            {   
+                @: @attr.Key="@attr.Value"      
+            } 
+        }
+    >
+        @FormatHelper.Format(value, format).HtmlEncode()
+    </span>
+}
+
+@helper Checkbox(bool? isChecked, string name, string id = null, string label = null, string htmlClass = null, Dictionary<string, string> attributes = null)
+{
+    @Edit.Checkbox(isChecked, name, id: id, label: label, validate: false, disabled: true, htmlClass: htmlClass, attributes: attributes)
+}
+
+@helper Text(string value, string htmlClass = null, Dictionary<string, string> attributes = null)
+{
+    <span class="@htmlClass"
+        @if ((attributes != null) && attributes.Any()) 
+        { 
+            foreach (var attr in attributes) 
+            {   
+                @: @attr.Key="@attr.Value"      
+            } 
+        }
+    >
+        @value.HtmlEncode()
+    </span>
+}
+
+@helper Date(DateTime? value, string htmlClass = null, string format = "dd/MM/yyyy", Dictionary<string, string> attributes = null)
+{
+    <span class="@htmlClass"
+        @if ((attributes != null) && attributes.Any()) 
+        { 
+            foreach (var attr in attributes) 
+            {   
+                @: @attr.Key="@attr.Value"      
+            } 
+        }
+    >
+        @FormatHelper.Format(value, format).HtmlEncode()
+    </span>
+}
+
+@helper RadioButton(string value, string name, string id = null, bool? isChecked = null, string label = null, bool validate = true,
+                        bool required = true, bool disabled = false, string htmlClass = null, Dictionary<string, string> attributes = null)
+{
+    @Edit.RadioButton(value, name, id: id, isChecked: isChecked, label: label, validate: false, required: false, disabled: true, htmlClass: htmlClass, attributes: attributes)
+}
+
+@helper DropDownExtend(string value, IEnumerable<object> optionList, string valuePropertyName, string textPropertyName,
+                            string htmlClass = "", Dictionary<string, string> attributes = null)
+{
+    <span class="@htmlClass"
+        @if ((attributes != null) && attributes.Any()) 
+        { 
+            foreach (var attr in attributes) 
+            {   
+                @: @attr.Key="@attr.Value"      
+            } 
+        }
+    >
+        @MvcHelper.GetSelectedItem(value, optionList, valuePropertyName, textPropertyName).HtmlEncode()
+    </span>
+}
+
+@helper DropDownExtend(int? value, IEnumerable<object> optionList, string valuePropertyName, string textPropertyName,
+                            string htmlClass = "", Dictionary<string, string> attributes = null)
+{
+    string stringValue = value.HasValue ? value.ToString() : null;
+    @DropDownExtend(stringValue, optionList, valuePropertyName, textPropertyName, htmlClass, attributes)
+}
+
+@helper DropDownExtend(string value, IEnumerable<System.Web.Mvc.SelectListItem> optionList, string htmlClass = "", 
+                        Dictionary<string, string> attributes = null)
+{
+    <span class="@htmlClass"
+        @if ((attributes != null) && attributes.Any()) 
+        { 
+            foreach (var attr in attributes) 
+            {   
+                @: @attr.Key="@attr.Value"      
+            } 
+        }
+    >
+        @MvcHelper.GetSelectedItem(value, optionList).HtmlEncode()
+    </span>
+}
+
+@helper DropDownExtend(int? value, IEnumerable<System.Web.Mvc.SelectListItem> optionList, string htmlClass = "", 
+                        Dictionary<string, string> attributes = null)
+{
+    string stringValue = value.HasValue ? value.ToString() : null;
+    @DropDownExtend(stringValue, optionList, htmlClass, attributes)
+}
+
+@helper GlyphiconButton(String htmlClass, string text = "")
+{
+
+    <span class="glyphicon @htmlClass"> @text</span>
+}
+
+

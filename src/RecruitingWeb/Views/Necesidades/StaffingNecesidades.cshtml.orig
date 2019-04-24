@@ -1,0 +1,156 @@
+﻿@using RecruitingWeb.Helpers
+@using RecruitingWeb.Properties
+@using RecruitingWeb.Components.DataTable.Helpers
+
+
+@using Recruiting.Application.Necesidades.ViewModels
+
+@model RecruitingWeb.Models.FiltroStaffingNecesidadesViewModel
+
+@Html.ScriptBlock(
+    @<script type="text/javascript">
+         registerCallback(function () {
+             var originalFilter = getFiltersStaffingNecesidades();
+             var filter = GetFilterForSearchableTable(originalFilter);
+             $('#sortNecesidadesTable').data("filters", filter);
+             $('#dragPersonasTable').data("filters", filter);
+         });
+    </script>
+<<<<<<< HEAD
+)
+=======
+                                                )
+>>>>>>> feature/Redirect_Necesidades_StaffingNecesidades
+<div class="row titlePage">
+    <div class="col-lg-6">
+        <h3>@Resources.HTML_Necesidades_StaffingNecesidades_GestionStaffingNecesidades</h3>
+    </div>
+</div>
+<div class="row header-flap">
+    <div class="col-lg-6 removePadding">
+        <h4 class="noMargin headerBox">@Resources.HTML_Necesidades_StaffingNecesidades_Filtro</h4>
+    </div>
+</div>
+
+<div class="row">
+    <div class="content-box border-top-cero">
+        <div class="content-box-content">
+            <div class="form-filter" id="form-filter">
+                <div class="row" data-id="formFilter">
+                    <div class="row">
+                        <div class="form-group col-lg-4">
+                            <div class="col-lg-4 title-form">
+                                <label for="filterTecnologiaId">@Resources.HTML_Necesidades_StaffingNecesidades_Tecnologia</label>
+                            </div>
+                            <div class="col-lg-8">
+                                @Edit.DropDownExtend(Model.TipoTecnologiaId.ToString(), "filterTecnologiaId", ViewBag.TecnologiaList, htmlClass: "form-control col-lg-4", validate: false, required: false, id: "filterTecnologiaId", showEmptyOption: false)
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-4">
+                            <div class="col-lg-4 title-form">
+                                <label for="filterPerfilId">@Resources.HTML_Necesidades_StaffingNecesidades_Perfil</label>
+                            </div>
+                            <div class="col-lg-8">
+                                @Edit.DropDownExtend(Model.TipoPerfilId.ToString(), "filterPerfilId", ViewBag.PerfilList, htmlClass: "form-control col-lg-4", validate: false, required: false, id: "filterPerfilId", showEmptyOption: true)
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-4">
+                            <div class="col-lg-4 title-form">
+                                <label for="filterPerfilId">@Resources.HTML_Necesidades_StaffingNecesidades_Estado</label>
+                            </div>
+                            <div class="col-lg-8">
+                                @Edit.DropDownExtend(Model.EstadoStaffingNecesidadId.ToString(), "filterEstadoId", ViewBag.EstadoStaffingNecesidadList, htmlClass: "form-control col-lg-4", validate: false, required: false, id: "filterEstadoId", showEmptyOption: false)
+                            </div>
+                        </div>
+                        <input id="filterBuscarNecesidad" name="filterBuscarNecesidad" hidden />
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12" style="text-align:right;">
+                            <div class="btn-group" role="group" aria-label="...">
+                                <button name="buscar" type="button" class="btn btn-default">@Resources.HTML_BotonGenericoBuscar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> <!-- End form-filter  -->
+        </div> <!-- End content box content-->
+    </div> <!-- End content box-->
+</div>
+<div class="row">
+    <div class="content-box">
+        <div class="row section-header">
+            <div class="col-lg-7">
+                <div class="col-lg-6 noPadding">
+                    <h4>@Resources.HTML_Necesidades_StaffingNecesidades_Necesidades </h4>
+                </div>
+                <div class="col-lg-6 noPadding text-right">
+                    <span id="btnDescargarExcel" class="icon icon-excel"></span>
+                </div>
+            </div>
+            <div class="col-lg-5">
+                <h4>@Resources.HTML_Necesidades_StaffingNecesidades_Personas </h4>
+            </div>
+        </div>
+        <div class="content-box-content">
+            <div class="form-filter" id="form-filter">
+                <div class="row">
+                    <div id="tablaNecesidades" class="col-lg-7">
+                        @{
+                            var config = Html.InitializeDataTable<StaffingNecesidadRowViewModel>();
+                            config.Name("sortNecesidadesTable")
+                                .AjaxLoadUrl(Url.Action("LoadStaffingNecesidades", "Necesidades"))
+                                .CustomFilterAjax("getFiltersStaffingNecesidades")
+                                .PrimaryKey(m => m.NecesidadId.ToString())
+                                .AddPrimaryKeyToName(false)
+                                .Paginable(false)
+                                .Columns(columns =>
+                                {
+                                    columns.Bound(c => c.NecesidadId).Header(Resources.HTML_Necesidades_StaffingNecesidades_RefHeader).ColumnName("NecesidadId").Orderable(false).CssHeaderClass("col-lg-1");
+                                    columns.Bound(c => c.Cliente).Header(Resources.HTML_Necesidades_StaffingNecesidades_ClienteHeader).ColumnName("Cliente").Orderable(false);
+                                    columns.Bound(c => c.Proyecto).Header(Resources.HTML_Necesidades_StaffingNecesidades_ProyectoHeader).ColumnName("Proyecto").Orderable(false);
+                                    columns.Bound(c => c.FechaCompromiso).Header(Resources.HTML_Necesidades_StaffingNecesidades_FechaCompromisoHeader).ColumnName("FechaCompromiso").Orderable(false);
+                                    columns.Bound(c => c.Perfil).Header(Resources.HTML_Necesidades_StaffingNecesidades_PerfilHeader).ColumnName("Perfil").Orderable(false);
+                                    columns.Bound(c => c.PersonaAsignada).Header(Resources.HTML_Necesidades_StaffingNecesidades_DatosPersonaAsignadaHeader).ColumnName("PersonaAsignada").Orderable(false).CssHeaderClass("col-lg-4");
+                                    columns.Bound(c => c.ObservacionesStaffing).Header(Resources.HTML_Necesidades_StaffingNecesidades_ObservacionesHeader).ColumnName("ObservacionesStaffing").Orderable(false).CssHeaderClass("col-lg-3");
+                                    columns.Template(@<div></div>).CssHeaderClass("hidden");
+
+});
+
+@Html.Partial("Controls/DataTable", config)
+                        }
+                    </div>
+                    <div id="tablaPersonas" class="col-lg-5">
+                        @{
+                            var configPersonas = Html.InitializeDataTable<StaffingPersonaRowViewModel>();
+                            int nElem = Convert.ToUInt16(Resources.NElementosPagina);
+                            configPersonas.Name("dragPersonasTable")
+                                                .AjaxLoadUrl(Url.Action("LoadStaffingPersonas", "Necesidades"))
+                                                .CustomFilterAjax("getFiltersStaffingNecesidades")
+                                                .PrimaryKey(m => m.PersonaId.ToString())
+                                                .AddPrimaryKeyToName(false)
+                                                .Paginable()
+                                                .PageSize(nElem)
+                                                .InitialPage(0)
+                                                .Columns(columns =>
+                                                {
+                                                    columns.Bound(c => c.PersonaId).Header(Resources.HTML_Necesidades_StaffingNecesidades_RefHeader).ColumnName("PersonaId").Orderable(true);
+                                                    columns.Bound(c => c.NombreCompleto).Header(Resources.HTML_Necesidades_StaffingNecesidades_NombreHeader).ColumnName("NombreCompleto").Orderable(true);
+                                                    columns.Bound(c => c.Categoria).Header(Resources.HTML_Necesidades_StaffingNecesidades_PerfilHeader).ColumnName("Perfil").Orderable(false);
+                                                    columns.Bound(c => c.TipoPersona).Header(Resources.HTML_Necesidades_StaffingNecesidades_TipoPersonaHeader).ColumnName("TipoPersona").Orderable(false);
+                                                    columns.Template(@<div></div>).CssHeaderClass("hidden");
+});
+
+@Html.Partial("Controls/DataTable", configPersonas)
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@Html.Partial("~/Views/Necesidades/Partials/Modals/_ModalEditNecesidad.cshtml")
+
+@section scripts{
+    @StaffingNecesidadesFrontActions.MenuFrontActions()
+    @StaffingNecesidadesFrontActions.IndexFrontActions(Url)
+}

@@ -1,0 +1,703 @@
+﻿@using Recruiting.Application.Roles.Enums
+@using RecruitingWeb.Components.DataTable.Helpers
+@using RecruitingWeb.Helpers
+@using Recruiting.Application.Roles.ViewModels
+@using Recruiting.Application.Usuarios.ViewModels
+@using RecruitingWeb.Properties
+@using RecruitingWeb.Components.Searchable
+@using Recruiting.Application.Clientes.ViewModels
+@using Recruiting.Application.Proyectos.ViewModels
+
+@model string
+@*Título de sección*@
+@{
+    var usuarioViewModel = (UsuarioRolPermisoViewModel)HttpContext.Current.Session["Usuario"];
+
+    var ListadoPermisos = (Dictionary<int, string>)HttpContext.Current.Session["Permisos"];
+    if (ListadoPermisos == null)
+    {
+        var permisos = new Dictionary<int, string>();
+
+        foreach (var rol in usuarioViewModel.UsuarioRol)
+        {
+            foreach (var permiso in rol.PermisoRol)
+            {
+                if (!permisos.ContainsKey(permiso.PermisoId))
+                {
+                    permisos.Add(permiso.PermisoId, permiso.PermisoNombre);
+                }
+            }
+        }
+        ListadoPermisos = permisos;
+    }
+
+    var ListadoRoles = (Dictionary<int, string>)HttpContext.Current.Session["Roles"];
+}
+
+<div class="row titlePage">
+    <div class="col-lg-6">
+        <h3>@Resources.HTML_Admin_Index_Administracion</h3>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-10 removePadding">
+        <ul name="tabAdmin" class="nav nav-tabs">
+            <li name="tab-user" class="active">
+                <a href="#tab_below_2" data-toggle="tab">@Resources.HTML_Admin_Index_GestionUsuarios</a>
+            </li>
+            <li name="tab-rol">
+                <a href="#tab_below_1" data-toggle="tab">@Resources.HTML_Admin_Index_GestionRoles</a>
+            </li>
+            <li name="tab-clientes">
+                <a href="#tab_below_3" data-toggle="tab">@Resources.HTML_Admin_Index_GestionClientes</a>
+            </li>
+
+            <li name="tab-proyectos">
+                <a href="#tab_below_4" data-toggle="tab">@Resources.HTML_Admin_Index_GestionProyectos</a>
+            </li>
+        </ul>
+    </div>
+    <div class="btn-group col-lg-2 text-right removePadding" role="group">
+        <div class="hide" data-tab-name="tab-rol">
+            <a class="btn btn-default @(!ListadoPermisos.ContainsKey((int)PermisosRolesEnum.AdminRoles) ? "hide" : "")" href="@Url.Action("CreateRoles", "Admin")">
+                <span class="text">@Resources.HTML_Admin_Index_AniadirRol</span>
+            </a>
+        </div>
+
+        <div data-tab-name="tab-user">
+            <a class="btn btn-default" href="@Url.Action("CreateUsuarios", "Admin")">
+                <span class="text">@Resources.HTML_Admin_Index_AniadirUsuario</span>
+            </a>
+        </div>
+        <div class="hide" data-tab-name="tab-clientes">
+            <a class="btn btn-default" href="@Url.Action("CreateEditCliente", "Admin")">
+                <span class="text">@Resources.HTML_Admin_Index_AniadirCliente</span>
+            </a>
+        </div>
+        <div class="hide" data-tab-name="tab-proyectos">
+            <a class="btn btn-default" href="@Url.Action("CreateEditProyecto", "Admin")">
+                <span class="text">@Resources.HTML_Admin_Index_AniadirProyecto</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="content-box border-top-cero">
+        <div class="content-box-content">
+            <div class="tabbable-panel">
+                <div class="tabbable-line tabs-below">
+                    <div class="tab-content">
+                        <div class="tab-pane" id="tab_below_1">
+                            <div class="form-filter" id="form-filter-rol">
+                                <!-- Start form-filter  -->
+                                <div class="row" data-id="formFilter">
+                                    <div class="col-lg-12 removePadding">
+                                        <div class="row">
+                                            <div class="form-group col-lg-4">
+                                                <div class="col-lg-12 title-form">
+                                                    <label for="filterNombre">@Resources.HTML_Admin_Index_Permiso </label>
+                                                </div>
+                                                <div class="col-lg-12">
+                                                    @Edit.DropDownExtend((string)null, "filterPermiso",
+                                                                                                                                 ViewBag.listPermisos, htmlClass: "form-control col-lg-4",
+                                                                                                                                 validate: false, required: false, id: "filterPermiso")
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-lg-4">
+                                                <div class="col-lg-12 title-form">
+                                                    <label for="filterNombre">@Resources.HTML_Admin_Index_Nombre </label>
+                                                </div>
+                                                <div class="col-lg-12">
+                                                    @Edit.Text((string)null, "filterNombre",
+                                                                                                                                 id: "filterNombre", htmlClass: "form-control")
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-12" style="text-align:right;">
+                                        <div class="btn-group" role="group" aria-label="...">
+                                            <button name="limpiarRol" id="limpiarRol" type="button" class="btn btn-default">@Resources.HTML_BotonGenericoLimpiar</button>
+                                            <button name="buscarRol" type="button" class="btn btn-default">@Resources.HTML_BotonGenericoBuscar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> <!-- End form-filter  -->
+                            <!-- Load Data Roles  -->
+                            @{
+                                var config = Html.InitializeDataTable<RolRowViewModel>();
+                                int nElem = Convert.ToUInt16(Resources.NElementosPagina);
+                                config.Name("tablaRoles")
+                                                    .AjaxLoadUrl(Url.Action("LoadRoles", "Admin"))
+                                                    .CustomFilterAjax("getFiltersRoles")
+                                                    .PrimaryKey(m => m.RolId.ToString())
+                                                    .AddPrimaryKeyToName(false)
+                                                    .Paginable()
+                                                    .PageSize(nElem)
+                                                    .Columns(columns =>
+                                                    {
+                                                        columns.Bound(c => c.Nombre).Header(Resources.HTML_Admin_Index_NombreHeader).ColumnName("Nombre").Orderable(true);
+                                                        columns.Bound(c => c.Permisos.Select(y => y.PermisoNombre)).Header(Resources.HTML_Admin_Index_PermisosHeader).ColumnName("Permisos").Orderable(true);
+                                                        columns.Template(@<div></div>).Header(Resources.HTML_Admin_Index_OpcionesHeader);
+});
+                            }
+
+                            @Html.Partial("Controls/DataTable", config)
+
+                        </div>
+
+                        <div class="tab-pane active" id="tab_below_2">
+                            <div class="form-filter form-filter-overflow" id="form-filter-user">
+                                <!-- Start form-filter  -->
+                                <div class="row" data-id="formFilter">
+                                    <div class="col-lg-12 removePadding">
+                                        <div class="row">
+                                            <div class="form-group col-lg-4">
+                                                <div class="col-lg-12 title-form">
+                                                    <label for="filterNombre">@Resources.HTML_Admin_Index_Rol </label>
+                                                </div>
+                                                <div class="col-lg-12">
+                                                    @Edit.DropDownExtend((string)null, "filterRol", ViewBag.listRoles, htmlClass: "form-control col-lg-4", validate: false, required: false, id: "filterRol")
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-lg-4">
+                                                <div class="col-lg-12 title-form">
+                                                    <label for="filterTipoIdentificacion">@Resources.HTML_Admin_Index_Usuario </label>
+                                                </div>
+                                                <div class="col-lg-12">
+                                                    @*@Edit.Text((string)null, "filterUsuario",
+                                                        id: "filterUsuario", htmlClass: "form-control")*@
+                                                    @(Html.Searchable("filterUsuario", Url)
+                                                                                                                                                                                                                        .Id("filterUsuario")
+                                                                                                                                                                                                                        .AddCssClass("form-control")
+                                                                                                                                                                                                                        .Action("GetUsuariosByNombreUsuario", "Admin"))
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group col-lg-4">
+                                                <div class="col-lg-12 title-form">
+                                                    <label for="CentroId">@Resources.HTML_Admin_Index_Centro</label>
+                                                </div>
+                                                <div class="col-lg-12">
+                                                    @Edit.DropDownExtend((string)null, "filterCentro",
+                                                                                                                                    ViewBag.CentroList, htmlClass: "form-control col-lg-4",
+                                                                                                                                    validate: false, id: "filterCentro", required: false)
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-12" style="text-align:right;">
+                                        <div class="btn-group" role="group" aria-label="...">
+                                            <button name="limpiarUser" id="limpiarUser" type="button" class="btn btn-default">@Resources.HTML_BotonGenericoLimpiar</button>
+                                            <button name="buscarUser" type="button" class="btn btn-default">@Resources.HTML_BotonGenericoBuscar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> <!-- End form-filter  -->
+                            <!-- Load Data Usuarios  -->
+                            @{
+                                var config2 = Html.InitializeDataTable<UsuarioRowViewModel>();
+                                int nElem2 = Convert.ToUInt16(Resources.NElementosPagina);
+                                config2.Name("tablaUsuarios")
+                                                    .AjaxLoadUrl(Url.Action("LoadUsuarios", "Admin"))
+                                                    .CustomFilterAjax("getFiltersUsuarios")
+                                                    .PrimaryKey(y => y.UsuarioId.ToString())
+                                                    .AddPrimaryKeyToName(false)
+                                                    .Paginable()
+                                                    .PageSize(nElem2)
+                                                    .Columns(columns =>
+                                                    {
+                                                        columns.Bound(c => c.Usuario).Header(Resources.HTML_Admin_Index_UsuarioHeader).ColumnName("Nombre").Orderable(true);
+                                                        columns.Bound(c => c.Roles.Select(x => x.RolNombre)).Header(Resources.HTML_Admin_Index_RolesHeader).ColumnName("Roles").Orderable(false);
+                                                        columns.Template(
+                    @<div></div>).Header(Resources.HTML_Admin_Index_OpcionesHeader);
+                                        });
+                            }
+
+                            @Html.Partial("Controls/DataTable", config2)
+
+                        </div>
+
+                        <div class="tab-pane" id="tab_below_3">
+                            <div class="form-filter" id="form-filter-cliente">
+                                <!-- Start form-filter  -->
+                                <div class="row" data-id="formFilter">
+                                    <div class="col-lg-12 removePadding">
+                                        <div class="row">
+                                            <div class="form-group col-lg-4">
+                                                <div class="col-lg-12 title-form">
+                                                    <label for="filterClienteNombre">@Resources.HTML_Admin_Index_Nombre </label>
+                                                </div>
+                                                <div class="col-lg-12">
+                                                    @Edit.Text(null, "filterClienteNombre", htmlClass: "form-control col-lg-4",
+                                                                                                                                          validate: false, required: false, id: "filterClienteNombre")
+                                                </div>
+                                            </div>
+
+                                            @if (!(ViewBag.HasCentro ?? false))
+                                            {
+                                                <div class="form-group col-lg-4">
+                                                    <div class="col-lg-12 title-form">
+                                                        <label for="filterClienteCentro">@Resources.HTML_Admin_Index_Centro</label>
+                                                    </div>
+                                                    <div class="col-lg-12">
+                                                        @Edit.DropDownExtend((string)null, "filterClienteCentro",
+                                                                                                                                    ViewBag.CentroList, htmlClass: "form-control col-lg-4",
+                                                                                                                                    validate: false, id: "filterClienteCentro", required: false)
+                                                    </div>
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-12" style="text-align:right;">
+                                        <div class="btn-group" role="group" aria-label="...">
+                                            <button name="limpiarCliente" id="limpiarCliente" type="button" class="btn btn-default">@Resources.HTML_BotonGenericoLimpiar</button>
+                                            <button name="buscarCliente" type="button" class="btn btn-default">@Resources.HTML_BotonGenericoBuscar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> <!-- End form-filter  -->
+                            <!-- Load Data Usuarios  -->
+                            @{
+                                var config3 = Html.InitializeDataTable<ClienteRowViewModel>();
+                                config3.Name("tablaClientes")
+                                    .AjaxLoadUrl(Url.Action("LoadClientes", "Admin"))
+                                    .CustomFilterAjax("getFiltersClientes")
+                                    .PrimaryKey(y => y.ClienteId.ToString())
+                                    .AddPrimaryKeyToName(false)
+                                    .Paginable()
+                                    .PageSize(nElem2)
+                                    .Columns(columns =>
+                                    {
+                                        columns.Bound(c => c.Nombre).Header(Resources.HTML_Admin_Index_ClienteHeader).ColumnName("Nombre").Orderable(true);
+                                        columns.Bound(c => string.Empty).Header(Resources.HTML_Admin_Index_OpcionesHeader);
+                                    });
+                            }
+
+                            @Html.Partial("Controls/DataTable", config3)
+
+                        </div>
+
+                        <div class="tab-pane" id="tab_below_4">
+                            <div class="form-filter" id="form-filter-proyecto">
+                                <!-- Start form-filter  -->
+                                <div class="row" data-id="formFilter">
+                                    <div class="col-lg-12 removePadding">
+                                        <div class="row">
+                                            <div class="form-group col-lg-4">
+                                                <div class=" col-lg-12 title-form">
+                                                    <label for="filterProyectoNombre">@Resources.HTML_Admin_Index_Nombre </label>
+                                                </div>
+                                                <div class="col-lg-12">
+                                                    @Edit.Text(null, "filterProyectoNombre", htmlClass: "form-control col-lg-4",
+                                                                                                                                          validate: false, required: false, id: "filterProyectoNombre")
+                                                </div>
+                                            </div>
+
+                                            @if (!(ViewBag.HasCentro ?? false))
+                                            {
+                                                <div class="form-group col-lg-4">
+                                                    <div class="col-lg-12 title-form">
+                                                        <label for="filterProyectoCentro">@Resources.HTML_Admin_Index_Centro</label>
+                                                    </div>
+                                                    <div class="col-lg-12">
+                                                        @Edit.DropDownExtend((string)null, "filterProyectoCentro",
+                                                                                                                                    ViewBag.CentroList, htmlClass: "form-control col-lg-4",
+                                                                                                                                    validate: false, id: "filterProyectoCentro", required: false)
+                                                    </div>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                int? centroId = null;
+                                                if (ViewBag.CentroUsuarioId != null)
+                                                {
+                                                    centroId = (int)ViewBag.CentroUsuarioId;
+                                                }
+                                                @Edit.Hidden(centroId, "filterProyectoCentro")
+                                            }
+
+                                            <div class="form-group col-lg-4">
+                                                <div class="col-lg-12 title-form">
+                                                    <label for="filterProyectoCliente">@Resources.HTML_Admin_Index_Cliente</label>
+                                                </div>
+                                                <div class="col-lg-12">
+                                                    @Edit.DropDownExtend("", "filterProyectoCliente", ViewBag.Clientes, htmlClass: "form-control col-md-4", validate: false, required: false, id: "filterProyectoCliente")
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-12" style="text-align:right;">
+                                        <div class="btn-group" role="group" aria-label="...">
+                                            <button name="limpiarProyecto" id="limpiarProyecto" type="button" class="btn btn-default">@Resources.HTML_BotonGenericoLimpiar</button>
+                                            <button name="buscarProyecto" type="button" class="btn btn-default">@Resources.HTML_BotonGenericoBuscar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> <!-- End form-filter  -->
+                            <!-- Load Data Usuarios  -->
+                            @{
+                                var config4 = Html.InitializeDataTable<ProyectoRowViewModel>();
+                                config4.Name("tablaProyectos")
+                                    .AjaxLoadUrl(Url.Action("LoadProyectos", "Admin"))
+                                    .CustomFilterAjax("getFiltersProyectos")
+                                    .PrimaryKey(y => y.ProyectoId.ToString())
+                                    .AddPrimaryKeyToName(false)
+                                    .Paginable()
+                                    .PageSize(nElem2)
+                                    .Columns(columns =>
+                                    {
+                                        columns.Bound(c => c.Nombre).Header(Resources.HTML_Admin_Index_ProyectoHeader).ColumnName("Nombre").Orderable(true);
+                                        columns.Bound(c => c.Cliente).Header(Resources.HTML_Admin_Index_ClienteHeader).ColumnName("Cliente").Orderable(true);
+                                        columns.Bound(c => c.Persona).Header(Resources.HTML_Admin_Index_PersonaHeader).ColumnName("Persona").Orderable(true);
+                                        columns.Bound(c => c.CentroId).Header(Resources.HTML_Admin_Index_CentroHeader).ColumnName("Centro").Orderable(true);
+                                        columns.Bound(c => string.Empty).Header(Resources.HTML_Admin_Index_OpcionesHeader);
+                                    });
+                            }
+
+                            @Html.Partial("Controls/DataTable", config4)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> <!-- End content-box-content -->
+    </div> <!-- End .content-box -->
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            $(document).on('click', '[name=buscarRol]', function () {
+                var table = $('#tablaRoles');
+                table.data("fn-search")();
+            });
+
+            $(document).on('click', '[name=limpiarRol]', function () {
+                var table = $('#tablaRoles');
+                table.data("fn-clear")();
+            });
+
+            $(document).on('click', '#limpiarRol', function () {
+                resetFields('#form-filter-rol');
+            });
+
+            $(document).on('click', '[name=buscarUser]', function () {
+                var table = $('#tablaUsuarios');
+                table.data("fn-search")();
+            });
+
+            $(document).on('click', '[name=limpiarUser]', function () {
+                var table = $('#tablaUsuarios');
+                table.data("fn-clear")();
+            });
+
+            $(document).on('click', '#limpiarUser', function () {
+                resetFields('#form-filter-user');
+            });
+
+            $(document).on('click', '[name=buscarCliente]', function () {
+                var table = $('#tablaClientes');
+                table.data("fn-search")();
+            });
+
+            $(document).on('click', '[name=limpiarCliente]', function () {
+                resetFields('#form-filter-cliente');
+                var table = $('#tablaClientes');
+                table.data("fn-clear")();
+            });
+
+            $(document).on('click', '[name=buscarProyecto]', function () {
+                var table = $('#tablaProyectos');
+                table.data("fn-search")();
+            });
+
+            $(document).on('click', '[name=limpiarProyecto]', function () {
+                resetFields('#form-filter-proyecto');
+                var table = $('#tablaProyectos');
+                table.data("fn-clear")();
+            });
+
+            $(document).on('click', '#EditButtonRol', function () {
+                var item = $(this).closest("tr").find("[data-id-user]").attr('data-id-user');
+                var url = '@Url.Action("EditRoles", "Admin", new { id = "__id__" })';
+                window.location.href = url.replace('__id__', item);
+            });
+
+            $(document).on('click', '#EditButtonUser', function () {
+                var item = $(this).closest("tr").find("[data-id-user]").attr('data-id-user');
+                var url = '@Url.Action("Edit", "Admin", new { id = "__id__" })';
+                window.location.href = url.replace('__id__', item);
+            });
+
+            $(document).on('click', '#DeleteButtonRol', function () {
+                var item = $(this).closest("tr").find("[data-id-user]").attr('data-id-user');
+                BootstrapDialog.confirm({
+                    title: '@Resources.Admin_EliminarRolTitulo',
+                    message: '@Resources.Admin_EliminarRolMensaje',
+                    type: BootstrapDialog.TYPE_CONFIRMDELETE,
+                    callback: function (result) {
+                        if (result) {
+                            $.post('@Url.Action("DeleteRol", "Admin")', { id: item }).
+                            done(function (Data) {
+                                if (Data.IsValid) {
+                                    var url = '@Url.Action("Index", "Admin")';
+                                    window.location.href = url;
+                                } else if (Data == "") {
+                                    BootstrapDialog.show({
+                                        type: BootstrapDialog.TYPE_ERROR,
+                                        title: '@Resources.Permiso_Titulo',
+                                        message: '@Resources.Permiso_Mensaje',
+                                    });
+                                }
+                            });
+                        } else {
+                            BootstrapDialog.closeAll();
+                        }
+                    }
+                });
+            });
+
+            $(document).on('click', '#DeleteButtonUser', function () {
+                var item = $(this).closest("tr").find("[data-id-user]").attr('data-id-user');
+                BootstrapDialog.confirm({
+                    title: '@Resources.Admin_EliminarUsuarioTitulo',
+                    message: '@Resources.Admin_EliminarUsuarioMensaje',
+                    type: BootstrapDialog.TYPE_CONFIRMDELETE,
+                    callback: function (result) {
+                        if (result) {
+                            $.post('Delete', { id: item }).
+                            done(function (Data) {
+                                if (Data.IsValid) {
+                                    var tableComponent = $('#tablaUsuarios').DataTable();
+                                    tableComponent.ajax.reload(null, true);
+                                }
+                            });
+                        } else {
+                            BootstrapDialog.closeAll();
+                        }
+                    }
+                });
+            });
+
+            $(document).on('click', 'ul[name="tabAdmin"] > li', function () {
+                var activeTab = $('[name="tabAdmin"] li.active');
+                var activeTabName = activeTab.attr('name');
+
+                var buttons = $('[data-tab-name]');
+                buttons.addClass('hide');
+
+                var activeButtons = $('[data-tab-name="' + activeTabName + '"]');
+                activeButtons.removeClass('hide');
+            });
+
+
+            $(document).on('click', '[name="EditButtonCliente"]', function () {
+                var item = $(this).attr('data-id');
+                var url = '@Url.Action("CreateEditCliente", "Admin", new { id = "__id__" })';
+                window.location.assign(url.replace('__id__', item));
+            });
+
+            $(document).on('click', '[name="DeleteButtonCliente"]', function () {
+                var source = $(this);
+                var item = source.attr('data-id');
+                BootstrapDialog.confirm({
+                    title: '@Resources.Cliente_ConfirmEliminarTitulo',
+                    message: '@Resources.Cliente_ConfirmEliminarTexto',
+                    type: BootstrapDialog.TYPE_CONFIRMDELETE,
+                    callback: function (result) {
+                    if (result) {
+                    $.post('@Url.Action("ComprobarClienteUsado", "Admin")', { ClienteId: item }).
+                        success(function (Data) {
+                            if (Data.IsValid) {
+                                if(Data.Usado == true)
+                                {
+                                    BootstrapDialog.show({
+                                        type: BootstrapDialog.TYPE_ERROR,
+                                        title: '@Resources.ClienteEnUsoTitulo',
+                                        message: '@Resources.ClienteEnUsoTexto',
+                                    });
+                                }
+                                else
+                                {
+                                    $.post('@Url.Action("DeleteCliente", "Admin")', { id: item }).
+                                    success(function (Data) {
+                                        if (Data.IsValid) {
+                                            var tableComponent = source.closest('table').DataTable();
+                                            tableComponent.ajax.reload(null, true);
+                                        }
+                                        else if (Data == "") {
+                                            BootstrapDialog.show({
+                                                type: BootstrapDialog.TYPE_ERROR,
+                                                title: '@Resources.Permiso_Titulo',
+                                                message: '@Resources.Permiso_Mensaje',
+                                            });
+                                        }
+                                    })
+                                }
+                            }
+                            else if (Data == "") {
+                                BootstrapDialog.show({
+                                    type: BootstrapDialog.TYPE_ERROR,
+                                    title: '@Resources.Permiso_Titulo',
+                                    message: '@Resources.Permiso_Mensaje',
+                                });
+                            }
+                        })
+                } else {
+                            BootstrapDialog.closeAll();
+                        }
+                    }
+                });
+            });
+
+            $(document).on('click', '[name="EditButtonProyecto"]', function () {
+                var item = $(this).attr('data-id');
+                var url = '@Url.Action("CreateEditProyecto", "Admin", new { id = "__id__" })';
+                window.location.assign(url.replace('__id__', item));
+            });
+
+            $(document).on('click', '[name="DeleteButtonProyecto"]', function () {
+                var source = $(this);
+                var item = source.attr('data-id');
+                BootstrapDialog.confirm({
+                    title: '@Resources.Proyecto_ConfirmEliminarTitulo',
+                    message: '@Resources.Proyecto_ConfirmEliminarTexto',
+                    type: BootstrapDialog.TYPE_CONFIRMDELETE,
+                    callback: function (result) {
+                        if (result) {
+                    $.post('@Url.Action("ComprobarProyectoUsado", "Admin")', { ProyectoId: item }).
+                        success(function (Data) {
+                            if (Data.IsValid) {
+                                if(Data.Usado == true)
+                                {
+                                    BootstrapDialog.show({
+                                        type: BootstrapDialog.TYPE_ERROR,
+                                        title: '@Resources.ProyectoEnUsoTitulo',
+                                        message: '@Resources.ProyectoEnUsoTexto',
+                                    });
+                                }
+                                else
+                                {
+                                    $.post('@Url.Action("DeleteProyecto", "Admin")', { id: item }).
+                                    success(function (Data) {
+                                        if (Data.IsValid) {
+                                            var tableComponent = source.closest('table').DataTable();
+                                            tableComponent.ajax.reload(null, true);
+                                        }
+                                        else if (Data == "") {
+                                            BootstrapDialog.show({
+                                                type: BootstrapDialog.TYPE_ERROR,
+                                                title: '@Resources.Permiso_Titulo',
+                                                message: '@Resources.Permiso_Mensaje',
+                                            });
+                                        }
+                                    })
+                                }
+                            }
+                            else if (Data == "") {
+                                BootstrapDialog.show({
+                                    type: BootstrapDialog.TYPE_ERROR,
+                                    title: '@Resources.Permiso_Titulo',
+                                    message: '@Resources.Permiso_Mensaje',
+                                });
+                            }
+                        })
+                } else {
+                            BootstrapDialog.closeAll();
+                        }
+                    }
+                });
+            });
+
+
+            $(document).on('change', '[name="filterProyectoCentro"]', function () {
+                var source = $(this);
+                var cliente = $('[name="filterProyectoCliente"]');
+                var itemsStr = cliente.attr('data-items');
+                var itemsPorCentro = JSON.parse(itemsStr);
+                var centroId = source.val();
+
+                var itemsMiCentro = itemsPorCentro[centroId];
+                if (centroId == '') {
+                    itemsMiCentro = [];
+                    for (var elto in itemsPorCentro) {
+                        var items = itemsPorCentro[elto];
+                        items.forEach(function (it, ix, list) {
+                            itemsMiCentro.push(it);
+                        });
+                    }
+                }
+
+                if (itemsMiCentro == null) {
+                    itemsMiCentro = [];
+                }
+
+                //Limpiamos todos menos el primero:
+                cliente.children(':not(:first)').remove();
+
+                //Añadimos todos los del centro seleccionado
+                itemsMiCentro.forEach(function (it, ix, list) {
+                    var option = $('<option>');
+                    option.attr('value', it.Value);
+                    option.html(it.Text);
+                    option.appendTo(cliente);
+                });
+            });
+
+            var initialTab = $('li[name="tab-user"] a');
+
+            var initialTabName = '@Model';
+            if (initialTabName != '') {
+
+                initialTab = $('li[name="' + initialTabName + '"] a');
+            }
+            initialTab.click();
+            $('[name="filterProyectoCentro"]').change();
+        });
+
+        function getFiltersUsuarios() {
+            var filterRol = $("[name=filterRol]").val();
+            var filterUsuario = $('[name="filterUsuario-Text"]').val();
+            var filterCentro = $("[name=filterCentro]").val();
+            return { Rol: filterRol, Usuario: filterUsuario, CentroSearch: filterCentro };
+        }
+
+
+        function getFiltersRoles() {
+            var filterPermiso = $("[name=filterPermiso]").val();
+            var filterNombre = $("[name=filterNombre]").val();
+            return { Permiso: filterPermiso, Nombre: filterNombre };
+        }
+
+        function getFiltersClientes() {
+            var nombre = $("[name=filterClienteNombre]").val();
+            var centro = $("[name=filterClienteCentro]").val();
+
+            return { Nombre: nombre, CentroId: centro };
+        }
+
+        function getFiltersProyectos() {
+            var nombre = $("[name=filterProyectoNombre]").val();
+            var centro = $("[name=filterProyectoCentro]").val();
+            var cliente = $("[name=filterProyectoCliente]").val();
+
+
+            return { Nombre: nombre, CentroId: centro, ClienteId: cliente };
+        }
+    </script>
+}
+
+

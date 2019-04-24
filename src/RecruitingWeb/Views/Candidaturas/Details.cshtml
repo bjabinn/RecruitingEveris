@@ -1,0 +1,99 @@
+﻿@using RecruitingWeb.Properties
+@using Recruiting.Application.Candidaturas.Enums;
+
+@model Recruiting.Application.Candidaturas.ViewModel.CandidaturaViewModel
+
+@{
+    var Activo = Model.CandidaturaDatosBasicosViewModel.DatosBasicos.Activo;
+    if (Activo == false)
+    {
+        Response.Redirect("/Shared/Borrado");
+    }
+}
+<div class="row titlePage">
+    <div class="col-lg-6">
+        <h3>@Resources.HTML_Candidaturas_Details_VerCandidatura - @Model.CandidaturaDatosBasicosViewModel.DatosBasicos.NombreCandidato</h3>
+    </div>
+</div>
+<div class="row header-flap">
+    <div class="btn-group" role="group">
+        <a class="btn btn-default" href="@Url.Action("Volver", "Candidaturas")">
+            <span class="text">@Resources.HTML_BotonGenericoVolver</span>
+        </a>
+        <a class="btn btn-default" title="@Resources.HTML_Title_VerCandidato" target="_blank" href="@Url.Action("Details/" +  Model.CandidaturaDatosBasicosViewModel.DatosBasicos.CandidatoId, "Candidatos")">
+            <span class="text">@Resources.HTML_Becarios_Details_VerCandidato</span>
+        </a>
+        <a href="@Url.Action("EditExtend", "Candidaturas", new {  id = Model.CandidaturaId })" class="btn btn-default">
+            <span class="text">@Resources.HTML_Candidaturas_Details_BotonEditarCandidatura</span>
+        </a>
+    </div>
+    <div class="col-lg-6 removePadding">
+        <h4 class="noMargin headerBox">@Resources.HTML_Candidaturas_Details_DatosCandidatura</h4>
+    </div>
+</div>
+@using (Html.BeginForm("Details", "Candidaturas", FormMethod.Post, new Dictionary<string, object> { { "role", "form" }, { "data-parsley-validate", "true" } }))
+{
+    @Edit.Hidden("guardar", "SubmitType")
+    @Edit.Hidden(Model.CandidaturaId, "CandidaturaId")
+
+    int etapaCandidaturaId = Model.CandidaturaDatosBasicosViewModel.DatosBasicos.EtapaCandidaturaId;
+    int estadoCandidaturaId = Model.CandidaturaDatosBasicosViewModel.DatosBasicos.EstadoCandidaturaId;
+   
+    <!--  START  Datos Generales  -->
+    @Html.Partial("~/Views/Candidaturas/Partials/Details/_DatosBasicosDetails.cshtml", Model.CandidaturaDatosBasicosViewModel.DatosBasicos)
+    <!--  END  Datos Generales    -->
+    if (etapaCandidaturaId != (int)TipoEtapaCandidaturaEnum.Inicio && etapaCandidaturaId != (int)TipoEtapaCandidaturaEnum.FiltradoTecnico
+        || estadoCandidaturaId == (int)TipoEstadoCandidaturaEnum.Descartado)
+    {
+        <!--  START Filtrado CV    -->
+        @Html.Partial("~/Views/Candidaturas/Partials/Details/FiltradoCv/FiltradoCvDetails.cshtml", Model.FiltroCVViewModel)
+        <!--  END  Filtrado CV     -->
+    }
+    if (etapaCandidaturaId != (int)TipoEtapaCandidaturaEnum.Inicio
+        && etapaCandidaturaId != (int)TipoEtapaCandidaturaEnum.FiltradoTecnico
+        && etapaCandidaturaId != (int)TipoEtapaCandidaturaEnum.AgendarEntrevistas)
+    {        <!--  START Datos 1ª Entrevista   -->
+        
+   
+        @Html.Partial("~/Views/Candidaturas/Partials/Details/Entrevista/PrimeraEntrevista/CompletarPrimeraEntrevistaDetails.cshtml", Model.PrimeraEntrevistaViewModel)
+        <!--  END  Datos 1ª Entrevista     -->
+    }
+    if (etapaCandidaturaId != (int)TipoEtapaCandidaturaEnum.Inicio
+        && etapaCandidaturaId != (int)TipoEtapaCandidaturaEnum.FiltradoTecnico
+        && etapaCandidaturaId != (int)TipoEtapaCandidaturaEnum.AgendarEntrevistas
+        && etapaCandidaturaId != (int)TipoEtapaCandidaturaEnum.FeedbackPrimeraEntrevista
+        && etapaCandidaturaId != (int)TipoEtapaCandidaturaEnum.AgendarSegundaEntrevista)
+    {
+        <!--  START Datos 2ª Entevista<    -->
+        
+        if (Model.SegundaEntrevistaViewModel.AgendarSegundaEntrevista != null)
+        {
+            @Html.Partial("~/Views/Candidaturas/Partials/Details/Entrevista/SegundaEntrevista/CompletarSegundaEntrevistaDetails.cshtml", Model.SegundaEntrevistaViewModel)
+        }       
+        <!--  END  Datos 2ª Entevista   -->
+    }
+    if (etapaCandidaturaId == (int)TipoEtapaCandidaturaEnum.EntregaCartaOferta ||
+        etapaCandidaturaId == (int)TipoEtapaCandidaturaEnum.FeedbackCartaOferta ||
+        etapaCandidaturaId == (int)TipoEtapaCandidaturaEnum.Fin)
+    {
+        <!--  START Carta Oferta     -->
+        @Html.Partial("~/Views/Candidaturas/Partials/Details/CartaOferta/CompletarCartaOfertaDetails.cshtml", Model.CompletarCartaOfertaViewModel)
+        <!--  END  Carta Oferta  -->
+    }
+
+    if (estadoCandidaturaId == (int)TipoEstadoCandidaturaEnum.Renuncia)
+    {
+        @Html.Partial("~/Views/Candidaturas/Partials/Details/Renuncia/DatosRenunciaDetails.cshtml", Model)
+    }
+
+    if ((estadoCandidaturaId == (int)TipoEstadoCandidaturaEnum.Descartado && Model.TipoRenunciaDescarte != null))
+    {
+        @Html.Partial("~/Views/Candidaturas/Partials/Details/Descarte/DatosDescarteDetails.cshtml", Model)
+    }
+}
+@section scripts{
+    @CandidaturasFrontActions.MenuFrontActions()
+    @CandidaturasFrontActions.DetailsFrontActions(Url)
+
+}
+

@@ -1,0 +1,210 @@
+@using RecruitingWeb.Components.DataTable.Helpers
+@using RecruitingWeb.Helpers
+@using Recruiting.Application.Bitacoras.ViewModels
+@using RecruitingWeb.Properties
+
+@model RecruitingWeb.Models.FiltroBitacoraModels
+
+@Html.ScriptBlock(
+    @<script type="text/javascript">
+         registerCallback(function () {
+             var originalFilter = getFiltersBitacoras();
+             var filter = GetFilterForSearchableTable(originalFilter);
+             $('#tablaBitacoras').data("filters", filter);
+         });
+    </script>
+                                        )
+
+
+<div class="row titlePage">
+    <div class="col-lg-6">
+        <h3>@Resources.HTML_Bitacoras_Index_GestionBitacoras</h3>
+    </div>
+</div>
+<div class="row header-flap">
+    <div class="btn-group" role="group">
+        <a class="btn btn-default" href="@Url.Action("Volver", "Bitacoras")">
+            <span class="text">@Resources.HTML_BotonGenericoVolver</span>
+        </a>
+        <a class="btn btn-default" data-toggle="modal" data-target="#myModal" id="BtnShowModal">
+            <span class="text">@Resources.HTML_Bitacoras_Index_AniadirComentario</span>
+            @Edit.Hidden(Model.CandidaturaId, "CandidaturaId")
+        </a>
+    </div>
+    <div class="col-lg-6 removePadding">
+        <h4 class="noMargin headerBox">@Resources.HTML_BitacorasCandidaturas_Candidatura @Model.CandidaturaId</h4>
+    </div>
+</div>
+<div class="row">
+    <div class="content-box border-top-cero">
+        <div class="content-box-content">
+            <div class="form-filter" id="form-filter">
+                @Html.Partial("~/Views/Bitacoras/Partials/_DatosCandidatura.cshtml", Model)
+                <div class="row footer">
+                </div><!-- End row footer -->
+            </div> <!-- End form-filter  -->
+        </div> <!-- End content-box-content -->
+    </div> <!-- End .content-box -->
+</div>
+
+<!-- Load Data Bitacoras  -->
+<div id="tabla" name="tabla">
+    <div class="content-box">
+        <div class="content-box-content">
+            <div class="row form-row">
+                <div class="col-lg-12 pt-22">
+                    @{
+                        int pagina = 0;
+                        var config = Html.InitializeDataTable<BitacoraRowViewModel>();
+                        int nElem = Convert.ToUInt16(Resources.NElementosPagina);
+                        config.Name("tablaBitacoras")
+                        .AjaxLoadUrl(Url.Action("LoadBitacoras", "Bitacoras"))
+                        .CustomFilterAjax("getFiltersBitacoras")
+                        .PrimaryKey(m => m.BitacoraId.ToString())
+                        .AddPrimaryKeyToName(false)
+                        .Paginable()
+                        .PageSize(nElem)
+                        .InitialPage(pagina)
+                        .Columns(columns =>
+                        {
+                            columns.Bound(c => c.BitacoraId).Header(Resources.HTML_Bitacoras_Index_BitacoraHeader).ColumnName("BitacoraId").Orderable(true);
+                            columns.Bound(c => c.TipoCambio).Header(Resources.HTML_Bitacoras_Index_TipoHeader).ColumnName("TipoCambio").Orderable(true);
+
+                            columns.Bound(c => c.MensajeSistema).Header(Resources.HTML_Bitacoras_Index_MensajeHeader).ColumnName("MensajeSistema").Orderable(true);
+                            columns.Bound(c => c.Usuario).Header(Resources.HTML_Bitacoras_Index_UsuarioHeader).ColumnName("Usuario").Orderable(true);
+                            columns.Bound(c => FormatHelper.Format(c.FechaCreacion, "dd/MM/yyyy")).Header(Resources.HTML_Bitacoras_Index_FechaHeader).ColumnName("FechaCreacion").Orderable(true);
+
+                            if (string.IsNullOrWhiteSpace(Model.CentroIdUsuarioLogueado))
+                            {
+                                columns.Bound(c => c.Centro).Header(Resources.HTML_Bitacoras_Index_CentroHeader).ColumnName("Centro").Orderable(true);
+                            }
+                        });
+
+
+
+                        @Html.Partial("Controls/DataTable", config)
+
+                        <div class="paginacionIn">
+                            <p>@Resources.HTML_Bitacoras_Index_TotalBitacoras <span class="tempdataTotalRegistros" id="tempdataBitacoras" /></p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div> <!-- End content-box-content -->
+    </div> <!-- End .content-box -->
+</div>
+@Html.Partial("~/Views/Bitacoras/Modal/_ModalAddComentario.cshtml", Model)
+
+
+
+@section scripts{
+    <script type="text/javascript">
+
+    $(document).ready(function () {
+
+
+        $('#tablaBitacoras').on('draw.dt', function (event, data) {
+            var total = $('#tempdataBitacoras');
+            total.html(data._iRecordsTotal);
+        });
+
+
+        var menuItemToSelect = $("#main-nav li a[data-option-name=Bitacoras]");
+        menuItemToSelect.addClass("current");
+
+
+        });
+
+
+    function getFiltersBitacoras() {
+            var filterBitacoraId = $("[name=filterBitacoraId]").val();
+            var filterTipoCambio = $("[name=filterTipoCambio]").val();
+            var filterMensajeSistema = $("[name=filterMensajeSistema]").val();
+            var filterUsuario = $("[name=filterUsuario]").val();
+            var filterFechaCreacion = $("[name=filterFechaCreacion]").val();
+            var filterCentro = $("[name=filterCentro]").val();
+            return {
+               BitacoraId: filterBitacoraId, TipoCambio: filterTipoCambio, MensajeSistema: filterMensajeSistema, Usuario: filterUsuario,
+                FechaCreacion: filterFechaCreacion,CentroSearch: filterCentro
+            };
+        }
+
+
+        $(document).on('click', '#btnDescargarExcel', function () {
+            var pageFilter = $('#tablaBitacoras').data('filters');
+            var filters = {
+                filterNombre: pageFilter['custom-filter-Nombre'],
+                filterApellidos: pageFilter['custom-filter-Apellidos'],
+                filterTipoTitulacion: pageFilter['custom-filter-TipoTitulacion'],
+                filterTipoIdentificacion: pageFilter['custom-filter-TipoIdentificacion'],
+                filterNumeroIdentificacion: pageFilter['custom-filter-NumeroIdentificacion'],
+                filterCentro: pageFilter['custom-filter-CentroSearch'],
+             };
+
+
+            var strFiltros = jQuery.param(filters);
+            var url = '@Url.Action("ExportToExcel", "Bitacoras")?' + strFiltros;
+            window.location.assign(url);
+
+        });
+
+
+
+
+        $(document).on('click', '#BtnShowModal', function () {
+            $('#myModal').modal('');
+        });
+
+
+        $(document).on('click', '#BtnBitacoras', function () {
+            $('#myModal').modal('hide');
+
+            var parametros = {
+                CandidaturaId: $("#CandidaturaId").val(),
+                MensajeSistema: $("#MensajeSistema").val()
+            };
+
+
+            var strParametros = jQuery.param(parametros);
+            var url = '@Url.Action("Create", "Bitacoras")?' + strParametros;
+            window.location.assign(url);
+
+
+
+
+        });
+
+
+
+
+
+
+
+
+        $(document).on('click', '#BtnBitacoras', function () {
+            var iframe = $(window.frames['myIframeObservacionesCartaOferta'].contentDocument);
+            var observaciones = iframe.find('body').html();
+            var textArea = $('#ObservacionesCartaOferta');
+            textArea.val(observaciones);
+            BootstrapDialog.confirm({
+                title: '@Resources.Candidatura_ReagendarCartaOfertaTitulo',
+                message: '@Resources.Candidatura_ConfirmacionFinalizarTexto',
+                type: BootstrapDialog.TYPE_CONFIRMFINALICE,
+                callback: function (result) {
+                    if (result) {
+                        var item = $("#CandidaturaId").val();
+                        var url = '@Url.Action("PrimeraEntrevistaReagendar", "Candidaturas", new { candidaturaID = "__id__" })';
+                        window.location.href = url.replace('__id__', item);
+                    } else {
+                        BootstrapDialog.closeAll();
+                    }
+                }
+            });
+        });
+
+
+
+    </script>
+}
+
+

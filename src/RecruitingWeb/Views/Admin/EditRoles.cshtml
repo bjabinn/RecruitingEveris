@@ -1,0 +1,128 @@
+﻿@using RecruitingWeb.Components.DataTable.Helpers
+@using RecruitingWeb.Helpers
+@using Recruiting.Application.Candidatos.ViewModels
+@using RecruitingWeb.Properties
+@using RecruitingWeb.Components.DataTable.Models
+@model Recruiting.Application.Roles.ViewModels.CreateEditRolViewModel
+
+@{
+    var Activo = Model.Activo;
+    if (Activo == false)
+    {
+        Response.Redirect("/Shared/Borrado");
+    }
+
+}
+
+<div class="row titlePage">
+    <div class="col-lg-6">
+        <h3>@Resources.HTML_Admin_Index_Administracion</h3>
+    </div>
+</div>
+
+<div class="row header-flap">
+    @* Menú de opciones *@
+    <div class="btn-group" role="group">
+        <a class="btn btn-default" href="@Url.Action("Index", new { tab = "tab-user" })">
+            <span class="text">@Resources.HTML_BotonGenericoVolver</span>
+        </a>
+        <a class="btn btn-default" href="#" data-action="guardar">
+            <span class="text">@Resources.HTML_BotonGenericoGuardar</span>
+        </a>
+    </div>
+    @* Pestaña caja superior*@
+    <div class="col-lg-6 removePadding">
+        <h4 class="noMargin headerBox">@Resources.HTML_Admin_EditRoles_EditandoRol</h4>
+    </div>
+</div>
+
+<div class="row">
+    <div class="content-box border-top-cero">
+        <div class="content-box-content">
+            @using (Html.BeginForm("EditRoles", "Admin", FormMethod.Post, new Dictionary<string, object> { { "role", "form" }, { "data-parsley-validate", "true" }, { "data-parsley-excluded", ":not([data-validate])" } }))
+            {
+                @Edit.Hidden("guardar", "SubmitType")
+                @Edit.Hidden(Model.RolId, "RolId")
+
+                <div class="section-form-admin-rol margin" data-id="section-form-basicos">
+                    <div class="row form-row">
+                        <div class="form-group col-lg-4">
+                            <div class="col-lg-12 title-form">
+                                <label for="Nombre">@Resources.HTML_Admin_EditRoles_Nombre</label>
+                            </div>
+                            <div class="col-lg-12">
+                                @Edit.Text(Model.Nombre, "Nombre", id: "Nombre", maxLength: 100, htmlClass: "form-control")
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-4">
+                            <div class="col-lg-12 title-form">
+                                <label for="Descripcion">@Resources.HTML_Admin_EditRoles_Descripcion</label>
+                            </div>
+                            <div class="col-lg-12">
+                                @Edit.Text(Model.Descripcion, "Descripcion", id: "Descripcion", maxLength: 500, htmlClass: "form-control")
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row form-row">
+                        <div class="col-lg-12">
+                            <table class="table table-striped" style="margin-top:20px;">
+                                <thead>
+                                    <tr>
+                                        <th colspan="6"> @Resources.HTML_Admin_EditRoles_Permisos</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{ var count = 0; }
+
+                                    @for (int i = 0; i < Model.PermisoRol.Count(); i++)
+                                    {
+                                        if (count % 3 == 0)
+                                        {
+                                            @:<tr>
+                                                }
+
+                                                <td style="width:25%">@Model.PermisoRol.ElementAt(i).PermisoNombre</td>
+                                                <td style="width:5%" class="text-center">
+                                                    @Edit.Checkbox(Model.PermisoRol.ElementAt(i).ContienePermiso,
+                                                           string.Format("PermisoRol[{0}].ContienePermiso", i))
+
+                                                    @Edit.Hidden(Model.PermisoRol.ElementAt(i).PermisoId,
+                                                           string.Format("PermisoRol[{0}].PermisoId", i))
+                                                </td>
+
+                                                count++;
+
+                                                if (count % 3 == 0)
+                                                {
+                                                @:</tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div> <!-- End content-box-content -->
+    </div> <!-- End .content-box -->
+</div> <!--End .Row-->
+@section scripts{
+
+    <script type="text/javascript">
+
+        function guardar(source) {
+            BootstrapDialog.confirm({
+                title: '@Resources.Rol_ConfirmacionFinalizarTitulo',
+                message: '@Resources.Rol_ConfirmacionFinalizarTexto',
+                type: BootstrapDialog.TYPE_CONFIRMFINALICE,
+                callback: function (result) {
+                    if (result) {
+                        $("form").submit();
+                    } else {
+                        BootstrapDialog.closeAll();
+                    }
+                }
+            });
+        }
+    </script>
+}

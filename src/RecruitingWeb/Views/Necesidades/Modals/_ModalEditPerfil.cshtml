@@ -1,0 +1,133 @@
+﻿@using RecruitingWeb.Models
+@using RecruitingWeb.Properties
+
+@model Recruiting.Application.Necesidades.ViewModels.ModalEdicionPerfilViewModel
+
+<div class="modal fade" id="modalEditPerfil">
+    @using (Html.BeginForm("SeguimientoGrupoNecesidad", "Necesidades", FormMethod.Post, new Dictionary<string, object> { { "id", "formModalEditPerfil" } }))
+    {
+        <div class="modal-dialog modalBusquedaNecesidad">
+            <div class="modal-content tablaNecesidadesCandidatura">
+                <div class="modal-header">
+                    <div class="row">
+                        <div class="col-lg-8 text-left">
+                            <h4 class="modal-title tituloModal">
+                                @Resources.HTML_Necesidades_SeguimientoGrupoNecesidadesModal_EditandoPerfil
+                            </h4>
+                        </div>
+                        <div class="col-lg-4 text-right">
+                            <button type="button" class="btnCloseModal" data-dismiss="modal">@Display.GlyphiconButton("glyphicon-remove")</button>
+                        </div>
+                    </div>
+                </div>
+                @Html.Hidden("indiceIdPerfilModalEditPerfil")
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="form-group col-lg-4">
+                            <div class="col-lg-12 title-form">
+                                <label for="TipoPerfilId">@Resources.HTML_Necesidades_SeguimientoGrupoNecesidadesModal_Perfil</label>
+                            </div>
+                            <div class="col-lg-12">
+                                @Edit.DropDownExtend("", "TipoPerfilId", Model.Perfil, htmlClass: "form-control", id: "TipoPerfilIdModalEditPerfil", required: true, showEmptyOption: false)
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-4">
+                            <div class="col-lg-12 title-form">
+                                <label for="PersonaAsignada">@Resources.HTML_Necesidades_SeguimientoGrupoNecesidadesModal_PersonaAsignada</label>
+                            </div>
+                            <div class="col-lg-12">
+                                @Edit.Text("", name: "PersonaAsignada", required: false, id: "PersonaAsignadaModalEditPerfil", htmlClass: "form-control inputSearch", isReadOnly: true)
+                            </div>
+                            <div class="col-lg-offset-8">
+                                @Edit.Hidden("", "PersonaAsignadaId", new Dictionary<string, string> { { "id", "PersonaAsignadaIdModalEditPerfil" } })
+                                @Edit.Hidden("", "PersonaAsignadaNroEmpleado", new Dictionary<string, string> { { "id", "PersonaAsignadaNroEmpleadoModalEditPerfil" } })
+                                @Edit.Hidden("", "CandidaturaId", new Dictionary<string, string> { { "id", "CandidaturaIdModalEditPerfil" } })
+                                <div class="spanSearchPerfil" id="botonBusquedaPersonaLibre">
+                                    <button class="btn btnSearch" type="button" data-toggle="modal" data-target="#myModal" id="btnAbrirModalPersonaLibre">@Display.GlyphiconButton("glyphicon-search")</button>
+                                </div>
+                                <div class="spanSearchPerfil" id="botonCandidatosQueCumplenPerfil">
+                                    <button class="btn btnSearch" type="button" data-toggle="modal" data-target="#modalCandidatosQueCumplenPerfil" id="btnAbrirModalCandidato">@Display.GlyphiconButton("glyphicon-search")</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-4">
+                            <div class="col-lg-12 title-form">
+                                <label for="TipoContratacionId">@Resources.HTML_Necesidades_SeguimientoGrupoNecesidadesModal_Contratacion</label>
+                            </div>
+                            <div class="col-lg-12">
+                                @Edit.DropDownExtend("", "TipoContratacionId", Model.Contratacion, htmlClass: "form-control", id: "TipoContratacionIdModalEditPerfil", required: true, showEmptyOption: false)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-lg-4">
+                            <div class="col-lg-12 title-form">
+                                <label for="EstadoNecesidad">@Resources.HTML_Necesidades_SeguimientoGrupoNecesidadesModal_Estado</label>
+                            </div>
+                            <div class="col-lg-12">
+                                @Edit.DropDownExtend("", "EstadoNecesidad", Model.Estado, htmlClass: "form-control", id: "EstadoNecesidadModalEditPerfil", required: true, showEmptyOption: false)
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-4">
+                            <div class="col-lg-12 title-form">
+                                <label for="TipoTecnologiaId">@Resources.HTML_Necesidades_SeguimientoGrupoNecesidadesModal_Tecnologia</label>
+                            </div>
+                            <div class="col-lg-12">
+                                @Edit.DropDownExtend("", "TipoTecnologiaId", Model.Tecnologia, htmlClass: "form-control", id: "TipoTecnologiaIdModalEditPerfil", required: true, showEmptyOption: false)
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-4">
+                            <div class="col-lg-12 title-form">
+                                <label for="Modulo">@Resources.HTML_Necesidades_SeguimientoGrupoNecesidadesModal_Modulo</label>
+                            </div>
+                            <div class="col-lg-12">
+                                @Edit.DropDownExtend("", "Modulo", Model.Modulo, htmlClass: "form-control", id: "ModuloModalEditPerfil", required: false)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-lg-4">
+                            <div class="col-lg-12 title-form">
+                                <label for="FechaCompromiso">@Resources.HTML_Necesidades_SeguimientoGrupoNecesidadesModal_FechaCompromiso</label>
+                            </div>
+                            <div class="col-lg-12">
+                                @Edit.Date(null, "FechaCompromiso", id: "FechaCompromisoModalEditPerfil", htmlClass: "form-control", required: true)
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-4">
+                            <div class="col-lg-12 title-form">
+                                <label for="FechaCierre">@Resources.HTML_Necesidades_SeguimientoGrupoNecesidadesModal_FechaCierre</label>
+                            </div>
+                            <div class="col-lg-12">
+                                @Edit.Date(null, "FechaCierre", id: "FechaCierreModalEditPerfil", htmlClass: "form-control", required: false)
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-4">
+                            <div class="col-lg-12 title-form">
+                                <label for="TipoServicioId">@Resources.HTML_Necesidades_SeguimientoGrupoNecesidadesModal_Servicio</label>
+                            </div>
+                            <div class="col-lg-12">
+                                @Edit.DropDownExtend("", "TipoServicioId", Model.Servicio, htmlClass: "form-control", id: "TipoServicioIdModalEditPerfil", required: true, showEmptyOption: false)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-lg-4">
+                            <div class="col-lg-12 title-form">
+                                <label for="TipoPrevisionId">@Resources.HTML_Necesidades_SeguimientoGrupoNecesidadesModal_Prevision</label>
+                            </div>
+                            <div class="col-lg-12">
+                                @Edit.DropDownExtend("", "TipoPrevisionId", Model.Prevision, htmlClass: "form-control", id: "TipoPrevisionIdModalEditPerfil", required: true, showEmptyOption: false)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" id="BtnAceptarModalEditPerfil">@Resources.Boton_Aceptar</button>
+                    </div>                    
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+

@@ -1,0 +1,32 @@
+﻿@using RecruitingWeb.Properties
+@using Recruiting.Application.Candidaturas.Enums;
+
+@model Recruiting.Application.Candidaturas.ViewModel.CompletarCartaOfertaViewModel
+
+@if (Model.EntregaCartaOfertaViewModel != null && Model.EntregaCartaOfertaViewModel.AgendarCartaOfertaViewModel != null &&
+    Model.EntregaCartaOfertaViewModel.AgendarCartaOfertaViewModel.AgendarCartaOferta != null)
+{
+    <div class="row">
+        <div class="content-box">
+            <div class="content-box-content">
+                <div class="row section-header">
+                    <div class="col-lg-6">
+                        <h4>@Resources.HTML_Candidaturas_CompletarCartaOferta_DatosCartaOferta</h4>
+                    </div>
+                </div>
+                <div class="content-box-content">
+                    <div class="section-form-cartaOferta" data-id="section-form-cartaOferta">
+                        @Html.Partial("~/Views/Candidaturas/Partials/Edit/CartaOferta/_DatosCartaOferta.cshtml", Model.EntregaCartaOfertaViewModel.AgendarCartaOfertaViewModel.AgendarCartaOferta)
+                        @if (Model.EntregaCartaOfertaViewModel.EntregaCartaOferta != null &&
+                            (Model.AccessEtapa != null && ((Model.AccessEtapa == (int)TipoEtapaCandidaturaEnum.Fin))))
+                        {
+                            @Html.Partial("~/Views/Candidaturas/Partials/Edit/CartaOferta/_EntregaCartaOferta.cshtml", Model.EntregaCartaOfertaViewModel.EntregaCartaOferta)
+                            @Html.Partial("~/Views/Candidaturas/Partials/Edit/CartaOferta/_CompletarCartaOferta.cshtml", Model.CompletarCartaOferta)
+                        }
+                    </div>
+                </div>
+            </div> <!-- End content-box-content -->
+        </div> <!-- End .content-box -->
+    </div> <!--End .Row-->
+}
+

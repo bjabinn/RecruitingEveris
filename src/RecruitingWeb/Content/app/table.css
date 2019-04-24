@@ -1,0 +1,174 @@
+
+#main-content table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: transparent;
+    color: #676a6c;
+    margin-bottom: 0;
+}
+    #main-content table tbody tr td {
+        padding: 8px 5px 8px 8px;
+        border-top: 1px solid #e7eaec;
+        vertical-align: middle;
+        font-size: 11px;
+        border-right: 1px solid rgba(0, 0, 0, 0.05);    
+    }
+
+    #main-content table tbody tr:nth-child(even){background-color: #f2f2f29e;}
+
+    #main-content table tbody tr:hover {background-color: #ddddddad;}
+
+    #main-content table thead th {
+        font-weight: bold;
+        font-size: 15px;
+        /*border-bottom: 1px solid #ddd;*/
+    }
+
+#main-content tbody {
+    border-bottom: 1px solid #ddd;
+}
+
+    #main-content tbody tr {
+        background: #fff;
+    }
+        /*LMG se sustiyuye el estilo de even para que sea el de hover*/
+        #main-content tbody tr:hover {
+            background: #f3f3f3;
+        }
+
+
+#main-content table tfoot td .bulk-actions {
+    padding: 15px 0 5px 0;
+}
+
+    #main-content table tfoot td .bulk-actions select {
+        padding: 4px;
+        border: 1px solid #ccc;
+    }
+
+/*************** Start Table Pagination ***************/
+
+#main-content .dataTables_paginate {
+    text-align: right;
+    padding: 10px 0px;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 11px;
+    float: right;
+}
+
+    #main-content .dataTables_paginate a {
+        margin: 0 1px 0 0;
+        padding: 1px 4px;
+        color: #000000;
+    }
+
+    #main-content .dataTables_paginate > a:hover {
+        cursor: pointer;
+    }
+
+    #main-content .dataTables_paginate a.current {
+        background: #688b00;
+        color: #ffffff;
+        border-color: #688b00 !important;
+    }
+
+        #main-content .dataTables_paginate a.current:hover {
+            text-decoration: underline;
+        }
+
+    #main-content .dataTables_paginate a.previous:before {
+        content: "\AB";
+        margin-right: 0.5em;
+    }
+
+    #main-content .dataTables_paginate a.next:after {
+        content: "\BB";
+        margin-left: 0.5em;
+    }
+
+    #main-content .dataTables_paginate > a.disabled {
+        color: gray;
+        cursor: default;
+        text-decoration: none;
+    }
+
+        #main-content .dataTables_paginate > a.disabled:hover {
+            cursor: default;
+            text-decoration: none;
+        }
+
+    #main-content .dataTables_paginate > span > a:hover {
+        cursor: pointer;
+    }
+
+    #main-content .dataTables_paginate > span > a.disabled:hover, #main-content .dataTables_paginate > span > a.current:hover {
+        cursor: default;
+        text-decoration: none;
+    }
+
+/*************** End Table Pagination ***************/
+
+.actionColumn {
+    min-width: 250px;
+    max-width: 250px;
+    margin-left: 3px;
+}
+
+    .actionColumn .actionC {
+        padding: 0;
+        margin-right: -30px;
+        margin-left: 5px;
+    }
+
+div.col-md-3.statesC {
+    min-width: 80px !important;
+    max-width: 80px !important;
+}
+
+
+.Stategreen {
+    font-weight: bold;
+    color: rgb(0, 104, 0);
+}
+
+.Statered {
+    font-weight: bold;
+    color: rgb(210, 6, 6);
+}
+
+.flat {
+    background: none !important;
+    border: none !important;
+}
+
+.icon.action[data-disabled="true"] {
+    color: rgba(210,210,210,255) !important;
+    cursor: default !important;
+}
+
+    .icon.action[data-disabled="true"]:hover {
+        color: rgba(210,210,210,255) !important;
+        cursor: default !important;
+    }
+
+.dataTables_wrapper {
+    padding-bottom: 40px;
+}
+
+div[data-id=section-form-PrimeraEntrevista] table, div[data-id=section-form-SubEntrevistas] table, div[data-id=section-form-SegundaEntrevista] table, div[data-id=section-form-CartaOferta] table, div[data-id=section-form-EntrevistasPendientes] table, div[data-id=section-form-CartaOfertaPendientes] table, div[data-id=section-form-StandByPendientes] table, div[data-id=section-form-TodosFiltradoCv] table, div[data-id=section-form-FiltradoCv] table, #tablaRoles_wrapper table, #tablaUsuarios_wrapper table, #tablaClientes_wrapper table, #tablaProyectos_wrapper table {
+    box-shadow: 0 1px 5px 0 rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.12);
+}
+
+div[data-id=section-form-PrimeraEntrevista] .form-row, div[data-id=section-form-SubEntrevistas] .form-row, div[data-id=section-form-SegundaEntrevista] .form-row, div[data-id=section-form-CartaOferta] .form-row, div[data-id=section-form-TodosFiltradoCv] .form-row, div[data-id=section-form-EntrevistasPendientes] .form-row, div[data-id=section-form-CartaOfertaPendientes] .form-row, div[data-id=section-form-StandByPendientes] .form-row, div[data-id=section-form-FiltradoCv] .form-row, #tablaRoles_wrapper, #tablaUsuarios_wrapper, #tablaClientes_wrapper, #tablaProyectos_wrapper {
+    padding: 15px 15px 40px 15px;
+}
+
+div[data-id=section-form-FiltradoCv] h2 {
+    margin-left: 15px;
+}
+
+.dataTables_processing {
+    padding-top: 10px;
+    width: 20%;
+    margin-left: 40%;
+}

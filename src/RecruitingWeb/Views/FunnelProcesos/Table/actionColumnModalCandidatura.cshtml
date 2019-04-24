@@ -1,0 +1,18 @@
+@using Recruiting.Application.FunnelProcesos.ViewModels
+@using Recruiting.Application.Candidaturas.Enums
+@using RecruitingWeb.Properties
+@using Recruiting.Application.Usuarios.ViewModels
+
+@model Recruiting.Application.FunnelProcesos.ViewModels.CandidaturaModalRowViewModel
+
+
+<div class="row">  
+    @Edit.Text(Model.CandidaturaId.ToString(), "CandidaturaId", id: "CandidaturaId", htmlClass: "form-control hide")    
+
+   
+
+    <a href="/Candidaturas/Details/@Model.CandidaturaId.ToString()" target="_blank" title="@Resources.HTML_Title_DetalleCandidatura" id="DetailButton">
+        @Display.GlyphiconButton("glyphicon-eye-open icon action")
+    </a>  
+
+</div>

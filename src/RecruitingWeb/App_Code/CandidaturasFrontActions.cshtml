@@ -1,0 +1,4331 @@
+﻿@using System.Web.Mvc
+@using Recruiting.Application.Candidaturas.Enums
+@using RecruitingWeb.Properties
+@using Recruiting.Application.Maestros.Enums
+
+@helper MenuFrontActions()
+    {
+        <script type="text/javascript">
+            //Menu
+
+            var menuItemToSelect = $("#main-nav li a[data-option-name=Candidaturas]");
+            menuItemToSelect.addClass("current");
+            
+        </script>
+}
+
+@helper IndexFrontActions(System.Web.Mvc.UrlHelper Url, string nUsuario, string tiempoExpiracionCookie, string centroUsuario)
+    {
+        <script type="text/javascript">
+
+        //Inicializaciones
+
+        $(document).ready(function () {
+            checkAndShowModulo();
+        });
+
+        //Navegacion Filtro
+
+        $(window).keydown(function (event) {
+            if (event.keyCode == 13) {
+                buscarIntro();
+                return true;
+            }
+        });
+
+        function buscarIntro() {
+            var table = $('#tablaCandidaturas');
+            table.data("fn-search")();
+        }
+
+        $(document).on('click', '[name=buscar]', function () {
+            buscarIntro();
+        });
+        $(document).on('click', '[name=limpiar]', function () {
+            resetFields('#form-filter');
+            var table = $('#tablaCandidaturas');
+            var url = '@Url.Action("Limpiar", "Candidaturas")';
+            window.location.href = url;
+
+        });
+
+        //Carga Tabla
+
+        $('#tablaCandidaturas').on('draw.dt', function (event, data) {
+            var total = $('#tempdataCandidaturas');
+            colorearCandidaturasVisitadas();
+            total.html(data._iRecordsTotal);
+        });
+
+        function getFiltersCandidaturas() {
+            var filterEstado = "";
+            if ($("select#filterEstado[multiple]").length > 0) {
+                filterEstado = [];
+                $("select#filterEstado[multiple] option:selected").each(function (i, selected) {
+                    if ($(this).length) {
+                        filterEstado[i] = selected.value;
+                    }
+                });
+            } else {
+                filterEstado = $("[name=filterEstado]").val();
+            }
+            var filterEtapa = "";
+            if ($("select#filterEtapa[multiple]").length > 0) {
+                filterEtapa = [];
+                $("select#filterEtapa[multiple] option:selected").each(function (i, selected) {
+                    if ($(this).length) {
+                        filterEtapa[i] = selected.value;
+                    }
+                });
+            } else {
+                filterEtapa = $("[name=filterEtapa]").val();
+            }
+            var filterPerfil = $("[name=filterPerfil]").val();
+            var filterEntrevistador = $("[name=EntrevistadorId]").val();
+            var filterCandidato = $("[name=filterCandidato]").val();
+            var filterOrigenCv = $("[name=OrigenCvId]").val();
+            var filterFuenteReclutamiento = $("[name=filterFuenteReclutamiento]").val();
+            var filterNombreOferta = $("#OfertaId-Text").val();
+            var filterCandidaturaId = $("[name=filterCandidaturaId]").val();
+            var filterAgendadaDesde = $("[name=filterAgendadaEntreDesde]").val();
+            var filterAgendadaHasta = $("[name=filterAgendadaEntreHasta]").val();
+            var filterTipoTecnologia = $("[name=filterTipoTecnologia]").val();
+            var filterCentro = $("[name=filterCentro]").val();
+            var filterIdioma = $("[name=filterIdioma]").val();
+            var filterNivelIdioma = $("[name=filterNivelIdioma]").val();
+            var filterBuscar = $("[name=filterBuscar]").val();
+            var filterModulo = $("[name=filterModulo]").val();
+            var filterEntrevistadorName = $("[name=EntrevistadorId-Text]").val();
+            var filterCandidaturaOferta = $("#filterCandidaturaOferta").val();
+            var filterCandidaturaOfertaName = $("#filterCandidaturaOferta-Text").val();
+            var filterUbicacionCandidato = $("[name=filterUbicacionCandidato]").val();
+            var filterAnioExperiencia = $("[name=filterAnioExperiencia]").val();
+            var filterKeyword = $("[name=filterKeyword]").val();
+
+            return {
+                Estado: filterEstado,
+                Etapa: filterEtapa,
+                Perfil: filterPerfil,
+                OrigenCv: filterOrigenCv, FuenteReclutamiento: filterFuenteReclutamiento,
+                Entrevistador: filterEntrevistador, Candidato: filterCandidato,
+                CandidaturaId: filterCandidaturaId, AgendadaDesde: filterAgendadaDesde,
+                AgendadaHasta: filterAgendadaHasta, TipoTecnologiaId: filterTipoTecnologia,
+                CentroSearch: filterCentro, Idioma: filterIdioma, NivelIdioma: filterNivelIdioma, Buscar: filterBuscar,
+                ModuloId: filterModulo, EntrevistadorName: filterEntrevistadorName,
+                CandidaturaOferta: filterCandidaturaOferta, CandidaturaOfertaName: filterCandidaturaOfertaName,
+                UbicacionCandidato: filterUbicacionCandidato,
+                AnioExperiencia: filterAnioExperiencia,
+                Keyword: filterKeyword
+            };
+        }
+
+        //Navegacion Buttons
+
+        $(document).on('click', '#btnCreateCandidatura', function () {
+            var centroUser = '@centroUsuario';
+
+            if (centroUser == null || centroUser == "") {
+                BootstrapDialog.alert({
+                    title: '@Resources.Usuario_ErrorMulticentroCrearCandidaturaTitulo',
+                    message: '@Resources.Usuario_ErrorMulticentroCrearCandidaturaTexto',
+                    type: BootstrapDialog.TYPE_ERROR
+                });
+            }
+            else
+            {
+                var url = '@Url.Action("Create", "Candidaturas")';
+                window.location.href = url;
+            }
+        });
+
+        $(document).on('click', '#EditExtendButton', function () {
+            var item = $(this).closest("tr").find("#CandidaturaId").val();
+            saveCookie(item);
+        });
+
+        $(document).on('click', '#DonwloadCVButton', function () {
+            var id = $(this).closest("tr").find("#CandidaturaId").val();
+            var url = '@Url.Action("DownloadCV", "Candidaturas", new { id = "__id__" })';
+            window.location.href = url.replace('__id__', id);
+        });
+
+
+        $(document).on('click', '#DetailButton', function () {
+            var item = $(this).closest("tr").find("#CandidaturaId").val();
+            saveCookie(item);
+        });
+
+        $(document).on('click', '#DeleteButton', function () {
+
+            var item = $(this).closest("tr").find("#CandidaturaId").val();
+
+            BootstrapDialog.confirm({
+                title: '@Resources.Candidatura_EliminarCandidaturaTitulo',
+                message: '@Resources.Candidatura_EliminarCandidaturaMensaje',
+                type: BootstrapDialog.TYPE_CONFIRMDELETE,
+                callback: function (result) {
+                    if (result) {
+                        $.post('@Url.Action("Delete", "Candidaturas")', { id: item }).
+                            success(function (Data) {
+                                if (Data.IsValid) {
+                                    var tableComponent = $('#tablaCandidaturas').DataTable();
+                                    tableComponent.ajax.reload(null, true);
+                                }
+                                else if (Data == "") {
+                                    BootstrapDialog.show({
+                                        type: BootstrapDialog.TYPE_ERROR,
+                                        title: '@Resources.Permiso_Titulo',
+                                        message: '@Resources.Permiso_Mensaje',
+                                    });
+                                }
+                            })
+
+                    } else {
+                        BootstrapDialog.closeAll();
+                    }
+                }
+            });
+        });
+
+        $(document).on('click', '[data-upload=true]', function () {
+
+            var inputFile = $(this).next();
+            inputFile.click();
+        });
+
+        $(document).on('click', '#Pausar', function () {
+            var candidaturaId = $(this).closest("tr").find("#CandidaturaId").val();
+            $("#modalStandBy").modal('show');
+            $('[name=candidaturaIdPausar]').val(candidaturaId);
+
+        });
+
+        $(document).on('click', '#BtnPausar', function () {
+            var candidaturaId = $('[name=candidaturaIdPausar]').val();
+            var fecha = $('[name="FechaContactoStandBy"]').val();
+            $.post('@Url.Action("Pausar", "Candidaturas")', { CandidaturaId: candidaturaId, fechaContactoStandBy: fecha }).
+                        success(function (IsValid) {
+                            if (IsValid) {
+                                var tableComponent = $('#tablaCandidaturas').DataTable();
+                                tableComponent.ajax.reload(null, true);
+                                BootstrapDialog.closeAll();
+                                $("#modalStandBy").modal('hide');
+                                $('[name=candidaturaIdPausar]').val('');
+                                $('[name="FechaContactoStandBy"]').val('');
+                            } else if (Data == "") {
+                                BootstrapDialog.show({
+                                    type: BootstrapDialog.TYPE_ERROR,
+                                    title: '@Resources.Permiso_Titulo',
+                                    message: '@Resources.Permiso_Mensaje',
+                                });
+                            }
+                        })
+
+
+        });
+
+        $(document).on('click', '#DescartarButton', function () {
+
+            $("#modalRenunciaDescarte").modal('show');
+            var item = $(this).closest("tr").find("#CandidaturaId").val();
+            $('[name=candidaturaIdHidden]').val(item);
+            $('#DescarteRadio').prop('checked', true);
+            $('[name="TipoDescarte"]').removeClass('hidden');
+            $('[name="TipoRenuncia"]').addClass('hidden');
+            $('#tituloDescarte').removeClass('hidden');
+            $('#tituloRenuncia').addClass('hidden');
+            $('#seleccionMotivoDescarte').removeClass('hidden');
+            $('#seleccionMotivoRenuncia').addClass('hidden');
+            $('#cabeceraDescarte').removeClass('hidden');
+            $('#cabeceraRenuncia').addClass('hidden');
+            TipoRenunciaDescarte = $('[name=TipoDescarte]');
+            $('#RenunciaDescarteDiv').addClass('hidden');
+
+        });
+
+        $(document).on('click', '#RecontactarButton', function () {
+            var item = $(this).closest("tr").find("#CandidaturaId").val();
+            BootstrapDialog.confirm({
+                title: '@Resources.Candidatura_ConfirmacionRecontactarTitulo',
+                message: '@Resources.Candidatura_ConfirmacionRecontactarTexto',
+                type: BootstrapDialog.TYPE_CONFIRMFINALICE,
+                callback: function (result) {
+                    if (result) {
+                        $.post('@Url.Action("Recontactar", "Candidaturas")', { candidaturaId: item }).
+                            success(function (Data) {
+                                if (Data.IsValid) {
+                                    var tableComponent = $('#tablaCandidaturas').DataTable();
+                                    tableComponent.ajax.reload(null, true);
+                                } else if (Data == "") {
+                                    BootstrapDialog.show({
+                                        type: BootstrapDialog.TYPE_ERROR,
+                                        title: '@Resources.Permiso_Titulo',
+                                        message: '@Resources.Permiso_Mensaje',
+                                    });
+                                }
+                            });
+                    } else {
+                        BootstrapDialog.closeAll();
+                    }
+                }
+            });
+        });
+
+        $(document).on('click', '#SeguirButton', function () {
+
+            var item = $(this).closest("tr").find("#CandidaturaId").val();
+
+            BootstrapDialog.confirm({
+                title: '@Resources.Candidatura_SeguirTitulo',
+                message: '@Resources.Candidatura_SeguirTexto',
+                type: BootstrapDialog.TYPE_CONFIRMFINALICE,
+                callback: function (result) {
+                    if (result) {
+                        $.post('@Url.Action("SeguirCandidatura", "Candidaturas")', { id: item }).
+                            success(function (Data) {
+                                if (Data.IsValid) {
+                                    var tableComponent = $('#tablaCandidaturas').DataTable();
+                                    tableComponent.ajax.reload(null, true);
+                                }
+                                else if (Data == "") {
+                                    BootstrapDialog.show({
+                                        type: BootstrapDialog.TYPE_ERROR,
+                                        title: '@Resources.Permiso_Titulo',
+                                        message: '@Resources.Permiso_Mensaje',
+                                    });
+                                }
+                            })
+
+                    } else {
+                        BootstrapDialog.closeAll();
+                    }
+                }
+            });
+        });
+
+        $(document).on('click', '#DejarSeguirButton', function () {
+
+            var item = $(this).closest("tr").find("#CandidaturaId").val();
+
+            BootstrapDialog.confirm({
+                title: '@Resources.Candidatura_DejarSeguirTitulo',
+                message: '@Resources.Candidatura_DejarSeguirTexto',
+                type: BootstrapDialog.TYPE_CONFIRMFINALICE,
+                callback: function (result) {
+                    if (result) {
+                        $.post('@Url.Action("DejarSeguirCandidatura", "Candidaturas")', { id: item }).
+                            success(function (Data) {
+                                if (Data.IsValid) {
+                                    var tableComponent = $('#tablaCandidaturas').DataTable();
+                                    tableComponent.ajax.reload(null, true);
+                                }
+                                else if (Data == "") {
+                                    BootstrapDialog.show({
+                                        type: BootstrapDialog.TYPE_ERROR,
+                                        title: '@Resources.Permiso_Titulo',
+                                        message: '@Resources.Permiso_Mensaje',
+                                    });
+                                }
+                            })
+
+                    } else {
+                        BootstrapDialog.closeAll();
+                    }
+                }
+            });
+        });
+
+
+        $(document).on('click', '#LoadCV', function () {
+            var item = $(this).closest("tr").find("#CandidaturaId").val();
+            var nameItem = $(this).closest("tr").find("#Candidato").val();
+            var modalContent = $('#CVModal');
+
+
+            var dialog = BootstrapDialog.show({
+                title: 'Cargar Curriculum Vitae',
+                message: function (dialog) {
+                    var $message = $('<div></div>');
+                    $message = modalContent.clone(false);
+                    $message.removeAttr('id');
+                    $message.removeClass('hidden');
+                    return $message;
+                },
+                buttons: [{
+                    label: '@Resources.Boton_Cargar',
+                    cssClass: 'btn-confirmFinalice',
+                    action: function (dialogItself) {
+                        var footer = $(this).closest('.modal-footer');
+                        var formToSubmit = footer.prev().find('form');
+                        var formOk = formToSubmit.parsley().validate();
+                        if (formOk) {
+                            var inputFile = formToSubmit.find('input[type=file]');
+                            var formData = new FormData();
+                            formData.append("files", inputFile[0].files[0]);
+                            formData.append("candidaturaId", item);
+                            var promise = $.ajax({
+                                url: '@Url.Action("UploadCV", "Candidaturas")',
+                                type: 'POST',
+                                contentType: false,
+                                data: formData,
+                                processData: false,
+                                cache: false
+                            });
+                                promise.done(function (response) {
+                                    if (response.IsValid) {
+                                        dialogItself.close();
+                                    } else {
+                                        BootstrapDialog.show({
+                                            type: BootstrapDialog.TYPE_ERROR,
+                                            title: '@Resources.Error',
+                                            message: response.ErrorMessage,
+                                        });
+                                    }
+                                });
+                        }
+                    }
+                }, {
+                    label: '@Resources.Boton_Cerrar',
+                    action: function (dialogItself) {
+                        dialogItself.close();
+                    }
+                }]
+            });
+            var form = dialog.$modalBody.find('form');
+            initParsley(form);
+
+
+            });
+
+
+
+        $(document).on('click', '#RenunciarButton', function () {
+            $("#modalRenunciaDescarte").modal('show');
+            var item = $(this).closest("tr").find("#CandidaturaId").val();
+            var estoyEnFiltradoTelefonico = $(this).closest("tr").find('[name="estoyEnFiltradoTelefonico"]').val();
+            var estoyEnAgendarCartaOferta = $(this).closest("tr").find('[name="estoyEnAgendarCartaOferta"]').val();
+            var estoyEnAgendarEntrevista = $(this).closest("tr").find('[name="estoyEnAgendarEntrevista"]').val();
+            var estoyEnAgendarSegundaEntrevista = $(this).closest("tr").find('[name="estoyEnAgendarSegundaEntrevista"]').val();
+            if (estoyEnFiltradoTelefonico == "false" && estoyEnAgendarCartaOferta == "false" && estoyEnAgendarEntrevista == "false" && estoyEnAgendarSegundaEntrevista == "false")
+            {
+                $('#RenunciaDescarteDiv').addClass('hidden');
+            }
+            else
+            {
+                $('#RenunciaDescarteDiv').removeClass('hidden');
+            }
+            $('[name=candidaturaIdHidden]').val(item);
+
+        });
+
+
+        $(document).on('click', '#BtnRenunciar', function () {
+            var candidaturaId = $('[name=candidaturaIdHidden]').val();
+            var esRenuncia = $('#RenunciaRadio').is(':checked');
+            var comentariosRenunciaDescarte = $('[name=ComentariosRenunciaDescarte]').val();
+            var TipoRenunciaDescarte;
+            if(esRenuncia)
+            {
+                TipoRenunciaDescarte = $('[name=TipoRenuncia]');
+            }
+            else
+            {
+                TipoRenunciaDescarte = $('[name=TipoDescarte]');
+            }
+            var validador = TipoRenunciaDescarte.parsley();
+            var validado = validador.validate();
+            if (esRenuncia && (validado == true || validado.length == 0)) {
+                $.post('@Url.Action("Renunciar", "Candidaturas")', { CandidaturaId: candidaturaId, TipoRenunciaDescarte: TipoRenunciaDescarte.val() , ComentariosRenunciaDescarte: comentariosRenunciaDescarte  }).
+                        success(function (IsValid) {
+                            if (IsValid) {
+                                var tableComponent = $('#tablaCandidaturas').DataTable();
+                                tableComponent.ajax.reload(null, true);
+                                BootstrapDialog.closeAll();
+                                $("#modalRenunciaDescarte").modal('hide');
+                                $('[name=candidaturaIdHidden]').val('');
+                                $('[name="TipoRenunciaDescarte"]').val('');
+                                $('[name=ComentariosRenunciaDescarte]').summernote("code", "");
+                            } else if (Data == "") {
+                                BootstrapDialog.show({
+                                    type: BootstrapDialog.TYPE_ERROR,
+                                    title: '@Resources.Permiso_Titulo',
+                                    message: '@Resources.Permiso_Mensaje',
+                                });
+                            }
+                        })
+
+            }
+            else if(!esRenuncia && (validado == true || validado.length == 0))
+            {
+                $.post('@Url.Action("Descartar", "Candidaturas")', { CandidaturaId: candidaturaId, TipoRenunciaDescarte: TipoRenunciaDescarte.val() , ComentariosRenunciaDescarte: comentariosRenunciaDescarte  }).
+                        success(function (IsValid) {
+                            if (IsValid) {
+                                var tableComponent = $('#tablaCandidaturas').DataTable();
+                                tableComponent.ajax.reload(null, true);
+                                BootstrapDialog.closeAll();
+                                $("#modalRenunciaDescarte").modal('hide');
+                                $('[name=candidaturaIdHidden]').val('');
+                                $('[name="TipoRenunciaDescarte"]').val('');
+                                $('[name=ComentariosRenunciaDescarte]').summernote("code", "");
+                            } else if (Data == "") {
+                                BootstrapDialog.show({
+                                    type: BootstrapDialog.TYPE_ERROR,
+                                    title: '@Resources.Permiso_Titulo',
+                                    message: '@Resources.Permiso_Mensaje',
+                                });
+                            }
+                        })
+            }
+
+
+        });
+
+        $(document).on('click', '[name=RenunciaDescarteRadio]', function () {
+            if($('#DescarteRadio').is(':checked'))
+            {
+                $('[name="TipoDescarte"]').removeClass('hidden');
+                $('[name="TipoRenuncia"]').addClass('hidden');
+                $('#tituloDescarte').removeClass('hidden');
+                $('#tituloRenuncia').addClass('hidden');
+                $('#seleccionMotivoDescarte').removeClass('hidden');
+                $('#seleccionMotivoRenuncia').addClass('hidden');
+                $('#cabeceraDescarte').removeClass('hidden');
+                $('#cabeceraRenuncia').addClass('hidden');
+
+            }
+            if($('#RenunciaRadio').is(':checked'))
+            {
+                $('[name="TipoDescarte"]').addClass('hidden');
+                $('[name="TipoRenuncia"]').removeClass('hidden');
+                $('#tituloDescarte').addClass('hidden');
+                $('#tituloRenuncia').removeClass('hidden');
+                $('#seleccionMotivoDescarte').addClass('hidden');
+                $('#seleccionMotivoRenuncia').removeClass('hidden');
+                $('#cabeceraDescarte').addClass('hidden');
+                $('#cabeceraRenuncia').removeClass('hidden');
+            }
+
+
+        });
+
+
+        $(document).on('click', '#RetrocederButton', function () {
+
+            var candidaturaId = $(this).closest("tr").find("#CandidaturaId").val();
+            var estadoFinal = $(this).closest("tr").find('[name="estadoFinal"]').val();
+            var candidaturaYaAbierta = false;
+            if(estadoFinal == "true")
+            {
+                var candidatoId = $(this).closest("tr").find('#CandidatoId').val();
+                var repetida = false;
+                var url = '@Url.Action("CheckCandidaturasAbiertas", "Candidaturas")';
+
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: { candidatoId: candidatoId },
+                    cache: false,
+                    success: function (data) {
+                        repetida = data;
+                        if(repetida == true)
+                        {
+                            muestraErrorRetroceder();
+                        }
+                        else
+                        {
+                            muestraConfirmarRetroceder(candidaturaId);
+                        }
+                    },
+                    error: function (data) {
+                        console.log("ha fallado");
+                    }
+                });
+            }
+            else
+            {
+                muestraConfirmarRetroceder(candidaturaId);
+            }
+
+        });
+
+
+
+
+
+        $(document).on('click', '#btnDescargarExcel', function () {
+            var pageFilter = $('#tablaCandidaturas').data('filters');
+
+            var filters = {
+                filterEstado: pageFilter['custom-filter-Estado'].toString(),
+                filterEtapa: pageFilter['custom-filter-Etapa'].toString(),
+                filterPerfil: pageFilter['custom-filter-Perfil'],
+                filterEntrevistador: pageFilter['custom-filter-Entrevistador'],
+                filterCandidato: pageFilter['custom-filter-Candidato'],
+                filterCandidaturaId: pageFilter['custom-filter-CandidaturaId'],
+                filterAgendadaDesde: pageFilter['custom-filter-AgendadaDesde'],
+                filterAgendadaHasta: pageFilter['custom-filter-AgendadaHasta'],
+                filterTipoTecnologia: pageFilter['custom-filter-TipoTecnologiaId'],
+                filterOrigenCv: pageFilter['custom-filter-OrigenCv'],
+                filterCentro: pageFilter['custom-filter-CentroSearch'],
+                filterIdioma: pageFilter['custom-filter-Idioma'],
+                filterNivelIdioma: pageFilter['custom-filter-NivelIdioma'],
+                filterModulo: pageFilter['custom-filter-ModuloId'],
+                filterCandidaturaOferta: pageFilter['custom-filter-CandidaturaOferta']
+            };
+
+            var strFiltros = jQuery.param(filters);
+            var url = '@Url.Action("ExportToExcel", "Candidaturas")?' + strFiltros;
+            window.location.assign(url);
+
+        });
+
+        $(document).on('click', '#btnDescargarCartaOferta', function () {
+            var item = $("#CandidaturaId").val();
+            var url = '@Url.Action("DownloadCartaOferta", "Candidaturas", new { candidaturaId = "__candidaturaId__" })';
+            window.location.href = url.replace('__candidaturaId__', item);
+
+            });
+
+
+            $(document).on('click', '#btnGenerarDescargarCartaOferta', function () {
+                $("#modalGenerarDescargarCO").modal('show');
+
+                var promise = $.ajax({
+                    url: '@Url.Action("ComprobacionExisteCartaOferta", "Candidaturas")',
+                    data: { candidaturaId: $("#CandidaturaId").val() },
+                    type: 'POST',
+                });
+
+                promise.done(function (response) {
+                    if (response == "False") {
+                        $('#btnDescargarCartaOferta').attr('disabled', true);
+                    }
+                })
+            });
+
+        $(document).on('click', '#btnEleccionCartaOferta', function () {
+                $("#modalEleccionCO").modal('show');
+                var promise = $.ajax({
+                    url: '@Url.Action("ElegirCartaOferta", "Candidaturas")',
+                    data: { candidaturaId: $("#CandidaturaId").val() },
+                    type: 'POST',
+                });
+
+                promise.done(function (response) {
+                    if (response.IsValid) {
+                        var $select = $('[name=EleccionCO]');
+                        $select.empty();
+                        $.each(response.plantillas, function (indice, elementoActual) {
+                            $('<option>', {
+                                value: elementoActual.Value
+                            }).html(elementoActual.Text).appendTo($select);
+                        });
+                    }
+                    else {
+                        BootstrapDialog.show({
+                        type: BootstrapDialog.TYPE_ERROR,
+                        title: '@Resources.Error_CargaPlantillasTitulo',
+                        text: '@Resources.Error_CargaPlantillasTexto',
+                        message: response.ErrorMessage,
+                    });
+                    }
+                })
+            });
+
+            $(document).on('click', '#btnGenerarCartaOferta', function () {
+
+                var candidaturaId = $("#CandidaturaId").val();
+                var plantillaId = $('[name=EleccionCO]').val();
+            var url = '@Url.Action("UploadCartaOfertaGeneradaIndex", "Candidaturas", new { candidaturaId = "__candidaturaId__" })';
+                window.location.href = url.replace('__candidaturaId__', candidaturaId) + '&plantillaId=' + plantillaId;
+                BootstrapDialog.closeAll();
+                $('#modalEleccionCO').modal('hide');
+                $('#modalGenerarDescargarCO').modal('hide');
+
+        });
+
+        $(document).on('click', '#Ejecutar', function () {
+
+            var soySubEntrevistador = $(this).closest("tr").find('input[name=soySubEntrevistador]').val();
+            var subEntrevistadoresString = $(this).closest("tr").find('input[name=subEntrevistadoresString]').val();
+            var subEntrevistadoresId = subEntrevistadoresString.split(',');
+            var currentUserId = @HttpContext.Current.Session["UsuarioId"];
+            var tipoEntrevista = $(this).closest("tr").find('input[name=tipoEntrevista]').val();
+
+            var candidaturaId = $(this).closest("tr").find("#CandidaturaId").val();
+
+            var parametro =
+                {
+                    candidaturaId: candidaturaId,
+                    tipoEntrevista: tipoEntrevista,
+                    entrevistadorId: currentUserId,
+                    vengoDeCandidaturas: true
+                };
+            var parametroStringified = JSON.stringify(parametro);
+
+            if (soySubEntrevistador == "true")
+            {
+                var url = '@Url.Action("EditarSubEntrevistaSubEntrevistador", "Candidaturas",
+                new { candidaturaIdTipoEntrevistaEntrevistadorId = "__parametro__" })';
+                window.location.href = url.replace('__parametro__', parametroStringified);
+                return;
+            }
+
+            var response;
+            var url = '@Url.Action("CompruebaEstadoPendienteEntrevistaDos", "Candidaturas", new { candidaturaId = "__idCandidaturaProxima__"})';
+            url = url.replace('__idCandidaturaProxima__', candidaturaId);
+
+            $.ajax({
+                type: "POST",
+                url: url,
+                async: false,
+                success: function (data) {
+                    console.log("ha funcionado" + data);
+                    response = data;
+                },
+                error: function (data) {
+                    console.log("ha fallado");
+                }
+            });
+            if (response == true)
+            {
+                BootstrapDialog.show({
+                    title: '@Resources.Candidatura_SaltarEntrevistaTitulo',
+                    message: '@Resources.Candidatura_SaltarEntrevistaMensaje',
+                    type: BootstrapDialog.TYPE_NOTIFY,
+                    buttons: [{
+                        label: '@Resources.Boton_CandidaturaNoSaltar',
+                        cssClass: 'btn-confirmFinalice',
+                        action: function (dialog) {
+                            var url = '@Url.Action("Ejecutar", "Candidaturas", new { CandidaturaId = "__candidaturaId__" })';
+                            window.location.href = url.replace('__candidaturaId__', candidaturaId);
+                        }
+                    }, {
+                        label: '@Resources.Boton_CandidaturaSaltar',
+                        cssClass: 'btn-confirmFinalice',
+                        action: function (dialog) {
+                            var url = '@Url.Action("EjecutarSaltandoSegundaEntrevista", "Candidaturas", new { CandidaturaId = "__candidaturaId__" })';
+                            window.location.href = url.replace('__candidaturaId__', candidaturaId);
+                        }
+                    }, {
+                        label: '@Resources.Boton_Cancelar',
+                        action: function (dialog) {
+                            BootstrapDialog.closeAll();
+                        }
+                    }]
+                });
+            }
+            else if (response == false)
+            {
+                var url = '@Url.Action("Ejecutar", "Candidaturas", new { CandidaturaId = "__candidaturaId__" })';
+                window.location.href = url.replace('__candidaturaId__', candidaturaId);
+            }
+        });
+
+
+
+        //Funciones
+
+        function checkAndShowModulo() {
+            var tecnologia = $('[id="filterTipoTecnologia"]');
+            var perfil = $('[id="filterPerfil"]');
+            var seccionModulo = $('[data-section="Modulo"]');
+            var modulo = $('[id="filterModulo"]');
+            var option = document.createElement("option");
+            option.text = "ABAP";
+            option.value = "1305";
+
+            modulo.attr('disabled', 'disabled');
+            seccionModulo.addClass('hide');
+            //Estado: Cerrada y Contratacion: Cambio Interno
+            if (tecnologia.val() == @((int)TipoTecnologiaEnum.Sap)) {
+                modulo.removeAttr('disabled');
+                seccionModulo.removeClass('hide');
+                if (perfil.val() != @((int)TipoPerfilCandidaturaEnum.FunctionalExpertSpecialist) &&
+                    perfil.val() != @((int)TipoPerfilCandidaturaEnum.FunctionalLeaderSpecialist) &&
+                    perfil.val() != @((int)TipoPerfilCandidaturaEnum.FunctionalSeniorSpecialist) &&
+                    perfil.val() != @((int)TipoPerfilCandidaturaEnum.FunctionalSpecialist)) {
+                    if (modulo.find("option[value='1305']").length == 0)
+                        modulo.append(option);
+                } else {
+                        modulo.find("option[value='1305']").remove();
+                }
+            } else {
+                modulo.find("option[value='1305']").remove();
+                modulo.val("");
+                modulo.change();
+            }
+        }
+
+        function saveCookie(item)
+        {
+            var cookieActual = getCookies();
+            if(cookieActual != null)
+            {
+                if(!cookieActual.includes(item))
+                {
+                    cookieActual += "," + item;
+                }
+            }
+            else
+            {
+                cookieActual = item;
+            }
+
+            $.cookie('@nUsuario' + '-candidaturas', cookieActual, {expires : @tiempoExpiracionCookie});
+        }
+        function getCookies()
+        {
+            var cookieActual = $.cookie('@nUsuario' + '-candidaturas');
+            return cookieActual;
+        }
+        function colorearCandidaturasVisitadas()
+        {
+            var listaCandidaturas = getCookies();
+            if (listaCandidaturas != null)
+            {
+                $('#tablaCandidaturas tr:not(:first)').each(function(){
+                    if($(this).find("#CandidaturaId") != null)
+                    {
+                        if(listaCandidaturas.includes($(this).find("#CandidaturaId").val()))
+                        {
+                            $(this).addClass("linkVisitado");
+                        }
+                    }
+                });
+            }
+        }
+        function muestraErrorRetroceder()
+        {
+            BootstrapDialog.show({
+                type: BootstrapDialog.TYPE_ERROR,
+                title: '@Resources.Error',
+                message: '@Resources.ErrorCandidaturaAbierta',
+            });
+        }
+
+        function muestraConfirmarRetroceder(candidaturaId)
+        {
+            BootstrapDialog.confirm({
+
+                title: '@Resources.Candidatura_RetrocederTitulo',
+                message: '@Resources.Candidatura_RetrocederMensaje',
+                type: BootstrapDialog.TYPE_CONFIRMDELETE,
+                callback: function (result) {
+                    if (result) {
+                        $.post('@Url.Action("RetrocederEstado", "Candidaturas")', { CandidaturaId: candidaturaId }).
+                            success(function (IsValid) {
+
+                                if (IsValid) {
+                                    var tableComponent = $('#tablaCandidaturas').DataTable();
+                                    tableComponent.ajax.reload(null, true);
+                                } else if (Data == "") {
+                                    BootstrapDialog.show({
+                                        type: BootstrapDialog.TYPE_ERROR,
+                                        title: '@Resources.Permiso_Titulo',
+                                        message: '@Resources.Permiso_Mensaje',
+                                    });
+                                }
+                            })
+
+                    } else {
+                        BootstrapDialog.closeAll();
+                    }
+                }
+            });
+        }
+
+        //Comprobaciones y restricciones
+
+        $(document).on('change', '[name=filterEstado]', function () {
+            var filterEstado = "";
+            if ($("select#filterEstado[multiple]").length > 0) {
+                filterEstado = [];
+                $("select#filterEstado[multiple] option:selected").each(function (i, selected) {
+                    if ($(this).length) {
+                        filterEstado[i] = selected.value;
+                    }
+                });
+            } else {
+                filterEstado = $("[name=filterEstado]").val();
+            }
+            var parameterString = JSON.stringify(filterEstado);
+            var url = '@Url.Action("GenerateEtapasElementsPorEstado", "Candidaturas", new { idEstado = "__idEstado__" })';
+            url = url.replace('__idEstado__', filterEstado);
+
+            idSelected = $(this).val();
+            $.ajax({
+                url: url,
+                type: "POST",
+                success: function (data) {
+                    var options = '<option value>(select an option)</option>';
+                    $.each(data, function (index, value) {
+                        options += '<option value="' + value.Value + '">' + value.Text + '</option>';
+                    });
+                    $("#filterEtapa").html(options);
+                },
+                error: function () {
+                }
+            });
+        });
+
+        $(document).on('change', '#OfertaId-Text', function () {
+            if ($('#OfertaId-Text').val() == "") {
+                $('#OfertaId').val("");
+            }
+        });
+
+        $(document).on('change', 'input[type=file]', function () {
+
+
+            var pathFile = $(this).val();
+            var nameFile = pathFile.split("\\");
+
+
+            var aux = nameFile[(nameFile.length) - 1].split('.');
+            var extension = aux[(aux.length) - 1];
+            var nameCv = nameFile[(nameFile.length) - 1].valueOf();
+
+            if (!(extension == "docx" || extension == "pdf" || extension == "doc" || extension == "txt" || extension == "xls" || extension == "xlsx")) {
+                $(this).val("");
+                BootstrapDialog.show({ type: BootstrapDialog.TYPE_ERROR, title: 'Subida de Archivo', message: 'Solo se permiten Archivos Word, Pdf, Txt o Excel.', });
+                nameCv = "";
+            }
+            var form = $(this).closest('form');
+
+            form.find('#nombreCV').text(nameCv);
+
+            form.parsley().validate();
+        });
+
+
+        $(document).on('change', '[id="filterTipoTecnologia"]', function () {
+            checkAndShowModulo();
+        });
+
+        $(document).on('change', '[id="filterPerfil"]', function () {
+            checkAndShowModulo();
+        });
+
+        </script>
+}
+
+@helper DetailsFrontActions(System.Web.Mvc.UrlHelper Url)
+    {
+        <script type="text/javascript">
+
+        //Descarga CV y Test
+
+        $(document).on('click', '#DownloadCV', function () {
+
+            var id = $("[name=CandidaturaId]").val();
+            var url = '@Url.Action("DownloadCV", "Candidaturas", new { id = "__id__" })';
+            window.location.href = url.replace('__id__', id);
+        });
+
+        $(document).on('click', '#DownloadTest', function () {
+            var id = $('[name=CandidaturaId]').val();
+            var url = '@Url.Action("DownloadTest", "Candidaturas", new { id = "__id__" })';
+            window.location.href = url.replace('__id__', id);
+        });
+
+        </script>
+}
+
+@helper DatosBasicosFrontActions(System.Web.Mvc.UrlHelper Url)
+    {
+        <script type="text/javascript">
+
+            //Inicializaciones
+
+            $(document).ready(function () {
+                checkOrigenCv();
+                CheckAndShowModulo();
+            });
+
+            //Descarga CV y Test
+
+            $(document).on('click', '#DescargarCV', function () {
+
+                var id = $("[name=CandidaturaId]").val();
+                var url = '@Url.Action("DownloadCV", "Candidaturas", new { id = "__id__" })';
+                window.location.href = url.replace('__id__', id);
+
+            });
+
+            $(document).on('click', '#DescargarTest', function () {
+                var id = $('[name=CandidaturaId]').val();
+                var url = '@Url.Action("DownloadTest", "Candidaturas", new { id = "__id__" })';
+                window.location.href = url.replace('__id__', id);
+            });
+
+            //Restricciones y comprobaciones
+
+            $(document).on('change', '#OrigenCvId', function () {
+                checkOrigenCv();
+            });
+
+            $(document).on('click', '#btnCreateContactosReferenciados', function () {
+                createItem("listSubmitReferenciados");
+            });
+
+            $(document).on('click', '#btnDelete', function () {
+                var item = $(this).closest("tr");
+                deleteItem(item);
+            });
+
+            $(document).on('click', '#btnDeleteLang', function () {
+                var item = $(this).closest("tr");
+                deleteItemLang(item);
+            });
+
+            $(document).on('click', '#btnDeleteExp', function () {
+                var item = $(this).closest("tr");
+                deleteItemExp(item);
+            });
+
+
+            $(document).on('change', '[id="TipoTecnologiaId"]', function () {
+                CheckAndShowModulo();
+            });
+
+            $(document).on('change', '#CategoriaId', function () {
+                CheckAndShowModulo();
+            });
+
+            //lógica idiomas
+            $(document).on('click', '#btncreateIdioma', function () {
+                createItemLang("listSubmitIdioma", null);
+            });
+
+            $(document).on('click', '#btncreateExperiencia', function () {
+                createItemLang("listSubmitExp", null);
+            });
+
+
+            $(document).on('change', '[name$=".NivelIdiomaId"], [name$=".IdiomaId"]', function () {
+                var idiomaID = $(this).closest('tr').find('[name$=".IdiomaId"]').val();
+
+                if (!verifyLanguagesLevels(idiomaID)) {
+                    $(this).val("");
+
+                    BootstrapDialog.alert({
+                        title: '@Resources.Candidatura_NivelIdiomaRepetidoErrorTitulo',
+                        message: '@Resources.Candidatura_NivelIdiomaRepetidoErrorTexto',
+                        type: BootstrapDialog.TYPE_ERROR,
+                    });
+                }
+
+            });
+
+            $(document).on('change', '[name$=".TipoTecnologiaId"], [name$=".NivelTecnologiaId"], [name$=".Experiencia"]', function () {
+                var tecnID = $(this).closest('tr').find('[name$=".TipoTecnologiaId"]').val();
+
+                if (!verifyExpITLevels(tecnID)) {
+                    $(this).val("");
+
+                    BootstrapDialog.alert({
+                        title: '@Resources.Candidatura_NivelTecnologiaRepetidoErrorTitulo',
+                        message: '@Resources.Candidatura_NivelTecnologiaRepetidoErrorTexto',
+                        type: BootstrapDialog.TYPE_ERROR,
+                    });
+                }
+            });
+
+
+            function verifyLanguagesLevels(idiomaId) {
+                var idiomas = $('[name$=".IdiomaId"]').toArray();
+                var cont = 0;
+
+                for (var i = 0; i < idiomas.length; i++) {
+                    if (idiomas[i].value == idiomaId && idiomas[i].value != "") {
+                        cont = cont + 1;
+                    }
+                }
+
+                if (cont > 1) {
+                    return false;
+                } else
+                    return true;
+            }
+
+            function verifyExpITLevels(tipoTecnId) {
+                var tipoTecn = $('[name$=".TipoTecnologiaId"]').toArray();
+                var cont = 0;
+
+                for (var i = 0; i < tipoTecn.length; i++) {
+                    if (tipoTecn[i].value == tipoTecnId && tipoTecn[i].value != "") {
+                        cont = cont + 1;
+                    }
+                }
+
+                if (cont > 1) {
+                    return false;
+                } else
+                    return true;
+
+            }
+
+
+            //Funciones
+
+            function checkOrigenCv() {
+                var input;
+
+                if ($('#OrigenCvId').val() == 1400 || $('#OrigenCvId').val() == 1401 || $('#OrigenCvId').val() == 1420 || $('#OrigenCvId').val() == "") { // busqueda y inscripcion
+                    $('#FuenteReclutamientoId').prop('disabled', false);
+                    $('#FuenteReclutamientoId').prop('required', true);
+                    clearEmailTable();
+                }
+                else if($('#OrigenCvId').val() == 1413 || $('#OrigenCvId').val() == 1414)
+                {
+                    $('#FuenteReclutamientoId').prop('disabled', true);
+                    $('#FuenteReclutamientoId').prop('required', false);
+                    clearEmailTable();
+                }
+                else {
+                    $('#FuenteReclutamientoId').prop('disabled', true);
+                    $('#FuenteReclutamientoId').prop('required', false);
+                    $('#FuenteReclutamientoId').prop('selectedIndex', 0);
+                    $('#listaGeneralEmailReferenciados').prop('hidden', false);
+
+
+                    input = location.pathname.substring(1).toLowerCase().includes("create") ?
+                        'input[name^="DatosBasicos.ListEmailReferenciados"]' :
+                        'input[name^="CandidaturaDatosBasicosViewModel.DatosBasicos.ListEmailReferenciados"]';
+
+                    $(document).on("change", input, function () {
+                            var email = $(this);
+
+                            if (!validateEmail(email.val()) && email.val().length > 0) {
+
+                                BootstrapDialog.alert({
+                                    title: '@Resources.Candidatura_ErrorEmail_Titulo',
+                                    message: '@Resources.Candidatura_ErrorEmail_Texto',
+                                    callback: function () {
+                                        email.attr("class", "form-control btn-danger");
+                                    }
+                                });
+
+                            } else {
+                                email.attr("class", "form-control");
+                            }
+
+                        });
+
+                }
+            }
+
+            function validateEmail(email) {
+                var re = /^(([^<>()\[\]\\.,;:\s@@"]+(\.[^<>()\[\]\\.,;:\s@@"]+)*)|(".+"))@@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                return re.test(String(email).toLowerCase());
+            }
+
+
+            function clearEmailTable() {
+                var cont = 0;
+                var tabla = $('#listSubmitReferenciados');
+                var filas = tabla.find('tr:not(:first)');
+                filas.each(function () {
+                    if (cont > 0) {
+                        $(this).remove();
+                    }
+                    else {
+                        cont++;
+                    }
+                });
+                $('#listaGeneralEmailReferenciados').prop('hidden', true);
+
+
+            }
+
+            function createItem(item) {
+                var original = $('#' + item + ' tbody tr:first');
+                var clone = original.clone(false);
+                clone.removeClass('hidden');
+                var cloneInputs = clone.find("input, textarea");
+                cloneInputs.removeAttr('disabled');
+                $('#' + item + ' tbody').append(clone);
+
+            }
+
+            function createItemLang(item, idioma) {
+                var ingles = 15;
+                var nameIdioma = '[name$="DatosBasicos.IdiomaCandidatoViewModel[{0}].IdiomaId"]';
+                var nameNvlIdioma = '[name$="DatosBasicos.IdiomaCandidatoViewModel[{0}].NivelIdiomaId"]';
+                var original = $('#' + item + ' tbody tr:first');
+                var clone = original.clone(false);
+
+                clone.removeClass('hidden');
+                var cloneInputs = clone.find("input, select, textarea");
+                cloneInputs.removeAttr('disabled');
+                cloneInputs.attr('required', true);
+
+                if (idioma != null) {
+                    clone.find(nameIdioma).val(idioma.IdiomaId);
+                    clone.find(nameNvlIdioma).val(idioma.NivelIdiomaId);
+                } else {
+                    clone.find(nameIdioma).val(ingles);
+                }
+
+
+                $('#' + item + ' tbody').append(clone);
+
+            }
+
+            function createItemExp(item, exp) {
+                var tipoTecnologia = '[name$="ExpCandidatoViewModel[{0}].TipoTecnologiaId"]';
+                var nvlTecnologia = '[name$="ExpCandidatoViewModel[{0}].NivelTecnologiaId"]';
+                var expPts = '[name$="ExpCandidatoViewModel[{0}].Experiencia"]';
+                var original = $('#' + item + ' tbody tr:first');
+                var clone = original.clone(false);
+
+                clone.removeClass('hidden');
+                var cloneInputs = clone.find("input, select, textarea");
+                cloneInputs.removeAttr('disabled');
+                cloneInputs.attr('required', true);
+
+                if (exp != null) {
+                    clone.find(tipoTecnologia).val(exp.TipoTecnologiaId);
+                    clone.find(nvlTecnologia).val(exp.NivelTecnologiaId);
+                    clone.find(expPts).val(exp.Experiencia);
+                }
+
+                $('#' + item + ' tbody').append(clone);
+
+            }
+
+
+            function deleteItem(item) {
+                BootstrapDialog.confirm({
+                    title: '@Resources.Candidatura_EliminarEmail_Titulo',
+                    message: '@Resources.Candidatura_EliminarEmail_Texto',
+                    type: BootstrapDialog.TYPE_CONFIRMDELETE,
+                    callback: function (result) {
+                        if (result) {
+                            item.remove();
+                            return false;
+                        } else {
+                            BootstrapDialog.closeAll();
+                        }
+                    }
+                });
+            }
+
+            function deleteItemLang(item) {
+                BootstrapDialog.confirm({
+                    title: '@Resources.Candidatura_EliminarIdioma_Titulo',
+                    message: '@Resources.Candidatura_EliminarIdioma_Texto',
+                    type: BootstrapDialog.TYPE_CONFIRMDELETE,
+                    callback: function (result) {
+                        if (result) {
+                            item.remove();
+                            return false;
+                        } else {
+                            BootstrapDialog.closeAll();
+                        }
+                    }
+                });
+            }
+
+            function deleteItemExp(item) {
+                BootstrapDialog.confirm({
+                    title: '@Resources.Eliminar_Generico_Title',
+                    message: '@Resources.Eliminar_Generico_Message',
+                    type: BootstrapDialog.TYPE_CONFIRMDELETE,
+                    callback: function (result) {
+                        if (result) {
+                            item.remove();
+                            return false;
+                        } else {
+                            BootstrapDialog.closeAll();
+                        }
+                    }
+                });
+            }
+
+            function CheckAndShowModulo() {
+                var tecnologia = $('[id="TipoTecnologiaId"]');
+                var perfil = $('[id="CategoriaId"]');
+                var seccionModulo = $('[data-section="Modulo"]');
+                var modulo = $('[id="Modulo"]');
+
+                modulo.attr('disabled', 'disabled');
+                modulo.removeAttr('required');
+                seccionModulo.addClass('hide');
+                //Estado: Cerrada y Contratacion: Cambio Interno
+                if ((tecnologia.val() == @((int)TipoTecnologiaEnum.Sap))
+                    && ((perfil.val() == @((int)TipoPerfilCandidaturaEnum.FunctionalSpecialist))
+                    || (perfil.val() == @((int)TipoPerfilCandidaturaEnum.FunctionalSeniorSpecialist))
+                    || (perfil.val() == @((int)TipoPerfilCandidaturaEnum.FunctionalLeaderSpecialist))
+                    || (perfil.val() == @((int)TipoPerfilCandidaturaEnum.FunctionalExpertSpecialist)))) {
+                    modulo.removeAttr('disabled');
+                    modulo.attr('required', 'required');
+                    seccionModulo.removeClass('hide');
+                }
+                else
+                {
+                    modulo.val("");
+                    modulo.change();
+                }
+            }
+
+            //Logica modal Oferta
+
+            $(document).on('click', '#buscarModalOferta', function () {
+                var table = $('#tablaOfertas');
+                table.data("fn-search")();
+            });
+
+            $(document).on('click', '#limpiarModalOferta', function () {
+                var table = $('#tablaOfertas');
+                table.data("fn-clear")();
+                resetFields('#form-filterOferta');
+            });
+
+            function getFiltersOfertas() {
+
+                var filterNombreOferta = $("[name=filterNombreOferta]").val();
+
+                return {
+                    NombreOferta: filterNombreOferta,
+                };
+            }
+
+            $(document).on('click', '#BtnOferta', function () {
+                var id = $("#modalOfertas input:radio:checked").closest("tr").find("#OfertaId").val();
+                var nombreOferta = $("#modalOfertas input:radio:checked").closest("tr").find("#NombreOferta").val();
+                $('#NombreOferta').attr('value', nombreOferta);
+                $('#OfertaId').attr('value', id);
+                $('#modalOfertas').modal('hide');
+            });
+
+             //Logica crear/editar Oferta
+
+            $(document).on('click', '#BtnCreateOferta', function () {
+                $('#NombreOfertaCrearEdit').val("");
+                $('[name=IdOfertaCrearEdit]').val(0);
+            });
+
+            $(document).on('click', '#EditOfertaButton', function () {
+
+                var ofertaId = $(this).closest("tr").find("#OfertaId").val();
+                var nombreOferta = $(this).closest("tr").find("#NombreOferta").val();
+                $('[name="IdOfertaCrearEdit"]').val(ofertaId);
+                $('#NombreOfertaCrearEdit').val(nombreOferta);
+
+            });
+
+            $(document).on('click', '#BtnCrearEditOferta', function () {
+                if ($('#NombreOfertaCrearEdit').val() == "") {
+                    BootstrapDialog.show({
+                        type: BootstrapDialog.TYPE_ERROR,
+                        title: '@Resources.OfertaVaciaTitulo',
+                        message: '@Resources.OfertaVaciaTexto',
+                    });
+                }
+                else {
+                    BootstrapDialog.confirm({
+                        title: '@Resources.Candidaturas_ConfirmacionGuardarOfertaTitulo',
+                        message: '@Resources.Candidaturas_ConfirmacionGuardarOfertaTexto',
+                        type: BootstrapDialog.TYPE_CONFIRMFINALICE,
+                        callback: function (result) {
+                            if (result) {
+                                var idOferta = $('[name=IdOfertaCrearEdit]').val();
+                                var nombreOferta = $('#NombreOfertaCrearEdit').val();
+
+
+                                $.post('@Url.Action("CrearEditOferta", "Candidaturas")', { IdOferta: idOferta, NombreOferta: nombreOferta}).
+                                    success(function (IsValid) {
+                                        if (IsValid) {
+                                            $('#NombreOfertaCrearEdit').val('');
+                                            BootstrapDialog.closeAll();
+                                            var table = $('#tablaOfertas');
+                                            table.data("fn-search")();
+                                        }
+                                        else if (Data == "") {
+                                            BootstrapDialog.show({
+                                                type: BootstrapDialog.TYPE_ERROR,
+                                                title: '@Resources.Permiso_Titulo',
+                                                message: '@Resources.Permiso_Mensaje',
+                                            });
+                                        }
+                                    })
+
+                            } else {
+                                BootstrapDialog.closeAll();
+                            }
+                        }
+                    });
+                    $('#modalCrearEditOfertas').modal('hide');
+                }
+
+            });
+
+            //Logica borrar Oferta
+
+            $(document).on('click', '#DeleteOfertaButton', function () {
+
+                var item = $(this).closest("tr").find("#OfertaId").val();
+
+                BootstrapDialog.confirm({
+                    title: '@Resources.Candidaturas_EliminarOfertaTitulo',
+                    message: '@Resources.Candidaturas_EliminarOfertaTexto',
+                    type: BootstrapDialog.TYPE_CONFIRMDELETE,
+                    callback: function (result) {
+                        if (result) {
+                            $.post('@Url.Action("ComprobarOfertaUsada", "Candidaturas")', { OfertaId: item }).
+                                    success(function (Data) {
+                                        if (Data.IsValid) {
+                                            if(Data.Usada == true)
+                                            {
+                                                BootstrapDialog.show({
+                                                    type: BootstrapDialog.TYPE_ERROR,
+                                                    title: '@Resources.OfertaEnUsoTitulo',
+                                                    message: '@Resources.OfertaEnUsoTexto',
+                                                });
+                                            }
+                                            else
+                                            {
+                                                $.post('@Url.Action("DeleteOferta", "Candidaturas")', { OfertaId: item }).
+                                                success(function (Data) {
+                                                    if (Data.IsValid) {
+                                                        var table = $('#tablaOfertas');
+                                                        table.data("fn-search")();
+                                                    }
+                                                    else if (Data == "") {
+                                                        BootstrapDialog.show({
+                                                            type: BootstrapDialog.TYPE_ERROR,
+                                                            title: '@Resources.Permiso_Titulo',
+                                                            message: '@Resources.Permiso_Mensaje',
+                                                        });
+                                                    }
+                                                })
+                                            }
+                                        }
+                                        else if (Data == "") {
+                                            BootstrapDialog.show({
+                                                type: BootstrapDialog.TYPE_ERROR,
+                                                title: '@Resources.Permiso_Titulo',
+                                                message: '@Resources.Permiso_Mensaje',
+                                            });
+                                        }
+                                    })
+                        } else {
+                            BootstrapDialog.closeAll();
+                        }
+                    }
+                });
+            });
+
+
+            //Logica comprobaciones Oferta
+
+            $(document).on('change', '#NombreOfertaCrearEdit', function () {
+                var NombreOferta = $('#NombreOfertaCrearEdit').val();
+                checkNombreOferta(NombreOferta);
+            });
+
+
+            function checkNombreOferta(NombreOferta) {
+                $.ajax({
+                    url: '@Url.Action("ComprobarExisteOferta", "Candidaturas")',
+                    data: { NombreOferta: NombreOferta },
+                    type: 'POST',
+                    success: function (data) {
+                        if (data) {
+                            BootstrapDialog.show({
+                                title: '@Resources.ExisteOferta',
+                                message: data,
+                                type: BootstrapDialog.TYPE_CONFIRMFINALICE,
+                                closable: false,
+                                closeByBackdrop: false,
+                                closeByKeyboard: false,
+                                buttons: [{
+                                    label: '@Resources.Boton_Aceptar',
+                                    cssClass: 'btn btnAdd',
+                                    action: function (dialogRef) {
+                                        //lo ponemos vacio
+                                        $('#NombreOfertaCrearEdit').val("");
+                                        dialogRef.close();
+                                    }
+                                }]
+                            });
+                        }
+                        //alert(data);
+                    },//success
+                    error: function (data) {
+                        alert("Error: problemas al conectar con la base de datos");
+                    }//error
+                });//ajax
+            }
+
+            //ForTable Referenciados
+
+            String.format = function (format) {
+                var args = Array.prototype.slice.call(arguments, 1);
+                return format.replace(/{(\d+)}/g, function (match, number) {
+                    return typeof args[number] != 'undefined'
+                        ? args[number]
+                        : match
+                        ;
+                });
+            };
+
+            function forTable() {
+
+                var $cont = 0;
+                $("#listSubmitReferenciados tbody tr:not(:first)").each(function () {
+                    var item = $(this);
+                    item.find('input, textarea').each(function () {
+                        var input = $(this);
+                        input.attr('name', String.format(input.attr('name'), $cont));
+                    });
+
+                    $cont++;
+
+                });
+
+                var $cont = 0;
+                $("#listSubmitIdioma tbody tr:not(:first)").each(function () {
+                    var item = $(this);
+                    item.find('input, select, textarea').each(function () {
+                        var input = $(this);
+                        input.attr('name', String.format(input.attr('name'), $cont));
+                    });
+
+                    $cont++;
+                });
+
+                var $cont = 0;
+                $("#listSubmitExp tbody tr:not(:first)").each(function () {
+                    var item = $(this);
+                    item.find('input, select, textarea').each(function () {
+                        var input = $(this);
+                        input.attr('name', String.format(input.attr('name'), $cont));
+                    });
+
+                    $cont++;
+                });
+
+            }
+
+        </script>
+}
+
+@helper CreateFrontActions(System.Web.Mvc.UrlHelper Url)
+    {
+        <script type="text/javascript">
+
+        //Finalizar
+
+            function finalizar(source) {
+                BootstrapDialog.confirm({      
+                    title: '@Resources.Candidatura_ConfirmacionFinalizarTitulo',
+                    message: '@Resources.Candidatura_ConfirmacionFinalizarTexto',
+                    type: BootstrapDialog.TYPE_CONFIRMFINALICE,
+                    callback: function (result) {
+                        if (result) {
+                            forTable();
+                            var submitType = $("[name=SubmitType]");
+                            submitType.val("finalizar");
+                            $("form").submit();
+                        } else {
+                            BootstrapDialog.closeAll();
+                        }
+                    }
+                });
+              
+        }
+
+        //Logica modal candidatos
+
+        $(document).on('click', '#limpiarModal', function () {
+            resetFields('#form-filter');
+            var table = $('#tablaCandidatosCandidatura');
+            table.data("fn-clear")();
+        });
+
+        $(document).on('click', '#buscarModal', function () {
+            var table = $('#tablaCandidatosCandidatura');
+            table.data("fn-search")();
+        });
+
+
+        $(document).on('click', '#SelectCandidato', function () {
+            $("#myModal input:checkbox").prop('checked', false);
+            $(this).prop('checked', true);
+        });
+
+        $(document).on('click', '#BtnCandidato', function () {
+            var id = $("#myModal input:radio:checked").closest("tr").find("#CandidatoId").val();
+            var nombre = $("#myModal input:radio:checked").closest("tr").find("#NombresYApellidos").val();
+            $('#NombreCandidato').attr('value', nombre);
+            $('#CandidatoId').attr('value', id);
+
+            //TODO Lllamamos al metodo del controlador
+            $.ajax({
+                url: '@Url.Action("CreateByCandidato", "Candidaturas")',
+                type: 'POST',
+                cache: false,
+                data: { id: id },
+                success: function (data) {
+                    var datos = data.DatosBasicos;
+                    var inputLang = $('#listSubmitIdioma tbody tr:first');
+                    var inputExp = $('#listSubmitExp tbody tr:first');
+
+                    if (inputLang.next("tr").length > 0) {
+                        inputLang.nextAll().remove();
+                    }
+
+                    if (inputExp.next("tr").length > 0) {
+                        inputExp.nextAll().remove();
+                    }
+
+                    for (var i = 0; i < datos.IdiomaCandidatoViewModel.length; i++) {
+                        createItemLang("listSubmitIdioma", datos.IdiomaCandidatoViewModel[i]);
+                    }
+
+                    for (var i = 0; i < datos.ExpCandidatoViewModel.length; i++) {
+                        createItemExp("listSubmitExp", datos.ExpCandidatoViewModel[i]);
+                    }
+
+                    $('#conocimientoIdiomas').removeAttr('hidden');
+                    $('#expTecnologias').removeAttr('hidden');
+                },
+                error: function (jqXHR, textStatus, errorThrown) { debugger;/*see what happened */ }
+            });
+
+            $('#myModal').modal('hide');
+        });
+
+        //logica idiomas
+       
+
+        
+
+        function getFiltersCandidatosCandidatura() {
+
+            var filterNombre = $("[name=filterNombre]").val();
+            var filterApellidos = $("[name=filterApellidos]").val();
+            var filterTipoIdentificacion = $("[name=filterTipoIdentificacion]").val();
+            var filterNumIdentificacion = $("[name=filterNumIdentificacion]").val();
+            var filterEmail = $("[name=filterEmail]").val();
+            var filterTelefono = $("[name=filterTelefono]").val();
+
+            return {
+                Nombre: filterNombre, Apellidos: filterApellidos, TipoIdentificacion: filterTipoIdentificacion,
+                NumeroIdentificacion: filterNumIdentificacion, Email: filterEmail, Telefono: filterTelefono
+            };
+        }
+
+        </script>
+}
+
+@helper FiltradoCvPartialFrontActions()
+    {
+        <script type="text/javascript">
+
+            //Inicializaciones
+
+            $(document).ready(function () {
+                //provocar el evento al cargar la pagina del boton switch
+                CheckFiltrado()
+
+
+
+            });
+
+            //Comprobaciones y restricciones
+
+            $(document).on('change', '#Filtrado', function () {
+                CheckFiltrado()
+
+            });
+
+            //Funciones
+
+            function CheckFiltrado() {
+                var selectMotivo = $('#RegionDescartar');
+                var valueRadio = $('#Filtrado').val();
+                if (valueRadio == "True") {
+                    selectMotivo.addClass('hide');
+                    $('#DescartarFuturasCandidaturas').prop("checked", false);
+                } else {
+                    selectMotivo.removeClass('hide');
+                }
+            }
+
+        </script>
+}
+
+@helper FiltradoCvFrontActions()
+    {
+        <script type="text/javascript">
+
+        //Guardar / finalizar
+
+        function guardar(source) {
+            var textArea = $('#MotivosObservaciones').val();
+   
+            BootstrapDialog.confirm({
+                title: '@Resources.Candidatura_ConfirmacionGuardarTitulo',
+                message: '@Resources.Candidatura_ConfirmacionGuardarTexto',
+                type: BootstrapDialog.TYPE_CONFIRMFINALICE,
+                callback: function (result) {
+                    if (result) {
+                        var submitType = $("[name=SubmitType]");
+                        submitType.val("guardar");
+                        $("form").submit();
+                    } else {
+                        BootstrapDialog.closeAll();
+                    }
+                }
+            });
+        }
+
+        function finalizar(source) {
+
+            var textArea = $('#MotivosObservaciones').val();
+
+            BootstrapDialog.confirm({
+                title: '@Resources.Candidatura_ConfirmacionFinalizarTitulo',
+                message: '@Resources.Candidatura_ConfirmacionFinalizarTexto',
+                type: BootstrapDialog.TYPE_CONFIRMFINALICE,
+                callback: function (result) {
+                    if (result) {
+                        var submitType = $("[name=SubmitType]");
+                        submitType.val("finalizar");
+                        $("form").submit();
+                    } else {
+                        BootstrapDialog.closeAll();
+                    }
+                }
+            });
+        }
+
+        </script>
+}
+
+@helper AgendarPrimeraEntrevistaPartialFrontActions()
+    {
+        <script type="text/javascript">
+
+            //Inicializaciones
+
+            $(document).ready(function () {
+
+                CheckAvisarCandidato();
+
+            });
+
+            //Comprobaciones y restricciones
+
+            $(document).on('click', "#AvisarAlCandidatoEntrevistaPrincial", function () {
+                CheckAvisarCandidato();
+            });
+
+            //Funciones
+
+            function CheckAvisarCandidato() {
+
+                if (document.getElementById("AvisarAlCandidatoEntrevistaPrincial") != null) {
+                    if (document.getElementById("AvisarAlCandidatoEntrevistaPrincial").checked == false) {
+                        $('#ocultarPlantilla').addClass('hidden');
+                    }
+                    else {
+                        $('#ocultarPlantilla').removeClass('hidden');
+                    }
+                }
+
+            }
+
+
+        </script>
+}
+
+@helper AgendarPrimeraEntrevistaFrontActions(System.Web.Mvc.UrlHelper Url, Recruiting.Application.Candidaturas.ViewModel.AgendarPrimeraEntrevistaViewModel Model, int nSubEntrevistas, int centroId)
+    {
+        <script type="text/javascript">
+
+
+         //Inicializaciones
+
+        $(document).ready(function () {
+            //necesario para mostrar la lista de subentrevistas
+            var indiceMostrarSubentrevistas = 0;
+            for (indiceMostrarSubentrevistas = 0; indiceMostrarSubentrevistas < @nSubEntrevistas; indiceMostrarSubentrevistas++) {
+                (function (j) {
+                    if ($('#EntrevistadorIdSearchable' + j + '-Text').val() != "") {
+                        $('#subEntrevista' + j).removeClass('hidden');
+                        $('#EntrevistadorIdSearchable' + j).prop('required', true);
+                        $('#FechaSubEntrevista' + j).prop('required', true);
+                        $('#TipoSubEntrevista' + j).prop('required', true);
+                        $('#Presencial' + j).prop('required', true);
+                        $('#AvisarAlCandidato' + j).prop('required', true);
+                    }
+                })(indiceMostrarSubentrevistas);
+            }
+        });
+
+        //Guardar / Finalizar
+
+         function guardar(source) {
+            //necesario para subentrevista
+            var conflictoFechaSubEntrevista = hayConflictoFechasYPreparaParaGuardar();
+            if (conflictoFechaSubEntrevista)
+            {
+                BootstrapDialog.alert({
+                    title: '@Resources.Subentrevista_FechasCoincidenErrorTitulo',
+                    message: '@Resources.Subentrevista_FechasCoincidenErrorTexto',
+                    type: BootstrapDialog.TYPE_ERROR,
+                });
+            }
+            else
+            {
+                //fin necesario para subentrevista
+                BootstrapDialog.confirm({
+                    title: '@Resources.Candidatura_ConfirmacionGuardarTitulo',
+                    message: '@Resources.Candidatura_ConfirmacionGuardarTexto',
+                    type: BootstrapDialog.TYPE_CONFIRMFINALICE,
+                    callback: function (result) {
+                        if ($('#FormGuardarEntrevista').parsley().validate() == true)
+                        {
+                            if (result) {
+                                var submitType = $("[name=SubmitType]");
+                                submitType.val("guardar");
+                                $("#FormGuardarEntrevista").submit();
+                            } else {
+                                BootstrapDialog.closeAll();
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        function finalizar(source) {
+            //necesario para subentrevista
+            var conflictoFechaSubEntrevista = hayConflictoFechasYPreparaParaGuardar();
+            if (conflictoFechaSubEntrevista)
+            {
+                BootstrapDialog.alert({
+                    title: '@Resources.Subentrevista_FechasCoincidenErrorTitulo',
+                    message: '@Resources.Subentrevista_FechasCoincidenErrorTexto',
+                    type: BootstrapDialog.TYPE_ERROR,
+                });
+            }
+            else
+            {
+                //fin necesario para subentrevista
+                BootstrapDialog.confirm({
+                    title: '@Resources.Candidatura_ConfirmacionFinalizarTitulo',
+                    message: '@Resources.Candidatura_ConfirmacionFinalizarTexto',
+                    type: BootstrapDialog.TYPE_CONFIRMFINALICE,
+                    callback: function (result) {
+                        if (result) {
+                            if ($("#FormGuardarEntrevista").parsley().validate() == true) {
+                                var submitType = $("[name=SubmitType]");
+                                submitType.val("finalizar");
+                                $("#FormGuardarEntrevista").submit();
+                            }
+                        } else {
+                            BootstrapDialog.closeAll();
+                        }
+                    }
+                });
+            }
+        }
+
+         //Logica subentrevistas
+
+        $(document).on('click', '#btnAddSubEntrevista', function ()
+        {
+            var iReal = @nSubEntrevistas - 1;
+            var ultimaSubEntrevistaHidden = $('#subEntrevista' + iReal).hasClass('hidden'); //si el ultimo elemento esta oculto
+
+            if($('#subEntrevista0').hasClass('hidden'))
+            {
+                $('#subEntrevista0').removeClass('hidden');
+                $('#EntrevistadorIdSearchable0').prop('required', true);
+                $('#FechaSubEntrevista0').prop('required', true);
+                $('#TipoSubEntrevista0').prop('required', true);
+                $('#Presencial0').prop('required', true);
+                $('#AvisarAlCandidato0').prop('required', true);
+            }
+            else if (ultimaSubEntrevistaHidden)
+            {
+                for (var x = (iReal - 1) ; x >= 0 ; x--) //recorremos los elemenots anteriores al ultimo elemento
+                {
+                    var entrevistasAnterioresNotHidden = !$('#subEntrevista' + x).hasClass('hidden'); //si no están ocultos
+                    if (entrevistasAnterioresNotHidden) {
+                        var indiceAAgregar = x + 1;
+                        $('#subEntrevista' + indiceAAgregar).removeClass('hidden');
+                        $('#EntrevistadorIdSearchable' + indiceAAgregar).prop('required', true);
+                        $('#FechaSubEntrevista' + indiceAAgregar).prop('required', true);
+                        $('#TipoSubEntrevista' + indiceAAgregar).prop('required', true);
+                        $('#Presencial' + indiceAAgregar).prop('required', true);
+                        $('#AvisarAlCandidato' + indiceAAgregar).prop('required', true);
+                        break;
+                    }
+                }
+            }
+        });
+
+        $('td[name=btnDeleteSubEntrevista]').click(function () {
+
+            var itemId = $(this).closest("tr").attr("id");
+
+            BootstrapDialog.confirm({
+                title: '@Resources.Eliminar_SubEntrevista_Title',
+                message: '@Resources.Eliminar_SubEntrevista_Message',
+                type: BootstrapDialog.TYPE_CONFIRMDELETE,
+                callback: function (result) {
+                    if (result) {
+                        deleteSubEntrevista("#" + itemId);
+                        return false;
+                    } else {
+                        BootstrapDialog.closeAll();
+                    }
+                }
+            });
+        });
+
+
+        function deleteSubEntrevista(item) {
+
+            for (var indiceItem = 0; indiceItem < @nSubEntrevistas; indiceItem++) //inicializamos el indice desde el que comenzamos a recorrer las subentrevistas
+            {
+                if (item == '#subEntrevista' + indiceItem)
+                {
+                    indiceInicial = indiceItem + 1;
+                }
+            } // fin
+
+            for (var i = indiceInicial; i <= @nSubEntrevistas; i++)
+            {
+                if ((!$('#subEntrevista' + i).hasClass('hidden'))
+                    && !($('#subEntrevista' + i).length == 0)) //comprueba que existe el indice siguiente
+                {
+                    var indiceAnterior = i - 1;
+                    var entrevistadorName = $('#EntrevistadorIdSearchable' + i + '-Text').val();
+                    var entrevistadorId = $('#EntrevistadorIdSearchable' + i).val();
+                    var fecha = $('#FechaSubEntrevista' + i).val();
+                    var subEntrevistaId = $("[name='SubEntrevistaList[" + i + "].SubEntrevistaId']").val();
+                    var completada = $("[name='SubEntrevistaList[" + i + "].Completada']").val();
+                    var tipoSubEntrevista = $('#TipoSubEntrevista' + i).val();
+                    var presencial = $('#Presencial' + i).val();
+                    var avisarAlCandidato = $('#AvisarAlCandidato' + i).val();
+
+                    $('#EntrevistadorIdSearchable' + indiceAnterior + '-Text').val(entrevistadorName);
+                    $('#EntrevistadorIdSearchable' + indiceAnterior).val(entrevistadorId);
+                    $('#FechaSubEntrevista' + indiceAnterior).val(fecha);
+                    $("[name='SubEntrevistaList[" + indiceAnterior + "].SubEntrevistaId']").val(subEntrevistaId);
+                    $("[name='SubEntrevistaList[" + indiceAnterior + "].Completada']").val(completada);
+                    $('#TipoSubEntrevista' + indiceAnterior).val(tipoSubEntrevista);
+                    $('#Presencial' + indiceAnterior).val(presencial);
+                    $('#AvisarAlCandidato' + indiceAnterior).val(avisarAlCandidato);
+
+                }
+                else
+                {
+                    var indiceAnterior = i - 1;
+                    $('#EntrevistadorIdSearchable' + indiceAnterior + '-Text').val("");
+                    $('#EntrevistadorIdSearchable' + indiceAnterior).val("");
+                    $('#FechaSubEntrevista' + indiceAnterior).val("");
+                    $('#subEntrevista' + indiceAnterior).addClass('hidden');
+                    $('#EntrevistadorIdSearchable' + indiceAnterior).prop('required', false);
+                    $('#FechaSubEntrevista' + indiceAnterior).prop('required', false);
+                    $("[name='SubEntrevistaList[" + indiceAnterior + "].SubEntrevistaId']").val(null);
+                    $("[name='SubEntrevistaList[" + indiceAnterior + "].Completada']").val(false);
+                    $('#TipoSubEntrevista' + indiceAnterior).val(null);
+                    $('#Presencial' + indiceAnterior).val("False");
+                    $('#TipoSubEntrevista' + indiceAnterior).prop('required', false);
+                    $('#Presencial' + indiceAnterior).prop('required', false);
+                    $('#AvisarAlCandidato' + indiceAnterior).prop('required', false);
+                    $('#AvisarAlCandidato' + indiceAnterior).val("False");
+                }
+            }
+        };
+
+        var x = 0;
+        for (x = 0; x < @nSubEntrevistas; x++)
+        {
+            (function(j) {
+                $(document).on('change', '#EntrevistadorIdSearchable' + j + '-Text', function ()
+                {
+                    var nombreEntrevistador = $('#EntrevistadorIdSearchable' + j + '-Text').val();
+                    if (nombreEntrevistador == "")
+                    {
+                        $('#EntrevistadorIdSearchable' + j).val("");
+                    }
+                });
+            })(x);
+        }
+
+        function hayConflictoFechasYPreparaParaGuardar()
+        {
+            var conflictoFechaSubEntrevista = false;
+            var indiceSubEntrevista = 0;
+            for (indiceSubEntrevista = 0; indiceSubEntrevista < @nSubEntrevistas; indiceSubEntrevista++) {
+                (function (j) {
+                    var nombreEntrevistador = $('#EntrevistadorIdSearchable' + j + '-Text').val();
+                    $('#EntrevistadorName' + j).val(nombreEntrevistador);
+                    var fecha = $('#FechaSubEntrevista' + j).val();
+                    var subEntrevistaActualNotificar = $('#AvisarAlCandidato' + j).val();
+                    if (fecha != null && fecha != "" && subEntrevistaActualNotificar == "True")
+                    {
+                        fecha = fecha.substring(0, fecha.length - 6);
+                        var fechaEntrevistaPrincipal = $('#FechaPrimeraEntrevista').val();
+                        fechaEntrevistaPrincipal = fechaEntrevistaPrincipal.substring(0, fechaEntrevistaPrincipal.length - 6);
+                        if (fecha == fechaEntrevistaPrincipal && $("#AvisarAlCandidatoEntrevistaPrincial").is(':checked'))
+                        {
+                            conflictoFechaSubEntrevista = true;
+                        }
+                        for (indiceSubEntrevistaConflictiva = 0; indiceSubEntrevistaConflictiva < @nSubEntrevistas; indiceSubEntrevistaConflictiva++)
+                        {
+                            (function (i) {
+                                if (i != j)
+                                {
+                                    var fechaOtraSubEntrevista = $('#FechaSubEntrevista' + i).val();
+                                    fechaOtraSubEntrevista = fechaOtraSubEntrevista.substring(0, fechaOtraSubEntrevista.length - 6);
+                                    var subEntrevistaNuevaNotificar = $('#AvisarAlCandidato' + i).val();
+                                    if (fecha == fechaOtraSubEntrevista && subEntrevistaActualNotificar == subEntrevistaNuevaNotificar)
+                                    {
+                                        conflictoFechaSubEntrevista = true;
+                                    }
+                                }
+                            })(indiceSubEntrevistaConflictiva);
+                        }
+                    }
+                })(indiceSubEntrevista);
+            }
+            return conflictoFechaSubEntrevista;
+        }
+
+        //Logica salas
+
+        $(document).on('click', '#excluirSalasButton', function(){
+            $('#OficinaId').val($('#Oficina').val());
+            $('#FormExcluirSalas').submit();
+        });
+
+        $(document).on('click', "#buscarSalasButton", function(){
+            var centroId = @centroId;
+            var oficinaId = $('#Oficina').val();
+            var entrevistadorId = $('#AgendarPrimeraEntrevista_EntrevistadorId').val();
+            var fecha = $('#FechaPrimeraEntrevista').val();
+            var ignorarDisponibilidad = $('#IgnorarDispEntrevistador').val();
+
+            var $select = $('#SalasId');
+            $select.empty();
+
+            $('body').LoadingOverlay('show');
+                      
+
+            $.post('@Url.Action("GetRooms", "Graph")', { CentroId: centroId, OficinaId: oficinaId, EntrevistadorId: entrevistadorId, Fecha: fecha, IgnorarDisponibilidad: ignorarDisponibilidad }).
+                done(function (Data) {
+                    if (Data.IsValid) {
+
+                        $.each(Data.salas, function () {                            
+                            $('<option>', {
+                                value: $(this).attr('Value'),
+                                text: $(this).attr('Text')
+                            }).html($(this).attr('Text')).appendTo($select);
+                        });
+                        $('body').LoadingOverlay('hide');
+                        
+                    } else if (!Data.IsValid) {
+                        BootstrapDialog.show({
+                            type: BootstrapDialog.TYPE_ERROR,
+                            title: 'Error obtener salas',
+                            message: Data.ErrorMessage,
+                        });
+                        ClearSala();
+                        $('body').LoadingOverlay('hide');
+                    }
+                });
+
+
+        });
+
+
+        $(document).on('click', "#enviarConvocatoriaButton", function(){
+            var centroId = @centroId;
+            var oficinaId = $('#Oficina').val();
+            var entrevistadorName = $('#AgendarPrimeraEntrevista_EntrevistadorId-Text').val();
+            var entrevistadorId = $('#AgendarPrimeraEntrevista_EntrevistadorId').val();
+            var candidaturaId = @Model.AgendarPrimeraEntrevista.CandidaturaId;
+            var emailSala = $('[name="nombreSala"]').val();
+            var fecha = $('#FechaPrimeraEntrevista').val();
+            var presencialPrincipal = $('#Presencial').val();
+            var sendMeetingSubEntrevistas = [];
+            var cont = 0;
+
+            $("#listSubmitSubInterview").find('tbody').find('tr:not(.hidden)').each(function () {
+                var entrevistador = $("#EntrevistadorIdSearchable" + cont + "-Text").val();
+                var entrevistadorIdSub = $("#EntrevistadorIdSearchable" + cont).val();
+                var fechaSub = $("#FechaSubEntrevista" + cont).val();
+                var tipo = $("#TipoSubEntrevista" + cont).val();
+                var presencial = $("#Presencial" + cont).val();
+
+                var datosSubEntrevista = { Entrevistador: entrevistador, EntrevistadorId: entrevistadorIdSub, Fecha: fechaSub, TipoSubEntrevista: tipo, Presencial: presencial }
+
+                cont++;
+
+                sendMeetingSubEntrevistas.push(datosSubEntrevista);
+            });
+
+           
+
+            if(emailSala == null)
+            {
+                BootstrapDialog.show({
+                    type: BootstrapDialog.TYPE_ERROR,
+                    title: 'Error enviar convocatoria',
+                    message: 'Debe buscar una sala antes para enviar la convocatoria',
+                });
+            }
+            else
+            {
+                $.post('@Url.Action("SendMeetings", "Candidaturas")', { CentroId: centroId, OficinaId: oficinaId, EntrevistadorId: entrevistadorId, Entrevistador: entrevistadorName, CandidaturaId: candidaturaId, Presencial: presencialPrincipal, EmailSala: emailSala, Fecha: fecha, SendMeetingSubEntrevistas: sendMeetingSubEntrevistas }).
+                    done(function (Data) {
+                        if (Data.IsValid) {
+                            BootstrapDialog.show({
+                                type: BootstrapDialog.TYPE_NOTIFY,
+                                title: 'Enviada correctamente',
+                                message: 'Convocatoria enviada con éxito',
+                            });
+                            $('#enviarConvocatoriaButton').attr('disabled', 'disabled');
+                        } else if (!Data.IsValid) {
+                            BootstrapDialog.show({
+                                type: BootstrapDialog.TYPE_ERROR,
+                                title: 'Error al enviar convocatoria',
+                                message: Data.ErrorMessage,
+                            });
+                            ClearSala();
+                        }
+                    });
+            }
+
+        });
+
+        $(document).on('change', '#AgendarPrimeraEntrevista_EntrevistadorId-Text', function () {
+            ClearSala();
+        });
+
+        $(document).on('click', '#FechaPrimeraEntrevista', function () {
+            ClearSala();
+        });
+
+        function ClearSala() {
+            $('#nombreSala').val("");
+            $('[name=emailSala]').val("");
+        }
+
+        </script>
+}
+
+@helper CompletarPrimeraEntrevistaPartialFrontActions()
+    {
+        <script type="text/javascript">
+
+            //Inicializaciones
+
+
+            $(document).ready(function () {
+
+                $('#regionMeetings').addClass("hidden");
+                var status = $('input[name="TriStatus"]:checked').val();
+                CheckSuperaPrimeraEntrevista(status);
+            });
+
+            //Validaciones y restricciones
+
+            $(document).on('click', 'input[name="TriStatus"]', function () {
+                var status = $(this).val();
+                $('input[name="ResultadoPrimeraEntrevista.SuperaEntrevistaId"]').val(status);
+                CheckSuperaPrimeraEntrevista(status);
+
+            });
+
+            //Funciones
+
+            function CheckSuperaPrimeraEntrevista(status) {
+
+                if (status == @((int)TipoDecisionEnum.SUPERA_PRIMERA_ENTREVISTA )) {
+                    var inputMotivoSelect = $('#MotivoPrimeraEntrevistaId');
+                    inputMotivoSelect.removeAttr('required');
+                    $('#MotivoPrimeraEntrevistaId').attr('disable', 'disable');
+                    $('#MotivoPrimeraEntrevistaRegion').addClass('hide');
+                }
+                if (status == @((int)TipoDecisionEnum.NO_SUPERA_PRIMERA_ENTREVISTA )) {
+                    var inputMotivoSelect = $('#MotivoPrimeraEntrevistaId');
+                    inputMotivoSelect.attr('required', 'required');
+                    $('#MotivoPrimeraEntrevistaId').removeAttr('disable');
+                    $('#MotivoPrimeraEntrevistaRegion').removeClass('hide');
+                }
+                if (status == @((int)TipoDecisionEnum.SIN_DECIDIR_PRIMERA_ENTREVISTA )) {
+                    var inputMotivoSelect = $('#MotivoPrimeraEntrevistaId');
+                    inputMotivoSelect.removeAttr('required');
+                    $('#MotivoPrimeraEntrevistaRegion').addClass('hide');
+                }
+            }
+
+        </script>
+}
+
+@helper CompletarPrimeraEntrevistaFrontActions(System.Web.Mvc.UrlHelper Url, Recruiting.Application.Candidaturas.ViewModel.PrimeraEntrevistaViewModel Model)
+    {
+        <script type="text/javascript">
+
+        //Guardar / finalizar
+
+            function guardar(source)
+            {
+
+                var textArea = $('#ObservacionesEntrevista-1').val();
+                BootstrapDialog.confirm({
+                    title: '@Resources.Candidatura_ConfirmacionGuardarTitulo',
+                    message: '@Resources.Candidatura_ConfirmacionGuardarTexto',
+                    type: BootstrapDialog.TYPE_CONFIRMFINALICE,
+                    callback: function (result) {
+                        if (result) {
+                            var submitType = $("[name=SubmitType]");
+                            submitType.val("guardar");
+                            $('#MotivoPrimeraEntrevistaId').prop('required', false);
+                            $("form").submit();
+                        } else {
+                            BootstrapDialog.closeAll();
+                        }
+                    }
+                });
+            }
+
+            function finalizar(source)
+            {
+
+            var completada = $('[name="ResultadoPrimeraEntrevista.Completada"]').val();
+            var haySubEntrevistasSinCompletar = false;
+            var error = false;
+
+            var superaEntrevista = $('input[name="TriStatus"]:checked').val();
+            if (superaEntrevista == @((int)TipoDecisionEnum.SIN_DECIDIR_PRIMERA_ENTREVISTA ))
+            {
+                BootstrapDialog.show({
+                    type: BootstrapDialog.TYPE_ERROR,
+                    title: '@Resources.HTML_Candidaturas_CompletarPrimeraEntrevista_Alerta',
+                    text: '@Resources.HTML_Candidaturas_CompletarPrimeraEntrevista_PrimeraEntrevistaSinDecision',
+                    message: '@Resources.HTML_Candidaturas_CompletarPrimeraEntrevista_PrimeraEntrevistaSinDecision',
+                });
+            } else
+            {
+                var candidaturaIdYTipoEntrevista = {
+                    candidaturaId: @Model.AgendarPrimeraEntrevista.AgendarPrimeraEntrevista.CandidaturaId,
+                    tipoEntrevista: 1
+                };
+
+                var candidaturaIdYTipoEntrevistaStringified = JSON.stringify(candidaturaIdYTipoEntrevista);
+
+                if (completada == "False") {
+                    BootstrapDialog.alert({
+                        title: '@Resources.HTML_Candidaturas_CompletarPrimeraEntrevista_Error',
+                        message: '@Resources.HTML_Candidaturas_CompletarPrimeraEntrevista_EntrevistaDebeSerCompletada',
+                        type: BootstrapDialog.TYPE_ERROR,
+                        callback: function (result) {
+                            if (result) {
+                                BootstrapDialog.closeAll();
+                            } else {
+                                BootstrapDialog.closeAll();
+                            }
+                        }
+                    });
+                }
+                else {
+                    $.ajax({
+                        url: "/Candidaturas/CompruebaSiTieneSubEntrevistas", // the URL of the controller action method
+                        async: false,
+                        type: "POST",
+                        data: candidaturaIdYTipoEntrevistaStringified,
+                        dataType: 'json',
+                        processData: false,
+                        contentType: 'application/json; charset=utf-8',
+                        success: function (result) {
+                            if (result == true && result != "error") {
+                                haySubEntrevistasSinCompletar = true;
+                            }
+                            else if (result == "error") {
+                                error = true;
+                                BootstrapDialog.alert({
+                                    title: '@Resources.HTML_Candidaturas_CompletarPrimeraEntrevista_Error',
+                                    message: '@Resources.HTML_Candidaturas_CompletarPrimeraEntrevista_ErrorComprobandoSubEntrevistas',
+                                    type: BootstrapDialog.TYPE_ERROR,
+                                    callback: function (result) {
+                                        if (result) {
+                                            BootstrapDialog.closeAll();
+                                        } else {
+                                            BootstrapDialog.closeAll();
+                                        }
+                                    }
+                                });
+                            }
+                        },
+                        error: function (req, status, error) {
+                            // do something with error
+                        }
+                    });
+
+                    if (!haySubEntrevistasSinCompletar && !error) {
+                        var textArea = $('#ObservacionesEntrevista-1').val();
+                        BootstrapDialog.confirm({
+                            title: '@Resources.Candidatura_ConfirmacionFinalizarTitulo',
+                            message: '@Resources.Candidatura_ConfirmacionFinalizarTexto',
+                            type: BootstrapDialog.TYPE_CONFIRMFINALICE,
+                            callback: function (result) {
+                                if (result) {
+                                    var submitType = $("[name=SubmitType]");
+                                    submitType.val("finalizar");
+                                    $("form").submit();
+                                } else {
+                                    BootstrapDialog.closeAll();
+                                }
+                            }
+                        });
+                    }
+                    else if (!error) {
+                        var textArea = $('#ObservacionesEntrevista-1').val();
+                        BootstrapDialog.confirm({
+                            title: '@Resources.Candidatura_EntrevistasSinCompletarGuardarTitulo',
+                            message: '@Resources.Candidatura_EntrevistasSinCompletarGuardarTexto',
+                            type: BootstrapDialog.TYPE_CONFIRMFINALICE,
+                            callback: function (result) {
+                                if (result) {
+                                    var submitType = $("[name=SubmitType]");
+                                    submitType.val("finalizar");
+                                    $("form").submit();
+                                } else {
+                                    BootstrapDialog.closeAll();
+                                }
+                            }
+                        });
+                    }
+                }
+            }
+        }
+
+        //Funciones subentrevistas
+
+        function aniadirSubEntrevista()
+        {
+            $.ajax({
+                url: '@Url.Action("CompruebaMaximoSubEntrevistas", "Candidaturas")',
+                type: 'POST',
+                cache: false,
+                async: false,
+                data: {CandidaturaId: @Model.AgendarPrimeraEntrevista.AgendarPrimeraEntrevista.CandidaturaId, TipoEntrevista: 1},
+                success: function (result) {
+                    if (result == "error")
+                    {
+                        BootstrapDialog.alert({
+                            title: '@Resources.Subentrevista_MaximoDeSubentrevistasAlcanzadoTitulo',
+                            message: '@Resources.Subentrevista_MaximoDeSubentrevistasAlcanzadoTexto',
+                            type: BootstrapDialog.TYPE_ERROR,
+                            callback: function (result) {
+                                if (result) {
+                                    BootstrapDialog.closeAll();
+                                } else {
+                                    BootstrapDialog.closeAll();
+                                }
+                            }
+                        });
+                    }
+                    if (result == "success")
+                    {
+                        $('#modalAniadirSubEntrevista').modal();
+                    }
+                }
+            });
+        }
+
+        function AgregaUnaNuevaSubEntrevista()
+        {
+            $.ajax({
+                url: '@Url.Action("AgregarUnaSubEntrevistaPrimeraEntrevista", "Candidaturas")',
+                type: 'POST',
+                cache: false,
+                data: jQuery("#formAniadirSubEntrevista").serialize(),
+                success: function (result) {
+                    if (result == "error")
+                    {
+                        BootstrapDialog.alert({
+                            title: '@Resources.Subentrevista_ErrorTitulo',
+                            message: '@Resources.Subentrevista_ErrorTexto',
+                            type: BootstrapDialog.TYPE_ERROR,
+                            callback: function (result) {
+                                if (result) {
+                                    BootstrapDialog.closeAll();
+                                } else {
+                                    BootstrapDialog.closeAll();
+                                }
+                            }
+                        });
+                    }
+                    if (result == "success")
+                    {
+                        BootstrapDialog.alert({
+                            title: '@Resources.Subentrevista_ExitoGuardarTitulo',
+                            message: '@Resources.SubEntrevista_ExitoGuardarTexto',
+                            type: BootstrapDialog.TYPE_CONFIRMFINALICE,
+                            callback: function (result) {
+                                if (result) {
+                                    BootstrapDialog.closeAll();
+                                } else {
+                                    BootstrapDialog.closeAll();
+                                }
+                            }
+                        });
+                        $('#modalAniadirSubEntrevista').modal('hide');
+                        $('#EntrevistadorNameModal').val("");
+                        $('#CandidaturaIdModal').val("");
+                        $('#EntrevistadorIdSearchableModal').val("");
+                        $('#EntrevistadorIdSearchableModal-Text').val("");
+                        $('#TipoSubEntrevistaIdModal').val("");
+                        $('#PresencialModal').val("");
+                        $('#AvisarAlCandidatoModal').val("");
+                        $('#FechaSubEntrevistaModal').val("");
+                    }
+                }
+            });
+        }
+
+        //Boton subentrevistas
+
+        $('#BtnAddSubEntrevista').click(function()
+        {
+            $('#EntrevistadorNameModal').val($('#EntrevistadorIdSearchableModal-Text').val());
+            $('#CandidaturaIdModal').val('@Model.AgendarPrimeraEntrevista.AgendarPrimeraEntrevista.CandidaturaId');
+            $('#EntrevistadorIdSearchableModal').prop('required',true);
+            var listaFechas = new Array();
+            $('#FechaSubEntrevistaModal').each(function(index, value){
+                listaFechas.push($(this).val());
+            });
+            if ($("#formAniadirSubEntrevista").parsley().validate())
+            {
+                $.ajax({
+                    url: '@Url.Action("ComprobarFechaAviso", "Candidaturas")',
+                    type: 'POST',
+                    cache: false,
+                    async: false,
+                    data:
+                        {
+                            fechas: listaFechas,
+                            candidaturaId: @Model.AgendarPrimeraEntrevista.AgendarPrimeraEntrevista.CandidaturaId,
+                            notificar: $('#AvisarAlCandidatoModal').val(),
+                            tipoEntrevista: 1
+                        },
+                    success: function (result) {
+                        if (result == "error")
+                        {
+                            BootstrapDialog.alert({
+                                title: '@Resources.Subentrevista_FechasCoincidenErrorTitulo',
+                                message: '@Resources.Subentrevista_FechasCoincidenErrorTexto',
+                                type: BootstrapDialog.TYPE_ERROR,
+                                callback: function (result) {
+                                    if (result) {
+                                        BootstrapDialog.closeAll();
+                                    } else {
+                                        BootstrapDialog.closeAll();
+                                    }
+                                }
+                            });
+                        }
+                        if (result == "success")
+                        {
+                            AgregaUnaNuevaSubEntrevista();
+                        }
+                    }
+                });
+            }
+        });
+
+        </script>
+}
+
+@helper AgendarSegundaEntrevistaPartialFrontActions()
+    {
+        <script type="text/javascript">
+
+            //Inicializaciones
+
+            $(document).ready(function () {
+
+                CheckAvisarCandidato();
+
+            });
+
+            //Comprobaciones y restricciones
+
+            $(document).on('click', "#AvisarAlCandidatoEntrevistaPrincial", function () {
+                CheckAvisarCandidato();
+            });
+
+            //Funciones
+
+            function CheckAvisarCandidato() {
+
+                if (document.getElementById("AvisarAlCandidatoEntrevistaPrincial") != null) {
+                    if (document.getElementById("AvisarAlCandidatoEntrevistaPrincial").checked == false) {
+                        $('#ocultarPlantilla').addClass('hidden');
+                    }
+                    else {
+                        $('#ocultarPlantilla').removeClass('hidden');
+                    }
+                }
+
+            }
+
+        </script>
+}
+
+@helper AgendarSegundaEntrevistaFrontActions(System.Web.Mvc.UrlHelper Url, Recruiting.Application.Candidaturas.ViewModel.AgendarSegundaEntrevistaViewModel Model, int nSubEntrevistas, int centroId)
+    {
+        <script type="text/javascript">
+
+        //Inicializaciones
+        $(document).ready(function () {
+            //necesario para mostrar la lista de subentrevistas
+            var indiceMostrarSubentrevistas = 0;
+            for (indiceMostrarSubentrevistas = 0; indiceMostrarSubentrevistas < @nSubEntrevistas; indiceMostrarSubentrevistas++) {
+                (function (j) {
+                    if ($('#EntrevistadorIdSearchable' + j + '-Text').val() != "") {
+                        $('#subEntrevista' + j).removeClass('hidden');
+                        $('#EntrevistadorIdSearchable' + j).prop('required', true);
+                        $('#FechaSubEntrevista' + j).prop('required', true);
+                        $('#TipoSubEntrevista' + j).prop('required', true);
+                        $('#Presencial' + j).prop('required', true);
+                        $('#AvisarAlCandidato' + j).prop('required', true);
+                    }
+                })(indiceMostrarSubentrevistas);
+            }
+            //fin
+        });
+
+        //Guardar / Finalizar
+
+        function guardar(source) {
+            //necesario para subentrevista
+            var conflictoFechaSubEntrevista = hayConflictoFechasYPreparaParaGuardar();
+            if (conflictoFechaSubEntrevista)
+            {
+                BootstrapDialog.alert({
+                    title: '@Resources.Subentrevista_FechasCoincidenErrorTitulo',
+                    message: '@Resources.Subentrevista_FechasCoincidenErrorTexto',
+                    type: BootstrapDialog.TYPE_ERROR,
+                });
+            }
+            else
+            {
+                //fin necesario para subentrevista
+                BootstrapDialog.confirm({
+                    title: '@Resources.Candidatura_ConfirmacionGuardarTitulo',
+                    message: '@Resources.Candidatura_ConfirmacionGuardarTexto',
+                    type: BootstrapDialog.TYPE_CONFIRMFINALICE,
+                    callback: function (result) {
+                        if (result) {
+                            var submitType = $("[name=SubmitType]");
+                            submitType.val("guardar");
+                            $("#FormEntrevistaComplementaria").submit();
+                        } else {
+                            BootstrapDialog.closeAll();
+                        }
+                    }
+                });
+            }
+        }
+
+        function finalizar(source) {
+            //necesario para subentrevista
+            var conflictoFechaSubEntrevista = hayConflictoFechasYPreparaParaGuardar();
+            if (conflictoFechaSubEntrevista)
+            {
+                BootstrapDialog.alert({
+                    title: '@Resources.Subentrevista_FechasCoincidenErrorTitulo',
+                    message: '@Resources.Subentrevista_FechasCoincidenErrorTexto',
+                    type: BootstrapDialog.TYPE_ERROR,
+                });
+            }
+            else
+            {
+                //fin necesario para subentrevista
+                BootstrapDialog.confirm({
+                    title: '@Resources.Candidatura_ConfirmacionFinalizarTitulo',
+                    message: '@Resources.Candidatura_ConfirmacionFinalizarTexto',
+                    type: BootstrapDialog.TYPE_CONFIRMFINALICE,
+                    callback: function (result) {
+                        if (result) {
+                            var submitType = $("[name=SubmitType]");
+                            submitType.val("finalizar");
+                            $("#FormEntrevistaComplementaria").submit();
+                        } else {
+                            BootstrapDialog.closeAll();
+                        }
+                    }
+                });
+            }
+        }
+
+       //Logica subentrevistas
+
+        $(document).on('click', '#btnAddSubEntrevista', function ()
+        {
+            var iReal = @nSubEntrevistas - 1;
+            var ultimaSubEntrevistaHidden = $('#subEntrevista' + iReal).hasClass('hidden'); //si el ultimo elemento esta oculto
+
+            if($('#subEntrevista0').hasClass('hidden'))
+            {
+                $('#subEntrevista0').removeClass('hidden');
+                $('#EntrevistadorIdSearchable0').prop('required', true);
+                $('#FechaSubEntrevista0').prop('required', true);
+                $('#TipoSubEntrevista0').prop('required', true);
+                $('#Presencial0').prop('required', true);
+                $('#AvisarAlCandidato0').prop('required', true);
+            }
+            else if (ultimaSubEntrevistaHidden)
+            {
+                for (var x = (iReal - 1) ; x >= 0 ; x--) //recorremos los elemenots anteriores al ultimo elemento
+                {
+                    var entrevistasAnterioresNotHidden = !$('#subEntrevista' + x).hasClass('hidden'); //si no están ocultos
+                    if (entrevistasAnterioresNotHidden) {
+                        var indiceAAgregar = x + 1;
+                        $('#subEntrevista' + indiceAAgregar).removeClass('hidden');
+                        $('#EntrevistadorIdSearchable' + indiceAAgregar).prop('required', true);
+                        $('#FechaSubEntrevista' + indiceAAgregar).prop('required', true);
+                        $('#TipoSubEntrevista' + indiceAAgregar).prop('required', true);
+                        $('#Presencial' + indiceAAgregar).prop('required', true);
+                        $('#AvisarAlCandidato' + indiceAAgregar).prop('required', true);
+                        break;
+                    }
+                }
+            }
+        });
+
+        $('td[name=btnDeleteSubEntrevista]').click(function () {
+
+            var itemId = $(this).closest("tr").attr("id");
+
+            BootstrapDialog.confirm({
+                title: '@Resources.Eliminar_SubEntrevista_Title',
+                message: '@Resources.Eliminar_SubEntrevista_Message',
+                type: BootstrapDialog.TYPE_CONFIRMDELETE,
+                callback: function (result) {
+                    if (result) {
+                        deleteSubEntrevista("#" + itemId);
+                        return false;
+                    } else {
+                        BootstrapDialog.closeAll();
+                    }
+                }
+            });
+        });
+
+        function hayConflictoFechasYPreparaParaGuardar()
+        {
+            var conflictoFechaSubEntrevista = false;
+            var indiceSubEntrevista = 0;
+            for (indiceSubEntrevista = 0; indiceSubEntrevista < @nSubEntrevistas; indiceSubEntrevista++) {
+                (function (j) {
+                    var nombreEntrevistador = $('#EntrevistadorIdSearchable' + j + '-Text').val();
+                    $('#EntrevistadorName' + j).val(nombreEntrevistador);
+                    var fecha = $('#FechaSubEntrevista' + j).val();
+                    var subEntrevistaActualNotificar = $('#AvisarAlCandidato' + j).val();
+                    if (fecha != null && fecha != "" && subEntrevistaActualNotificar == "True")
+                    {
+                        fecha = fecha.substring(0, fecha.length - 6);
+                        var fechaEntrevistaPrincipal = $('#FechaSegundaEntrevista').val();
+                        fechaEntrevistaPrincipal = fechaEntrevistaPrincipal.substring(0, fechaEntrevistaPrincipal.length - 6);
+                        if (fecha == fechaEntrevistaPrincipal && $("#AvisarAlCandidatoEntrevistaPrincial").is(':checked'))
+                        {
+                            conflictoFechaSubEntrevista = true;
+                        }
+                        for (indiceSubEntrevistaConflictiva = 0; indiceSubEntrevistaConflictiva < @nSubEntrevistas; indiceSubEntrevistaConflictiva++)
+                        {
+                            (function (i) {
+                                if (i != j)
+                                {
+                                    var fechaOtraSubEntrevista = $('#FechaSubEntrevista' + i).val();
+                                    fechaOtraSubEntrevista = fechaOtraSubEntrevista.substring(0, fechaOtraSubEntrevista.length - 6);
+                                    var subEntrevistaNuevaNotificar = $('#AvisarAlCandidato' + i).val();
+                                    if (fecha == fechaOtraSubEntrevista && subEntrevistaActualNotificar == subEntrevistaNuevaNotificar)
+                                    {
+                                        conflictoFechaSubEntrevista = true;
+                                    }
+                                }
+                            })(indiceSubEntrevistaConflictiva);
+                        }
+                    }
+                })(indiceSubEntrevista);
+            }
+            return conflictoFechaSubEntrevista;
+        }
+
+        function deleteSubEntrevista(item) {
+
+            for (var indiceItem = 0; indiceItem < @nSubEntrevistas; indiceItem++) //inicializamos el indice desde el que comenzamos a recorrer las subentrevistas
+            {
+                if (item == '#subEntrevista' + indiceItem)
+                {
+                    indiceInicial = indiceItem + 1;
+                }
+            } // fin
+
+            for (var i = indiceInicial; i <= @nSubEntrevistas; i++)
+            {
+                if ((!$('#subEntrevista' + i).hasClass('hidden'))
+                    && !($('#subEntrevista' + i).length == 0)) //comprueba que existe el indice siguiente
+                {
+                    var indiceAnterior = i - 1;
+                    var entrevistadorName = $('#EntrevistadorIdSearchable' + i + '-Text').val();
+                    var entrevistadorId = $('#EntrevistadorIdSearchable' + i).val();
+                    var fecha = $('#FechaSubEntrevista' + i).val();
+                    var subEntrevistaId = $("[name='SubEntrevistaList[" + i + "].SubEntrevistaId']").val();
+                    var completada = $("[name='SubEntrevistaList[" + i + "].Completada']").val();
+                    var tipoSubEntrevista = $('#TipoSubEntrevista' + i).val();
+                    var presencial = $('#Presencial' + i).val();
+                    var avisarAlCandidato = $('#AvisarAlCandidato' + i).val();
+
+                    $('#EntrevistadorIdSearchable' + indiceAnterior + '-Text').val(entrevistadorName);
+                    $('#EntrevistadorIdSearchable' + indiceAnterior).val(entrevistadorId);
+                    $('#FechaSubEntrevista' + indiceAnterior).val(fecha);
+                    $("[name='SubEntrevistaList[" + indiceAnterior + "].SubEntrevistaId']").val(subEntrevistaId);
+                    $("[name='SubEntrevistaList[" + indiceAnterior + "].Completada']").val(completada);
+                    $('#TipoSubEntrevista' + indiceAnterior).val(tipoSubEntrevista);
+                    $('#Presencial' + indiceAnterior).val(presencial);
+                    $('#AvisarAlCandidato' + indiceAnterior).val(avisarAlCandidato);
+
+                }
+                else
+                {
+                    var indiceAnterior = i - 1;
+                    $('#EntrevistadorIdSearchable' + indiceAnterior + '-Text').val("");
+                    $('#EntrevistadorIdSearchable' + indiceAnterior).val("");
+                    $('#FechaSubEntrevista' + indiceAnterior).val("");
+                    $('#subEntrevista' + indiceAnterior).addClass('hidden');
+                    $('#EntrevistadorIdSearchable' + indiceAnterior).prop('required', false);
+                    $('#FechaSubEntrevista' + indiceAnterior).prop('required', false);
+                    $("[name='SubEntrevistaList[" + indiceAnterior + "].SubEntrevistaId']").val(null);
+                    $("[name='SubEntrevistaList[" + indiceAnterior + "].Completada']").val(false);
+                    $('#TipoSubEntrevista' + indiceAnterior).val(null);
+                    $('#Presencial' + indiceAnterior).val("False");
+                    $('#TipoSubEntrevista' + indiceAnterior).prop('required', false);
+                    $('#Presencial' + indiceAnterior).prop('required', false);
+                    $('#AvisarAlCandidato' + indiceAnterior).prop('required', false);
+                    $('#AvisarAlCandidato' + indiceAnterior).val("False");
+                }
+            }
+        };
+
+        var x = 0;
+        for (x = 0; x < @nSubEntrevistas; x++)
+        {
+            (function (j) {
+                $(document).on('change', '#EntrevistadorIdSearchable' + j + '-Text', function ()
+                {
+                    var nombreEntrevistador = $('#EntrevistadorIdSearchable' + j + '-Text').val();
+                    if (nombreEntrevistador == "")
+                    {
+                        $('#EntrevistadorIdSearchable' + j).val("");
+                    }
+                });
+            })(x);
+        }
+
+        //Logica meetings
+
+        $(document).on('change', '#AgendarSegundaEntrevista_EntrevistadorId-Text', function () {
+            ClearSala();
+        });
+
+        $(document).on('click', '#FechaSegundaEntrevista', function () {
+            ClearSala();
+        });
+
+        function ClearSala() {
+            $('#nombreSala').val("");
+            $('[name=emailSala]').val("");
+        }
+
+        $(document).on('click', '#excluirSalasButton', function(){
+            $('#OficinaId').val($('#Oficina').val());
+            $('#FormExcluirSalas').submit();
+        });
+
+
+
+        $(document).on('click', "#buscarSalasButton", function(){
+            var centroId = @centroId;
+            var oficinaId = $('#Oficina').val();
+            var entrevistadorId = $('#AgendarSegundaEntrevista_EntrevistadorId').val();
+            var fecha = $('#FechaSegundaEntrevista').val();
+            var ignorarDisponibilidad = $('#IgnorarDispEntrevistador').val();
+
+            var $select = $('#SalasId');
+            $select.empty();
+
+            $('body').LoadingOverlay('show');
+
+            $.post('@Url.Action("GetRooms", "Graph")', { CentroId: centroId, OficinaId: oficinaId, EntrevistadorId: entrevistadorId, Fecha: fecha, IgnorarDisponibilidad: ignorarDisponibilidad }).
+                done(function (Data) {
+                    if (Data.IsValid) {
+
+                        $.each(Data.salas, function () {
+                            $('<option>', {
+                                value: $(this).attr('Value'),
+                                text: $(this).attr('Text')
+                            }).html($(this).attr('Text')).appendTo($select);
+                        });
+                        $('body').LoadingOverlay('hide');
+
+                    } else if (!Data.IsValid) {
+                        BootstrapDialog.show({
+                            type: BootstrapDialog.TYPE_ERROR,
+                            title: 'Error obtener salas',
+                            message: Data.ErrorMessage,
+                        });
+                        ClearSala();
+                        $('body').LoadingOverlay('hide');
+                    }
+                });
+
+
+        });
+
+
+        $(document).on('click', "#enviarConvocatoriaButton", function(){
+            var centroId = @centroId;
+            var oficinaId = $('#Oficina').val();
+            var entrevistadorName = $('#AgendarSegundaEntrevista_EntrevistadorId-Text').val();
+            var entrevistadorId = $('#AgendarSegundaEntrevista_EntrevistadorId').val();
+            var candidaturaId = @Model.AgendarSegundaEntrevista.CandidaturaId;
+            var emailSala = $('[name="nombreSala"]').val();
+            var fecha = $('#FechaSegundaEntrevista').val();
+            var presencialPrincipal = $('#Presencial').val();
+            var sendMeetingSubEntrevistas = [];
+            var cont = 0;
+
+            $("#listSubmitSubInterview").find('tbody').find('tr:not(.hidden)').each(function () {
+                var entrevistador = $("#EntrevistadorIdSearchable" + cont + "-Text").val();
+                var entrevistadorIdSub = $("#EntrevistadorIdSearchable" + cont).val();
+                var fechaSub = $("#FechaSubEntrevista" + cont).val();
+                var tipo = $("#TipoSubEntrevista" + cont).val();
+                var presencial = $("#Presencial" + cont).val();
+
+                var datosSubEntrevista = { Entrevistador: entrevistador, EntrevistadorId: entrevistadorIdSub, Fecha: fechaSub, TipoSubEntrevista: tipo, Presencial: presencial }
+
+                cont++;
+
+                sendMeetingSubEntrevistas.push(datosSubEntrevista);
+            });
+
+            if(emailSala == null)
+            {
+                BootstrapDialog.show({
+                    type: BootstrapDialog.TYPE_ERROR,
+                    title: 'Error enviar convocatoria',
+                    message: 'Debe buscar una sala antes para enviar la convocatoria',
+                });
+            }
+            else
+            {
+                $.post('@Url.Action("SendMeetings", "Candidaturas")', { CentroId: centroId, OficinaId: oficinaId, EntrevistadorId: entrevistadorId, Entrevistador: entrevistadorName, CandidaturaId: candidaturaId, Presencial: presencialPrincipal, EmailSala: emailSala, Fecha: fecha, SendMeetingSubEntrevistas: sendMeetingSubEntrevistas }).
+                    done(function (Data) {
+                        if (Data.IsValid) {
+                            BootstrapDialog.show({
+                                type: BootstrapDialog.TYPE_NOTIFY,
+                                title: 'Enviada correctamente',
+                                message: 'Convocatoria enviada con éxito',
+                            });
+                            $('#enviarConvocatoriaButton').attr('disabled', 'disabled');
+                        } else if (!Data.IsValid) {
+                            BootstrapDialog.show({
+                                type: BootstrapDialog.TYPE_ERROR,
+                                title: 'Error al enviar convocatoria',
+                                message: Data.ErrorMessage,
+                            });
+                            ClearSala();
+                        }
+                    });
+            }
+
+        });
+
+        </script>
+}
+
+@helper CompletarSegundaEntrevistaPartialFrontActions()
+    {
+        <script type="text/javascript">
+
+            //Inicializaciones
+
+            $(document).ready(function () {
+                $('#regionMeetings').addClass("hidden");
+                var status = $('input[name="TriStatus2"]:checked').val();
+                CheckSuperaSegundaEntrevista(status);
+            });
+
+            //Comprobaciones y restricciones
+
+            $(document).on('click', 'input[name="TriStatus2"]', function () {
+                var status = $(this).val();
+                $('input[name="ResultadoSegundaEntrevista.SuperaEntrevista2Id"]').val(status);
+                CheckSuperaSegundaEntrevista(status);
+            });
+
+            //Funciones
+
+            function CheckSuperaSegundaEntrevista(status) {
+
+                if (status == @((int)TipoDecisionEnum.SUPERA_SEGUNDA_ENTREVISTA )) {
+                    var selectMotivo = $('#MotivoSegundaEntrevistaId');
+                    selectMotivo.removeAttr('required');
+                    $('#MotivoSegundaEntrevistaId').attr('disable', 'disable');
+                    $('#MotivoSegundaEntrevistaRegion').addClass('hide');
+                }
+                if (status == @((int)TipoDecisionEnum.NO_SUPERA_SEGUNDA_ENTREVISTA )) {
+                    var selectMotivo = $('#MotivoSegundaEntrevistaId');
+                    selectMotivo.attr('required', 'required');
+                    $('#MotivoSegundaEntrevistaId').removeAttr('disable');
+                    $('#MotivoSegundaEntrevistaRegion').removeClass('hide');
+                }
+                if (status == @((int)TipoDecisionEnum.SIN_DECIDIR_SEGUNDA_ENTREVISTA )) {
+                    var selectMotivo = $('#MotivoSegundaEntrevistaId');
+                    selectMotivo.removeAttr('required');
+                    $('#MotivoSegundaEntrevistaRegion').addClass('hide');
+                }
+            }
+
+
+        </script>
+}
+
+@helper CompletarSegundaEntrevistaFrontActions(System.Web.Mvc.UrlHelper Url, Recruiting.Application.Candidaturas.ViewModel.SegundaEntrevistaViewModel Model)
+    {
+        <script type="text/javascript">
+
+        //Guardar / finalizar
+
+        function guardar(source) {
+            var textArea = $('#ObservacionesEntrevista-2').val();
+            BootstrapDialog.confirm({
+                title: '@Resources.Candidatura_ConfirmacionGuardarTitulo',
+                message: '@Resources.Candidatura_ConfirmacionGuardarTexto',
+                type: BootstrapDialog.TYPE_CONFIRMFINALICE,
+                callback: function (result) {
+                    if (result) {
+                            var submitType = $("[name=SubmitType]");
+                        submitType.val("guardar");
+                        $('#MotivoSegundaEntrevistaId').prop('required', false);
+                            $("form").submit();
+
+                    } else {
+                        BootstrapDialog.closeAll();
+                    }
+                }
+            });
+        }
+
+        function finalizar(source)
+        {
+                var haySubEntrevistasSinCompletar = false;
+                var error = false;
+                var superaSegundaEntrevista = $('input[name="TriStatus"]:checked').val();
+                if (superaSegundaEntrevista == @((int)TipoDecisionEnum.SIN_DECIDIR_SEGUNDA_ENTREVISTA ))
+                {
+                    BootstrapDialog.show({
+                        type: BootstrapDialog.TYPE_ERROR,
+                        title: '@Resources.HTML_Candidaturas_CompletarSegundaEntrevista_Alerta',
+                        text: '@Resources.HTML_Candidaturas_CompletarSegundaEntrevista_SegundaEntrevistaSinDecision',
+                        message: '@Resources.HTML_Candidaturas_CompletarSegundaEntrevista_SegundaEntrevistaSinDecision',
+                    });
+                } else
+                {
+                    var candidaturaIdYTipoEntrevista = {
+                        candidaturaId: @Model.AgendarSegundaEntrevista.AgendarSegundaEntrevista.CandidaturaId,
+                        tipoEntrevista: 2
+                    };
+
+                    var candidaturaIdYTipoEntrevistaStringified = JSON.stringify(candidaturaIdYTipoEntrevista);
+
+                    $.ajax({
+                        url: "/Candidaturas/CompruebaSiTieneSubEntrevistas", // the URL of the controller action method
+                        async: false,
+                        type: "POST",
+                        data: candidaturaIdYTipoEntrevistaStringified,
+                        dataType: 'json',
+                        processData: false,
+                        contentType: 'application/json; charset=utf-8',
+                        success: function (result) {
+                            if (result == true && result != "error") {
+                                haySubEntrevistasSinCompletar = true;
+                            }
+                            else if (result == "error") {
+                                error = true;
+                                BootstrapDialog.alert({
+                                    title: 'ERROR',
+                                    message: 'Error comprobando si tiene subentrevistas',
+                                    type: BootstrapDialog.TYPE_ERROR,
+                                    callback: function (result) {
+                                        if (result) {
+                                            BootstrapDialog.closeAll();
+                                        } else {
+                                            BootstrapDialog.closeAll();
+                                        }
+                                    }
+                                });
+                            }
+                        },
+                        error: function (req, status, error) {
+                            // do something with error
+                        }
+                    });
+
+                    if (!haySubEntrevistasSinCompletar && !error) {
+                        var textArea = $('#ObservacionesEntrevista-2').val();
+                        BootstrapDialog.confirm({
+                            title: '@Resources.Candidatura_ConfirmacionFinalizarTitulo',
+                            message: '@Resources.Candidatura_ConfirmacionFinalizarTexto',
+                            type: BootstrapDialog.TYPE_CONFIRMFINALICE,
+                            callback: function (result) {
+                                if (result) {
+                                    var submitType = $("[name=SubmitType]");
+                                    submitType.val("finalizar");
+                                    $("form").submit();
+                                } else {
+                                    BootstrapDialog.closeAll();
+                                }
+                            }
+                        });
+                    }
+                    else if (!error)
+                    {
+                        var textArea = $('#ObservacionesEntrevista-2').val();
+                        BootstrapDialog.confirm({
+                            title: '@Resources.Candidatura_EntrevistasSinCompletarGuardarTitulo',
+                            message: '@Resources.Candidatura_EntrevistasSinCompletarGuardarTexto',
+                            type: BootstrapDialog.TYPE_CONFIRMFINALICE,
+                            callback: function (result) {
+                                if (result) {
+                                    var submitType = $("[name=SubmitType]");
+                                    submitType.val("finalizar");
+                                    $("form").submit();
+                                } else {
+                                    BootstrapDialog.closeAll();
+                                }
+                            }
+                        });
+                    }
+                }
+            }
+        
+         //Funciones subentrevistas
+
+        function aniadirSubEntrevista()
+        {
+            $.ajax({
+                url: '@Url.Action("CompruebaMaximoSubEntrevistas", "Candidaturas")',
+                type: 'POST',
+                cache: false,
+                async: false,
+                data: {CandidaturaId: @Model.AgendarSegundaEntrevista.AgendarSegundaEntrevista.CandidaturaId, TipoEntrevista: 2},
+                success: function (result) {
+                    if (result == "error")
+                    {
+                        BootstrapDialog.alert({
+                            title: '@Resources.Subentrevista_MaximoDeSubentrevistasAlcanzadoTitulo',
+                            message: '@Resources.Subentrevista_MaximoDeSubentrevistasAlcanzadoTexto',
+                            type: BootstrapDialog.TYPE_ERROR,
+                            callback: function (result) {
+                                if (result) {
+                                    BootstrapDialog.closeAll();
+                                } else {
+                                    BootstrapDialog.closeAll();
+                                }
+                            }
+                        });
+                    }
+                    if (result == "success")
+                    {
+                        $('#modalAniadirSubEntrevista').modal();
+                    }
+                }
+            });
+        }
+
+        function AgregaUnaNuevaSubEntrevista()
+        {
+            $.ajax({
+                url: '@Url.Action("AgregarUnaSubEntrevistaSegundaEntrevista", "Candidaturas")',
+                type: 'POST',
+                cache: false,
+                data: jQuery("#formAniadirSubEntrevista").serialize(),
+                success: function (result) {
+                    if (result == "error")
+                    {
+                        BootstrapDialog.alert({
+                            title: '@Resources.Subentrevista_ErrorTitulo',
+                            message: '@Resources.Subentrevista_ErrorTexto',
+                            type: BootstrapDialog.TYPE_ERROR,
+                            callback: function (result) {
+                                if (result) {
+                                    BootstrapDialog.closeAll();
+                                } else {
+                                    BootstrapDialog.closeAll();
+                                }
+                            }
+                        });
+                    }
+                    if (result == "success")
+                    {
+                        BootstrapDialog.alert({
+                            title: '@Resources.Subentrevista_ExitoGuardarTitulo',
+                            message: '@Resources.SubEntrevista_ExitoGuardarTexto',
+                            type: BootstrapDialog.TYPE_CONFIRMFINALICE,
+                            callback: function (result) {
+                                if (result) {
+                                    BootstrapDialog.closeAll();
+                                } else {
+                                    BootstrapDialog.closeAll();
+                                }
+                            }
+                        });
+                        $('#modalAniadirSubEntrevista').modal('hide');
+                        $('#EntrevistadorNameModal').val("");
+                        $('#CandidaturaIdModal').val("");
+                        $('#EntrevistadorIdSearchableModal').val("");
+                        $('#EntrevistadorIdSearchableModal-Text').val("");
+                        $('#TipoSubEntrevistaIdModal').val("");
+                        $('#PresencialModal').val("");
+                        $('#AvisarAlCandidatoModal').val("");
+                        $('#FechaSubEntrevistaModal').val("");
+                    }
+                }
+            });
+            }
+
+        //Boton subentrevista
+
+        $('#BtnAddSubEntrevista').click(function()
+        {
+            $('#EntrevistadorNameModal').val($('#EntrevistadorIdSearchableModal-Text').val());
+            $('#CandidaturaIdModal').val('@Model.AgendarSegundaEntrevista.AgendarSegundaEntrevista.CandidaturaId');
+            $('#EntrevistadorIdSearchableModal').prop('required',true);
+            var listaFechas = new Array();
+            $('#FechaSubEntrevistaModal').each(function(index, value){
+                listaFechas.push($(this).val());
+            });
+            if ($("#formAniadirSubEntrevista").parsley().validate())
+            {
+                $.ajax({
+                    url: '@Url.Action("ComprobarFechaAviso", "Candidaturas")',
+                    type: 'POST',
+                    cache: false,
+                    async: false,
+                    data:
+                        {
+                            fechas: listaFechas,
+                            candidaturaId: @Model.AgendarSegundaEntrevista.AgendarSegundaEntrevista.CandidaturaId,
+                            notificar: $('#AvisarAlCandidatoModal').val(),
+                            tipoEntrevista: 2
+                        },
+                    success: function (result) {
+                        if (result == "error")
+                        {
+                            BootstrapDialog.alert({
+                                title: '@Resources.Subentrevista_FechasCoincidenErrorTitulo',
+                                message: '@Resources.Subentrevista_FechasCoincidenErrorTexto',
+                                type: BootstrapDialog.TYPE_ERROR,
+                                callback: function (result) {
+                                    if (result) {
+                                        BootstrapDialog.closeAll();
+                                    } else {
+                                        BootstrapDialog.closeAll();
+                                    }
+                                }
+                            });
+                        }
+                        if (result == "success")
+                        {
+                            AgregaUnaNuevaSubEntrevista();
+                        }
+                    }
+                });
+            }
+        });
+
+        </script>
+}
+
+
+
+
+@helper AgendarCartaOfertaFrontActions(System.Web.Mvc.UrlHelper Url, Recruiting.Application.Candidaturas.ViewModel.AgendarCartaOfertaViewModel Model, int centroId)
+    {
+        <script type="text/javascript">
+
+        //Guardar / Finalizar
+
+        function guardar(source) {
+            BootstrapDialog.confirm({
+                title: '@Resources.Candidatura_ConfirmacionGuardarTitulo',
+                message: '@Resources.Candidatura_ConfirmacionGuardarTexto',
+                type: BootstrapDialog.TYPE_CONFIRMFINALICE,
+                callback: function (result) {
+                    if (result) {
+                        if ($("#FormAgendarCartaOferta").parsley().validate() == true) {
+                            var submitType = $("[name=SubmitType]");
+                            submitType.val("guardar");
+                            $("#FormAgendarCartaOferta").submit();
+                        }
+                    } else {
+                        BootstrapDialog.closeAll();
+                    }
+                }
+            });
+        }
+
+        function finalizar(source) {
+            BootstrapDialog.confirm({
+                title: '@Resources.Candidatura_ConfirmacionFinalizarTitulo',
+                message: '@Resources.Candidatura_ConfirmacionFinalizarTexto',
+                type: BootstrapDialog.TYPE_CONFIRMFINALICE,
+                callback: function (result) {
+                    if (result) {
+                        if ($("#FormAgendarCartaOferta").parsley().validate() == true) {
+                            var submitType = $("[name=SubmitType]");
+                            submitType.val("finalizar");
+                            $("#FormAgendarCartaOferta").submit();
+                        }
+
+                    } else {
+                        BootstrapDialog.closeAll();
+                    }
+                }
+            });
+        }
+
+         //Logica meetings
+
+         $(document).on('click', '#excluirSalasButton', function(){
+            $('#OficinaId').val($('#Oficina').val());
+            $('#FormExcluirSalas').submit();
+        });
+
+        $(document).on('click', "#buscarSalasButton", function(){
+            //CentroId: centroId , OficinaId: oficinaId , EntrevistadorId = entrevistadorId, Fecha: fecha
+            var centroId = @centroId;
+            var oficinaId = $('#Oficina').val();
+            var entrevistadorId = $('#AgendarCartaOferta_EntrevistadorId').val();
+            var fecha = $('#FechaCartaOferta').val();
+            var ignorarDisponibilidad = $('#IgnorarDispEntrevistador').val();
+
+            var $select = $('#SalasId');
+            $select.empty();
+
+            $('body').LoadingOverlay('show');
+
+            $.post('@Url.Action("GetRooms", "Graph")', { CentroId: centroId, OficinaId: oficinaId, EntrevistadorId: entrevistadorId, Fecha: fecha, IgnorarDisponibilidad: ignorarDisponibilidad }).
+                done(function (Data) {
+                    if (Data.IsValid) {
+
+                        $.each(Data.salas, function () {
+                            $('<option>', {
+                                value: $(this).attr('Value'),
+                                text: $(this).attr('Text')
+                            }).html($(this).attr('Text')).appendTo($select);
+                        });
+                        $('body').LoadingOverlay('hide');
+
+                    } else if (!Data.IsValid) {
+                        BootstrapDialog.show({
+                            type: BootstrapDialog.TYPE_ERROR,
+                            title: 'Error obtener salas',
+                            message: Data.ErrorMessage,
+                        });
+                        ClearSala();
+                        $('body').LoadingOverlay('hide');
+                    }
+                });
+
+
+        });
+
+
+        $(document).on('click', "#enviarConvocatoriaButton", function(){
+            var centroId = @centroId;
+            var oficinaId = $('#Oficina').val();
+            var entrevistadorId = $('#AgendarCartaOferta_EntrevistadorId').val();
+            var candidaturaId = @Model.AgendarCartaOferta.CandidaturaId;
+            var emailSala = $('[name="nombreSala"]').val();
+            var fecha = $('#FechaCartaOferta').val();
+
+            if(emailSala == null)
+            {
+                BootstrapDialog.show({
+                    type: BootstrapDialog.TYPE_ERROR,
+                    title: 'Error enviar convocatoria',
+                    message: 'Debe buscar una sala antes para enviar la convocatoria',
+                });
+            }
+            else
+            {
+                $.post('@Url.Action("SendMeetings", "Candidaturas")', { CentroId: centroId , OficinaId: oficinaId , EntrevistadorId: entrevistadorId, CandidaturaId: candidaturaId, EmailSala: emailSala, Fecha: fecha }).
+                    done(function (Data) {
+                        if (Data.IsValid) {
+                            BootstrapDialog.show({
+                                type: BootstrapDialog.TYPE_NOTIFY,
+                                title: 'Enviada correctamente',
+                                message: 'Convocatoria enviada con éxito',
+                            });
+                            $('#enviarConvocatoriaButton').attr('disabled', 'disabled');
+                        } else if (!Data.IsValid) {
+                            BootstrapDialog.show({
+                                type: BootstrapDialog.TYPE_ERROR,
+                                title: 'Error al enviar convocatoria',
+                                message: Data.ErrorMessage,
+                            });
+                            ClearSala();
+                        }
+                    });
+            }
+
+        });
+
+        //Comprobaciones y restricciones
+
+        $(document).on('change', '#AgendarCartaOferta_EntrevistadorId-Text' , function ()
+        {
+            ClearSala();
+        });
+
+        $(document).on('click', '#FechaAgendarCarta' , function ()
+        {
+            ClearSala();
+        });
+
+        //Funciones
+
+        function ClearSala()
+        {
+            $('#nombreSala').val("");
+            $('[name=emailSala]').val("");
+        }
+
+        </script>
+}
+
+@helper CompletarCartaOfertaPartialFrontActions(System.Web.Mvc.UrlHelper Url)
+    {
+        <script type="text/javascript">
+
+        //Inicializaciones
+
+            $(document).ready(function () {
+                $('#regionMeetings').addClass("hidden");
+                var status = $('input[name="TriStatus3"]:checked').val();
+                CheckAceptaCartaOferta(status);
+            });
+
+            //Comprobaciones y restricciones
+
+            $(document).on('click', 'input[name="TriStatus3"]', function () {
+                var status = $(this).val();
+                $('input[name="CompletarCartaOferta.SuperaCartaOferta"]').val(status);
+                CheckAceptaCartaOferta(status);
+            });
+
+        //Funciones
+
+            function CheckAceptaCartaOferta(status) {
+
+                var regionIncorporacion = $('[name="DatosIncorporacionRegion"]');
+                var regionRechazo = $('[name="MotivoRegion"]');
+
+
+                if (status == @((int)TipoDecisionEnum.ACEPTA_CARTA_OFERTA )) {
+                    regionIncorporacion.removeClass('hide');
+                    regionRechazo.addClass('hide');
+                    regionIncorporacion.find('input, select, textarea').prop('disabled', false);
+                    //regionIncorporacion.find('input, select, textarea').prop('required', true);
+                    regionRechazo.find('input, select, textarea').prop('disabled', true);
+                    regionRechazo.find('input, select, textarea').prop('required', false);
+                }
+                if (status == @((int)TipoDecisionEnum.NO_ACEPTA_CARTA_OFERTA )) {
+                    regionIncorporacion.addClass('hide');
+                    regionRechazo.removeClass('hide');
+                    regionIncorporacion.find('input, select, textarea').prop('disabled', true);
+                    //regionIncorporacion.find('input, select, textarea').prop('required', false);
+                    regionRechazo.find('input, select, textarea').prop('disabled', false);
+                    regionRechazo.find('input, select, textarea').prop('required', true);
+                }
+                if (status == @((int)TipoDecisionEnum.SIN_DECISION_CARTAOFERTA )) {
+                    regionIncorporacion.addClass('hide');
+                    regionRechazo.addClass('hide');
+                    regionIncorporacion.find('input, select, textarea').prop('disabled', true);
+                    //regionIncorporacion.find('input, select, textarea').prop('required', false);
+                    regionRechazo.find('input, select, textarea').prop('disabled', true);
+                    regionRechazo.find('input, select, textarea').prop('required', false);
+                }
+            }
+
+
+        //Logica modal buscar necesidades
+
+        $(document).on('click', '#buscarModal', function () {
+            var table = $('#tablaNecesidadesCandidatura');
+            table.data("fn-search")();
+        });
+
+        $(document).on('click', '#limpiarModal', function () {
+            resetFields('#form-filter');
+            var table = $('#tablaNecesidadesCandidatura');
+            table.data("fn-clear")();
+        });
+
+        $(document).on('click', '#SelectNecesidades', function () {
+            $("#myModal input:checkbox").prop('checked', false);
+            $(this).prop('checked', true);
+        });
+
+        $(document).on('click', '#BtnNecesidades', function () {
+            var id = $("#myModal input:radio:checked").closest("tr").find("#NecesidadId").val();
+            var nombre = $("#myModal input:radio:checked").closest("tr").find("#Nombre").val();
+            if ($('#NecesidadId').val() != id) {
+                $('#necesidadAAbrir').attr('value', $('#NecesidadId').val());
+            }
+            $('#Nombre').attr('value', nombre);
+            $('#NecesidadId').val(id);
+            $('#myModal').modal('hide');
+
+        });
+
+
+        function getFiltersNecesidadesCandidaturas() {
+            var filterCliente = $("[name=filterCliente]").val();
+            var filterProyecto = $("[name=filterProyecto]").val();
+            var filterTecnologia = $("[name=filterTecnologia]").val();
+            var filterPerfil = $("[name=filterPerfil]").val();
+            var filterSolicitadoDesde = $("[name=filterSolicitadoEntreDesde]").val();
+            var filterSolicitadoHasta = $("[name=filterSolicitadoEntreHasta]").val();
+
+            return {
+                Cliente: filterCliente, Proyecto: filterProyecto,
+                Tecnologia: filterTecnologia, Perfil: filterPerfil,
+                SolicitadoDesde: filterSolicitadoDesde,
+                SolicitadoHasta: filterSolicitadoHasta,
+                Buscar: "true",
+
+            };
+        }
+
+        $(document).on('change', '[id="filterCliente"]', function () {
+            CheckCliente();
+        });
+
+        function CheckCliente(){
+
+            var clienteIdSeleccionado = $("#filterCliente").val();
+            var $select = $('#filterProyecto');
+            $select.empty();
+
+            $.post('@Url.Action("GeneraProyectosFromClientes", "Necesidades")', { clienteId: clienteIdSeleccionado }).done(function (data) {
+
+                $('<option>', {
+                    value: ''
+                }).html('(select an option)').appendTo($select);
+
+                $.each(data, function (indice, elementoActual) {
+                    $('<option>', {
+                        value: elementoActual.ProyectoId
+                    }).html(elementoActual.Nombre).appendTo($select);
+                });
+
+
+            });
+        }
+
+        //Logica modal edit necesidades
+
+        $(document).on('click', '#NecesidadId', function () {
+            var necesidadId = $('#NecesidadId').val();
+
+            if (necesidadId != null && necesidadId != "")
+            {
+                var url = '@Url.Action("GetNecesidadEditar", "Candidaturas")';
+                $('#NecesidadId').val(necesidadId);
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: { necesidadId: necesidadId },
+                    success: function (data) {
+                        var fechaCompromiso = new Date(parseInt(data.FechaCompromiso.substr(6)));
+                        data.FechaCompromiso = (fechaCompromiso.getDate() + '/' + (fechaCompromiso.getMonth() + 1) + '/' + fechaCompromiso.getFullYear());
+                        var fechaSolicitud = new Date(parseInt(data.FechaSolicitud.substr(6)));
+                        data.FechaSolicitud = (fechaSolicitud.getDate() + '/' + (fechaSolicitud.getMonth() + 1) + '/' + fechaSolicitud.getFullYear());
+                        if(data.FechaCierre != null)
+                        {
+                            var fechaCierre = new Date(parseInt(data.FechaCierre.substr(6)));
+                            data.FechaCierre = (fechaCierre.getDate() + '/' + (fechaCierre.getMonth() + 1) + '/' + fechaCierre.getFullYear());
+                        }
+                        cargarNecesidadModal(data);
+                        $("#modalEditNecesidad").modal('show');
+                        if (data.GrupoNecesidad != null && data.GrupoNecesidad != "")
+                        {
+                            putDisabled();
+                        }
+
+                        var element = document.getElementById('ClienteId');
+                        var event = new Event('change');
+                        element.dispatchEvent(event);
+                        checkAndShowModulo();
+                    },
+                    error: function () {
+                        alert('Error occured');
+                    }
+                });
+
+
+            }
+
+        });
+
+        function cargarNecesidadModal(necesidad)
+        {
+            $('[name="Nombre"]').val(necesidad.Nombre);
+            $('[name="OficinaId"]').val(necesidad.OficinaId);
+            $('[name="SectorId"]').val(necesidad.SectorId);
+            $('[name="ClienteId"]').val(necesidad.ClienteId);
+            $('[name="ProyectoId"]').val(necesidad.ProyectoId);
+            $('[name="TipoTecnologiaId"]').val(necesidad.TipoTecnologiaId);
+            $('[name="TipoServicioId"]').val(necesidad.TipoServicioId);
+            $('[name="TipoPerfilId"]').val(necesidad.TipoPerfilId);
+            $('[name="MesesAsignacionId"]').val(necesidad.MesesAsignacionId);
+            $('[name="TipoContratacionId"]').val(necesidad.TipoContratacionId);
+            $('[name="TipoPrevisionId"]').val(necesidad.TipoPrevisionId);
+            $('[name="FechaSolicitud"]').val(necesidad.FechaSolicitud);
+            $('[name="FechaCompromiso"]').val(necesidad.FechaCompromiso);
+            $('[name="Modulo"]').val(necesidad.Modulo);
+            $('[name="DetalleTecnologia"]').val(necesidad.DetalleTecnologia);
+            $('#dispViaje').val(necesidad.DisponibilidadViajes);
+            $('#dispReubicacion').val(necesidad.DisponibilidadReubicacion);
+            $('#NecesidadIdioma').val(necesidad.NecesidadIdioma);
+            $('#NecesidadIdModal').val(necesidad.NecesidadId);
+            $('[name="CentroId"]').val(necesidad.CentroId);
+            $('[name="FechaCierre"]').val(necesidad.FechaCierre);
+            $('[name="EstadoNecesidadId"]').val(necesidad.EstadoNecesidadId);
+            $('[name=GrupoNecesidad]').val(necesidad.GrupoNecesidad);
+
+            if (necesidad.GrupoNecesidad != null) {
+                $("#dispViaje").prop("disabled", true);
+                $("#dispReubicacion").prop("disabled", true);
+                $("#NecesidadIdioma").prop("disabled", true);
+            }
+
+            if(necesidad.DisponibilidadViajes == true)
+            {
+                $("#dispViaje").prop("checked", true);
+            }
+            if (necesidad.DisponibilidadReubicacion == true)
+            {
+                $("#dispReubicacion").prop("checked", true);
+            }
+            if (necesidad.NecesidadIdioma == true)
+            {
+                $("#NecesidadIdioma").prop("checked", true);
+            }
+        }
+
+        function checkAndShowModulo() {
+            var tecnologia = $('[id="TipoTecnologiaId"]');
+            var perfil = $('[id="TipoPerfilId"]');
+            var seccionModulo = $('[data-section="Modulo"]');
+            var modulo = $('[id="Modulo"]');
+
+            modulo.attr('disabled', 'disabled');
+            modulo.removeAttr('required');
+            seccionModulo.addClass('hide');
+            //Estado: Cerrada y Contratacion: Cambio Interno
+            if ((tecnologia.val() == @((int)TipoTecnologiaEnum.Sap))
+                && ((perfil.val() == @((int)TipoPerfilCandidaturaEnum.FunctionalSpecialist))
+                || (perfil.val() == @((int)TipoPerfilCandidaturaEnum.FunctionalSeniorSpecialist))
+                || (perfil.val() == @((int)TipoPerfilCandidaturaEnum.FunctionalLeaderSpecialist))
+                || (perfil.val() == @((int)TipoPerfilCandidaturaEnum.FunctionalExpertSpecialist)))) {
+                modulo.removeAttr('disabled');
+                modulo.attr('required', 'required');
+                seccionModulo.removeClass('hide');
+            }
+            else
+            {
+                modulo.val("");
+                modulo.change();
+            }
+        }
+
+        $(document).on('change', '[id="TipoTecnologiaId"]', function () {
+            checkAndShowModulo();
+        });
+
+        $(document).on('change', '[id="TipoPerfilId"]', function () {
+            checkAndShowModulo();
+        });
+
+        $("#ClienteId").on("change", function (event) {
+
+            var clienteIdSeleccionado = $("#ClienteId").val();
+            var $select = $('#ProyectoId');
+            $select.empty();
+
+            $.post('@Url.Action("GeneraProyectosFromClientes", "Necesidades")', { clienteId: clienteIdSeleccionado }).done(function (data) {
+
+                $.each(data, function (indice, elementoActual) {
+                    $('<option>', {
+                        value: elementoActual.ProyectoId
+                    }).html(elementoActual.Nombre).appendTo($select);
+                });
+
+            });
+
+        });
+
+
+        function compruebaRadios(){
+            if($('#dispViaje').prop("checked") == true)
+            {
+                $('[name="DisponibilidadViajes"]').val(true);
+            }
+            else
+            {
+                $('[name="DisponibilidadViajes"]').val(false);
+            }
+            if($('#dispReubicacion').prop("checked") == true)
+            {
+                $('[name="DisponibilidadReubicacion"]').val(true);
+            }
+            else
+            {
+                $('[name="DisponibilidadReubicacion"]').val(false);
+            }
+            if($('#NecesidadIdioma').prop("checked") == true)
+            {
+                $('[name="NecesidadIdioma"]').val(true);
+            }
+            else
+            {
+                $('[name="NecesidadIdioma"]').val(false);
+            }
+
+        }
+
+        $("#BtnAceptarNecesidad").on("click", function(event) {
+            var necesidadId = $('#NecesidadIdModal').val();
+            BootstrapDialog.confirm({
+                title: '@Resources.Necesidad_ConfirmacionFinalizarTitulo',
+                message: '@Resources.Necesidad_ConfirmacionFinalizarTexto',
+                type: BootstrapDialog.TYPE_CONFIRMFINALICE,
+                callback: function (result) {
+                    if (result) {
+                        quitDisabled();
+                        compruebaRadios();
+                        if ($('#necesidadForm').parsley().validate() == true)
+                        {
+                            $.ajax({
+                                url: '@Url.Action("EditarNecesidadModal", "Candidaturas")',
+                                type: 'POST',
+                                cache: false,
+                                data: jQuery("#necesidadForm").serialize(),
+                                success: function (result) {
+                                    if (result == "error")
+                                    {
+                                        BootstrapDialog.alert({
+                                            title: '@Resources.Necesidad_ErrorTitulo',
+                                            message: '@Resources.Necesidad_ErrorTexto',
+                                            type: BootstrapDialog.TYPE_ERROR,
+                                            callback: function (result) {
+                                                if (result) {
+                                                    BootstrapDialog.closeAll();
+                                                } else {
+                                                    BootstrapDialog.closeAll();
+                                                }
+                                            }
+                                        });
+                                    }
+                                    if (result == "success")
+                                    {
+                                        BootstrapDialog.alert({
+                                            title: '@Resources.Necesidad_ExitoTitulo',
+                                            message: '@Resources.Necesidad_ExitoTexto',
+                                            type: BootstrapDialog.TYPE_CONFIRMFINALICE,
+                                            callback: function (result) {
+                                                if (result) {
+                                                    BootstrapDialog.closeAll();
+                                                    $("#modalEditNecesidad").modal('hide');
+                                                } else {
+                                                    BootstrapDialog.closeAll();
+                                                }
+                                            }
+                                        });
+                                    }
+                                }
+                            });
+
+                        }
+                    } else {
+                        BootstrapDialog.closeAll();
+                    }
+                }
+            });
+        });
+
+        function putDisabled(){
+
+            $('[name="OficinaId"]').attr("disabled", true);
+            $('[name="SectorId"]').attr("disabled", true);
+            $('[name="ClienteId"]').attr("disabled", true);
+            $('[name="ProyectoId"]').attr("disabled", true);
+            $('[name="MesesAsignacionId"]').attr("disabled", true);
+            $('[name="TipoPrevisionId"]').attr("disabled", true);
+            $('[name="FechaSolicitud"]').attr("disabled", true);
+            $('[name="FechaCompromiso"]').attr("disabled", true);
+            $('[name="DisponibilidadViajes"]').attr("disabled", true);
+            $('[name="DisponibilidadReubicacion"]').attr("disabled", true);
+            $('[name="NecesidadIdioma"]').attr("disabled", true);
+
+        }
+        function quitDisabled(){
+            $(':disabled').each(function(e) {
+                $(this).removeAttr('disabled');
+                $(this).attr("readonly", true);
+            })
+        }
+
+
+        </script>
+}
+
+@helper CompletarCartaOfertaFrontActions(System.Web.Mvc.UrlHelper Url)
+    {
+        <script type="text/javascript">
+
+        //Guardar / Finalizar
+
+        function guardar(source) {
+            var textArea = $('#ObservacionesCartaOferta');
+            var observaciones = $('#ObservacionesCartaOferta').val();
+            textArea.val(observaciones);
+
+            //ChangeAceptaRequiredFinalizar(false);
+
+            BootstrapDialog.confirm({
+                title: '@Resources.Candidatura_ConfirmacionGuardarTitulo',
+                message: '@Resources.Candidatura_ConfirmacionGuardarTexto',
+                type: BootstrapDialog.TYPE_CONFIRMFINALICE,
+                callback: function (result) {
+                    if (result) {
+                        if ($("#cartaOfertaForm").parsley().validate() == true) {
+                            var submitType = $("[name=SubmitType]");
+                            submitType.val("guardar");
+                            $("#cartaOfertaForm").submit();
+                        }
+                    } else {
+                        BootstrapDialog.closeAll();
+                    }
+                }
+            });
+        }
+
+            function finalizar(source)
+            {
+
+                var fechaAgendada = $('[name="EntregaCartaOfertaViewModel.AgendarCartaOfertaViewModel.AgendarCartaOferta.FechaAgendarCarta"]').val();
+                var textArea = $('#ObservacionesCartaOferta');
+                var observaciones = $('#ObservacionesCartaOferta').val();
+                textArea.val(observaciones);
+
+                if (fechaAgendada == "")
+                {
+                    BootstrapDialog.alert({
+                        title: '@Resources.HTML_Candidaturas_CompletarCartaOferta_Error',
+                        message: '@Resources.HTML_Candidaturas_CompletarCartaOferta_FechaDebeTenerValor',
+                        type: BootstrapDialog.TYPE_ERROR,
+                        callback: function (result) {
+                            if (result) {
+                                BootstrapDialog.closeAll();
+                            } else {
+                                BootstrapDialog.closeAll();
+                            }
+                        }
+                    });
+                }
+                else
+                {
+                    //ChangeAceptaRequiredFinalizar(true);
+                    var necesidad = $('[name="CompletarCartaOferta.NecesidadId"]').val();
+                    var nombreNecesidad = $('[name="CompletarCartaOferta.Nombre"]').val();
+                    var aceptaCartaOferta = $('input[name="TriStatus3"]:checked').val();
+                    var fechaIncorporacion = $('[name="CompletarCartaOferta.FechaIncorporacion"]').val();
+
+                    if (aceptaCartaOferta == @((int)TipoDecisionEnum.SIN_DECISION_CARTAOFERTA ))
+                    {
+                        BootstrapDialog.show({
+                            type: BootstrapDialog.TYPE_ERROR,
+                            title: '@Resources.HTML_Candidaturas_CompletarCartaOferta_Alerta',
+                            text: '@Resources.HTML_Candidaturas_CompletarCartaOferta_CartaOfertaSinDecision',
+                            message: '@Resources.HTML_Candidaturas_CompletarCartaOferta_CartaOfertaSinDecision',
+                        });
+                    } else
+                    {
+                        if ((necesidad == "" || nombreNecesidad == "" || fechaIncorporacion == "") && aceptaCartaOferta == @((int)TipoDecisionEnum.ACEPTA_CARTA_OFERTA ))
+                        {
+                            BootstrapDialog.show({
+                                type: BootstrapDialog.TYPE_ERROR,
+                                title: '@Resources.HTML_Candidaturas_CompletarCartaOferta_Alerta',
+                                text: '@Resources.HTML_Candidaturas_CompletarCartaOferta_NecesidadSinAsignarContinuar',
+                                message: '@Resources.HTML_Candidaturas_CompletarCartaOferta_NecesidadSinAsignarContinuar',
+                            });
+                        }
+                        else
+                        {
+                            BootstrapDialog.confirm({
+                                title: '@Resources.Candidatura_ConfirmacionFinalizarTitulo',
+                                message: '@Resources.Candidatura_ConfirmacionFinalizarTexto',
+                                type: BootstrapDialog.TYPE_CONFIRMFINALICE,
+                                callback: function (result) {
+                                    if (result) {
+                                        if ($('#cartaOfertaForm').parsley().validate() == true) {
+                                            var submitType = $("[name=SubmitType]");
+                                            submitType.val("finalizar");
+                                            $("#cartaOfertaForm").submit();
+                                        }
+
+                                    } else
+                                    {
+                                        BootstrapDialog.closeAll();
+                                    }
+                                }
+                            });
+                        }
+                    }
+                }
+            }
+
+            //Logica generar C.O
+                        
+            $(document).on('click', '#btnEleccionCartaOferta', function () {
+                $("#modalEleccionCO").modal('show');
+                var promise = $.ajax({
+                    url: '@Url.Action("ElegirCartaOferta", "Candidaturas")',
+                    data: { candidaturaId: $("#CandidaturaId").val() },
+                    type: 'POST',
+                });
+
+                promise.done(function (response) {
+                    if (response.IsValid) {
+                        var $select = $('[name=EleccionCO]');
+                        $select.empty();
+                        $.each(response.plantillas, function (indice, elementoActual) {
+                            $('<option>', {
+                                value: elementoActual.Value
+                            }).html(elementoActual.Text).appendTo($select);
+                        });
+                    }
+                    else {
+                        BootstrapDialog.show({
+                        type: BootstrapDialog.TYPE_ERROR,
+                        title: '@Resources.Error_CargaPlantillasTitulo',
+                        text: '@Resources.Error_CargaPlantillasTexto',
+                        message: response.ErrorMessage,
+                    });
+                    }
+                })
+            });
+
+            $(document).on('click', '#btnGenerarCartaOferta', function () {
+
+                var item = $("#CandidaturaId").val();
+                var valor = $('[name=EleccionCO]').val();
+            var url = '@Url.Action("UploadCartaOfertaGenerada", "Candidaturas")';
+
+            var promise = $.ajax({
+                url: url,
+                data: {
+                    candidaturaId: item,
+                    plantillaId : valor
+                },
+                type: 'POST',
+            });
+
+
+            promise.done(function (response) {
+
+                if (response.IsValid) {
+                    BootstrapDialog.confirm({
+                        title: '@Resources.Candidatura_CartaOfertaGeneradaTitulo',
+                        message: '@Resources.Candidatura_CartaOfertaGeneradaMensaje',
+                        type: BootstrapDialog.TYPE_CONFIRMFINALICE,
+                        callback: function (result) {
+                            if (result) {
+                                var candidaturaId = $("#CandidaturaId").val();
+                                var url = '@Url.Action("DownloadCartaOferta", "Candidaturas", new { candidaturaId = "__candidaturaId__" })';
+                                window.location.href = url.replace('__candidaturaId__', candidaturaId);
+                                BootstrapDialog.closeAll();
+                                $('#modalEleccionCO').modal('hide');
+
+                            } else {
+                                BootstrapDialog.closeAll();
+                            }
+                        }
+                    });
+
+                } else {
+                    BootstrapDialog.show({
+                        type: BootstrapDialog.TYPE_ERROR,
+                        title: '@Resources.Error_GenerarCartaOferta',
+                        message: response.ErrorMessage,
+                    });
+                }
+            });
+
+        });
+
+        //Funciones
+
+        function ChangeAceptaRequiredFinalizar(isRequired) {
+            var motivoRechazo = $('[name="CompletarCartaOferta.MotivoRechazoId"]');
+            var fechaIncorporacion = $('[name="CompletarCartaOferta.FechaIncorporacion"]');
+            var necesidad = $('[name="CompletarCartaOferta.NecesidadId"]');
+            var nombreNecesidad = $('[name="CompletarCartaOferta.Nombre"]');
+
+            motivoRechazo.removeAttr('required');
+            fechaIncorporacion.removeAttr('required');
+            necesidad.removeAttr('required');
+            nombreNecesidad.removeAttr('required');
+
+            if (isRequired) {
+                motivoRechazo.attr('required', 'required');
+                fechaIncorporacion.attr('required', 'required');
+                necesidad.attr('required', 'required');
+                nombreNecesidad.attr('required', 'required');
+            }
+        }
+
+        </script>
+}
+
+@helper EditSubEntrevistasFrontActions(System.Web.Mvc.UrlHelper Url, Recruiting.Application.Candidaturas.ViewModel.SubEntrevistaListViewModel Model, int nSubEntrevistas)
+    {
+        <script type="text/javascript">
+
+        //Logica botones
+
+            $("[name='btnBorrar']").click(function () {
+                var dataId = $(this).closest("div:has(*[data-id])").attr('data-id');
+                var activo = $("[name='SubEntrevistaList[" + dataId + "].Activo']").val();
+                var candidaturaId = $("[name='CandidaturaId']").val();
+
+                BootstrapDialog.confirm({
+                    title: '@Resources.SubEntrevista_BorrarTitulo',
+                    message: '@Resources.SubEntrevista_BorrarTexto',
+                    type: BootstrapDialog.TYPE_CONFIRMFINALICE,
+                    callback: function (result) {
+                        if (result) {
+                            $("[name='SubEntrevistaList[" + dataId + "].Activo']").val(!activo);
+
+                            $.ajax({
+                                url: '@Url.Action("SaveSubEntrevistas", "Candidaturas")',
+                                type: 'POST',
+                                cache: false,
+                                data: jQuery("#formId").serialize(),
+                                success: function (result) {
+                                    if (result == "error")
+                                    {
+                                        BootstrapDialog.alert({
+                                            title: '@Resources.Subentrevista_ErrorTitulo',
+                                            message: '@Resources.Subentrevista_ErrorTexto',
+                                            type: BootstrapDialog.TYPE_ERROR,
+                                            callback: function (result) {
+                                                if (result) {
+                                                    BootstrapDialog.closeAll();
+                                                } else {
+                                                    BootstrapDialog.closeAll();
+                                                }
+                                            }
+                                        });
+                                    }
+                                    if (result == "success")
+                                    {
+                                        BootstrapDialog.alert({
+                                            title: '@Resources.Subentrevista_ExitoBorrarTitulo',
+                                            message: '@Resources.SubEntrevista_ExitoBorrarTexto',
+                                            type: BootstrapDialog.TYPE_CONFIRMFINALICE,
+                                            callback: function (result) {
+                                                if (result) {
+                                                    var tam = document.getElementsByName('btnBorrar').length;    
+                                                    BootstrapDialog.closeAll();
+
+                                                    if (tam > 1) {
+                                                        location.reload();
+                                                    } else {
+                                                        var url = '@Url.Action("Ejecutar", "Candidaturas", new { CandidaturaId = "__candidaturaId__" })';
+                                                        window.location.href = url.replace('__candidaturaId__', candidaturaId);
+                                                    } 
+
+                                                } else {
+                                                    BootstrapDialog.closeAll();
+                                                }
+                                            }
+                                        });
+                                    }
+                                }
+                            });
+                        } else {
+                            BootstrapDialog.closeAll();
+                        }
+                    }
+                });
+        });
+
+         $('#btnVolver').click(function()
+        {
+            var entrevistaId = @Model.SubEntrevistaList[0].EntrevistaId.Value;
+            var url = '@Url.Action("VolverSubEntrevistas", "Candidaturas",
+            new { entrevistaId = "__parametro__" })';
+            window.location.href = url.replace('__parametro__', entrevistaId);
+
+        });
+
+        $('#btnGuardar').click(function()
+        {
+            var tieneFechas = ComprobarFechas();
+            if (tieneFechas == true)
+            {
+                BootstrapDialog.alert({
+                    title: '@Resources.Subentrevista_FechasCoincidenErrorTitulo',
+                    message: '@Resources.Subentrevista_FechasCoincidenErrorTexto',
+                    type: BootstrapDialog.TYPE_ERROR,
+                    callback: function (result) {
+                        if (result) {
+                            BootstrapDialog.closeAll();
+                        } else {
+                            BootstrapDialog.closeAll();
+                        }
+                    }
+                });
+            }
+            else
+            {
+                var x = 0;
+                for (x = 0; x < @nSubEntrevistas; x++) {
+                    (function (j) {
+                        if ($("#Observaciones_" + j).length != 0)
+                        {
+                            var texto = $('#Observaciones_' + j).val();
+                            $('#ObservacionesHidden_' + j).val(texto);
+                        }
+                    })(x);
+                }
+                BootstrapDialog.confirm({
+                    title: '@Resources.SubEntrevista_GuardarTitulo',
+                    message: '@Resources.SubEntrevista_GuardarTexto',
+                    type: BootstrapDialog.TYPE_CONFIRMFINALICE,
+                    callback: function (result) {
+                        if (result) {
+                            //$("form").submit();
+                            $.ajax({
+                                url: '@Url.Action("SaveSubEntrevistas", "Candidaturas")',
+                                type: 'POST',
+                                cache: false,
+                                data: jQuery("#formId").serialize(),
+                                success: function (result) {
+                                    if (result == "error")
+                                    {
+                                        BootstrapDialog.alert({
+                                            title: '@Resources.Subentrevista_ErrorTitulo',
+                                            message: '@Resources.Subentrevista_ErrorTexto',
+                                            type: BootstrapDialog.TYPE_ERROR,
+                                            callback: function (result) {
+                                                if (result) {
+                                                    BootstrapDialog.closeAll();
+                                                } else {
+                                                    BootstrapDialog.closeAll();
+                                                }
+                                            }
+                                        });
+                                    }
+                                    if (result == "success")
+                                    {
+                                        BootstrapDialog.alert({
+                                            title: '@Resources.Subentrevista_ExitoGuardarTitulo',
+                                            message: '@Resources.SubEntrevista_ExitoGuardarTexto',
+                                            type: BootstrapDialog.TYPE_CONFIRMFINALICE,
+                                            callback: function (result) {
+                                                if (result) {
+                                                    BootstrapDialog.closeAll();
+                                                } else {
+                                                    BootstrapDialog.closeAll();
+                                                }
+                                            }
+                                        });
+                                    }
+                                }
+                            });
+                        } else {
+                            BootstrapDialog.closeAll();
+                        }
+                    }
+                });
+            }
+        });
+
+        //Funciones
+
+        function ComprobarFechas()
+        {
+            var candidaturaId = $('[name="CandidaturaId"]').val();
+            var listaFechas = new Array();
+            var x = 0;
+            for (x = 0; x < @nSubEntrevistas; x++) {
+                (function (j) {
+                    if ($('[name="SubEntrevistaList[' + j + '].FechaSubEntrevista"]').length != 0)
+                    {
+                        $(function () {
+                            if ($('[name="SubEntrevistaList[' + j + '].AvisarAlCandidato"]').prop('checked'))
+                            {
+                                var fechaAMeter = $('[name="SubEntrevistaList[' + j + '].FechaSubEntrevista"]').val();
+                                fechaAMeter = fechaAMeter.substring(0, fechaAMeter.length - 8);
+                                listaFechas.push(fechaAMeter);
+                            }
+                        });
+                    }
+                })(x);
+            }
+            var coincideConEntrevistaPrincipal = false;
+            var hayFechasDuplicadas = (new Set(listaFechas)).size !== listaFechas.length
+            if (hayFechasDuplicadas)
+            {
+                return true;
+            }
+            else
+            {
+                var result = $.ajax({
+                    async: false,
+                    url: '@Url.Action("ComprobarFechaAvisoEntrevistaPrincipal", "Candidaturas")',
+                    type: 'POST',
+                    cache: false,
+                    data:
+                        {
+                            fechas: listaFechas,
+                            candidaturaId: candidaturaId,
+                            notificar: true
+                        },
+                    success: function (result) {
+                        if (result == "error")
+                        {
+                            coincideConEntrevistaPrincipal = true;
+                        }
+                        if (result == "success")
+                        {
+                            coincideConEntrevistaPrincipal = false;
+                        }
+                    }
+                });
+                if (coincideConEntrevistaPrincipal)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+
+        </script>
+}
+
+@helper EditExtendFrontActions(System.Web.Mvc.UrlHelper Url, Recruiting.Application.Candidaturas.ViewModel.CandidaturaViewModel Model)
+    {
+        <script type="text/javascript">
+
+        //Inicializaciones
+
+        $(document).ready(function () {
+            DisableContainer();
+        });
+
+        //Redirect detalles necesidades al clickar
+
+        $(document).on('click', '#NecesidadId', function () {
+            var id = $('#NecesidadId').val();
+            var url = '@Url.Action("Details", "Necesidades", new { id = "__id__" })';
+            window.open(url.replace('__id__', id));
+
+        });
+
+        //Guardar
+
+        function guardar(source) { //adquiriendo los cambios del summernote
+            validateFields();
+
+            $('[name="PrimeraEntrevistaViewModel.ResultadoPrimeraEntrevista.Completada"]')
+                .val($('[name="PrimeraEntrevistaViewModel.ResultadoPrimeraEntrevista.Completada"]').val()).toString().toLowerCase();
+
+            var observacionesCartaOferta = $('#ObservacionesCartaOferta').val();
+            if (observacionesCartaOferta != null) {
+                var textArea = $('#ObservacionesCartaOferta');
+                textArea.val(observacionesCartaOferta);
+            }
+
+            var observacionesEntrevista2 = $('#ObservacionesEntrevista-2').val();
+            if (observacionesEntrevista2 != null) {
+                var textArea = $('#ObservacionesEntrevista-2');
+                textArea.val(observacionesEntrevista2);
+            }
+
+            var observacionesEntrevista1 = $('#ObservacionesEntrevista-1').val();
+            if (observacionesEntrevista1 != null) {
+                var textArea = $('#ObservacionesEntrevista-1');
+                textArea.val(observacionesEntrevista1);
+            }
+
+            var motivosObservaciones = $('#MotivosObservaciones').val();
+            if (motivosObservaciones != null) {
+                var textArea = $('#MotivosObservaciones');
+                textArea.val(motivosObservaciones);
+            }
+
+            var DatosCv = $('#DatosCv').val();
+            if (DatosCv != null) {
+                var textArea = $('#DatosCv');
+                textArea.val(DatosCv);
+            }
+
+
+            //guardar
+            BootstrapDialog.confirm({
+                title: '@Resources.Candidatura_ConfirmacionModificarTitulo',
+                message: '@Resources.Candidatura_ConfirmacionModificarTexto',
+                type: BootstrapDialog.TYPE_CONFIRMFINALICE,
+                callback: function (result) {
+                    if (result) {
+
+                        forTable();
+
+                        var submitType = $("[name=SubmitType]");
+                        submitType.val("guardar");
+
+                        var formElement = $("form");//obtenemos la referencia del formulario
+                        var action = formElement.attr("action");//establecemos la accion
+                        var formData = new FormData(formElement[0]);//creamos un formData para obtener todos los elementos del formulario
+                        //Para la subida de Archivo.
+                        //Si existe el imput con este id y contiene un archivo
+                        if ($("#SubirTS").length == 1) {
+                            //creamos una variable el cual obtenemos la longitud del archivo.
+                            var file1 = $("#SubirTS")[0].files;
+                            //si la longitud del archivo es mayor que cero es que tenemos un archivo dentro.
+                            if (file1.length == 1) {
+                                //con esto obtenemos el nombre y bytes del archivo
+                                var f1 = file1[0];
+                                //se lo añadimos al formData
+                                formData.append("archivoTest", f1.file);//nombre del imput + el archivo
+                            }
+                        }
+                        //CREAMOS UNA LLAMADA CON AJAX
+                        if($('form').parsley().validate())
+                        {
+                            $.ajax({
+                                //EN URL ESTABLECEMOS LA ACCION
+                                url: action,//accion de antes
+                                type: 'POST',//metodo post para enviar con el formulario
+                                data: formData ,//todos los datos añadidos
+                                contentType: false,
+                                cache: false,
+                                processData: false,
+                                success: function (data) {//si todo esta bien guardamos el formulario
+                                    var mensajeError = data.ErrorMessage;
+                                    if (mensajeError == null) mensajeError = "";
+                                    if (data.IsValid == true) {
+                                        BootstrapDialog.show({
+                                            type: BootstrapDialog.TYPE_NOTIFY,
+                                            title: '@Resources.Candidatura_CandidaturaGuardadaTitulo',
+                                            message: '@Resources.Candidatura_CandidaturaGuardadaMensaje' + mensajeError,
+                                            action: function () { setTimeout(function () { BootstrapDialog.closeAll(); }, 2000); }
+                                        });
+                                    }
+                                    else {//si no nos genera el mensaje de error
+                                        BootstrapDialog.show({
+                                            type: BootstrapDialog.TYPE_ERROR,
+                                            title: '@Resources.Error_Guardado',
+                                            message: mensajeError,
+                                            action: function () { setTimeout(function () { BootstrapDialog.closeAll(); }, 2000); }
+                                        });
+                                    }
+                                }
+                            });
+                        }
+                        else
+                        {
+                            BootstrapDialog.show({
+                                type: BootstrapDialog.TYPE_ERROR,
+                                title: '@Resources.Error_Guardado',
+                                message: '@Resources.Candidatura_CandidaturaGuardarRequeridosMensaje',
+                                action: function () { setTimeout(function () { BootstrapDialog.closeAll(); }, 2000); }
+                            });
+                        }
+
+                    } else {
+                        BootstrapDialog.closeAll();
+                    }
+                }
+            });
+        }
+
+        //Funciones
+
+        function DisableContainer() {
+            $("#Filtrado").attr("disabled", "disabled");
+            $('input[name="PrimeraEntrevistaViewModel.ResultadoPrimeraEntrevista.SuperaEntrevistaId"]').attr("disabled", "disabled");
+            $('input[name="SegundaEntrevistaViewModel.ResultadoSegundaEntrevista.SuperaEntrevista2Id"]').attr("disabled", "disabled");
+            $('input[name="CompletarCartaOfertaViewModel.CompletarCartaOferta.SuperaCartaOferta"]').attr("disabled", "disabled");
+        }
+
+        function validateFields()
+        {
+            var etapaCandidaturaId = @Model.CandidaturaDatosBasicosViewModel.DatosBasicos.EtapaCandidaturaId;
+            if ($('#SuperaEntrevistaId').is(':checked'))
+            {
+                $('#MotivoId').prop('required',false);
+            }
+            else
+            {
+                $('#MotivoId').prop('required',true);
+            }
+            if ($('#SuperaEntrevista2Id').is(':checked'))
+            {
+                $('#MotivoId2').prop('required',false);
+            }
+            else
+            {
+                $('#MotivoId2').prop('required',true);
+            }
+            if($('#SuperaCartaOferta').is(':checked'))
+            {
+                $('#MotivoRechazoId').prop('required',false);
+            }
+            else
+            {
+                $('#MotivoRechazoId').prop('required',true);
+            }
+        }
+
+
+        </script>
+}

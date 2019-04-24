@@ -1,0 +1,214 @@
+﻿@using RecruitingWeb.Components.DataTable.Helpers
+@using RecruitingWeb.Helpers
+@using Recruiting.Application.Candidatos.ViewModels
+@using RecruitingWeb.Properties
+@using RecruitingWeb.Components.DataTable.Models
+
+@model Recruiting.Application.Proyectos.ViewModels.ProyectoRowViewModel
+
+@{
+
+    if (Model.ProyectoId != 0)
+    {
+        var Activo = Model.Activo;
+        if (Activo == false)
+        {
+            Response.Redirect("/Shared/Borrado");
+
+        }
+    }
+}
+
+<div class="row titlePage">
+    <div class="col-lg-6">
+        <h3>@Resources.HTML_Admin_Index_Administracion</h3>
+    </div>
+</div>
+
+<div class="row header-flap">
+    @* Menú de opciones *@
+    <div class="btn-group" role="group">
+        <a class="btn btn-default" href="@Url.Action("Index", new { tab = "tab-user" })">
+            <span class="text">@Resources.HTML_BotonGenericoVolver</span>
+        </a>
+        <a class="btn btn-default" href="#" data-action="guardar">
+            <span class="text">@Resources.HTML_BotonGenericoGuardar</span>
+        </a>
+    </div>
+    @* Pestaña caja superior*@
+    @if (Model.ProyectoId == 0)
+    {
+        <div class="col-lg-6 removePadding">
+            <h4 class="noMargin headerBox">@Resources.HTML_Admin_CreateEditProyecto_CreandoProyecto</h4>
+        </div>
+    }
+    else
+    {
+        <div class="col-lg-6 removePadding">
+            <h4 class="noMargin headerBox">@Resources.HTML_Admin_CreateEditProyecto_EditandoProyecto</h4>
+        </div>
+    }
+</div>
+<div class="row">
+    <div class="content-box border-top-cero">
+        <div class="content-box-content">
+            @using (Html.BeginForm("CreateEditProyecto", "Admin", FormMethod.Post, new Dictionary<string, object> { { "role", "form" }, { "data-parsley-validate", "true" }, { "data-parsley-excluded", ":not([data-validate])" } }))
+            {
+                @Edit.Hidden(Model.ProyectoId, "ProyectoId")
+
+                <div class="section-form-admin-rol margin" data-id="section-form-basicos">
+                    <div class="row form-row">
+                        <div class="form-group col-lg-4">
+                            <div class="col-lg-12 title-form">
+                                <label for="Nombre">@Resources.HTML_Admin_CreateEditProyecto_Nombre</label>
+                            </div>
+                            <div class="col-lg-12">
+                                @Edit.Text(Model.Nombre, "Nombre", id: "Nombre", maxLength: 100, htmlClass: "form-control")
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-4">
+                            <div class="col-lg-12 title-form">
+                                <label for="Persona">@Resources.HTML_Admin_CreateEditProyecto_Persona</label>
+                            </div>
+                            <div class="col-lg-12">
+                                @Edit.Text(Model.Persona, "Persona", id: "Persona", maxLength: 100, htmlClass: "form-control", required: false)
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-4">
+                            <div class="col-lg-12 title-form">
+                                <label for="CuentaCargo">@Resources.HTML_Admin_CreateEditProyecto_CuentaCargo</label>
+                            </div>
+                            <div class="col-lg-12">
+                                @Edit.Text(Model.CuentaCargo, "CuentaCargo", id: "CuentaCargo", maxLength: 100, htmlClass: "form-control", required: false)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row form-row">
+                        <div class="form-group col-lg-4">
+                            <div class="col-lg-12 title-form">
+                                <label for="ClienteId">@Resources.HTML_Admin_CreateEditProyecto_Cliente</label>
+                            </div>
+                            <div class="col-lg-12">
+                                @Edit.DropDownExtend(Model.ClienteId, "ClienteId", ViewBag.Clientes, htmlClass: "form-control col-md-4", validate: true, required: true, id: "ClienteId")
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-4">
+                            <div class="col-lg-12 title-form">
+                                <label for="SectorId">@Resources.HTML_Admin_CreateEditProyecto_Sector</label>
+                            </div>
+                            <div class="col-lg-12">
+                                @Edit.DropDownExtend(Model.SectorId, "SectorId", Model.SectorList, htmlClass: "form-control col-lg-4", id: "SectorId", required: false)
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-4">
+                            <div class="col-lg-12 title-form">
+                                <label for="ServicioId">@Resources.HTML_Admin_CreateEditProyecto_Servicio</label>
+                            </div>
+                            <div class="col-lg-12">
+                                @Edit.DropDownExtend(Model.ServicioId, "ServicioId", Model.ServicioList, htmlClass: "form-control col-lg-4", id: "ServicioId", required: false)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row form-row">
+                        @if (ViewBag.HasCentro ?? false)
+                        {
+                            var centroUsuarioId = (int)ViewBag.CentroUsuarioId;
+                            var selectList = (System.Web.Mvc.SelectList)ViewBag.CentroList;
+                            var centroList = selectList.Where(x => x.Value == centroUsuarioId.ToString()).ToList();
+
+                            <div class="form-group col-lg-4">
+                                <div class="col-lg-12 title-form">
+                                    <label for="Descripcion">@Resources.HTML_Admin_CreateEditProyecto_Centro</label>
+                                </div>
+                                <div class="col-lg-12">
+                                    @Edit.DropDownExtend(
+                                                         centroUsuarioId,
+                                                         "CentroId",
+                                                         centroList,
+                                                         htmlClass: "form-control",
+                                                         required: true)
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="form-group col-lg-4">
+                                <div class="col-lg-12 title-form">
+                                    <label for="Descripcion">@Resources.HTML_Admin_CreateEditProyecto_Centro</label>
+                                </div>
+                                <div class="col-lg-12">
+                                    @Edit.DropDownExtend(
+                                                        Model.CentroId,
+                                                        "CentroId",
+                                                        ViewBag.CentroList,
+                                                        htmlClass: "form-control",
+                                                        required: true)
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        </div> <!-- End content-box-content -->
+    </div> <!-- End .content-box -->
+</div> <!--End .Row-->
+@section scripts{
+
+    <script type="text/javascript">
+
+        function guardar(source) {
+            BootstrapDialog.confirm({
+                title: '@Resources.Proyecto_ConfirmFinalizarTitulo',
+                message: '@Resources.Proyecto_ConfirmFinalizarTexto',
+                type: BootstrapDialog.TYPE_CONFIRMFINALICE,
+                callback: function (result) {
+                    if (result) {
+                        $("form").submit();
+                    } else {
+                        BootstrapDialog.closeAll();
+                    }
+                }
+            });
+        }
+
+        $(document).ready(function () {
+            $(document).on('change', '[name="CentroId"]', function () {
+                var source = $(this);
+                var cliente = $('[name="ClienteId"]');
+                var itemsStr = cliente.attr('data-items');
+                var itemsPorCentro = JSON.parse(itemsStr);
+                var centroId = source.val();
+
+                var itemsMiCentro = itemsPorCentro[centroId];
+                if (centroId == '') {
+                    itemsMiCentro = [];
+                    for (var elto in itemsPorCentro) {
+                        var items = itemsPorCentro[elto];
+                        items.forEach(function (it, ix, list) {
+                            itemsMiCentro.push(it);
+                        });
+                    }
+                }
+
+                if (itemsMiCentro == null) {
+                    itemsMiCentro = [];
+                }
+
+                //Limpiamos todos menos el primero:
+                cliente.children(':not(:first)').remove();
+
+                //Añadimos todos los del centro seleccionado
+                itemsMiCentro.forEach(function (it, ix, list) {
+                    var option = $('<option>');
+                    option.attr('value', it.Value);
+                    option.html(it.Text);
+                    option.appendTo(cliente);
+                });
+            });
+
+            $('[name="CentroId"]').change();
+            $('[name="ClienteId"]').val('@Model.ClienteId');
+        });
+
+    </script>
+}

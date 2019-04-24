@@ -1,0 +1,200 @@
+﻿@using RecruitingWeb.Helpers
+@using Recruiting.Application.Candidaturas.ViewModel
+@using Recruiting.Application.Necesidades.ViewModels
+@using RecruitingWeb.Properties
+@using RecruitingWeb.Models
+
+@model Recruiting.Application.Candidaturas.ViewModel.CompletarCartaOferta
+
+@using (Html.BeginForm("EditarNecesidadModal", "Candidaturas", FormMethod.Post, new Dictionary<string, object> { { "id", "necesidadForm" }, { "role", "form" }, { "data-parsley-validate", "true" }, { "data-parsley-excluded", ":not([data-validate]) , [disabled]" } }))
+{
+    <div class="modal fade" id="modalEditNecesidad">
+        <div class="modal-dialog modalBusquedaNecesidad">
+            <div class="modal-content tablaNecesidadesCandidatura">
+                <div class="modal-header">
+                    <div class="row">
+                        <div class="col-lg-8 text-left">
+                            <h4 class="modal-title tituloModal">
+                                @Resources.HTML_Candidaturas_ModalEditNecesidad_EditandoNecesidad
+                            </h4>
+                        </div>
+                        <div class="col-lg-4 text-right">
+                            <button type="button" class="btnCloseModal" data-dismiss="modal">@Display.GlyphiconButton("glyphicon-remove")</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    @Edit.Hidden("guardar", "SubmitType")
+                    @Edit.Hidden("", "NecesidadId", new Dictionary<string, string>() { { "id", "NecesidadIdModal" } })
+                    @Edit.Hidden("", "CentroId")
+                    @Edit.Hidden("", "FechaCierre")
+                    @Edit.Hidden("", "EstadoNecesidadId")
+                    @Edit.Hidden("", "GrupoNecesidad")
+                    <div class="row">
+                        <div class="form-group col-lg-4">
+                            <div class="col-lg-12 title-form">
+                                <label for="Nombre">@Resources.HTML_Candidaturas_ModalEditNecesidad_Nombre</label>
+                            </div>
+                            <div class="col-lg-12">
+                                @Edit.Text("", "Nombre", id: "Nombre", maxLength: 100, htmlClass: "form-control")
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-4">
+                            <div class="col-lg-12 title-form">
+                                <label for="OficinaId">@Resources.HTML_Candidaturas_ModalEditNecesidad_Oficina</label>
+                            </div>
+                            <div class="col-lg-12">
+                                @Edit.DropDownExtend("", "OficinaId", Model.OficinaList, htmlClass: "form-control", id: "OficinaId")
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-lg-4">
+                            <div class="col-lg-12 title-form">
+                                <label for="SectorId">@Resources.HTML_Candidaturas_ModalEditNecesidad_Sector</label>
+                            </div>
+                            <div class="col-lg-12">
+                                @Edit.DropDownExtend("", "SectorId", Model.SectorList, htmlClass: "form-control", id: "SectorId")
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-4">
+                            <div class="col-lg-12 title-form">
+                                <label for="ClienteId">@Resources.HTML_Candidaturas_ModalEditNecesidad_Cliente</label>
+                            </div>
+                            <div class="col-lg-12">
+                                @Edit.DropDownExtend("", "ClienteId", Model.ClienteList, htmlClass: "form-control", id: "ClienteId")
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-4">
+                            <div class="col-lg-12 title-form">
+                                <label for="ProyectoId">@Resources.HTML_Candidaturas_ModalEditNecesidad_Proyecto</label>
+                            </div>
+                            <div class="col-lg-12">
+                                @Edit.DropDownExtend("", "ProyectoId", Model.ProyectoList, htmlClass: "form-control", id: "ProyectoId")
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-lg-4">
+                            <div class="col-lg-12 title-form">
+                                <label for="TipoTecnologiaId">@Resources.HTML_Candidaturas_ModalEditNecesidad_Tecnologia</label>
+                            </div>
+                            <div class="col-lg-12">
+                                @Edit.DropDownExtend("", "TipoTecnologiaId", Model.TecnologiaList, htmlClass: "form-control", id: "TipoTecnologiaId")
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-4">
+                            <div class="col-lg-12 title-form">
+                                <label for="TipoServicioId">@Resources.HTML_Candidaturas_ModalEditNecesidad_Servicio</label>
+                            </div>
+                            <div class="col-lg-12">
+                                @Edit.DropDownExtend("", "TipoServicioId", Model.ServicioList, htmlClass: "form-control", id: "TipoServicioId")
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-4">
+                            <div class="col-lg-12 title-form">
+                                <label for="TipoPerfilId">@Resources.HTML_Candidaturas_ModalEditNecesidad_Perfil</label>
+                            </div>
+                            <div class="col-lg-12">
+                                @Edit.DropDownExtend("", "TipoPerfilId", Model.CategoriaList, htmlClass: "form-control", id: "TipoPerfilId")
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-lg-4">
+                            <div class="col-lg-12 title-form">
+                                <label for="MesesAsignacionId">@Resources.HTML_Candidaturas_ModalEditNecesidad_Duracion</label>
+                            </div>
+                            <div class="col-lg-12">
+                                @Edit.DropDownExtend("", "MesesAsignacionId", Model.DuracionList, htmlClass: "form-control", id: "MesesAsignacionId")
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-4">
+                            <div class="col-lg-12 title-form">
+                                <label for="TipoContratacionId">@Resources.HTML_Candidaturas_ModalEditNecesidad_Contratacion</label>
+                            </div>
+                            <div class="col-lg-12">
+                                @Edit.DropDownExtend("", "TipoContratacionId", Model.ContratacionList, htmlClass: "form-control", id: "TipoContratacionId")
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-4">
+                            <div class="col-lg-12 title-form">
+                                <label for="TipoPrevisionId">@Resources.HTML_Candidaturas_ModalEditNecesidad_Prevision</label>
+                            </div>
+                            <div class="col-lg-12">
+                                @Edit.DropDownExtend("", "TipoPrevisionId", Model.PrevisionList, htmlClass: "form-control", id: "TipoPrevisionId")
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-lg-4">
+                            <div class="col-lg-12 title-form">
+                                <label for="FechaSolicitud">@Resources.HTML_Candidaturas_ModalEditNecesidad_FechaSolicitud</label>
+                            </div>
+                            <div class="col-lg-12">
+                                @Edit.Date(null, "FechaSolicitud", id: "FechaSolicitud", htmlClass: "form-control")
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-4">
+                            <div class="col-lg-12 title-form">
+                                <label for="FechaCompromiso">@Resources.HTML_Candidaturas_ModalEditNecesidad_FechaCompromiso</label>
+                            </div>
+                            <div class="col-lg-12">
+                                @Edit.Date(null, "FechaCompromiso", id: "FechaCompromiso", htmlClass: "form-control")
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-4" data-section="Modulo">
+                            <div class="col-lg-12 title-form">
+                                <label for="Modulo">@Resources.HTML_Candidaturas_ModalEditNecesidad_Modulo</label>
+                            </div>
+                            <div class="col-lg-12">
+                                @Edit.DropDownExtend("", "Modulo", Model.ModuloList, htmlClass: "form-control", id: "Modulo")
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-lg-8">
+                            <div class="col-lg-12 title-form">
+                                <label for="DetalleTecnologia">@Resources.HTML_Candidaturas_ModalEditNecesidad_DetalleTecnologia</label>
+                            </div>
+                            <div class="col-lg-12">
+                                @Edit.TextArea("", "DetalleTecnologia", id: "DetalleTecnologia", rows: 8, required: false, htmlClass: "form-control", placeholder: "Detalle de Tecnología ... ")
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-4 pt-25">
+                            <div class="col-lg-12 noPadding noMargin">
+                                <div class="col-lg-4 title-form">
+                                    <label for="dispViaje">@Resources.HTML_Candidaturas_ModalEditNecesidad_DisponibilidadViaje</label>
+                                </div>
+                                <div class="col-lg-8">                                    
+                                    @Edit.CheckBoxDig(false, name: "DisponibilidadViajes", id: "dispViaje", disabled: false, required: false)
+                                </div>
+                            </div>
+                            <div class="col-lg-12 noPadding noMargin">
+                                <div class="col-lg-4 title-form">
+                                    <label for="dispReubicacion">@Resources.HTML_Candidaturas_ModalEditNecesidad_DisponibilidadReubicacion</label>
+                                </div>
+                                <div class="col-lg-8">                                   
+                                    @Edit.CheckBoxDig(false, name: "DisponibilidadReubicacion", id: "dispReubicacion", disabled: false, required: false)
+                                </div>
+                            </div>
+                            <div class="col-lg-12 noPadding noMargin">
+                                <div class="col-lg-4 title-form">
+                                    <label for="dispReubicacion">@Resources.HTML_Candidaturas_ModalEditNecesidad_NecesidadIdioma</label>
+                                </div>
+                                <div class="col-lg-8">                                    
+                                    @Edit.CheckBoxDig(false, name: "NecesidadIdioma", id: "NecesidadIdioma", disabled: false, required: false)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" id="BtnAceptarNecesidad">@Resources.Boton_Aceptar</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+}
+

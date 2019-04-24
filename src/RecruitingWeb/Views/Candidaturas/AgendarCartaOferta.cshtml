@@ -1,0 +1,56 @@
+﻿@using RecruitingWeb.Properties
+@using Recruiting.Application.Centros.Enums
+
+@model Recruiting.Application.Candidaturas.ViewModel.AgendarCartaOfertaViewModel
+
+@{
+    int centroId = (int)HttpContext.Current.Session["CentroIdUsuario"];
+}
+<div class="row titlePage">
+    <div class="col-lg-6">
+        <h3>@Resources.HTML_Candidaturas_AgendarCartaOferta_AgendarCartaOferta - @Model.AgendarCartaOferta.NombreCandidato</h3>
+    </div>
+</div>
+<div class="row header-flap"> 
+    <div class="btn-group" role="group">
+        <a href="@Url.Action("Volver", "Candidaturas")" class="btn btn-default">
+            <span class="text">@Resources.HTML_BotonGenericoVolver</span>
+        </a>
+        @if (centroId == (int)CentroEnum.Sevilla)
+        {
+            <a id="excluirSalasButton" class="btn btn-default">
+                <span class="text">@Resources.HTML_BotonExcluirSalas</span>
+            </a>
+        }
+        <a href="#" data-action="guardar" class="btn btn-default">
+            <span class="text">@Resources.HTML_BotonGenericoGuardar</span>
+        </a>
+        <a href="#" data-action="finalizar" class="btn btn-default">
+            <span class="text">@Resources.HTML_BotonGenericoFinalizar</span>
+        </a>
+    </div>    
+    <div class="col-lg-6 removePadding">
+        <h4 class="noMargin headerBox">@Resources.HTML_Candidaturas_AgendarCartaOferta_DatosCartaOferta</h4>
+    </div>
+</div>
+
+@using (Html.BeginForm("AgendarCartaOferta", "Candidaturas", FormMethod.Post, new Dictionary<string, object> { { "role", "form" }, { "data-parsley-validate", "true" }, { "id", "FormAgendarCartaOferta" } }))
+{
+    @Edit.Hidden("guardar", "SubmitType")
+    @Edit.Hidden(Model.AgendarCartaOferta.CandidaturaId, "AgendarCartaOferta.CandidaturaId")
+   
+    @Html.Partial("~/Views/Candidaturas/Partials/Ejecutar/CartaOferta/AgendarCartaOferta.cshtml", Model)
+}
+
+<div class="hidden">
+    @using (Html.BeginForm("ExcludedRooms", "Graph", FormMethod.Post, new Dictionary<string, object> { { "class", "form-horizontal" }, { "role", "form" }, { "data-parsley-validate", "true" }, { "id", "FormExcluirSalas" } }))
+    {
+        @Edit.Hidden(centroId, "CentroId")
+        @Edit.Hidden("", "OficinaId")
+    }
+</div>
+
+@section scripts{
+    @CandidaturasFrontActions.MenuFrontActions()    
+    @CandidaturasFrontActions.AgendarCartaOfertaFrontActions(Url, Model, centroId)
+}

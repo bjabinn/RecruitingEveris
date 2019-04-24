@@ -1,0 +1,441 @@
+﻿@using RecruitingWeb.Components.DataTable.Helpers
+@using RecruitingWeb.Helpers
+@using Recruiting.Application.PersonasLibres.ViewModels
+@using RecruitingWeb.Properties
+@using RecruitingWeb.Components.DataTable.Models
+@model Recruiting.Application.PersonasLibres.ViewModels.CreateEditPersonaLibreViewModel
+
+<div class="row">
+    <ul class="shortcut-buttons-set">
+        <li>
+            <a class="shortcut-button" href="#" data-action="finalizar">
+                <span class="icon icon-close"></span>
+                <span class="text">Finalizar</span>
+            </a>
+        </li>
+        <li>
+            <a class="shortcut-button" href="@Url.Action("Volver", "PersonasLibres")">
+                <span class="icon icon-volver"></span>
+                <span class="text">Volver</span>
+            </a>
+        </li>
+    </ul>
+    <!-- End .shortcut-buttons-set -->
+</div>
+<!--End .Row-->
+<div class="row">
+    <div class="content-box">
+        <!-- Start Content Box -->
+        <div class="content-box-header">
+            <h3>Creando PersonaLibre </h3>
+        </div>
+        <!-- End .content-box-header -->
+        <div class="content-box-content">
+            @using (Html.BeginForm("Create", "PersonasLibres", FormMethod.Post, new Dictionary<string, object> { { "class", "form-horizontal" }, { "role", "form" }, { "data-parsley-validate", "true" }, { "data-parsley-excluded", ":not([data-validate]) , [disabled]" } }))
+            {
+                @Edit.Hidden("guardar", "SubmitType")
+                @Edit.Hidden(Model.PersonaLibreId, "PersonaLibreId")
+
+
+                <div class="section-form" data-id="section-form-basicos">
+                    <div class="row form-row">
+                        <div class="form-group col-lg-4">
+                            <label class="col-lg-4" for="NroEmpleado">Nº Empleado:</label>
+                            <div class="col-lg-8">
+                                @Edit.Text(Model.NroEmpleado, "NroEmpleado", id: "NroEmpleado", htmlClass: "form-control", maxLength: 10)
+                                @*@Edit.Hidden(" ", "dniValidado")*@
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-4">
+                            <label class="col-lg-4" for="Nombre">Nombre:</label>
+                            <div class="col-lg-8">
+                                @Edit.Text(Model.Nombre, "Nombre", id: "Nombre", maxLength: 30, htmlClass: "form-control")
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-4">
+                            <label class="col-lg-4" for="apellidos">Apellidos:</label>
+                            <div class="col-lg-8">
+                                @Edit.Text(Model.Apellidos, "Apellidos", id: "apellidos", htmlClass: "form-control", maxLength: 50)
+                            </div>
+                        </div>                        
+                    </div>
+                    <div class="row form-row">
+                        <div class="form-group col-lg-4">
+                            <label class="col-lg-4" for="FechaLiberacion">Fecha Liberaci&oacute;n:</label>
+                            <div class="col-lg-8">
+                                @Edit.Date(Model.FechaLiberacion, "FechaLiberacion", id: "FechaLiberacion", htmlClass: "form-control", required: false)
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-4">
+                            <label class="col-lg-4" for="Categoria">Categoria:</label>
+                            <div class="col-lg-8">
+                                @Edit.DropDownExtend(Model.Categoria, "Categoria", ViewBag.CategoriaList, true, false, "form-control", showEmptyOption: true, id: "Categoria")
+                            </div>
+                        </div>
+
+                        <div class="form-group col-lg-4">
+                            <label class="col-lg-4" for="NecesidadId">Necesidad Id:</label>
+                            <div class="col-lg-8">
+                                @Edit.DropDownExtend(Model.NecesidadId, "NecesidadId", ViewBag.PrevisionList, true, false, "form-control", showEmptyOption: true, id: "NecesidadId", required: false)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row form-row">
+                        <div class="form-group col-lg-4">
+                            <label class="col-lg-4" for="Linea">Linea:</label>
+                            <div class="col-lg-8">
+                                @Edit.DropDownExtend(Model.Celda, "Linea", ViewBag.LineaList, true, false, "form-control", required: false, showEmptyOption: true, id: "Linea")
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-4">
+                            <label class="col-lg-4" for="Celda">Celda:</label>
+                            <div class="col-lg-8">
+                                @Edit.DropDownExtend(Model.Celda, "Celda", ViewBag.ClienteList, true, false, "form-control", required: false, showEmptyOption: true, id: "Celda")
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-4">
+                            <label class="col-lg-4" for="Comentario">Comentario:</label>
+                            <div class="col-lg-8">
+                                @Edit.TextArea(Model.Comentario, "Comentario", id: "Comentario", rows: 4, required: false, htmlClass: "form-control", placeholder: "Comentario...", maxLength: 500)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--  END  Datos Generales    -->
+                <!--  START  Datos Contacto    -->
+                @*<div class="row section-header">
+                        <div class="col-lg-6">
+                            <h5 class="TextSeparator">Datos Contacto</h5>
+                        </div>
+                        <div class="col-lg-6 text-right">
+                            <ul class="small-buttons-set butttonCollapse">
+                                <li>
+                                    <a class="small-button" href="#" data-collapse="[data-id=section-form-contacto]" data-collapse-show-text='@Display.GlyphiconButton("glyphicon-plus")' data-collapse-hide-text='@Display.GlyphiconButton("glyphicon-minus")' data-collapse-time="200">
+                                        @Display.GlyphiconButton("glyphicon-minus")
+                                    </a>
+                                </li>
+                            </ul><!-- End .shortcut-buttons-set -->
+                        </div>
+                    </div>
+                    <div class="section-form" data-id="section-form-contacto">
+                        <div class="row form-row">
+                            <div class="form-group col-lg-10">
+                                <div class="col-lg-12">
+                                    <table id="listSubmitContact" data-id="listSubmit">
+                                        <thead>
+                                            <tr role="row">
+                                                <th>Tipo Contacto</th>
+                                                <th>Contacto</th>
+                                                <th>Eliminar</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr role="row" class="hidden" id="templateContactos">
+                                                <td class="hidden">@Edit.Hidden(0, "ContactPersonaLibreViewModel[{0}].PersonaLibreId")</td>
+                                                <td class="hidden">@Edit.Hidden(0, "ContactPersonaLibreViewModel[{0}].PersonaLibreContactoId")</td>
+                                                <td>@Edit.DropDownExtend((String)null, "ContactPersonaLibreViewModel[{0}].TipoMedioContactoId", ViewBag.TipoContacto, htmlClass: "form-control", showEmptyOption: true, required: true, disabled: true)</td>
+                                                <td>@Edit.Text((String)null, "ContactPersonaLibreViewModel[{0}].ValorContacto", htmlClass: "form-control", required: true, disabled: true)</td>
+                                                <td>
+                                                    <a id="btnDelete"> @Display.GlyphiconButton("glyphicon-trash icon action")</a>
+                                                </td>
+                                            </tr>
+
+                                            @{
+                                                for (int x = 0; x < Model.ContactPersonaLibreViewModel.Count; x++)
+                                                {
+                                                    var candId = "ContactPersonaLibreViewModel[{0}].PersonaLibreId";
+                                                    var nameId = "ContactPersonaLibreViewModel[{0}].PersonaLibreContactoId";
+                                                    var nameMed = "ContactPersonaLibreViewModel[{0}].TipoMedioContactoId";
+                                                    var nameValor = "ContactPersonaLibreViewModel[{0}].ValorContacto";
+
+                                                            <tr role="row" class="odd">
+                                                                <td class="hidden">@Edit.Hidden(@Model.ContactPersonaLibreViewModel[x].PersonaLibreId, candId)</td>
+                                                                <td class="hidden">@Edit.Hidden(@Model.ContactPersonaLibreViewModel[x].PersonaLibreContactoId, nameId)</td>
+                                                                <td class="hidden">@Edit.Hidden(@Model.ContactPersonaLibreViewModel[x].TipoMedioContactoId, nameMed) @Model.ContactPersonaLibreViewModel[x].TipoMedioContactoId</td>
+                                                                <td>@Display.DropDownExtend(Model.ContactPersonaLibreViewModel[x].TipoMedioContactoId, ViewBag.TipoContacto)</td>
+                                                                <td>@Edit.Hidden(@Model.ContactPersonaLibreViewModel[x].ValorContacto, nameValor) @Model.ContactPersonaLibreViewModel[x].ValorContacto</td>
+                                                                <td>
+                                                                    <a id="btnDelete"> @Display.GlyphiconButton("glyphicon-trash icon action")</a>
+                                                                </td>
+                                                            </tr>
+                                                }
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="col-lg-2">
+                                <button type="button" class="btn btnAdd" aria-label="Left Align" id="btncreateContactos">
+                                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp;&nbsp;A&ntilde;adir
+                                </button>
+                            </div>
+                        </div>
+                    </div>  <!--End Section form-->
+                     <!--   END Datos Contacto    -->
+                     <!--  START  Datos Experiencia    -->
+                    <div class="row section-header">
+                        <div class="col-lg-6">
+                            <h5 class="TextSeparator">Datos Experiencia</h5>
+                        </div>
+                        <div class="col-lg-6 text-right">
+                            <ul class="small-buttons-set butttonCollapse">
+                                <li>
+                                    <a class="small-button" href="#" data-collapse="[data-id=section-form-experiencia]" data-collapse-show-text='@Display.GlyphiconButton("glyphicon-plus")' data-collapse-hide-text='@Display.GlyphiconButton("glyphicon-minus")' data-collapse-time="200">
+                                        @Display.GlyphiconButton("glyphicon-minus")
+                                    </a>
+                                </li>
+                            </ul><!-- End .shortcut-buttons-set -->
+                        </div>
+                    </div>
+                    <div class="section-form" data-id="section-form-experiencia">
+                        <div class="row form-row">
+                            <div class="form-group col-lg-10">
+                                <div class="col-lg-12">
+                                    <table id="listSubmitExp" data-id="listSubmit">
+                                        <thead>
+                                            <tr role="row">
+                                                <th>Tipo Tecnolog&iacute;a</th>
+                                                <th>Nivel Experiencia</th>
+                                                <th>Experiencia (pts)</th>
+                                                <th>Eliminar</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr role="row" class="hidden" id="templateExperiencia">
+                                                <td class="hidden">@Edit.Hidden(0,   "ExpPersonaLibreViewModel[{0}].PersonaLibreId")</td>
+                                                <td class="hidden">@Edit.Hidden(0,   "ExpPersonaLibreViewModel[{0}].PersonaLibreExperienciaId")</td>
+                                                <td>@Edit.DropDownExtend((String)null, "ExpPersonaLibreViewModel[{0}].TipoTecnologiaId", ViewBag.TipoTecnologia, validate: true, multiple: false, htmlClass: "form-control", showEmptyOption: true, required: true, disabled: true)</td>
+                                                <td>@Edit.DropDownExtend((String)null, "ExpPersonaLibreViewModel[{0}].NivelTecnologiaId", ViewBag.NivelExp, validate: true, multiple: false, htmlClass: "form-control", showEmptyOption: true, required: true, disabled: true)</td>
+                                                <td>@Edit.DropDownExtend((String)null, "ExpPersonaLibreViewModel[{0}].Experiencia", ViewBag.Experiencia, validate: true, multiple: false, htmlClass: "form-control", showEmptyOption: true, required: true, disabled: true)</td>
+                                                <td>
+                                                    <a id="btnDelete"> @Display.GlyphiconButton("glyphicon-trash icon action")</a>
+                                                </td>
+                                            </tr>
+                                            @{
+                                                for (int x = 0; x < Model.ExpPersonaLibreViewModel.Count; x++)
+                                                {
+                                                    var candId = "ExpPersonaLibreViewModel[{0}].PersonaLibreId";
+                                                    var nameId = "ExpPersonaLibreViewModel[{0}].PersonaLibreExperienciaId";
+                                                    var nameTipo = "ExpPersonaLibreViewModel[{0}].TipoTecnologiaId";
+                                                    var nameNivel = "ExpPersonaLibreViewModel[{0}].NivelTecnologiaId";
+                                                    var nameExp = "ExpPersonaLibreViewModel[{0}].Experiencia";
+
+                                                    <tr role="row" class="odd">
+                                                        <td class="hidden">@Edit.Hidden(@Model.ExpPersonaLibreViewModel[x].PersonaLibreId, candId)</td>
+                                                        <td class="hidden">@Edit.Hidden(@Model.ExpPersonaLibreViewModel[x].PersonaLibreExperienciaId, nameId)</td>
+                                                        <td class="hidden">@Edit.Hidden(@Model.ExpPersonaLibreViewModel[x].TipoTecnologiaId, nameTipo) @Model.ExpPersonaLibreViewModel[x].TipoTecnologiaId</td>
+                                                        <td>@Display.DropDownExtend(Model.ExpPersonaLibreViewModel[x].TipoTecnologiaId, ViewBag.TipoTecnologia)</td>
+                                                        <td class="hidden">@Edit.Hidden(@Model.ExpPersonaLibreViewModel[x].NivelTecnologiaId, nameNivel) @Model.ExpPersonaLibreViewModel[x].NivelTecnologiaId</td>
+                                                        <td>@Display.DropDownExtend(Model.ExpPersonaLibreViewModel[x].NivelTecnologiaId, ViewBag.NivelExp)</td>
+                                                        <td>@Edit.Hidden(@Model.ExpPersonaLibreViewModel[x].Experiencia, nameExp) @Model.ExpPersonaLibreViewModel[x].Experiencia</td>
+                                                        <td>
+                                                            <a id="btnDelete"> @Display.GlyphiconButton("glyphicon-trash icon action")</a>
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="col-lg-2">
+                                <button type="button" class="btn btnAdd" aria-label="Left Align" id="btncreateExperiencia">
+                                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp;&nbsp;A&ntilde;adir
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>  <!--End Section form-->
+                    <!--  END  Datos Experiencia    -->*@
+            }
+        </div>
+        <!-- End content-box-content -->
+    </div>
+    <!-- End .content-box -->
+</div>
+<!--End .Row-->
+@section scripts{
+
+
+    <script type="text/javascript">
+
+
+        $(document).ready(function () {
+            var menuItemToSelect = $("#main-nav li a[data-option-name=PersonasLibres]");
+            menuItemToSelect.addClass("current");
+        });
+
+        $(document).on('change', '#NroEmpleado,#Nombre,#apellidos', function () {
+            var NroEmpleadoValue = $('#NroEmpleado').val();
+            var Nombre = $('#Nombre').val();
+            var Apellidos = $('#apellidos').val();
+            $.ajax({
+                url: '@Url.Action("ComprobarExisteUsuario", "PersonasLibres")',
+                data: { NroEmpleado: NroEmpleadoValue, Nombre: Nombre, Apellidos: Apellidos },
+                type: 'POST',
+                success: function (data) {
+                    if (data) {
+                        BootstrapDialog.show({
+                            title: '@Resources.ExistePersonaLibre',
+                            message: data,
+                            type: BootstrapDialog.TYPE_CONFIRMFINALICE,
+                            closable: false,
+                            closeByBackdrop: false,
+                            closeByKeyboard: false,
+                            buttons: [{
+                                label: 'Aceptar',
+                                cssClass: 'btn btnAdd',
+                                action: function (dialogRef) {
+
+                                    //lo ponemos vacio
+                                    $('#NroEmpleado').val("");
+                                    $('#Nombre').val("");
+                                    $('#apellidos').val("");
+                                    dialogRef.close();
+                                }
+                            }]
+
+                        });
+                    }
+                    //alert(data);
+                },//success
+                error: function (data) {
+                    alert("Error: problemas al conectar con la base de datos");
+                }//error
+            });//ajax
+            //alert(dni);
+        });//funcion NroEmpleado
+
+
+        String.format = function (format) {
+            var args = Array.prototype.slice.call(arguments, 1);
+            return format.replace(/{(\d+)}/g, function (match, number) {
+                return typeof args[number] != 'undefined'
+                    ? args[number]
+                    : match
+                ;
+            });
+        };
+
+
+        function forTable() {
+
+            var $cont = 0;
+            $("#listSubmitContact tbody tr:not(:first)").each(function () {
+                var item = $(this);
+                item.find('input, select, textarea').each(function () {
+                    var input = $(this);
+                    input.attr('name', String.format(input.attr('name'), $cont));
+                });
+
+                $cont++;
+            });
+
+            var $cont = 0;
+            $("#listSubmitExp tbody tr:not(:first)").each(function () {
+                var item = $(this);
+                item.find('input, select, textarea').each(function () {
+                    var input = $(this);
+                    input.attr('name', String.format(input.attr('name'), $cont));
+                });
+
+                $cont++;
+            });
+
+            var $cont = 0;
+            $("#listSubmitIdioma tbody tr:not(:first)").each(function () {
+                var item = $(this);
+                item.find('input, select, textarea').each(function () {
+                    var input = $(this);
+                    input.attr('name', String.format(input.attr('name'), $cont));
+                });
+
+                $cont++;
+            });
+
+        }
+
+        function createItem(item) {
+            var original = $('#' + item + ' tbody tr:first');
+            var clone = original.clone(false);
+            clone.removeClass('hidden');
+            var cloneInputs = clone.find("input, select, textarea");
+            cloneInputs.removeAttr('disabled');
+            $('#' + item + ' tbody').append(clone);
+
+        }
+
+
+        function deleteItem(item) {
+            BootstrapDialog.confirm({
+                title: 'ELIMINAR',
+                message: '¿Está seguro de eliminarlo?',
+                type: BootstrapDialog.TYPE_CONFIRMDELETE,
+                callback: function (result) {
+                    if (result) {
+                        item.remove();
+                        return false;
+                    } else {
+                        BootstrapDialog.closeAll();
+                    }
+                }
+            });
+        }
+
+        $(document).on('click', '#btncreateContactos', function () {
+            createItem("listSubmitContact");
+        });
+
+        $(document).on('click', '#btncreateExperiencia', function () {
+            createItem("listSubmitExp");
+        });
+
+        $(document).on('click', '#btnDelete', function () {
+            var item = $(this).closest("tr");
+            deleteItem(item);
+        });
+
+        function guardar(source) {
+            if ($("form").parsley().validate()) {
+                BootstrapDialog.confirm({
+                    title: '@Resources.PersonaLibre_ConfirmacionGuardarTitulo',
+                    message: '@Resources.PersonaLibre_ConfirmacionGuardarTexto',
+                    type: BootstrapDialog.TYPE_CONFIRMSAVE,
+                    callback: function (result) {
+                        if (result) {
+                            forTable();
+                            var submitType = $("[name=SubmitType]");
+                            submitType.val("guardar");
+                            $("form").submit();
+
+                        } else {
+                            BootstrapDialog.closeAll();
+                        }
+                    }
+                });
+            }
+        }
+
+        function finalizar(source) {
+            if ($("form").parsley().validate()) {
+                BootstrapDialog.confirm({
+                    title: '@Resources.PersonaLibre_ConfirmacionGuardarTitulo',
+                    message: '@Resources.PersonaLibre_ConfirmacionGuardarTexto',
+                    type: BootstrapDialog.TYPE_CONFIRMSAVE,
+                    callback: function (result) {
+                        if (result) {
+                            forTable();
+                            var submitType = $("[name=SubmitType]");
+                            submitType.val("finalizar");
+                            $("form").submit();
+
+                        } else {
+                            BootstrapDialog.closeAll();
+                        }
+                    }
+                });
+            }
+        }
+
+    </script>
+}

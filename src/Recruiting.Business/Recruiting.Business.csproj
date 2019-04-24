@@ -1,0 +1,192 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{2994B963-0181-4A1F-BB84-FDE37E46D920}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Recruiting.Business</RootNamespace>
+    <AssemblyName>Recruiting.Business</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Preproduction|AnyCPU'">
+    <OutputPath>bin\Preproduction\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EverNext.Domain">
+      <HintPath>..\..\lib\EverNext\EverNext.Domain.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Entities\CandidatoCentroEducativo.cs" />
+    <Compile Include="Entities\CandidaturaOferta.cs" />
+    <Compile Include="Entities\BecarioConvocatoria.cs" />
+    <Compile Include="Entities\BecarioObservacion.cs" />
+    <Compile Include="Entities\Becario.cs" />
+    <Compile Include="Entities\BitacoraBecario.cs" />
+    <Compile Include="Entities\BitacoraNecesidad.cs" />
+    <Compile Include="Entities\Bitacora.cs" />
+    <Compile Include="Entities\BlackListSala.cs" />
+    <Compile Include="Entities\CorreoBecario.cs" />
+    <Compile Include="Entities\CuentaToken.cs" />
+    <Compile Include="Entities\GrupoNecesidad.cs" />
+    <Compile Include="Entities\AdministradorDashboard.cs" />
+    <Compile Include="Entities\Oficina.cs" />
+    <Compile Include="Entities\Centro.cs" />
+    <Compile Include="Entities\PersonaLibreIdioma.cs" />
+    <Compile Include="Entities\SubEntrevista.cs" />
+    <Compile Include="Entities\MonedasDeCentro.cs" />
+    <Compile Include="Entities\FenixCategoriaLineaCelda.cs" />
+    <Compile Include="Entities\PersonaLibre.cs" />
+    <Compile Include="Entities\Candidato.cs" />
+    <Compile Include="Entities\CandidatoContacto.cs" />
+    <Compile Include="Entities\CandidatoExperiencia.cs" />
+    <Compile Include="Entities\CandidatoIdioma.cs" />
+    <Compile Include="Entities\Correo.cs" />
+    <Compile Include="Entities\Candidatura.cs" />
+    <Compile Include="Entities\CorreoPlantillaVariableValor.cs" />
+    <Compile Include="Entities\CorreoPlantillaVariable.cs" />
+    <Compile Include="Entities\CorreoPlantilla.cs" />
+    <Compile Include="Entities\CorreoAdjunto.cs" />
+    <Compile Include="Entities\CartaOferta.cs" />
+    <Compile Include="Entities\Cliente.cs" />
+    <Compile Include="Entities\Entrevista.cs" />
+    <Compile Include="Entities\Maestro.cs" />
+    <Compile Include="Entities\ModifiableEntity.cs" />
+    <Compile Include="Entities\Necesidad.cs" />
+    <Compile Include="Entities\Oferta.cs" />
+    <Compile Include="Entities\Rol.cs" />
+    <Compile Include="Entities\Proyecto.cs" />
+    <Compile Include="Entities\RelacionEtapa.cs" />
+    <Compile Include="Entities\RelacionVistaEtapa.cs" />
+    <Compile Include="Entities\TipoDecision.cs" />
+    <Compile Include="Entities\TipoEntrevista.cs" />
+    <Compile Include="Entities\BecarioCentroProcedencia.cs" />
+    <Compile Include="Entities\TipoEstadoBecario.cs" />
+    <Compile Include="Entities\TipoEstadoCandidatura.cs" />
+    <Compile Include="Entities\TipoEtapaCandidatura.cs" />
+    <Compile Include="Entities\TipoMaestro.cs" />
+    <Compile Include="Entities\TipoMotivoDecision.cs" />
+    <Compile Include="Entities\PermisoRol.cs" />
+    <Compile Include="Entities\Permiso.cs" />
+    <Compile Include="Entities\UsuarioRol.cs" />
+    <Compile Include="Entities\Usuario.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\ICorreoBecarioRepository.cs" />
+    <Compile Include="Repositories\ICandidatoCentroEducativo.cs" />
+    <Compile Include="Repositories\ICandidaturaOfertaRepository.cs" />
+    <Compile Include="Repositories\IBecarioConvocatoriaRepository.cs" />
+    <Compile Include="Repositories\IBecarioCentroRepository.cs" />
+    <Compile Include="Repositories\IBlackListSalaRepository.cs" />
+    <Compile Include="Repositories\IBecarioObservacion.cs" />
+    <Compile Include="Repositories\IBitacoraBecarioRepository.cs" />
+    <Compile Include="Repositories\IBitacoraNecesidadRepository.cs" />
+    <Compile Include="Repositories\IBecarioCentroProcedenciaRepository.cs" />
+    <Compile Include="Repositories\IBecarioRepository.cs" />
+    <Compile Include="Repositories\ICuentaTokenRepository.cs" />
+    <Compile Include="Repositories\IGrupoNecesidadRepository.cs" />
+    <Compile Include="Repositories\IAdministradorDashboardRepository.cs" />
+    <Compile Include="Repositories\IOficinaRepository.cs" />
+    <Compile Include="Repositories\ICentroRepository.cs" />
+    <Compile Include="Repositories\IPersonaLibreIdiomaRepository.cs" />
+    <Compile Include="Repositories\ISubEntrevistaRepository.cs" />
+    <Compile Include="Repositories\IMonedasDeCentroRepository.cs" />
+    <Compile Include="Repositories\ICandidatoContactoRepository.cs" />
+    <Compile Include="Repositories\ICandidatoExperienciaRepository.cs" />
+    <Compile Include="Repositories\ICandidatoIdiomaRepository.cs" />
+    <Compile Include="Repositories\IFenixCategoriaLineaCeldaRepository.cs" />
+    <Compile Include="Repositories\IPersonaLibreRepository.cs" />
+    <Compile Include="Repositories\ICandidaturaEstadoRepository.cs" />
+    <Compile Include="Repositories\IBitacoraRepository.cs" />
+    <Compile Include="Repositories\ICandidaturaEtapaRepository.cs" />
+    <Compile Include="Repositories\ICorreoPlantillaVariableValorRepository.cs" />
+    <Compile Include="Repositories\ICorreoAdjuntoRepository.cs" />
+    <Compile Include="Repositories\ICorreoPlantillaVariableRepository.cs" />
+    <Compile Include="Repositories\ICorreoPlantillaRepository.cs" />
+    <Compile Include="Repositories\ICorreoRepository.cs" />
+    <Compile Include="Repositories\IClienteRepository.cs" />
+    <Compile Include="Repositories\IMaestroRepository.cs" />
+    <Compile Include="Repositories\ICartaOfertaRepository.cs" />
+    <Compile Include="Repositories\IEntrevistaRepository.cs" />
+    <Compile Include="Repositories\IProyectoRepository.cs" />
+    <Compile Include="Repositories\IRelacionVistaEtapaRepository.cs" />
+    <Compile Include="Repositories\ITipoEstadoBecarioRepository.cs" />
+    <Compile Include="Repositories\ITipoEstadoCandidaturaRepository.cs" />
+    <Compile Include="Repositories\ITipoEtapaCandidaturaRepository.cs" />
+    <Compile Include="Repositories\ITipoDecisionRepository.cs" />
+    <Compile Include="Repositories\IRolRepository.cs" />
+    <Compile Include="Repositories\IPermisoRepository.cs" />
+    <Compile Include="Repositories\IUsuarioRepository.cs" />
+    <Compile Include="Repositories\ICandidatoRepository.cs" />
+    <Compile Include="Repositories\ICandidaturaRepository.cs" />
+    <Compile Include="Repositories\INecesidadRepository.cs" />
+    <Compile Include="Repositories\IOfertaRepository.cs" />
+    <Compile Include="Repositories\IRelacionEtapaRepository.cs" />
+    <Compile Include="WorkflowCandidatura\Messages\WorkflowResponseDTO.cs" />
+    <Compile Include="WorkflowCandidatura\Services\IWorkflowCandidaturaService.cs" />
+    <Compile Include="WorkflowCandidatura\Services\WorkflowCandidaturaService.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Recruiting.Infra\Recruiting.Infra.csproj">
+      <Project>{b32595b8-4298-416e-89d2-d255710c6a33}</Project>
+      <Name>Recruiting.Infra</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

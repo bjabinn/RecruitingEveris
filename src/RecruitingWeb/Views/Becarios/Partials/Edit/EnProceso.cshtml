@@ -1,0 +1,113 @@
+﻿@using RecruitingWeb.Properties
+@using RecruitingWeb.Properties
+
+@model Recruiting.Application.Becarios.ViewModels.BecarioObservacionesViewModel
+
+
+@if (Model != null)
+{
+    @Edit.Hidden("", Model.AccessObservaciones + "ObservacionesBorradas")
+    <div class="row">
+        <div class="content-box">
+            <div class="content-box-content">
+                    <div class="row section-header">
+                        <div class="col-lg-6">
+                            <h4>@Resources.HTML_Becarios_Proceso_DatosProceso </h4>
+                        </div>
+                    </div>
+                <div class="content-box-content">
+                    <div class="section-form-FiltradoCV" data-id="section-form-datosProceso">
+                        <div class="row form-row">
+                            <div class="form-group col-lg-3">
+                                <div class="col-lg-6">
+                                    <label for="Filtrado">@Resources.HTML_Candidaturas_Proceso_SuperaProceso</label>
+                                </div>
+                                <div class="col-lg-6">
+                                    @Edit.CheckBoxDig(value: Model.SuperaProceso, name: Model.AccessObservaciones + "SuperaProceso", id: "SuperaProceso", required: false, disabled: false)
+                                </div>
+                            </div>
+                            <div class="form-group col-lg-9">
+                                <div class="col-lg-12 title-form">
+                                    <label for="ObservacionGeneralProceso">@Resources.HTML_Becarios_Proceso_ObservacionFinal</label>
+                                </div>
+                                <div class="col-lg-12">
+                                    @Edit.TextAreaEditor(Model.ObservacionGeneralProceso, Model.AccessObservaciones + "ObservacionGeneralProceso", id: "ObservacionGeneralProceso", rows: 8, required: false, htmlClass: "form-control")
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row form-row">
+                            <div id="listaGeneralEmailReferenciados">
+                                <div class="form-group col-lg-12">
+                                    <div class="col-lg-12" style="text-align:right">
+                                        <a class="btn btn-default" id="btnCreateObservacionBecario">
+                                            <span class="text">@Resources.HTML_BotonGenerico_Aniadir</span>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="form-group col-lg-12">
+                                    <div class="col-lg-12">
+                                        <table id="listSubmitObservaciones" data-id="listSubmit">
+                                            <thead>
+                                                <tr role="row">
+                                                    <th>@Resources.HTML_Becarios_Proceso_Tipo</th>
+                                                    <th>@Resources.HTML_Becarios_Proceso_PersonaConvocatoria</th>
+                                                    <th>@Resources.HTML_Becarios_Proceso_FechaProceso</th>
+                                                    <th>@Resources.HTML_Becarios_Proceso_Observaciones</th>
+                                                    <th>@Resources.HTML_Becarios_Proceso_Resultado</th>
+                                                    <th>@Resources.HTML_Becarios_Proceso_Eliminar</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr role="row" class="hidden" id="templateObservaciones" name="observacionRow">
+                                                    <td>@Edit.DropDownExtend((String)null, Model.AccessObservaciones + "BecarioObservacionList[{0}].TipoPruebaId", Model.TipoPruebaList, htmlClass: "form-control", id: "TipoPruebaId", required: false, disabled: true)</td>
+                                                    <td>
+                                                        <div data-role="searchable">
+                                                            <input autocomplete="off" class="form-control" data-searchable-input="text" name="@(Model.AccessObservaciones +"BecarioObservacionList[{0}].PersonaConvocatoriaNombre")" type="text">
+                                                            <input class="hide" data-searchable-input="hidden" name="@(Model.AccessObservaciones +"BecarioObservacionList[{0}].PersonaConvocatoriaId")" type="text">
+                                                            <ul class="searchable-results hide" name="@(Model.AccessObservaciones +"BecarioObservacionList[{0}].PersonaConvocatoriaId-Resultados")"></ul>
+                                                        </div>
+                                                    </td>
+                                                    <td>@Edit.DateTime(null, Model.AccessObservaciones + "BecarioObservacionList[{0}].FechaConvocatoria", id: "FechaConvocatoria", htmlClass: "form-control", required: false, disabled: true)</td>
+                                                    <td class="col-lg-4">@Edit.TextArea((String)null, name: Model.AccessObservaciones + "BecarioObservacionList[{0}].Observacion", id: "Observacion", rows: 4, required: false, disabled: true, htmlClass: "form-control", placeholder: "Comentarios ...")</td>
+                                                    <td>@Edit.DropDownExtend((String)null, Model.AccessObservaciones + "BecarioObservacionList[{0}].TipoResultadoId", Model.TipoResultadoList, htmlClass: "form-control", id: "TipoResultadoId", required: false, disabled: true)</td>
+                                                    <td>
+                                                        <a id="btnDelete"> @Display.GlyphiconButton("glyphicon-trash icon action")</a>
+                                                    </td>
+                                                </tr>
+                                                @{
+                                                    if (Model.BecarioObservacionList != null)
+                                                    {
+                                                        for (int x = 0; x < Model.BecarioObservacionList.Count; x++)
+                                                        {
+                                                            <tr role="row" class="odd" name="observacionRow">
+                                                                @Edit.Hidden(Model.BecarioObservacionList[x].ObservacionId.ToString(), Model.AccessObservaciones + "BecarioObservacionList[{0}].ObservacionId", attributes: new Dictionary<string, string> { { "id", "ObservacionId" } })
+                                                                <td>@Edit.DropDownExtend(Model.BecarioObservacionList[x].TipoPruebaId, Model.AccessObservaciones + "BecarioObservacionList[{0}].TipoPruebaId", Model.TipoPruebaList, htmlClass: "form-control", id: "TipoPruebaId", required: true, disabled: false)</td>
+                                                                <td>
+                                                                    <div data-role="searchable">
+                                                                        <input autocomplete="off" class="form-control" data-searchable-input="text" name="@( Model.AccessObservaciones +"BecarioObservacionList[{0}].PersonaConvocatoriaNombre")" type="text" value="@Model.BecarioObservacionList[x].PersonaConvocatoriaNombre">
+                                                                        <input class="hide" data-searchable-input="hidden" name="@( Model.AccessObservaciones +"BecarioObservacionList[{0}].PersonaConvocatoriaId")" type="text" value="@Model.BecarioObservacionList[x].PersonaConvocatoriaId" required>
+                                                                        <ul class="searchable-results hide" name="@(Model.AccessObservaciones +"BecarioObservacionList[{0}].PersonaConvocatoriaId-Resultados")"></ul>
+                                                                    </div>
+                                                                </td>
+                                                                <td>@Edit.DateTime(Model.BecarioObservacionList[x].FechaConvocatoria, Model.AccessObservaciones + "BecarioObservacionList[{0}].FechaConvocatoria", id: "FechaConvocatoria", htmlClass: "form-control", required: true, disabled: false)</td>
+                                                                <td class="col-lg-4" id="tablaBecarioProceso">@Edit.TextArea(Model.BecarioObservacionList[x].Observacion, name: Model.AccessObservaciones + "BecarioObservacionList[{0}].Observacion", id: "Observacion", rows: 4, required: false, disabled: false, htmlClass: "form-control", placeholder: "Comentarios ...")</td>
+                                                                <td>@Edit.DropDownExtend(Model.BecarioObservacionList[x].TipoResultadoId, Model.AccessObservaciones + "BecarioObservacionList[{0}].TipoResultadoId", Model.TipoResultadoList, htmlClass: "form-control", id: "TipoResultadoId", required: true, disabled: false)</td>
+                                                                <td>
+                                                                    <a id="btnDelete"> @Display.GlyphiconButton("glyphicon-trash icon action")</a>
+                                                                </td>
+                                                            </tr>
+                                                        }
+                                                    }
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> <!-- End content-box-content -->
+        </div> <!-- End .content-box -->
+    </div> <!--End .Row-->
+}

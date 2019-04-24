@@ -1,0 +1,10 @@
+﻿@using Recruiting.Application.PersonasLibres.ViewModels
+@using Recruiting.Application.Necesidades.ViewModels
+@model Recruiting.Application.PersonasLibres.ViewModels.PersonaLibreRowViewModel
+<div>
+    @Edit.Hidden(@Model.Nombre + " " + @Model.Apellidos, "NombresYApellidos", new Dictionary<string, string> { { "id", "NombresYApellidos" } })
+    @Edit.Text(Model.PersonaLibreId.ToString(), "PersonaLibreId", id: "PersonaLibreId", htmlClass: "form-control hide", required: false)
+    <div class="text-center">
+        @Edit.RadioButton(Model.PersonaLibreId.ToString(), "SelectPersonaLibre", id: "SelectPersonaLibre")
+    </div>
+</div>

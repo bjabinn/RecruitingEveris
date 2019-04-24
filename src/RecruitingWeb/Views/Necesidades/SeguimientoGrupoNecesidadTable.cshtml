@@ -1,0 +1,361 @@
+﻿@using RecruitingWeb.Properties
+
+@using Recruiting.Application.Candidaturas.Enums
+@using Recruiting.Application.Maestros.Enums
+
+@model Recruiting.Application.Necesidades.ViewModels.CreateEditGrupoNecesidadViewModel
+
+@{
+    var Activo = Model.Activo;
+    if (Activo == false)
+    {
+        Response.Redirect("/Shared/Borrado");
+    }
+    var GrupoCerrado = Model.EstadoGrupo;
+}
+<div class="row titlePage">
+    <div class="col-lg-6">
+        <h3>@Resources.HTML_Necesidades_Index_GestionNecesidades</h3>
+    </div>
+</div>
+<div class="row header-flap">    
+    <div class="btn-group" role="group">
+        <a href="/Necesidades/GrupoNecesidades" class="btn btn-default">
+            <span class="text">@Resources.HTML_BotonGenericoVolver</span>
+        </a>
+        <a href="#" data-action="guardar" class="btn btn-default">
+            <span class="text">@Resources.HTML_BotonGenericoGuardar</span>
+        </a>
+    </div>    
+    <div class="col-lg-6 removePadding">
+        <h4 class="noMargin headerBox">@Resources.HTML_Necesidades_SeguimientoGrupoNecesidad_EditandoGrupo</h4>
+    </div>
+</div>
+
+@using (Html.BeginForm("SeguimientoGrupoNecesidadTable", "Necesidades", FormMethod.Post, new Dictionary<string, object> { { "role", "form" }, { "data-parsley-validate", "true" }, { "data-parsley-excluded", ":not([data-validate])" } }))
+{
+
+    @Edit.Hidden(Model.GrupoNecesidadId.Value.ToString(), "GrupoNecesidadId")
+    @Edit.Hidden("", "NecesidadesBorradas")
+
+    <div class="row">
+        <div class="content-box border-top-cero">            
+            <div class="content-box-content">
+                <div class="section-form-basicos-necesidad margin" data-id="section-form-basicos">
+                    <div class="row">
+                        <div class="form-group col-lg-4">
+                            <div class="col-lg-12 title-form">
+                                <label for="NombreGrupo">@Resources.HTML_Necesidades_SeguimientoGrupoNecesidad_NombreGrupo</label>
+                            </div>
+                            <div class="col-lg-12">
+                                @Edit.Text(Model.NombreGrupo, "NombreGrupo", id: "NombreGrupo", maxLength: 250, htmlClass: "form-control")
+                            </div>
+                        </div>
+                        @if (Model.CentroId > 0)
+                        {
+                            <div class="form-group col-lg-4">
+                                <div class="col-lg-12 title-form">
+                                    <label for="NombreCentro">@Resources.HTML_Necesidades_SeguimientoGrupoNecesidad_Centro</label>
+                                </div>
+                                <div class="col-lg-12">
+                                    @Edit.Text(Model.ListaNecesidades != null ? Model.ListaNecesidades.ToList()[0].NombreCentro : "", "NombreCentro", id: "NombreCentro", maxLength: 250, htmlClass: "form-control", isReadOnly: true)
+                                    @Edit.Hidden(Model.ListaNecesidades != null ? Model.ListaNecesidades.ToList()[0].CentroId : 0, "CentroId")
+                                    @Edit.Hidden(Model.ListaNecesidades != null ? Model.ListaNecesidades.ToList()[0].NombreCentro : "", "NombreCentroHidden")
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="form-group col-lg-4">
+                                <div class="col-lg-12 title-form">
+                                    <label for="CentroId">@Resources.HTML_Necesidades_SeguimientoGrupoNecesidad_Centro</label>
+                                </div>
+                                <div class="col-lg-12">
+                                    @Edit.DropDownExtend(Model.CentroId, "CentroId", Model.CentroList, htmlClass: "form-control", id: "CentroId")
+                                </div>
+                            </div>
+                        }
+                        <div class="form-group col-lg-4">
+                            <div class="col-lg-12 title-form">
+                                <label for="OficinaId">@Resources.HTML_Necesidades_SeguimientoGrupoNecesidad_Oficina</label>
+                            </div>
+                            <div class="col-lg-12">
+                                @Edit.DropDownExtend(Model.OficinaId, "OficinaId", Model.OficinaList, htmlClass: "form-control", id: "OficinaId")
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-lg-4">
+                            <div class="col-lg-12 title-form">
+                                <label for="SectorId">@Resources.HTML_Necesidades_SeguimientoGrupoNecesidad_Sector</label>
+                            </div>
+                            <div class="col-lg-12">
+                                @Edit.DropDownExtend(Model.SectorId, "SectorId", Model.SectorList, htmlClass: "form-control", id: "SectorId")
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-4">
+                            <div class="col-lg-12 title-form">
+                                <label for="ClienteId">@Resources.HTML_Necesidades_SeguimientoGrupoNecesidad_Cliente</label>
+                            </div>
+                            <div class="col-lg-12">
+                                @Edit.DropDownExtend(Model.ClienteId, "ClienteId", Model.ClienteList, htmlClass: "form-control", id: "ClienteId")
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-4">
+                            <div class="col-lg-12 title-form">
+                                <label for="ProyectoId">@Resources.HTML_Necesidades_SeguimientoGrupoNecesidad_Proyecto</label>
+                            </div>
+                            <div class="col-lg-12">
+                                @Edit.DropDownExtend(Model.ProyectoId, "ProyectoId", Model.ProyectoList, htmlClass: "form-control", id: "ProyectoId")
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-lg-4">
+                            <div class="col-lg-12 title-form">
+                                <label for="MesesAsignacionId">@Resources.HTML_Necesidades_SeguimientoGrupoNecesidad_Duracion</label>
+                            </div>
+                            <div class="col-lg-12">
+                                @Edit.DropDownExtend(Model.MesesAsignacionId, "MesesAsignacionId", Model.MesesAsignacionList, htmlClass: "form-control", id: "MesesAsignacionId")
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-4">
+                            <div class="col-lg-12 title-form">
+                                <label for="FechaSolicitud">@Resources.HTML_Necesidades_SeguimientoGrupoNecesidad_FechaSolicitud</label>
+                            </div>
+                            <div class="col-lg-12">
+                                @Edit.Date(Model.FechaSolicitud, "FechaSolicitud", id: "FechaSolicitud", htmlClass: "form-control")
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-4">
+                            <div class="col-lg-12 title-form">
+                            </div>
+                            <div class="col-lg-12">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-lg-8">
+                            <div class="col-lg-12 title-form">
+                                <label for="DetalleTecnologia">@Resources.HTML_Necesidades_SeguimientoGrupoNecesidad_DescripcionGrupo</label>
+                            </div>
+                            <div class="col-lg-12">                                
+                                @Edit.TextAreaEditor(Model.DescripcionGrupo, name: "DescripcionGrupo", id: "DescripcionGrupo", rows: 8, required: false, htmlClass: "form-control")
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-4 pt-25">
+                            <div class="col-lg-12 removePadding">
+                                <div class="col-lg-4 title-form">
+                                    <label for="dispViaje">@Resources.HTML_Necesidades_SeguimientoGrupoNecesidad_DisponibilidadViaje</label>
+                                </div>
+                                <div class="col-lg-8">
+                                    @Edit.CheckBoxDig(value: Model.ListaNecesidades.ToList()[0].DisponibilidadViajes, name: "DisponibilidadViajes", id: "dispViaje", required: false, disabled: false)
+                                </div>
+                            </div>
+                            <div class="col-lg-12 removePadding">
+                                <div class="col-lg-4 title-form">
+                                    <label for="dispReubicacion">@Resources.HTML_Necesidades_SeguimientoGrupoNecesidad_DisponibilidadReubicacion</label>
+                                </div>
+                                <div class="col-lg-8">
+                                    @Edit.CheckBoxDig(value: Model.ListaNecesidades.ToList()[0].DisponibilidadReubicacion, name: "DisponibilidadReubicacion", id: "dispReubicacion", required: false, disabled: false)
+                                </div>
+                            </div>
+                            <div class="col-lg-12 removePadding">
+                                <div class="col-lg-4">
+                                    <label for="dispReubicacion">@Resources.HTML_Necesidades_SeguimientoGrupoNecesidad_NecesidadIdioma</label>
+                                </div>
+                                <div class="col-lg-8">
+                                    @Edit.CheckBoxDig(value: Model.ListaNecesidades.ToList()[0].NecesidadIdioma, name: "NecesidadIdioma", id: "NecesidadIdioma", required: false, disabled: false)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> <!-- End content-box-content -->
+        </div> <!-- End .content-box -->
+    </div> <!--End .Row-->
+
+    <div class="row">
+        <div class="col-lg-12 content-box">
+            <div class="content-box-content">
+                <div class="row section-header">
+                    <h4>@Resources.HTML_Necesidades_SeguimientoGrupoNecesidad_Perfiles</h4>
+                </div>
+                <div class="content-box-content">
+                    <div class="row col-lg-12 removePadding mb-5">
+                        <div class="col-lg-12">
+                            <button type="button" class="col-lg-1 col-lg-offset-11 btn btn-default" id="btnAddPerfil">
+                                @Resources.HTML_BotonGenerico_Aniadir
+                            </button>
+                        </div>
+                    </div>
+                    <div class="row col-lg-12">
+                        <div id="perfilFlexContainer" class="perfil-flex-container">
+                            @{ var indice = 0; }
+                            @foreach (var Necesidad in Model.ListaNecesidades)
+                            {
+                                var id = "perfil-" + indice;
+                                <div class="content-box-perfil" id="@id" name="perfil">
+                                    @Edit.Hidden(indice.ToString(), "position")
+                                    <table class="perfil-single" id="tablaPerfilUnico" data-id="tablaPerfilUnico">
+                                        <thead>
+                                            <tr role="row">
+                                                <th class="pPerfil">@Resources.HTML_Necesidades_CreateGrupoNecesidad_Perfil</th>
+                                                <th class="pPersonaAsignada">Persona As:</th>
+                                                <th class="pContratacion">@Resources.HTML_Necesidades_CreateGrupoNecesidad_Contratacion</th>
+                                                <th class="pPrevision">@Resources.HTML_Necesidades_CreateGrupoNecesidad_Prevision</th>
+                                                <th class="pEstado">@Resources.HTML_Necesidades_CreateGrupoNecesidad_Estado</th>
+                                                <th class="pTecnologia">@Resources.HTML_Necesidades_CreateGrupoNecesidad_Tecnologia</th>
+                                                <th class="pModulo">@Resources.HTML_Necesidades_Create_Modulo</th>
+                                                <th class="pFCompromiso">@Resources.HTML_Necesidades_CreateGrupoNecesidad_FechaCompromiso</th>
+                                                <th class="pFCierre">@Resources.HTML_Necesidades_CreateGrupoNecesidad_FechaCierre</th>
+                                                <th class="pServicio">@Resources.HTML_Necesidades_CreateGrupoNecesidad_Servicio</th>                                                
+                                                <th class="pEliminar">Elim.</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr role="row" id="templatePerfiles" name="perfilUnico">
+                                                <td>
+                                                    @Edit.Hidden(Necesidad.NecesidadId, "ListaNecesidades[{0}].NecesidadId", new Dictionary<string, string> { { "id", "NecesidadId" } })
+                                                    @Edit.Hidden(Necesidad.DetalleTecnologia, "ListaNecesidades[{0}].DetalleTecnologia", new Dictionary<string, string> { { "id", "DetalleTecnologia" } })
+                                                    @Edit.DropDownExtend(Necesidad.TipoPerfilId, "ListaNecesidades[{0}].TipoPerfilId", Model.PerfilList, htmlClass: "form-control", id: "TipoPerfilId", required: true, showEmptyOption: false)
+                                                </td>
+                                                <td>
+                                                    @Edit.Hidden(Necesidad.PersonaAsignadaId, "ListaNecesidades[{0}].PersonaAsignadaId", new Dictionary<string, string> { { "id", "PersonaAsignadaId" } })
+                                                    @Edit.Hidden(Necesidad.candidaturaId, "ListaNecesidades[{0}].CandidaturaId", new Dictionary<string, string> { { "id", "CandidaturaId" } })
+                                                    @if (!GrupoCerrado)
+                                                    {
+                                                        <span class="spanSearchPerfil" id="botonBusquedaPersonaLibre">
+                                                            <button class="btn btnSearch" type="button" data-toggle="modal" data-target="#myModal" id="btnAbrirModalPersonaLibre">@Display.GlyphiconButton("glyphicon-search")</button>
+                                                        </span>
+                                                        <span class="spanSearchPerfil" id="botonCandidatosQueCumplenPerfil">
+                                                            <button class="btn btnSearch" type="button" data-toggle="modal" data-target="#modalCandidatosQueCumplenPerfil" id="btnAbrirModalCandidato">@Display.GlyphiconButton("glyphicon-search")</button>
+                                                        </span>
+                                                    }
+                                                    @Edit.Text(Necesidad.PersonaAsignada, name: "ListaNecesidades[{0}].PersonaAsignada", required: false, id: "PersonaAsignada", htmlClass: "form-control inputSearch", isReadOnly: true)
+                                                </td>
+                                                <td>
+                                                    @Edit.Hidden(Necesidad.TipoContratacionId.ToString(), "ContratacionInicial")
+                                                    @Edit.DropDownExtend(Necesidad.TipoContratacionId, "ListaNecesidades[{0}].TipoContratacionId", Model.ContratacionList, htmlClass: "form-control", id: "TipoContratacionId", required: true, showEmptyOption: false)
+                                                </td>
+                                                <td>
+                                                    @Edit.DropDownExtend(Necesidad.TipoPrevisionId, "ListaNecesidades[{0}].TipoPrevisionId", Model.PrevisionList, htmlClass: "form-control", id: "TipoPrevisionId", required: true, showEmptyOption: false)
+                                                </td>
+                                                <td>
+                                                    @Edit.Hidden(Necesidad.EstadoNecesidadId.ToString(), "EstadoNecesidadInicial")
+                                                    @Edit.DropDownExtend(Necesidad.EstadoNecesidadId, "ListaNecesidades[{0}].EstadoNecesidadId", Model.EstadoList, htmlClass: "form-control", id: "EstadoNecesidadId", required: true, showEmptyOption: false)
+                                                </td>
+                                                <td>
+                                                    @Edit.DropDownExtend(Necesidad.TipoTecnologiaId, "ListaNecesidades[{0}].TipoTecnologiaId", Model.TecnologiaList, htmlClass: "form-control", id: "TipoTecnologiaId", required: true, showEmptyOption: false)
+                                                </td>
+                                                <td>
+                                                    @Edit.DropDownExtend(Necesidad.Modulo, "ListaNecesidades[{0}].Modulo", Model.ModuloList, htmlClass: "form-control", id: "Modulo", required: false, disabled: true)
+                                                </td>
+                                                <td>
+                                                    @Edit.Date(Necesidad.FechaCompromiso, "ListaNecesidades[{0}].FechaCompromiso", id: "FechaCompromiso", htmlClass: "form-control", required: true)
+                                                </td>
+                                                <td>
+                                                    @Edit.Date(Necesidad.FechaCierre, "ListaNecesidades[{0}].FechaCierre", id: "FechaCierre", htmlClass: "form-control", required: false)
+                                                </td>
+                                                <td>
+                                                    @Edit.DropDownExtend(Necesidad.TipoServicioId, "ListaNecesidades[{0}].TipoServicioId", Model.ServicioList, htmlClass: "form-control", id: "ServicioTemplateId", required: true, showEmptyOption: false)
+                                                </td>
+                                                <td>
+                                                    @if (!GrupoCerrado)
+                                                    {
+                                                        <a id="btnDelete"> @Display.GlyphiconButton("glyphicon-trash icon action")</a>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span id="btnDeleteDisabled"> @Display.GlyphiconButton("glyphicon-trash icon unactive")</span>
+                                                    }
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                indice++;
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<div class="content-box-perfil hidden" id="perfil-" name="perfilTemplate">
+    @Edit.Hidden("", "position")
+    <table class="perfil-single" id="tablaPerfilUnico" data-id="tablaPerfilUnico">
+        <thead>
+            <tr role="row">
+                <th class="pPerfil">@Resources.HTML_Necesidades_CreateGrupoNecesidad_Perfil</th>
+                <th class="pPersonaAsignada">Persona As:</th>
+                <th class="pContratacion">@Resources.HTML_Necesidades_CreateGrupoNecesidad_Contratacion</th>
+                <th class="pPrevision">@Resources.HTML_Necesidades_CreateGrupoNecesidad_Prevision</th>
+                <th class="pEstado">Estado:</th>
+                <th class="pTecnologia">@Resources.HTML_Necesidades_CreateGrupoNecesidad_Tecnologia</th>
+                <th class="pModulo">@Resources.HTML_Necesidades_Create_Modulo</th>
+                <th class="pFCompromiso">F. comp:</th>
+                <th class="pFCierre">F. cierre:</th>
+                <th class="pServicio">@Resources.HTML_Necesidades_CreateGrupoNecesidad_Servicio</th>
+                <th class="pEliminar">@Resources.HTML_Candidatos_Create_EliminarHeader</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr role="row" id="templatePerfiles" name="perfilUnico">
+                <td>
+                    @Edit.Hidden("", "ListaNecesidades[{0}].NecesidadId", new Dictionary<string, string> { { "id", "NecesidadId" } })
+                    @Edit.Hidden("", "ListaNecesidades[{0}].DetalleTecnologia", new Dictionary<string, string> { { "id", "DetalleTecnologia" } })
+                    @Edit.DropDownExtend("", "ListaNecesidades[{0}].TipoPerfilId", Model.PerfilList, htmlClass: "form-control", id: "TipoPerfilId", required: false, disabled: true)
+                </td>
+                <td>
+                    @Edit.Hidden("", "ListaNecesidades[{0}].PersonaAsignadaId", new Dictionary<string, string> { { "id", "PersonaAsignadaId" } })
+                    @Edit.Hidden("", "ListaNecesidades[{0}].CandidaturaId", new Dictionary<string, string> { { "id", "CandidaturaId" } })
+                    <span class="spanSearchPerfil" id="botonBusquedaPersonaLibre">
+                        <button class="btn btnSearch" type="button" data-toggle="modal" data-target="#myModal" id="btnAbrirModalPersonaLibre">@Display.GlyphiconButton("glyphicon-search")</button>
+                    </span>
+                    <span class="spanSearchPerfil" id="botonCandidatosQueCumplenPerfil">
+                        <button class="btn btnSearch" type="button" data-toggle="modal" data-target="#modalCandidatosQueCumplenPerfil" id="btnAbrirModalCandidato">@Display.GlyphiconButton("glyphicon-search")</button>
+                    </span>
+                    @Edit.Text("", name: "ListaNecesidades[{0}].PersonaAsignada", required: false, id: "PersonaAsignada", htmlClass: "form-control inputSearch", isReadOnly: true, disabled: true)
+                </td>
+                <td>
+                    @Edit.Hidden("", "ContratacionInicial")
+                    @Edit.DropDownExtend("", "ListaNecesidades[{0}].TipoContratacionId", Model.ContratacionList, htmlClass: "form-control", id: "TipoContratacionId", required: false, disabled: true)
+                </td>
+                <td>
+                    @Edit.DropDownExtend("", "ListaNecesidades[{0}].TipoPrevisionId", Model.PrevisionList, htmlClass: "form-control", id: "TipoPrevisionId", required: false, disabled: true)
+                </td>
+                <td>
+                    @Edit.Hidden("", "EstadoNecesidadInicial")
+                    @Edit.DropDownExtend("", "ListaNecesidades[{0}].EstadoNecesidadId", Model.EstadoList, htmlClass: "form-control", id: "EstadoNecesidadId", required: false, disabled: true)
+                </td>
+                <td>
+                    @Edit.DropDownExtend("", "ListaNecesidades[{0}].TipoTecnologiaId", Model.TecnologiaList, htmlClass: "form-control", id: "TipoTecnologiaId", required: false, disabled: true)
+                </td>
+                <td>
+                    @Edit.DropDownExtend("", "ListaNecesidades[{0}].Modulo", Model.ModuloList, htmlClass: "form-control", id: "Modulo", required: false, disabled: true)
+                </td>
+                <td>
+                    @Edit.Date(null, "ListaNecesidades[{0}].FechaCompromiso", id: "FechaCompromiso", htmlClass: "form-control", required: false, disabled: true)
+                </td>
+                <td>
+                    @Edit.Date(null, "ListaNecesidades[{0}].FechaCierre", id: "FechaCierre", htmlClass: "form-control", required: false, disabled: true)
+                </td>
+                <td>
+                    @Edit.DropDownExtend("", "ListaNecesidades[{0}].TipoServicioId", Model.ServicioList, htmlClass: "form-control", id: "ServicioTemplateId", required: false, disabled: true)
+                </td>
+                <td>
+                    <a id="btnDelete"> @Display.GlyphiconButton("glyphicon-trash icon action")</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+@Html.Partial("~/Views/Necesidades/Modals/_ModalBusquedaPersonaLibre.cshtml")
+@Html.Partial("~/Views/Necesidades/Modals/_ModalCandidatosQueCumplenPerfil.cshtml")
+@section scripts{
+    @GrupoNecesidadesFrontActions.MenuFrontActions()
+    @GrupoNecesidadesFrontActions.EditFrontActions(Url, GrupoCerrado, Model)
+    @GrupoNecesidadesFrontActions.ForTableEdit()
+}

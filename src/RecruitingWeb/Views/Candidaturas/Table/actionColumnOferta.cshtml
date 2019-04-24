@@ -1,0 +1,23 @@
+﻿@using Recruiting.Application.CandidaturasOfertas.ViewModels
+@using RecruitingWeb.Properties
+
+@model Recruiting.Application.CandidaturasOfertas.ViewModels.OfertaRowViewModel
+<div>
+    @Edit.Hidden(@Model.NombreOferta , "NombreOferta", new Dictionary<string, string> { { "id", "NombreOferta" } })  
+    @Edit.Text(Model.OfertaId.ToString(), "OfertaId", id: "OfertaId", htmlClass: "form-control hide")
+    <div class="text-center">
+        @Edit.RadioButton(Model.OfertaId.ToString(), "SelectOferta", id: "SelectOferta", required: false, validate: false)
+        <a title="@Resources.HTML_Title_Editar"
+           id="EditOfertaButton" data-target="#modalCrearEditOfertas" data-toggle="modal">
+
+            @Display.GlyphiconButton("glyphicon-pencil icon action")
+        </a>
+
+        <a title="@Resources.HTML_Title_Eliminar"
+           id="DeleteOfertaButton">
+            @Display.GlyphiconButton("glyphicon-trash icon action")
+        </a>
+    </div>
+    
+</div>
+

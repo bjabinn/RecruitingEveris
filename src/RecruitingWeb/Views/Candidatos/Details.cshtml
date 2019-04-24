@@ -1,0 +1,390 @@
+﻿@using RecruitingWeb.Helpers
+@using RecruitingWeb.Properties
+
+@model Recruiting.Application.Candidatos.ViewModels.CreateEditCandidatoViewModel
+
+@{
+    var Activo = Model.Activo;
+    if (Activo == false)
+    {
+        Response.Redirect("/Shared/Borrado");
+    }
+
+}
+<div class="row titlePage">
+    <div class="col-lg-6">
+        <h3>@Resources.HTML_Candidatos_Details_VerCandidato</h3>
+    </div>
+</div>
+<div class="row header-flap">
+    <div class="btn-group" role="group">
+        <a class="btn btn-default" href="@Url.Action("Volver", "Candidatos")">
+            <span class="text">@Resources.HTML_BotonGenericoVolver</span>
+        </a>
+        <a href="@Url.Action("Edit", "Candidatos", new {  id = Model.CandidatoId })" class="btn btn-default">
+            <span class="text">@Resources.HTML_Candidatos_Details_BotonEditarCandidato</span>
+        </a>
+    </div>
+    <div class="col-lg-6 removePadding">
+        <h4 class="noMargin headerBox">@Resources.HTML_Candidatos_Details_DatosdelCandidato</h4>
+    </div>
+</div>
+
+<div class="content-box border-top-cero">
+    <div class="content-box-content">
+        <div class="row form-row">
+            <div class="form-group col-lg-4">
+                <div class="col-lg-12 title-form">
+                    <label>@Resources.HTML_Candidatos_Edit_Nombre</label>
+                </div>
+                <div class="col-lg-12 content-form">
+                    <label>
+                        @Model.Nombres
+                    </label>
+                </div>
+            </div>
+            <div class="form-group col-lg-4">
+                <div class="col-lg-12 title-form">
+                    <label>@Resources.HTML_Candidatos_Edit_Apellidos</label>
+                </div>
+                <div class="col-lg-12 content-form">
+                    <label>
+                        @Model.Apellidos
+                    </label>
+                </div>
+            </div>
+            <div class="form-group col-lg-4">
+                <div class="col-lg-12 title-form">
+                    <label>@Resources.HTML_Candidatos_Edit_FechaNacimiento</label>
+                </div>
+                <div class="col-lg-12 content-form">
+                    <label>
+                        @{
+                            if (Model.FechaNacimiento.HasValue)
+                            {
+                                
+                                @FormatHelper.Format(Model.FechaNacimiento, "dd/MM/yyyy")
+                            }
+                            else
+                            {
+                                <p>@Resources.HTML_General_CampoVacio_Details_NA</p>;
+
+                            }
+                        }
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="row form-row">
+            <div class="form-group col-lg-4">
+                <div class="col-lg-12 title-form">
+                    <label>
+                        @Resources.HTML_Candidatos_Edit_TipoIdentificacion
+                    </label>
+                </div>
+                <div class="col-lg-12 content-form">
+                    @{
+                        if (string.IsNullOrEmpty(Model.TipoIdentificacion))
+                        {
+                            @Resources.HTML_General_CampoVacio_Details_NA
+                        }
+                        else
+                        {
+                            @Model.TipoIdentificacion
+
+                        }
+                    }
+                </div>
+            </div>
+            <div class="form-group col-lg-4">
+                <div class="col-lg-12 title-form">
+                    <label>@Resources.HTML_Candidatos_Edit_NumeroIdentificacion</label>
+                </div>
+                <div class="col-lg-12 content-form">
+
+                    @{
+                        if (string.IsNullOrEmpty(Model.NumeroIdentificacion))
+                        {
+                            @Resources.HTML_General_CampoVacio_Details_NA;
+                        }
+                        else
+                        {
+                            @Model.NumeroIdentificacion
+
+                        }
+                    }
+                </div>
+            </div>
+            <div class="form-group col-lg-4">
+                <div class="col-lg-12 title-form">
+                    <label>@Resources.HTML_Candidatos_Edit_Titulacion</label>
+                </div>
+                <div class="col-lg-12 content-form">
+                    <label>
+                        @Model.Titulacion
+                    </label>
+                </div>
+            </div>
+            <div class="row form-row">
+                <div class="form-group col-lg-4">
+                    <div class="col-lg-12 title-form">
+                        <label>@Resources.HTML_Candidatos_Details_VerCandidato_Centro</label>
+                    </div>
+                    <div class="col-lg-12 content-form">
+                        @{
+                            if (string.IsNullOrEmpty(Model.NombreCentroEducativo))
+                            {
+                                @Resources.HTML_General_CampoVacio_Details_NA
+                            }
+                            else
+                            {
+                                @Model.NombreCentroEducativo
+
+                            }
+                        }
+                    </div>
+                </div>
+                <div class="form-group col-lg-4">
+                    <div class="col-lg-12 title-form">
+                        <label>@Resources.HTML_Candidatos_Edit_AnioEgresado</label>
+                    </div>
+                    <div class="col-lg-12 content-form">
+                        <label>
+                            @{
+                                if (string.IsNullOrEmpty(Model.AnioRegresado))
+                                {
+                                    <p>@Resources.HTML_General_CampoVacio_Details_NA</p>;
+                                }
+                                else
+                                {
+                                    @Model.AnioRegresado
+
+                                }
+                            }
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row form-row">
+            <div class="form-group col-lg-8">
+                <div class="col-lg-12 title-form">
+                    <label>
+                        @Resources.HTML_Candidatos_Edit_DetalleTitulacion
+                    </label>
+                </div>
+                <div class="col-lg-12 content-form">
+                    <label>
+                        @{
+                            if (string.IsNullOrEmpty(Model.DetalleTitulacion))
+                            {
+                                <p>@Resources.HTML_General_CampoVacio_Details_NA</p>;
+                            }
+                            else
+                            {
+                                @Model.DetalleTitulacion
+
+                            }
+                        }
+                    </label>
+                </div>
+            </div>
+            <div class="form-group col-lg-4">
+                <div class="col-lg-12 title-form">
+                    <label></label>
+                </div>
+            </div>
+            <div class="form-group col-lg-8">
+                <div class="col-lg-12 title-form">
+                    <label>
+                        @Resources.HTML_Candidatos_Edit_Direccion
+                    </label>
+                </div>
+                <div class="col-lg-12 content-form">
+                    <label>
+                        @{
+                            if (string.IsNullOrEmpty(Model.Direccion))
+                            {
+                                <p>@Resources.HTML_General_CampoVacio_Details_NA</p>;
+                            }
+                            else
+                            {
+                                @Model.Direccion
+
+                            }
+                        }
+                    </label>
+                </div>
+            </div>
+            <div class="form-group col-lg-4">
+                <div class="col-lg-12 title-form">
+                    <label></label>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-lg-4">
+                <div class="row form-row">
+                    <div class="form-group col-lg-12">
+                        <div class="col-lg-12 title-form">
+                            <label>
+                                @Resources.HTML_Candidatos_Details_DatosContacto
+                            </label>
+                        </div>
+                        <div class="col-lg-12">
+                            <table id="listSubmitContact" data-id="listSubmit">
+                                @{    
+                                    if (Model.ContactCandidatoViewModel == null || !Model.ContactCandidatoViewModel.Any())
+                                    {
+                                <tr role="row" class="odd">
+                                    <td>@Resources.HTML_General_CampoVacio_Details_NA</td>
+                                    <td>@Resources.HTML_General_CampoVacio_Details_NA</td>
+                                </tr>
+                                    }
+                                }
+                                <thead>
+                                    <tr role="row">
+                                        <th>@Resources.HTML_Candidatos_Edit_TipoContactoHeader</th>
+                                        <th>@Resources.HTML_Candidatos_Edit_ContactoHeader</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        for (int x = 0; x < Model.ContactCandidatoViewModel.Count; x++)
+                                        {
+                                            var candId = "ContactCandidatoViewModel[{0}].CandidatoId";
+                                            var nameId = "ContactCandidatoViewModel[{0}].CandidatoContactoId";
+                                            var nameMed = "ContactCandidatoViewModel[{0}].TipoMedioContactoId";
+                                            var nameMedio = "ContactCandidatoViewModel[{0}].TipoMedioContacto";
+                                            var nameValor = "ContactCandidatoViewModel[{0}].ValorContacto";
+
+                                            <tr role="row" class="odd">
+                                                <td class="hidden">@Edit.Hidden(@Model.ContactCandidatoViewModel[x].CandidatoId, candId)</td>
+                                                <td class="hidden">@Edit.Hidden(@Model.ContactCandidatoViewModel[x].CandidatoContactoId, nameId)</td>
+                                                <td class="hidden">@Edit.Hidden(@Model.ContactCandidatoViewModel[x].TipoMedioContactoId, nameMed) @Model.ContactCandidatoViewModel[x].TipoMedioContactoId</td>
+                                                <td>@Display.Text(Model.ContactCandidatoViewModel[x].TipoMedioContacto, nameMedio) @Model.TipoContactoList</td>
+                                                <td>@Edit.Hidden(@Model.ContactCandidatoViewModel[x].ValorContacto, nameValor) @Model.ContactCandidatoViewModel[x].ValorContacto</td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group col-lg-4">
+                <div class="row form-row">
+                    <div class="form-group col-lg-12">
+                        <div class="col-lg-12 title-form">
+                            <label>
+                                @Resources.HTML_Candidatos_Details_ConocimientosTecnologicos
+                            </label>
+                        </div>
+                        <div class="col-lg-12">
+                            <table id="listSubmitExp" data-id="listSubmit">
+                             
+                                    @if (Model.ExpCandidatoViewModel == null || !Model.ExpCandidatoViewModel.Any())
+                                    {
+                                <tr role="row" class="odd">
+                                        <td>@Resources.HTML_General_CampoVacio_Details_NA</td>
+                                        <td>@Resources.HTML_General_CampoVacio_Details_NA</td>
+                                        <td>@Resources.HTML_General_CampoVacio_Details_NA</td>
+                                </tr>
+                                    }
+                                <thead>
+                                    <tr role="row">
+                                        <th>@Resources.HTML_Candidatos_Edit_TipoTecnologiaHeader</th>
+                                        <th>@Resources.HTML_Candidatos_Edit_NivelExperienciaHeader</th>
+                                        <th>@Resources.HTML_Candidatos_Edit_ExperienciaPtsHeader</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        for (int x = 0; x < Model.ExpCandidatoViewModel.Count; x++)
+                                        {
+                                            var candId = "ExpCandidatoViewModel[{0}].CandidatoId";
+                                            var nameId = "ExpCandidatoViewModel[{0}].CandidatoExperienciaId";
+                                            var nameTipo = "ExpCandidatoViewModel[{0}].TipoTecnologiaId";
+                                            var nameTipoTec = "ExpCandidatoViewModel[{0}].TipoTecnologia";
+                                            var nameNivel = "ExpCandidatoViewModel[{0}].NivelTecnologiaId";
+                                            var nameNivelTec = "ExpCandidatoViewModel[{0}].NivelTecnologia";
+                                            var nameExp = "ExpCandidatoViewModel[{0}].Experiencia";
+
+
+                                            <tr role="row" class="odd">
+                                                <td class="hidden">@Edit.Hidden(@Model.ExpCandidatoViewModel[x].CandidatoId, candId)</td>
+                                                <td class="hidden">@Edit.Hidden(@Model.ExpCandidatoViewModel[x].CandidatoExperienciaId, nameId)</td>
+                                                <td class="hidden">@Edit.Hidden(@Model.ExpCandidatoViewModel[x].TipoTecnologiaId, nameTipo) @Model.ExpCandidatoViewModel[x].TipoTecnologiaId</td>
+                                                <td>@Display.Text(@Model.ExpCandidatoViewModel[x].TipoTecnologia, nameTipoTec) @Model.TipoTecnologiaList</td>
+                                                <td class="hidden">@Edit.Hidden(@Model.ExpCandidatoViewModel[x].NivelTecnologiaId, nameNivel) @Model.ExpCandidatoViewModel[x].NivelTecnologiaId</td>
+                                                <td>@Display.Text(@Model.ExpCandidatoViewModel[x].NivelTecnologia, nameNivelTec) @Model.NivelExpList</td>
+                                                <td>@Edit.Hidden(@Model.ExpCandidatoViewModel[x].Experiencia, nameExp) @Model.ExpCandidatoViewModel[x].Experiencia</td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group col-lg-4">
+                <div class="row form-row">
+                    <div class="form-group col-lg-12">
+                        <div class="col-lg-12 title-form">
+                            <label>
+                                @Resources.HTML_Candidatos_Details_ConocimientosIdiomas
+                            </label>
+                        </div>
+                        <div class="col-lg-12">
+                            <table id="listSubmitIdioma" data-id="listSubmit">
+                                @{
+
+                                    if (Model.IdiomaCandidatoViewModel == null || !Model.IdiomaCandidatoViewModel.Any())
+                                    {
+                                        <tr role="row" class="odd">
+                                            <td>@Resources.HTML_General_CampoVacio_Details_NA</td>
+                                            <td>@Resources.HTML_General_CampoVacio_Details_NA</td>
+                                        </tr>
+                                    }
+                                }
+                                <thead>
+                                    <tr role="row">
+                                        <th>@Resources.HTML_Candidatos_Edit_IdiomaHeader</th>
+                                        <th>@Resources.HTML_Candidatos_Edit_NivelHeader</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        for (int x = 0; x < Model.IdiomaCandidatoViewModel.Count; x++)
+                                        {
+                                            var candId = "IdiomaCandidatoViewModel[{0}].CandidatoId";
+                                            var nameId = "IdiomaCandidatoViewModel[{0}].CandidatoIdiomasId";
+                                            var nameIdioma = "IdiomaCandidatoViewModel[{0}].IdiomaId";
+                                            var nameIdio = "IdiomaCandidatoViewModel[{0}].Idioma";
+                                            var nameNivelIdioma = "IdiomaCandidatoViewModel[{0}].NivelIdiomaId";
+                                            var nameNivelIdio = "IdiomaCandidatoViewModel[{0}].NivelIdioma";
+
+                                            <tr role="row" class="odd">
+                                                <td class="hidden">@Edit.Hidden(@Model.IdiomaCandidatoViewModel[x].CandidatoId, candId)</td>
+                                                <td class="hidden">@Edit.Hidden(@Model.IdiomaCandidatoViewModel[x].CandidatoIdiomasId, nameId)</td>
+                                                <td class="hidden">@Edit.Hidden(@Model.IdiomaCandidatoViewModel[x].IdiomaId, nameIdioma) @Model.IdiomaCandidatoViewModel[x].IdiomaId</td>
+                                                <td>@Display.Text(Model.IdiomaCandidatoViewModel[x].Idioma, nameIdio) @Model.IdiomaList</td>
+                                                <td class="hidden">@Edit.Hidden(@Model.IdiomaCandidatoViewModel[x].NivelIdiomaId, nameNivelIdioma) @Model.IdiomaCandidatoViewModel[x].NivelIdiomaId</td>
+                                                <td>@Display.Text(Model.IdiomaCandidatoViewModel[x].NivelIdioma, nameNivelIdio) @Model.NivelIdiomaList</td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    @CandidatosFrontActions.MenuFrontActions()
+}

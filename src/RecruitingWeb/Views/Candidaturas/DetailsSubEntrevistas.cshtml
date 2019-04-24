@@ -1,0 +1,227 @@
+﻿@using RecruitingWeb.Components.DataTable.Helpers
+@using RecruitingWeb.Helpers
+@using Recruiting.Application.Usuarios.ViewModels
+@using Recruiting.Application.Candidatos.ViewModels
+@using RecruitingWeb.Properties
+@using Recruiting.Application.Oficinas.ViewModels
+@model Recruiting.Application.Candidaturas.ViewModel.SubEntrevistaListViewModel
+
+
+@{
+    var vengoDeCandidaturas = (Model.VengoDeCandidaturas == true && Model.VengoDeCandidaturas != null) ? "true" : "false";
+    var entrevistaId = Model.SubEntrevistaList[0].EntrevistaId.Value;
+    int nSubEntrevistas = (int)HttpContext.Current.Session["NumeroSubEntrevistas"];
+    var roles = (UsuarioRolPermisoViewModel)HttpContext.Current.Session["Usuario"];
+
+    var disabled = (Model.Editar) ? "" : "disabled";
+
+    var expRegularDecimal = System.Configuration.ConfigurationManager.AppSettings["expRegularDecimal"];
+
+    string htmlMoneda = FormatHelper.GetHtmlMoneda(Model.Moneda);
+}
+
+@*Título de sección*@
+<div class="row titlePage">
+    <div class="col-lg-6">
+        @if (Model.TipoEntrevista != 2)
+        {
+        <h3>@Resources.HTML_Candidaturas_VerEditarSubEntrevistas_FeedbackSubentrevistas - @Model.NombreCandidato</h3>
+        }
+        else
+        {
+        <h3>@Resources.HTML_Candidaturas_VerEditarSubEntrevistas_FeedbackSubentrevistasEntrevista @Model.TipoEntrevista.ToString() - @Model.NombreCandidato</h3>
+        }
+    </div>
+</div>
+<div class="row header-flap">
+    <div class="btn-group" role="group">
+        @if (roles.UsuarioRol.Count() == 1 && roles.UsuarioRol.Where(x => x.RolId == 2).Count() > 0)
+        {
+            var subEntrevistas = Model.SubEntrevistaList.Where(x => x.EntrevistadorId == (int)HttpContext.Current.Session["UsuarioId"]).ToList();
+            if (subEntrevistas.Count > 0)
+            {
+                <a href="#" data-action="editarMisSubEntrevistas" class="btn btn-default">
+                    <span class="text">@Resources.HTML_Candidaturas_VerEditarSubEntrevistas_EditarMias</span>
+                </a>
+            }
+        }
+        else
+        {
+            <a href="@Url.Action("EditarSubEntrevistas", "Candidaturas", new {  entrevistaId = entrevistaId })" id="btnEditar" class="btn btn-default">
+                <span class="text">@Resources.HTML_Candidaturas_VerEditarSubEntrevistas_EditarTodas</span>
+            </a>
+        }
+    </div>
+</div>
+
+@using (Html.BeginForm("SaveSubEntrevistas", "Candidaturas", FormMethod.Post, new Dictionary<string, object> { { "id", "formId" }, { "role", "form" }, { "data-parsley-validate", "true" }, { "data-parsley-excluded", ":not([data-validate]) , [disabled]" } }))
+{
+    @Html.Hidden("TipoEntrevista", Model.TipoEntrevista);
+    @Html.Hidden("Editar", Model.Editar);
+    @Html.Hidden("CandidaturaId", Model.CandidaturaId);
+    for (int x = 0; x < Model.SubEntrevistaList.Count; x++)
+    {
+        if (Model.SubEntrevistaList[x].EntrevistadorName != null)
+        {
+            var cadenaAux = "SubEntrevistaList[" + x + "].";
+            var idAux = "Persona_" + x;
+            var idAuxBotonColapsar = "Boton_" + x;
+            var dataIdTarget = "[data-id=" + x + "]";
+            @Html.Hidden(cadenaAux + "SubEntrevistaId", Model.SubEntrevistaList[x].SubEntrevistaId);
+            @Html.Hidden(cadenaAux + "EntrevistadorId", Model.SubEntrevistaList[x].EntrevistadorId);
+            @Html.Hidden(cadenaAux + "EntrevistadorName", Model.SubEntrevistaList[x].EntrevistadorName);
+            @Html.Hidden(cadenaAux + "EntrevistaId", Model.SubEntrevistaList[x].EntrevistaId);
+            @Html.Hidden(cadenaAux + "FechaSubEntrevista", Model.SubEntrevistaList[x].FechaSubEntrevista);
+            <div class="row">
+                <div class="content-box">
+                    <div class="content-box-content">
+                        <div class="row section-header">
+                            <div class="col-lg-6">
+                                <h4>@((x + 1).ToString()). Entrevistador: @(Model.SubEntrevistaList[x].EntrevistadorName). &nbsp&nbsp&nbsp Fecha: @Model.SubEntrevistaList[x].FechaSubEntrevista</h4>
+                            </div>
+                            <div class="col-lg-3"></div>
+                            <div class="col-lg-3">
+                                <div class="col-lg-4 text-right title-form">
+                                    <label>@Resources.HTML_Candidaturas_VerEditarSubEntrevistas_Completada</label>
+                                </div>
+                                <div class="col-lg-8 content-form">
+                                    @(@Model.SubEntrevistaList[x].Completada ? @Resources.HTML_General_Si : @Resources.HTML_General_No)
+                                </div>
+                            </div>
+                        </div>
+                        <div data-id='@x'>
+                            <div data-id="section-form-basicos" class="section-form-entrevista">
+                                <div class="row form-row">
+                                    <div class="form-group col-lg-4">
+                                        <div class="col-lg-12 title-form">
+                                            <label for="TipoSubEntrevistaId">@Resources.HTML_Candidaturas_VerEditarSubEntrevistas_EntrevistaTipo</label>
+                                        </div>
+                                        <div class="col-lg-12 content-form">                                            
+                                            @Model.SubEntrevistaList[x].TipoSubEntrevistaNombre
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-lg-4">
+                                        <div class="col-lg-12 title-form">
+                                            <label>@Resources.HTML_Candidaturas_VerEditarSubEntrevistas_Presencial</label>
+                                        </div>
+                                        <div class="col-lg-12 content-form">
+                                            @(@Model.SubEntrevistaList[x].Presencial ? @Resources.HTML_General_Si : @Resources.HTML_General_No)
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-lg-4">
+                                        <div class="col-lg-12 title-form">
+                                            <label for="AvisarAlCandidato">@Resources.HTML_Candidaturas_VerEditarSubEntrevistas_NotificarCandidatoAutomaticamente</label>
+                                        </div>
+                                        <div class="col-lg-12 content-form">
+                                            @(@Model.SubEntrevistaList[x].AvisarAlCandidato ? @Resources.HTML_General_Si : @Resources.HTML_General_No)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row form-row">
+                                    <div class="form-group col-lg-4">
+                                        <div class="col-lg-12 title-form">
+                                            <label for="SalarioPropuesto">@Resources.HTML_Candidaturas_VerEditarSubEntrevistas_SalarioPropuesto</label>
+                                        </div>
+                                        <div class="col-lg-12 content-form">
+                                            <div class="inner-addon right-addon">
+                                                @(Model.SubEntrevistaList[x].SalarioPropuesto + " €")
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-lg-4">
+                                        <div class="col-lg-12 title-form">
+                                            <label for="SalarioDeseado">@Resources.HTML_Candidaturas_VerEditarSubEntrevistas_SalarioDeseado</label>
+                                        </div>
+                                        <div class="col-lg-12 content-form">
+                                            <div class="inner-addon right-addon">
+                                                @(Model.SubEntrevistaList[x].SalarioDeseado + " €")
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-lg-4">
+                                        <div class="col-lg-12 title-form">
+                                            <label for="SalarioActual">@Resources.HTML_Candidaturas_VerEditarSubEntrevistas_SalarioActual</label>
+                                        </div>
+                                        <div class="col-lg-12 content-form">
+                                            <div class="inner-addon right-addon">
+                                                @(Model.SubEntrevistaList[x].SalarioActual + " €")
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row form-row">
+                                    <div class="form-group col-lg-4">
+                                        <div class="col-lg-12 title-form">
+                                            <label for="CategoriaId">@Resources.HTML_Candidaturas_VerEditarSubEntrevistas_Categoria</label>
+                                        </div>
+                                        <div class="col-lg-12 content-form">                                            
+                                            @Model.SubEntrevistaList[x].CategoriaNombre
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row form-row">
+                                    <div class="form-group col-lg-4">
+                                        <div class="col-lg-12 title-form">
+                                            <label for="IncorporacionId">@Resources.HTML_Candidaturas_VerEditarSubEntrevistas_Incorporacion</label>
+                                        </div>
+                                        <div class="col-lg-12 content-form">
+                                            @{
+                                                if (string.IsNullOrEmpty(Model.SubEntrevistaList[x].IncorporacionNombre) || string.IsNullOrWhiteSpace(Model.SubEntrevistaList[x].IncorporacionNombre))
+                                                {
+                                                    @Resources.HTML_General_CampoVacio_Details_NA
+                                                }
+                                                else
+                                                {
+                                                    @Model.SubEntrevistaList[x].IncorporacionNombre
+
+                                                }
+                                            }
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-lg-4">
+                                        <div class="col-lg-12 title-form">
+                                            <label for="DisponibilidadViajes">@Resources.HTML_Candidaturas_VerEditarSubEntrevistas_DisponibilidadViajes</label>
+                                        </div>
+                                        <div class="col-lg-12 content-form">                                           
+                                            @(@Model.SubEntrevistaList[x].DisponibilidadViajes ? @Resources.HTML_General_Si : @Resources.HTML_General_No)
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-lg-4">
+                                        <div class="col-lg-12 title-form">
+                                            <label>@Resources.HTML_Candidaturas_VerEditarSubEntrevistas_CambioResidencia</label>
+                                        </div>
+                                        <div class="col-lg-12 content-form">
+                                            @(@Model.SubEntrevistaList[x].CambioResidencia ? @Resources.HTML_General_Si : @Resources.HTML_General_No)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row form-row">
+                                    <div class="form-group col-lg-4">
+                                        <div class="col-lg-12 title-form">
+                                            <label>@Resources.HTML_Candidaturas_VerEditarSubEntrevistas_SuperaEntrevista </label>
+                                        </div>
+                                        <div class="col-lg-12 content-form">                                            
+                                            @(@Model.SubEntrevistaList[x].SuperaSubEntrevista ? @Resources.HTML_General_Si : @Resources.HTML_General_No)
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-lg-8">
+                                        <div class="col-lg-12 title-form">
+                                            <label for="Observaciones">@Resources.HTML_Candidaturas_VerEditarSubEntrevistas_Observaciones</label>
+                                        </div>
+                                        <div class="col-lg-12 content-form">                                            
+                                            @Model.SubEntrevistaList[x].Observaciones
+                                        </div>
+                                    </div>
+                                </div>                                
+                            </div>
+                        </div>
+                    </div>                    
+                </div>                
+            </div>   
+        }
+    }
+}
+
+@section scripts{
+    @CandidaturasFrontActions.MenuFrontActions()
+}

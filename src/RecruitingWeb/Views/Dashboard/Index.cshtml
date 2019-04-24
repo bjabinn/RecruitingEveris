@@ -1,0 +1,150 @@
+@using RecruitingWeb.Helpers
+@using Recruiting.Application.Dashboard.Enums
+@using Recruiting.Application.Usuarios.ViewModels
+@using RecruitingWeb.Properties
+
+@model Recruiting.Application.Dashboard.ViewModels.DashboardViewModel
+
+@Html.ScriptBlock(
+    @<script type="text/javascript">
+         registerCallback(function () {
+             var originalFilter = getFiltersAlertaNecesidades();
+             var filter = GetFilterForSearchableTable(originalFilter);
+             $('#tablaAlertaNecesidades').data("filters", filter);
+         });
+    </script>
+                                                                                )
+
+@{
+    UsuarioRolPermisoViewModel usuario = HttpContext.Current != null ? (UsuarioRolPermisoViewModel)HttpContext.Current.Session["Usuario"] : null;
+    bool condiTipoRolUsuario = (Model.RolsId.Contains((int)TipoRolUsuario.Administrador)) || (Model.RolsId.Contains((int)TipoRolUsuario.People));
+    var soyYo = false; //Poner a true para tener un botón de enviar correos en esta vista.
+    var usuarioId = Model.UsuarioIdLogueado.ToString();
+
+}
+
+<div class="row titlePage tittleDashBoard">
+    <div class="row">
+        <h2>@Resources.HTML_Dashboard_Index_Dashboard</h2>
+    </div>
+    <div class="row" style="flex-direction: row; box-sizing: border-box; display: flex;">
+        <div class="col permisos">
+            @if (usuario != null)
+            {
+                foreach (var rol in usuario.UsuarioRol)
+                {
+                    <span>@(rol.Nombre + " ") </span>
+
+                }
+            }
+
+        </div>
+        @if (condiTipoRolUsuario)
+        {
+            <span class="button-wrappe">
+                <a class="glyphicon glyphicon-cog" id="btnAdministrarAlertas"><span> @Resources.HTML_Dashboard_Administrador_Index_Alertas</span></a>
+            </span>
+        }
+        @if (condiTipoRolUsuario && soyYo)
+        {
+            <span class="button-wrappe">
+                <a href="@Url.Action("enviarCorreosDePrueba", "Candidaturas")" title="@Resources.HTML_Dashboard_Index_EnviarCorreosPrueba" class="glyphicon glyphicon-envelope"></a>
+            </span>
+        }
+
+    </div>
+</div>
+
+<div class="row">
+    <ul id="nav-fla" class="nav nav-tabs">
+        @{
+            bool flapAlerta = (Model.InfoAdministradorViewModel != null)
+                        && (
+                            (Model.InfoAdministradorViewModel.AlertasAdministradorViewModel == null)
+                            || (Model.InfoAdministradorViewModel.AlertasAdministradorViewModel.NecesidadesCreadasModificadas)
+                            || (Model.InfoAdministradorViewModel.AlertasAdministradorViewModel.PrimeraEntrevista)
+                            || (Model.InfoAdministradorViewModel.AlertasAdministradorViewModel.SubEntrevistaPrimeraEntrevista)
+                            || (Model.InfoAdministradorViewModel.AlertasAdministradorViewModel.SegundaEntrevista)
+                            || (Model.InfoAdministradorViewModel.AlertasAdministradorViewModel.SubEntrevistaSegundaEntrevista)
+                            || (Model.InfoAdministradorViewModel.AlertasAdministradorViewModel.CartaOferta)
+                            || (Model.InfoAdministradorViewModel.AlertasAdministradorViewModel.CvPendienteFiltro)
+                            || (Model.InfoAdministradorViewModel.AlertasAdministradorViewModel.CandidaturaStandBy)
+                            || (Model.InfoAdministradorViewModel.AlertasAdministradorViewModel.BecarioStandBy)
+                          );
+
+            if (condiTipoRolUsuario)
+            {
+                <li class="active"><h4 class="noMargin"><a href="#alertas" data-toggle="tab">@Resources.HTML_Dashboard_Index_Alertas</a></h4></li>
+            }
+        }
+        <li id="tabEntrevistas" class="@(!condiTipoRolUsuario ? "active" : "")"><h4 class="noMargin"><a href="#entrevistas" data-toggle="tab">@Resources.HTML_Dashboard_Index_Entrevistas</a></h4></li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane @(!condiTipoRolUsuario ? "active" : "")" id="entrevistas">
+            @if (Model.RolsId.Contains((int)TipoRolUsuario.Entrevistador))
+            {
+
+                @Html.Partial("~/Views/Dashboard/Partials/_Entrevistador.cshtml", Model.InfoEntrevistadorViewModel)
+
+
+            }
+            else
+            {
+                <div class="col-lg-6 removePadding">
+                    <div class="content-box border-top-cero">
+                        <div class="content-box-content">
+                            <div class="row">
+                                <div class="col-lg-12 form-group">
+                                    <div class="col-lg-12">
+                                        <h3>@Resources.HTML_Dashboard_Index_NoAcceso</h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        @* panel  Entrevista*@
+        @if (condiTipoRolUsuario)
+        {
+            if (flapAlerta)
+            {
+                <div class="tab-pane active" id="alertas">
+
+                    @Html.Partial("~/Views/Dashboard/Partials/_Administrador.cshtml", Model.InfoAdministradorViewModel)
+
+                </div>
+            }
+            else
+            {
+                <div class="tab-pane active" id="alertas">
+                    <div class="col-lg-6 removePadding">
+                        <div class="content-box border-top-cero">
+                            <div class="content-box-content">
+                                <div class="row">
+                                    <div class="col-lg-12 form-group">
+                                        <div class="col-lg-12">
+                                            <h3>@Resources.HTML_Dashboard_Index_ConfigureAlertas</h3>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            @* Partial: Modal de administración de alertas *@
+            @Html.Partial("~/Views/Dashboard/Modal/_ModalAlertasAdmin.cshtml", Model.InfoAdministradorViewModel.AlertasAdministradorViewModel)
+        }
+        @* fin panel  Entrevista*@
+    </div>
+</div>@*row*@
+
+
+@section scripts{
+    @DashboardFrontActions.MenuFrontActions()
+    @DashboardFrontActions.IndexFrontActions(Html, Url, Model)
+
+}

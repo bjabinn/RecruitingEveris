@@ -1,0 +1,387 @@
+@using System.Configuration;
+
+@using RecruitingWeb.Helpers
+@using RecruitingWeb.Properties
+@using RecruitingWeb.Components.Searchable
+@using RecruitingWeb.Components.DataTable.Helpers
+
+@using Recruiting.Application.Maestros.Enums
+@using Recruiting.Application.Candidaturas.Enums
+@using Recruiting.Application.Roles.Enums
+@using Recruiting.Application.Usuarios.ViewModels
+@using Recruiting.Application.Candidaturas.ViewModel
+
+@model RecruitingWeb.Models.FiltroCandidaturaModels
+
+@Html.ScriptBlock(
+    @<script type="text/javascript">
+         registerCallback(function () {
+             var originalFilter = getFiltersCandidaturas();
+             var filter = GetFilterForSearchableTable(originalFilter);
+             $('#tablaCandidaturas').data("filters", filter);
+         });
+    </script>
+                            )
+@{
+    var tiempoExpiracionCookie = ConfigurationManager.AppSettings["tiempoExpiracion"].ToString();
+    var usuarioViewModel = (UsuarioRolPermisoViewModel)HttpContext.Current.Session["Usuario"];
+    var nUsuario = usuarioViewModel.UserName;
+    var roles = (UsuarioRolPermisoViewModel)HttpContext.Current.Session["Usuario"];
+    var centroUsuario = roles.CentroIdUsuario == null ? "" : roles.CentroIdUsuario.ToString();
+
+    var ListadoPermisos = (Dictionary<int, string>)HttpContext.Current.Session["Permisos"];
+
+    if (ListadoPermisos == null)
+    {
+        var permisos = new Dictionary<int, string>();
+
+        foreach (var rol in usuarioViewModel.UsuarioRol)
+        {
+            foreach (var permiso in rol.PermisoRol)
+            {
+                if (!permisos.ContainsKey(permiso.PermisoId))
+                {
+                    permisos.Add(permiso.PermisoId, permiso.PermisoNombre);
+                }
+            }
+        }
+
+        ListadoPermisos = permisos;
+    }
+
+    var ListadoRoles = (Dictionary<int,string>)HttpContext.Current.Session["Roles"];
+}
+
+@{
+    string estados = "";
+    string etapas = "";
+    if (Model.EstadoCandidaturaId != null)
+    {
+        foreach (var estado in Model.EstadoCandidaturaId)
+        {
+            estados = estados + (estado.ToString() + ',');
+        }
+        estados = estados.Remove(estados.Length - 1);
+    }
+
+    if (Model.EtapaCandidaturaId != null)
+    {
+        foreach (var etapa in Model.EtapaCandidaturaId)
+        {
+            etapas = etapas + (etapa.ToString() + ',');
+        }
+        etapas = etapas.Remove(etapas.Length - 1);
+    }
+}
+
+<div class="row titlePage">
+    <div class="col-lg-6">
+        <h3>@Resources.HTML_Candidaturas_Index_GestionCandidaturas</h3>
+    </div>
+</div>
+<div class="row header-flap">
+    <div class="btn-group @(!ListadoPermisos.ContainsKey((int)PermisosRolesEnum.AniadirEliminarCandidatura) ? "hide" : "")" role="group">
+        <a id="btnCreateCandidatura" class="btn btn-default">
+            <span class="text">@Resources.HTML_Candidaturas_Index_AniadirCandidatura</span>
+        </a>
+    </div>
+    <div class="col-lg-6 removePadding">
+        <h4 class="noMargin headerBox">@Resources.HTML_Candidaturas_Index_Filtro</h4>
+    </div>
+</div>
+
+<div class="row">
+    <div class="content-box border-top-cero">
+        <div class="content-box-content" id="form-filter">
+            <div class="row" data-id="formFilter">
+
+                <div class="form-group col-lg-4">
+                    <div class="col-lg-4 title-form">
+                        <label for="filterCandidaturaId">@Resources.HTML_Candidaturas_Index_Referencia</label>
+                    </div>
+                    <div class="col-lg-8">
+                        @Edit.Number(Model.Referencia, "filterCandidaturaId", id: "filterCandidaturaId", minValue: "1", htmlClass: "form-control")
+                    </div>
+                </div>
+
+                <div class="form-group col-lg-4">
+                    <div class="col-lg-4 title-form">
+                        <label for="filterEstado">@Resources.HTML_Candidaturas_Index_Estado</label>
+                    </div>
+                    <div class="col-lg-8">
+                        @Edit.DropDownExtend(estados, "filterEstado", Model.EstadoList, htmlClass: "form-control col-md-4", validate: false, multiple: true, required: false, id: "filterEstado")
+                    </div>
+                </div>
+
+                <div class="form-group col-lg-4">
+                    <div class="col-lg-4 title-form">
+                        <label for="filterEstapa">@Resources.HTML_Candidaturas_Index_Fase</label>
+                    </div>
+                    <div class="col-lg-8">
+                        @Edit.DropDownExtend(etapas, "filterEtapa", Model.EtapaList, htmlClass: "form-control col-md-4", validate: false, multiple: true, required: false, id: "filterEtapa")
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="form-group col-lg-4">
+                    <div class="col-lg-4 title-form">
+                        <label for="filterCandidato">@Resources.HTML_Candidaturas_Index_Candidato</label>
+                    </div>
+                    <div class="col-lg-8">
+                        @Edit.Text(Model.NombreCandidato, "filterCandidato", id: "filterCandidato", htmlClass: "form-control")
+                    </div>
+                </div>
+
+                <div class="form-group col-lg-4">
+                    <div class="col-lg-4 title-form">
+                        <label for="filterPerfil">@Resources.HTML_Candidaturas_Index_Perfil</label>
+                    </div>
+                    <div class="col-lg-8">
+                        @Edit.DropDownExtend(Model.PerfilId, "filterPerfil", Model.CategoriaList, htmlClass: "form-control col-md-4", validate: false, required: false, id: "filterPerfil")
+                    </div>
+                </div>
+
+                <div class="form-group col-lg-4">
+                    <div class="col-lg-4 title-form">
+                        <label for="filterEntrevistador">@Resources.HTML_Candidaturas_Index_Entrevistador</label>
+                    </div>
+                    <div class="col-lg-8">
+                        @Html.Hidden("EntrevistadorName")
+                        @(Html.Searchable("EntrevistadorId", Url)
+                                                                                        .Id("EntrevistadorId")
+                                                                                        .AddCssClass("form-control")
+                                                                                        .Action("GetUsuariosEntrevistadoresByNombreUsuario", "Admin")
+                                                                                        .Value(Model.EntrevistadorName, hiddenValue: Model.EntrevistadorId.ToString()))
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+
+                <div class="form-group col-lg-4">
+                    <div class="col-lg-4 title-form">
+                        <label for="filterTipoTecnologia">@Resources.HTML_Candidaturas_Index_Tecnologia</label>
+                    </div>
+                    <div class="col-lg-8">
+                        @Edit.DropDownExtend(Model.TipoTecnologiaId, "filterTipoTecnologia", Model.TecnologiaList, htmlClass: "form-control col-md-4", validate: false, required: false, id: "filterTipoTecnologia")
+                    </div>
+                </div>
+
+                <div class="form-group col-lg-4">
+                    <div class="col-lg-4 title-form">
+                        <label for="filterAgendadaEntre">@Resources.HTML_Candidaturas_Index_AgendadaEntre</label>
+                    </div>
+                    <div class="col-lg-8">
+                        @Edit.Date(Model.AgendadaEntre, "filterAgendadaEntreDesde", id: "filterAgendadaEntreDesde", validate: false, required: false, htmlClass: "form-control align-left")
+                    </div>
+                </div>
+
+                <div class="form-group col-lg-4">
+                    <div class="col-lg-4 title-form">
+                        <label for="filterAgendadaHasta">@Resources.HTML_Candidaturas_Index_AgendadaHasta</label>
+                    </div>
+                    <div class="col-lg-8">
+                        @Edit.Date(Model.AgendadaHasta, "filterAgendadaEntreHasta", id: "filterAgendadaEntreHasta", validate: false, required: false, htmlClass: "form-control align-left")
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+
+                <div class="form-group col-lg-4">
+                    <div class="col-lg-4 title-form">
+                        <label for="filterOrigenCV">@Resources.HTML_Candidaturas_Index_OrigenCV</label>
+                    </div>
+                    <div class="col-lg-8">
+                        @Edit.DropDownExtend(Model.OrigenCvId, "OrigenCvId", Model.OrigenCvList, required: true, htmlClass: "form-control", id: "OrigenCvId")
+                    </div>
+                </div>
+
+                <div class="form-group col-lg-4">
+                    <div class="col-lg-4 title-form">
+                        <label for="filterUbicacionCandidato">Ubicacion</label>
+                    </div>
+                    <div class="col-lg-8">
+                        @Edit.Text(Model.UbicacionCandidato, "filterUbicacionCandidato", id: "filterUbicacionCandidato", required: false, validate: true, htmlClass: "form-control", maxLength: 500)
+                    </div>
+                </div>
+
+                <div class="form-group col-lg-4">
+                    <div class="col-lg-4 title-form">
+                        <label for="filterCandidaturaOferta">@Resources.HTML_Candidaturas_Index_Oferta</label>
+                    </div>
+                    <div class="col-lg-8">
+                        @(Html.Searchable("filterCandidaturaOferta", Url)
+                                                                            .Id("filterCandidaturaOferta")
+                                                                            .AddCssClass("form-control")
+                                                                            .Action("GetOfertasByNombre", "Candidaturas")
+                                                                            .Value(Model.CandidaturaOferta, hiddenValue: Model.CandidaturaOfertaId.ToString()))
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="form-group col-lg-4">
+                    <div class="col-lg-4 title-form">
+                        <label for="filterIdioma">@Resources.HTML_Candidaturas_Index_Idioma</label>
+                    </div>
+                    <div class="col-lg-8">
+                        @Edit.DropDownExtend(Model.Idioma, "filterIdioma", Model.IdiomaList, htmlClass: "form-control col-md-4", validate: false, required: false, id: "filterIdioma")
+                    </div>
+                </div>
+
+                <div class="form-group col-lg-4">
+                    <div class="col-lg-4 title-form">
+                        <label for="filterNivelIdioma">@Resources.HTML_Candidaturas_Index_NivelMinimoIdioma</label>
+                    </div>
+                    <div class="col-lg-8">
+                        @Edit.DropDownExtend(Model.NivelIdioma, "filterNivelIdioma", Model.NivelIdiomaList, htmlClass: "form-control col-md-4", validate: false, required: false, id: "filterNivelIdioma")
+                    </div>
+                </div>
+                <div class="form-group col-lg-4">
+                    <div class="col-lg-4 title-form">
+                        <label for="filterKeyword">Palabras clave:</label>
+                    </div>
+                    <div class="col-lg-8">
+                        @Edit.Text(Model.Keyword, "filterKeyword", id: "filterKeyword", htmlClass: "form-control")
+                    </div>
+                </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group col-lg-4">
+                        <div class="col-lg-4 title-form">
+                            <label for="filterAnioExperiencia">@Resources.HTML_Candidatura_Index_AnioExperiencia</label>
+                        </div>
+                        <div class="col-lg-8">
+                            @Edit.DateTime(Model.AnioExperiencia, "filterAnioExperiencia", id: "filterAnioExperiencia", htmlClass: "form-control", required: false)
+                        </div>
+                    </div>
+
+                    @if (Model.CentroIdUsuarioLogueado == string.Empty)
+                    {  
+                        <div class="form-group col-lg-4">
+                            <div class="col-lg-4 title-form">
+                                <label for="CentroId">@Resources.HTML_Candidaturas_Index_Centro</label>
+                            </div>
+                            <div class="col-lg-8">
+                                @Edit.DropDownExtend(Model.CentroIdUsuario, "filterCentro", Model.CentroList, htmlClass: "form-control col-lg-4", validate: false, required: false, id: "filterCentro")
+                            </div>
+                        </div>  
+                    }
+
+                    <div class="form-group col-lg-4" data-section="Modulo">
+                        <div class="col-lg-4 title-form">
+                            <label for="filterModulo">@Resources.HTML_Candidaturas_Index_Modulo</label>
+                        </div>
+                        <div class="col-lg-8">
+                            @Edit.DropDownExtend(Model.ModuloId, "filterModulo", Model.ModuloList, htmlClass: "form-control col-lg-4", validate: false, required: false, id: "filterModulo")
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-12" style="text-align:right;">
+                        <div class="btn-group" role="group" aria-label="...">
+                            <button name="limpiar" id="limpiar" type="button" class="btn btn-default">@Resources.HTML_BotonGenericoLimpiar</button>
+                            <button name="buscar" type="button" class="btn btn-default">@Resources.HTML_BotonGenericoBuscar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div> <!-- End .row -->
+
+<div id="tabla" name="tabla">
+    <div class="content-box">
+        <div class="content-box-content">
+            <div class="row">
+                <div class="col-lg-12 text-right" style="padding-bottom: 10px;">
+                    <span id="btnDescargarExcel" class="icon icon-excel"></span>
+                </div>
+                <div class="col-lg-12">
+                    @{
+                        int pagina = Model.Pagina ?? 0;
+                        var config = Html.InitializeDataTable<CandidaturaRowViewModel>();
+                        int nElem = Convert.ToUInt16(Resources.NElementosPagina);
+                        config.Name("tablaCandidaturas")
+                        .AjaxLoadUrl(Url.Action("LoadCandidaturas", "Candidaturas"))
+                        .CustomFilterAjax("getFiltersCandidaturas")
+                        .PrimaryKey(m => m.CandidaturaId.ToString())
+                        .AddPrimaryKeyToName(false)
+                        .Paginable()
+                        .PageSize(nElem)
+                        .InitialPage(pagina)
+                        .Columns(columns =>
+                        {
+                        columns.Bound(c => c.CandidaturaId).Header(Resources.HTML_Candidaturas_Index_ReferenciaHeader).ColumnName("CandidaturaId").Orderable(true).CssHeaderClass("ref-header");
+                        columns.Bound(c => c.OrigenCv).Header(Resources.HTML_Candidaturas_Index_OrigenCvHeader).ColumnName("OrigenCvId").Orderable(true).CssHeaderClass("origenCV-header");
+                        columns.Bound(c => c.Estado).Header(Resources.HTML_Candidaturas_Index_EstadoHeader).ColumnName("Estado").Orderable(true).CssHeaderClass("estado-header");
+                        columns.Bound(c => c.Etapa).Header(Resources.HTML_Candidaturas_Index_FaseHeader).ColumnName("Etapa").Orderable(true).CssHeaderClass("fase-header");
+                        columns.Bound(c => c.Candidato).Header(Resources.HTML_Candidaturas_Index_CandidatoHeader).ColumnName("Candidato").Orderable(true).CssHeaderClass("candidato-header");
+                        columns.Bound(c => c.TipoTecnologia).Header(Resources.HTML_Candidaturas_Index_TecnologiaHeader).ColumnName("TipoTecnologia").Orderable(true).CssHeaderClass("tecnologia-header");
+                        columns.Bound(c => c.Entrevistador).Header(Resources.HTML_Candidaturas_Index_EntrevistadorHeader).ColumnName("Entrevistador").Orderable(false).CssHeaderClass("entrevistador-header");
+                        columns.Bound(c => c.Agendada).Header(Resources.HTML_Candidaturas_Index_AgendadaHeader).ColumnName("Agendada").Orderable(false).CssHeaderClass("agendada-header");
+                        //columns.Bound(c => c.NumeroDeEntrevistas).Header(Resources.HTML_Candidaturas_Index_NumeroEntrevistasHeader).ColumnName("N.Entrevistas").Orderable(false).CssHeaderClass("nentrevistas-header");
+                        columns.Bound(c => c.Perfil).Header(Resources.HTML_Candidaturas_Index_PerfilHeader).ColumnName("Perfil").Orderable(true).CssHeaderClass("perfil-header");
+                        columns.Bound(c => c.Modulo).Header(Resources.HTML_Candidaturas_Index_ModuloHeader).ColumnName("Modulo").Orderable(true).CssHeaderClass("modulo-header");
+                        columns.Bound(c => c.NivelIdioma).Header(Resources.HTML_Candidaturas_Index_NivelInglesHeader).ColumnName("NivelIdioma").Orderable(false).CssHeaderClass("ingles-header");
+                        if (string.IsNullOrWhiteSpace(Model.CentroIdUsuarioLogueado))
+                        {
+                            columns.Bound(c => c.Centro).Header(Resources.HTML_Candidaturas_Index_CentroHeader).ColumnName("Centro").Orderable(true).CssHeaderClass("centro-header");
+                        }
+
+                        columns.Template(
+            @<div>
+
+            </div>).Header(Resources.HTML_Candidaturas_Index_AccionesHeader).CssHeaderClass("acciones-header");
+
+                      columns.Template(
+    @<div>
+
+    </div>).Header(Resources.HTML_Candidaturas_Index_EstadosHeader).CssHeaderClass("estados-header");
+});
+                    }
+
+                    @Html.Partial("Controls/DataTable", config)
+
+                    <div class="paginacionIn">
+                        <p> @Resources.HTML_Candidaturas_Index_TotalCandidaturas <span id="tempdataCandidaturas" class="tempdataTotalRegistros"></span> </p>
+                    </div>
+                    <div id="CVModal" class="hidden">
+                        @using (Html.BeginForm("UploadCV", "Candidaturas", FormMethod.Post, new Dictionary<string, object> { { "role", "form" }, { "data-parsley-validate", "true" }, { "enctype", "multipart/form-data" } }))
+                        {
+                            <div class="row">
+                                <div class="col-md-12 text-center">
+                                    <span data-upload="true">@Display.GlyphiconButton("glyphicon-open icon action")</span>
+                                    <input required="required" type="file" class="hidden" name="file" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 text-center">
+                                    <p id="nombreCV"></p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 text-center">
+                                    <b>@Resources.HTML_Candidaturas_Index_Archivos</b>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div> <!-- End content-box-content -->
+    </div>  <!-- End .content-box -->
+</div>
+@Html.Partial("~/Views/Candidaturas/Modal/_ModalRenuncia.cshtml", Model)
+@Html.Partial("~/Views/Candidaturas/Modal/_ModalStandBy.cshtml", Model)
+@Html.Partial("~/Views/Candidaturas/Modal/_ModalGenerarDescargarCartaOferta.cshtml")
+@Html.Partial("~/Views/Candidaturas/Modal/_ModalEleccionCartaOferta.cshtml")
+
+@section scripts{
+    @CandidaturasFrontActions.MenuFrontActions()
+    @CandidaturasFrontActions.IndexFrontActions(Url, nUsuario, tiempoExpiracionCookie, centroUsuario)
+
+}

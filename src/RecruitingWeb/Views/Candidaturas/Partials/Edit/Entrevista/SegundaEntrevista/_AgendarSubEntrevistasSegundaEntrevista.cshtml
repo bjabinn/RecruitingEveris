@@ -1,0 +1,101 @@
+﻿@using RecruitingWeb.Components.Searchable
+@using RecruitingWeb.Properties
+@model Recruiting.Application.Candidaturas.ViewModel.AgendarSegundaEntrevistaViewModel
+
+@{ 
+    int nSubEntrevistas = (int)HttpContext.Current.Session["NumeroSubEntrevistas"];
+}
+<div class="row form-row">
+    <div class="form-group col-lg-2">
+    </div>
+    <div class="form-group col-lg-8 noMargin">
+        <div class="col-lg-12">
+            <button type="button" class="btn btn-default pull-right" id="btnAddSubEntrevista">
+                @Resources.HTML_Candidaturas_AgendarSubEntrevistasPrimeraEntrevista_Aniadir
+            </button>
+        </div>
+    </div>
+</div>
+<div class="row form-row margin">
+    <div class="form-group col-lg-2">
+    </div>
+    <div class="form-group col-lg-8">
+        <div class="col-lg-12">
+            <table id="listSubmitSubInterview" data-id="listSubmit">
+                <thead>
+                    <tr role="row">
+                        <th>@Resources.HTML_Candidaturas_AgendarSubEntrevistasSegundaEntrevista_EntrevistadorHeader</th>
+                        <th>@Resources.HTML_Candidaturas_AgendarSubEntrevistasSegundaEntrevista_FechaSubentrevistaHeader</th>
+                        <th>@Resources.HTML_Candidaturas_AgendarSubEntrevistasSegundaEntrevista_TipoSubentrevistaHeader</th>
+                        <th>@Resources.HTML_Candidaturas_AgendarSubEntrevistasSegundaEntrevista_PresencialHeader</th>
+                        <th>@Resources.HTML_Candidaturas_AgendarSubEntrevistasSegundaEntrevista_NotificarCandidatoHeader</th>
+                        <th>@Resources.HTML_Candidaturas_AgendarSubEntrevistasSegundaEntrevista_EliminarHeader</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        for (var i = 0; i < nSubEntrevistas; i++)
+                        {
+                            <tr role="row" class="hidden" id="subEntrevista@(i)" name="0">
+                                <td class="hidden">@Edit.Hidden(0, "SubEntrevistaList[" + i + "].EntrevistadorName", new Dictionary<string, string> { { "id", "EntrevistadorName" + i } })</td>
+                                @{if (Model.SubEntrevistaList[i].SubEntrevistaId.HasValue)
+                                    {
+                                        @Html.Hidden("SubEntrevistaList[" + i + "].SubEntrevistaId", Model.SubEntrevistaList[i].SubEntrevistaId.Value);
+                                        @Html.Hidden("SubEntrevistaList[" + i + "].Completada", Model.SubEntrevistaList[i].Completada);
+                                    }
+                                    else
+                                    {
+                                        @Html.Hidden("SubEntrevistaList[" + i + "].SubEntrevistaId", null);
+                                        @Html.Hidden("SubEntrevistaList[" + i + "].Completada", false);
+                                    }
+                                }
+                                <td>
+                                    @(Html.Searchable("SubEntrevistaList[" + i + "].EntrevistadorId", Url)
+                                    .Id("EntrevistadorIdSearchable" + i)
+                                    .AddCssClass("form-control")
+                                    .Action("GetUsuariosByNombreUsuario", "Admin")
+                                    .Value(Model.SubEntrevistaList[i].EntrevistadorName, Model.SubEntrevistaList[i].EntrevistadorId.ToString(), ""))
+                                    @*.Value(Model.SubEntrevistaList[0].EntrevistadorName, Model.SubEntrevistaList[0].EntrevistadorId.ToString(), isReadonly))*@
+                                </td>
+                                <td>
+                                    <div id="datetimepicker" class="input-group date">
+                                        <input autocomplete="off" value="@(Model.SubEntrevistaList[i].FechaSubEntrevista)" name="SubEntrevistaList[@(i)].FechaSubEntrevista" id="FechaSubEntrevista@(i)" class="form-control" type="text" />
+                                    </div>
+                                </td>
+                                <td>
+                                    @Edit.DropDownExtend(Model.SubEntrevistaList[i].TipoSubEntrevistaId.ToString(), "SubEntrevistaList[" + i + "].TipoSubEntrevistaId", Model.TipoSubEntrevistaList, id: "TipoSubEntrevista" + i, required: false)
+                                </td>
+                                <td>
+                                    @Edit.DropDownExtend(Model.SubEntrevistaList[i].Presencial.ToString(),
+                                        "SubEntrevistaList[" + i + "].Presencial",
+                                        new SelectList(new Dictionary<string, string>
+                                        {
+                                        {Resources.Si, "True"},
+                                        {Resources.No, "False"}
+                                        },
+                                        "Value", "Key"),
+                                        validate: true, multiple: false, id: "Presencial" + i, showEmptyOption: false, required: false)
+                                </td>
+                                <td>
+                                    @Edit.DropDownExtend(Model.SubEntrevistaList[i].AvisarAlCandidato.ToString(),
+                                        "SubEntrevistaList[" + i + "].AvisarAlCandidato",
+                                        new SelectList(new Dictionary<string, string>
+                                        {
+                                        {Resources.Si, "True"},
+                                        {Resources.No, "False"}
+                                        },
+                                        "Value", "Key"),
+                                        validate: true, multiple: false, id: "AvisarAlCandidato" + i, showEmptyOption: false, required: false)
+                                </td>
+                                <td name="btnDeleteSubEntrevista">
+                                    <a id="btnDelete" name="btnDeleteSubEntrevista"> @Display.GlyphiconButton("glyphicon-trash icon action")</a>
+                                </td>
+                            </tr>
+                                    }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>   
+</div>
+

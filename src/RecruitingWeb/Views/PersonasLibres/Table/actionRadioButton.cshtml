@@ -1,0 +1,7 @@
+﻿@model Recruiting.Application.Necesidades.ViewModels.NecesidadRowViewModel
+
+<div class="text-center">
+    @Edit.Hidden(@Model.Nombre , "Nombre",new Dictionary<string, string> { {"id","Nombre" } })
+    @Edit.Text(Model.NecesidadId.ToString(), "NecesidadId", id: "NecesidadId", htmlClass: "form-control hide")
+    @Edit.RadioButton(Model.NecesidadId.ToString(), "SelectNecesidades", id: "SelectNecesidades")
+</div>

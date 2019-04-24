@@ -1,0 +1,138 @@
+﻿@using RecruitingWeb.Properties
+
+@model Recruiting.Application.PersonasLibres.ViewModels.CreateEditPersonaLibreViewModel
+
+@{
+    var Activo = Model.Activo;
+    if (Activo == false)
+    {
+        Response.Redirect("/Shared/Borrado");
+    }
+
+}
+<div class="row titlePage">
+    <div class="col-lg-6">
+        <h3>@Resources.HTML_PersonasLibres_Edit_EditarPersonaLibre</h3>
+    </div>
+</div>
+<div class="row header-flap">
+    <div class="btn-group" role="group">
+        <a class="btn btn-default" href="@Url.Action("Volver", "PersonasLibres")">
+            <span class="text">@Resources.HTML_BotonGenericoVolver</span>
+        </a>
+        <a href="#" data-action="finalizar" class="btn btn-default">
+            <span class="text">@Resources.HTML_BotonGenericoFinalizar</span>
+        </a>
+    </div>
+        <div class="col-lg-6 removePadding">
+            <h4 class="noMargin headerBox">@Resources.HTML_PersonasLibres_Datos_PersonaLibre</h4>
+        </div>
+    </div>
+<!--End .Row-->
+
+<div class="row">
+    <div class="content-box border-top-cero">
+        <div class="content-box-content">
+            <div class="row">
+                @using (Html.BeginForm("Edit", "PersonasLibres", FormMethod.Post, new Dictionary<string, object> { { "role", "form" }, { "data-parsley-validate", "true" }, { "data-parsley-excluded", ":not([data-validate]) , [disabled]" } }))
+            {
+                    @Edit.Hidden("guardar", "SubmitType")
+                    @Edit.Hidden(Model.PersonaLibreId, "PersonaLibreId")
+                    @Edit.Hidden(Model.Nombre, "Nombre")
+                    @Edit.Hidden(Model.Apellidos, "Apellidos")
+                    @Edit.Hidden(Model.NroEmpleado, "NroEmpleado")
+                    @Edit.Hidden(Model.NecesidadId.ToString(), "NecesidadId")
+                    @Edit.Hidden(Model.SinNecesidadAsignada.ToString(), "SinNecesidadAsignada")
+                    @Edit.Hidden(Model.IsActivo.ToString(), "IsActivo")
+
+                    <div class="section-form-basicos margin" data-id="section-form-basicos">
+                        <div class="row form-row">
+                            <div class="form-group col-lg-4">
+                                <div class="col-lg-12 title-form">
+                                    <label for="Nombre">@Resources.HTML_PersonasLibres_Edit_Nombre</label>
+                                </div>
+                                <div class="col-lg-12">
+                                    @Edit.Text(Model.Nombre + " " + Model.Apellidos, "Nombre", id: "Nombre", htmlClass: "form-control", isReadOnly: true)
+                                </div>
+                            </div>
+                            <div class="form-group col-lg-4">
+                                <div class="col-lg-12 title-form">
+                                    <label for="Categoria">@Resources.HTML_PersonasLibres_Edit_Categoria</label>
+                                </div>
+                                <div class="col-lg-12">
+                                    @Edit.Text(Model.Categoria, "Categoria", id: "Categoria", htmlClass: "form-control", isReadOnly: true)
+                                </div>
+                            </div>
+                            <div class="form-group col-lg-4">
+                                <div class="col-lg-12 title-form">
+                                    <label for="Tecnologia">@Resources.HTML_PersonasLibres_Edit_Tecnologia</label>
+                                </div>
+                                <div class="col-lg-12">
+                                    @Edit.DropDownExtend(Model.TipoTecnologiaId, "TipoTecnologiaId", Model.TecnologiaList, htmlClass: "form-control", validate: true, required: true, id: "filterTipoTecnologiaId")
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row form-row">
+                            <div class="form-group col-lg-4">
+                                <div class="col-lg-12 title-form">
+                                    <label for="FechaLiberacion">@Resources.HTML_PersonasLibres_Edit_FechaLiberacion</label>
+                                </div>
+                                <div class="col-lg-12">
+                                    @Edit.Date(Model.FechaLiberacion, "FechaLiberacion", id: "FechaLiberacion", htmlClass: "form-control", required: true)
+                                </div>
+                            </div>
+                            <div class="form-group col-lg-4">
+                                <div class="col-lg-12 title-form">
+                                    <label for="Linea">@Resources.HTML_PersonasLibres_Edit_Linea</label>
+                                </div>
+                                <div class="col-lg-12">
+                                    @Edit.Text(Model.Linea, "Linea", id: "Linea", htmlClass: "form-control", isReadOnly: true)
+                                </div>
+                            </div>
+                            <div class="form-group col-lg-4">
+                                <div class="col-lg-12 title-form">
+                                    <label for="Celda">@Resources.HTML_PersonasLibres_Edit_Celda</label>
+                                </div>
+                                <div class="col-lg-12">
+                                    @Edit.Text(Model.Celda, "Celda", id: "Celda", htmlClass: "form-control", isReadOnly: true)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row form-row">
+                            <div class="form-group col-lg-8">
+                                <div class="col-lg-12 title-form">
+                                    <label for="Comentario">@Resources.HTML_PersonasLibres_Edit_Comentario</label>
+                                </div>
+                                <div class="col-lg-12">
+                                    @Edit.TextArea(Model.Comentario, "Comentario", id: "Comentario", rows: 4, required: false, htmlClass: "form-control", placeholder: "Comentario...")
+                                </div>
+                            </div>
+                            <div class="form-group col-lg-4">
+                                <div class="col-lg-12 title-form">
+                                    <label for="NivelIdioma">@Resources.HTML_Candidatos_Index_InglesHeader</label>
+                                </div>
+                                <div class="col-lg-12">
+                                    @Edit.DropDownExtend(Model.NivelIdiomaId, "NivelIdiomaId", Model.NivelIdiomaList, htmlClass: "form-control", validate: true, required: false, id: "filterNivelIdioma")
+                                </div>
+                            </div>
+                            <div class="form-group col-lg-4">
+                                <div class="col-lg-12 title-form">
+                                </div>
+                                <div class="col-lg-12">
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+
+    @PersonasLibresFrontActions.MenuFrontActions()
+    @PersonasLibresFrontActions.EditFrontActions()
+  
+}

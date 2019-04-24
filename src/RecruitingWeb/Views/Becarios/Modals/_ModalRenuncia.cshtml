@@ -1,0 +1,45 @@
+﻿@using RecruitingWeb.Helpers
+@using RecruitingWeb.Components.Searchable
+@using RecruitingWeb.Properties
+
+<div class="modal fade" id="modalRenunciaDescarte">
+    <div class="modal-dialog modalRenuncia">
+        <div class="modal-content tablaCandidaturasRenuncia">
+            <div class="modal-header">
+                <div class="row">
+                    <div class="col-lg-6 text-left">
+                        <h4 class="modal-title tituloModal">
+                            <div id="cabeceraRenuncia">
+                                @Resources.HTML_Becarios_ModalRenuncia_MotivoRenuncia
+                            </div>
+                        </h4>
+                    </div>
+                    <div class="col-lg-6 text-right">
+                        <button type="button" class="btnCloseModal" data-dismiss="modal">@Display.GlyphiconButton("glyphicon-remove")</button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body">
+                @Html.Hidden("becarioIdHidden")
+                <div class="row" id="tituloRenuncia">
+                    <div class="col-lg-12 title-form">
+                        @Resources.HTML_Becarios_ModalRenuncia_SeguroRenunciar
+                    </div>
+                </div>
+                <div class="row form-row">
+                    <div class="col-lg-12 title-form">
+                        <label for="ComentariosRenunciaDescarte">@Resources.HTML_Candidaturas_ModalRenuncia_Comentarios</label>
+                    </div>
+                    <div class="col-lg-12">
+                        @Edit.TextArea("", "ComentariosRenunciaDescarte", id: "ComentariosRenunciaDescarte", rows: 5, required: false, htmlClass: "form-control")
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="row">
+                    <button type="button" class="btn btn-default" id="BtnRenunciar">@Resources.Boton_Aceptar</button>
+                </div>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

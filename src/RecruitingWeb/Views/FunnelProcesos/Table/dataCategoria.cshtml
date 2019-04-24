@@ -1,0 +1,12 @@
+@model Recruiting.Application.FunnelProcesos.ViewModels.DesgloseCategoriaViewModel
+
+
+<div class="row">
+
+    @Edit.DateTime(Model.FechaInicio, "FechaInicio", id: "FechaInicio", htmlClass: "form-control hide")
+    @Edit.DateTime(Model.FechaFin, "FechaFin", id: "FechaFin", htmlClass: "form-control hide")
+    @Edit.Text(Model.TecnologiaId.ToString(), "TecnologiaId", id: "TecnologiaId", htmlClass: "form-control hide")
+    @Edit.Text(Model.CategoriaId.ToString(), "CategoriaId", id: "CategoriaId", htmlClass: "form-control hide")
+    @Edit.Text(Model.CentroIdUsuario.ToString(), "CentroIdUsuario", id: "CentroIdUsuario", htmlClass: "form-control-hide")
+
+</div>

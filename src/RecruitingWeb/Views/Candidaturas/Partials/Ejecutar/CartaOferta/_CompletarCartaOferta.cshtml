@@ -1,0 +1,63 @@
+﻿@using RecruitingWeb.Properties
+@using Recruiting.Application.Candidaturas.Enums;
+
+@model Recruiting.Application.Candidaturas.ViewModel.CompletarCartaOferta
+
+<div class="row form-row">
+    <div class="form-group col-lg-4 pt-25">
+        <div class="col-lg-4 title-form">
+            <label>@Resources.HTML_Candidaturas_CompletarCartaOferta_Acepta</label>
+        </div>
+        <div class="col-lg-8">
+            @Edit.CheckBoxTri("TriStatus3", (int)TipoDecisionEnum.ACEPTA_CARTA_OFERTA, (int)TipoDecisionEnum.NO_ACEPTA_CARTA_OFERTA, (int)TipoDecisionEnum.SIN_DECISION_CARTAOFERTA, (Model.SuperaCartaOferta != null) ? Model.SuperaCartaOferta.Value : (int)TipoDecisionEnum.SIN_DECISION_CARTAOFERTA)
+            @Edit.Hidden(Model.SuperaCartaOferta, Model.AccessCompletar + "SuperaCartaOferta")
+        </div>
+    </div>
+    <div class="form-group col-lg-4" name="MotivoRegion">
+        <div class="col-lg-12 title-form">
+            <label for="MotivoRechazoId">@Resources.HTML_Candidaturas_CompletarCartaOferta_MotivoRechazo</label>
+        </div>
+        <div class="col-lg-12">
+            @Edit.DropDownExtend(Model.MotivoRechazoId, Model.AccessCompletar + "MotivoRechazoId", Model.MotivoRechazoCartaOfertaList, required: false, htmlClass: "form-control", id: "MotivoRechazoId")
+        </div>
+    </div>
+</div>
+<div class="row form-row" name="DatosIncorporacionRegion">
+    <div class="form-group col-lg-4">
+        <div class="col-lg-12 title-form">
+            <label for="FechaIncorporacion">@Resources.HTML_Candidaturas_CompletarCartaOferta_FechaIncorporacion</label>
+        </div>
+        <div class="col-lg-12">
+            @Edit.Date(Model.FechaIncorporacion, name: Model.AccessCompletar + "FechaIncorporacion", id: Model.AccessCompletar + "FechaIncorporacion", validate: true, required: false, htmlClass: "form-control")
+        </div>
+    </div>
+    <div class="form-group col-lg-4">
+        <div class="col-lg-12 title-form">
+            <label for="NecesidadId">@Resources.HTML_Candidaturas_CompletarCartaOferta_NecesidadCubre</label>
+        </div>
+        <div class="col-lg-12">
+            <div>
+                <span class="spanSearch">
+                    <button class="btn btnSearch" type="button" data-toggle="modal" data-target="#myModal">@Display.GlyphiconButton("glyphicon-search")</button>
+                </span>
+                @Edit.Hidden("", "necesidadAAbrir", new Dictionary<string, string> { { "id", "necesidadAAbrir" } })
+                @Edit.Hidden("test", "prueba", new Dictionary<string, string> { { "id", "prueba" } })
+                @Edit.Text(Model.NecesidadId.ToString(), name: Model.AccessCompletar + "NecesidadId", required: false, id: "NecesidadId", htmlClass: "form-control inputSearch", isReadOnly: true)
+            </div><!-- /input-group -->
+        </div>
+    </div>
+    @{
+        var AsignadaCorrectamente = (Model.AsignadaCorrectamente.HasValue) ? Model.AsignadaCorrectamente : false;
+    }
+    <div class="form-group col-lg-4 pt-25">
+        <div class="col-lg-5 title-form">
+            <label for="AsignadaCorrectamente">@Resources.HTML_Candidaturas_CompletarCartaOferta_CumpleNecesidad</label>
+        </div>
+        @Edit.CheckBoxDig((bool)AsignadaCorrectamente, name: Model.AccessCompletar + "AsignadaCorrectamente", id: "AsignadaCorrectamente", required: false, disabled: false)
+    </div>
+</div>
+
+
+
+
+

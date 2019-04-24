@@ -1,0 +1,87 @@
+﻿@using RecruitingWeb.Properties
+
+@model RecruitingWeb.Models.FiltroBitacoraModels
+
+
+<div class="form-filter" id="form-filter">
+    <div class="row" data-id="formFilter">
+        <div class="row">
+            <div class="form-group col-lg-4">
+                <div class="col-lg-12 title-form">
+                    <label for="filterEstado">@Resources.HTML_Bitacoras_DatosCandidatura_Estado</label>
+                </div>
+                <div class="col-lg-12 content-form">
+                    @Model.EstadoCandidatura
+                </div>
+            </div>
+            <div class="form-group col-lg-4">
+                <div class="col-lg-12 title-form">
+                    <label for="filterEstapa">@Resources.HTML_Bitacoras_DatosCandidatura_Fase</label>
+                </div>
+                <div class="col-lg-12 content-form">
+                    @Model.EtapaCandidatura
+                </div>
+            </div>
+
+            <div class="form-group col-lg-4">
+                <div class="col-lg-12 title-form">
+                    <label for="filterPerfil">@Resources.HTML_Bitacoras_DatosCandidatura_Perfil</label>
+                </div>
+                <div class="col-lg-12 content-form">
+                    @Model.Perfil
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-lg-4">
+                <div class="col-lg-12 title-form">
+                    <label for="filterEntrevistador">@Resources.HTML_Bitacoras_DatosCandidatura_Entrevistador</label>
+                </div>
+                <div class="col-lg-12 content-form">
+                    @{
+                        if (string.IsNullOrEmpty(Model.Entrevistador) || string.IsNullOrWhiteSpace(Model.Entrevistador))
+                        {
+                            <p>@Resources.HTML_General_CampoVacio_Details_NA</p>;
+                        }
+                        else
+                        {
+                            @Model.Entrevistador
+                        }
+
+                    }
+                </div>
+            </div>
+            <div class="form-group col-lg-4">
+                <div class="col-lg-12 title-form">
+                    <label for="filterCandidato">@Resources.HTML_Bitacoras_DatosCandidatura_Candidato</label>
+                </div>
+                <div class="col-lg-12 content-form">
+                    @Model.NombreCandidato
+                </div>
+            </div>
+            <div class="form-group col-lg-4">
+                <div class="col-lg-12 title-form">
+                    <label for="filterTipoTecnologia">@Resources.HTML_Bitacoras_DatosCandidatura_Tecnologia</label>
+                </div>
+                <div class="col-lg-12 content-form">
+                    @Model.TipoTecnologia
+                </div>
+            </div>
+        </div>
+
+        @if (Model.CentroIdUsuarioLogueado == string.Empty)
+        {
+            <div class="row">
+                <div class="form-group col-lg-4">
+                    <div class="col-lg-12 title-form">
+                        <label for="CentroId">@Resources.HTML_Bitacoras_DatosCandidatura_Centro</label>
+                    </div>
+                    <div class="col-lg-12 content-form">                        
+                        @Model.CentroUsuarioCreacion
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+

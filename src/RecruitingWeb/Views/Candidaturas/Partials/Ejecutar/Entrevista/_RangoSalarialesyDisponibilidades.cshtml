@@ -1,0 +1,93 @@
+﻿@using RecruitingWeb.Helpers;
+@using RecruitingWeb.Properties
+
+@using Recruiting.Application.Candidaturas.Enums;
+
+@model Recruiting.Application.Candidaturas.ViewModel.RangoSalarialesyDisponibilidades
+@{
+    Model.AccessRango = Model.AccessRango ?? "";
+    var expRegularDecimal = System.Configuration.ConfigurationManager.AppSettings["expRegularDecimal"];
+    string htmlMoneda = FormatHelper.GetHtmlMoneda(Model.Moneda);
+}
+<div class="row form-row">
+    <div class="form-group col-lg-4">
+        <div class="col-lg-12 title-form">
+            <label for="CategoriaId">@Resources.HTML_Candidaturas_RangoSalarialesyDisponibilidades_Categoria</label>
+        </div>
+        <div class="col-lg-12">
+            @Edit.DropDownExtend(Model.CategoriaId, Model.AccessRango + "CategoriaId", Model.CategoriaList, required: true, htmlClass: "form-control", id: "CategoriaId")
+        </div>
+    </div>
+</div>
+<div class="row form-row">      
+        <div class="form-group col-lg-4">
+            <div class="col-lg-12 title-form">
+                <label for="SalarioPropuesto">@Resources.HTML_Candidaturas_RangoSalarialesyDisponibilidades_SalarioPropuesto</label>
+            </div>
+            <div class="col-lg-12">
+                <div class="inner-addon right-addon">
+                    @Edit.Decimal(Model.SalarioPropuesto, name: Model.AccessRango + "SalarioPropuesto", id: "SalarioPropuesto", required: true, htmlClass: "form-control", expReg: expRegularDecimal, decimalSeparator: ",", numberSeparator: ".")
+                    @Html.Raw(htmlMoneda)
+                </div>
+            </div>
+        </div>
+        <div class="form-group col-lg-4">
+            <div class="col-lg-12 title-form">
+                <label for="SalarioDeseado">@Resources.HTML_Candidaturas_RangoSalarialesyDisponibilidades_SalarioDeseado</label>
+            </div>
+            <div class="col-lg-12">
+                <div class="inner-addon right-addon">
+                    @Edit.Decimal(Model.SalarioDeseado, name: Model.AccessRango + "SalarioDeseado", id: "SalarioDeseado", required: true, htmlClass: "form-control", expReg: expRegularDecimal, decimalSeparator: ",", numberSeparator: ".")
+                    @Html.Raw(htmlMoneda)
+                </div>
+            </div>
+        </div>
+        <div class="form-group col-lg-4">
+            <div class="col-lg-12 title-form">
+                <label for="SalarioActual">@Resources.HTML_Candidaturas_RangoSalarialesyDisponibilidades_SalarioActual</label>
+            </div>
+            <div class="col-lg-12">
+                <div class="inner-addon right-addon">
+                    @Edit.Decimal(Model.SalarioActual, name: Model.AccessRango + "SalarioActual", id: "SalarioActual", required: false, htmlClass: "form-control", expReg: expRegularDecimal, decimalSeparator: ",", numberSeparator: ".")
+                    @Html.Raw(htmlMoneda)
+                </div>
+            </div>
+        </div>    
+</div>
+
+<div class="row form-row">
+    <div class="form-group col-lg-4">
+        <div class="col-lg-12 title-form">
+            <label for="IncorporacionId">@Resources.HTML_Candidaturas_RangoSalarialesyDisponibilidades_Incorporacion</label>
+        </div>
+        <div class="col-lg-12">
+            @Edit.DropDownExtend(Model.IncorporacionId, Model.AccessRango + "IncorporacionId", Model.IncorporacionList, required: true, htmlClass: "form-control", id: "IncorporacionId")
+        </div>
+    </div>
+    <div class="form-group col-lg-4 pt-25">
+        <div class="col-lg-5 title-form">
+            <label for="DisponibilidadViajes">@Resources.HTML_Candidaturas_RangoSalarialesyDisponibilidades_DisponibilidadViajes</label>
+        </div>
+        <div class="col-lg-7">
+            @Edit.CheckBoxDig(value: Model.DisponibilidadViajes, name: Model.AccessRango + "DisponibilidadViajes", id: "DisponibilidadViajes", required: false, disabled: false)
+        </div>
+    </div>
+    <div class="form-group col-lg-4 pt-25">
+        <div class="col-lg-5 title-form">
+            <label>@Resources.HTML_Candidaturas_RangoSalarialesyDisponibilidades_CambioResidencia</label>
+        </div>
+        <div class="col-lg-7">
+            @Edit.CheckBoxDig(value: Model.CambioResidencia, name: Model.AccessRango + "CambioResidencia", id: "CambioResidenciaNo", required: false, disabled: false)
+        </div>
+    </div>
+</div>
+<div class="row form-row">
+    <div class="form-group col-lg-8">
+        <div class="col-lg-12 title-form">
+            <label for="ObservacionesEntrevista">@Resources.HTML_Candidaturas_RangoSalarialesyDisponibilidades_Observaciones</label>
+        </div>
+        <div class="col-lg-12">            
+            @Edit.TextAreaEditor(Model.ObservacionesEntrevista, Model.AccessRango + "ObservacionesEntrevista", id: "ObservacionesEntrevista", rows: 8, required: false, htmlClass: "form-control")
+        </div>
+    </div>
+</div>

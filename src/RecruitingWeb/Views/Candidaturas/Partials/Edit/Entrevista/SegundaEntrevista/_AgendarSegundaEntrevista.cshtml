@@ -1,0 +1,73 @@
+﻿@using RecruitingWeb.Properties
+@using RecruitingWeb.Components.Searchable
+
+@using Recruiting.Application.Centros.Enums
+@using Recruiting.Application.Candidaturas.Enums
+
+@model Recruiting.Application.Candidaturas.ViewModel.AgendarSegundaEntrevistaViewModel
+@{  
+
+    string EntrevistadorId = Model.AccessAgendar2 ?? "";
+    EntrevistadorId = EntrevistadorId + "EntrevistadorId";
+    var oficinas = (IEnumerable<SelectListItem>)HttpContext.Current.Session["OficinaIdCentroUsuario"];
+    int centroId = (int)HttpContext.Current.Session["CentroIdUsuario"];
+
+    var oficina = (Model.AgendarSegundaEntrevista.OficinaId.HasValue) ? Model.AgendarSegundaEntrevista.OficinaId.Value.ToString() : "";
+    if (!oficinas.Any(x => x.Value == oficina))
+    {
+        oficina = "";
+    }
+
+    string isReadonly = "";
+
+}
+<div class="row form-row">
+    <div class="form-group col-lg-4">
+        <div class="col-lg-12 title-form">
+            <label for="EntrevistadorId">@Resources.HTML_Candidaturas_AgendarSegundaEntrevista_Entrevistador</label>
+        </div>
+        <div class="col-lg-12">
+            @(Html.Searchable(EntrevistadorId, Url)
+                                        .Id(EntrevistadorId)
+                                        .AddCssClass("form-control required")
+                                        .Action("GetUsuariosEntrevistadoresByNombreUsuario", "Admin")
+                                        .Value(Model.AgendarSegundaEntrevista.EntrevistadorName, Model.AgendarSegundaEntrevista.EntrevistadorId.ToString(), isReadonly)
+                                        .Required(true))
+        </div>
+    </div>
+    <div class="form-group col-lg-4">
+        <div class="col-lg-12 title-form">
+            <label for="FechaSegundaEntrevista">@Resources.HTML_Candidaturas_AgendarSegundaEntrevista_FechaSegundaEntrevista</label>
+        </div>
+        <div class="col-lg-12">
+            @Edit.DateTime(Model.AgendarSegundaEntrevista.FechaEntrevista, Model.AccessAgendar2 + "FechaEntrevista", "FechaSegundaEntrevista", validate: true, required: true, htmlClass: "form-control")
+        </div>
+    </div>
+    <div class="form-group col-lg-4 pt-25">
+        <div class="col-lg-4 title-form">
+            <label>@Resources.HTML_Candidaturas_AgendarSegundaEntrevista_Presencial</label>
+        </div>
+        <div class="col-lg-8">
+            @Edit.CheckBoxDig(value: Model.AgendarSegundaEntrevista.Presencial, name: Model.AccessAgendar2 + "Presencial", id: "Presencial", required: false, disabled: false)
+        </div>
+    </div>
+</div>
+<div class="row form-row">
+    <div class="form-group col-lg-4 pt-22">
+        <div class="col-lg-6 title-form">
+            <label for="AvisarAlCandidato">@Resources.HTML_Candidaturas_AgendarSegundaEntrevista_NotificarEntrevistaCandidato</label>
+        </div>
+        <div class="col-lg-6">
+            @Edit.CheckBoxDig(value: Model.AgendarSegundaEntrevista.AvisarAlCandidato, name: Model.AccessAgendar2 + "AvisarAlCandidato", id: "AvisarAlCandidatoEntrevistaPrincial", required: false, disabled: false)
+        </div>
+    </div>
+    <div class="form-group col-lg-4" id="ocultarPlantilla">
+        <div class="col-lg-12 title-form">
+            <label for="Oficina">@Resources.HTML_Candidaturas_AgendarPrimeraEntrevista_PlantillaCorreos</label>
+        </div>
+        <div class="col-lg-12">
+            @Edit.DropDownExtend(Model.AgendarSegundaEntrevista.OficinaId, Model.AccessAgendar2 + "OficinaId", oficinas, htmlClass: "form-control ", validate: false, required: false, id: "Oficina", showEmptyOption: false, isReadOnly: true)
+        </div>
+    </div>
+</div>
+

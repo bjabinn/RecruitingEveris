@@ -1,0 +1,794 @@
+﻿@using System.Web.Mvc
+@using RecruitingWeb.Helpers
+@using RecruitingWeb.Properties
+@using Recruiting.Application.Candidatos.Enums
+
+@helper MenuFrontActions()
+    {
+        <script type="text/javascript">
+            var menuItemToSelect = $("#main-nav li a[data-option-name=Candidatos]");
+            menuItemToSelect.addClass("current");
+        </script>
+}
+
+@helper IndexFrontActions(System.Web.Mvc.UrlHelper Url, string nUsuario, string tiempoExpiracionCookie)
+    {
+        <script type="text/javascript">
+
+            //Navegacion filtro
+            $(window).keydown(function (event) {
+                if (event.keyCode == 13) {
+                    buscarIntro();
+                    return true;
+                }
+            });
+
+            function buscarIntro() {
+                var table = $('#tablaCandidatos');
+                table.data("fn-search")();
+            }
+
+
+            $(document).on('click', '[name=buscar]', function () {
+                buscarIntro();
+            });
+
+            $(document).on('click', '[name=limpiar]', function () {
+                resetFields('#form-filter');
+                var table = $('#tablaCandidatos');
+                table.data("fn-clear")();
+            });
+
+            //Carga Tabla
+
+            $('#tablaCandidatos').on('draw.dt', function (event, data) {
+                var total = $('#tempdataCandidatos');
+                colorearCandidatosVisitados();
+                total.html(data._iRecordsTotal);
+            });
+
+            function getFiltersCandidatos() {
+                var filterNombre = $("[name=filterNombre]").val();
+                var filterApellidos = $("[name=filterApellidos]").val();
+                var filterTipoTitulacion = $("[name=filterTitulacion]").val();
+                var filterTipoIdentificacion = $("[name=filterTipoIdentificacion]").val();
+                var filterNumeroIdentificacion = $("[name=filterNumIdentificacion]").val();
+                var filterCentro = $("[name=filterCentro]").val();
+                var filterTipoTecnologia = $("[name=filterTipoTecnologia]").val();
+                var filterEmail = $("[name=filterEmail]").val();
+                var filterTelefono = $("[name=filterTelefono]").val();
+                var filterCentroEducativoId = $("[name=filterCentroEducativoId]").val();
+                var filterCentroEducativoName = $("[name=filterCentroEducativoId-Text]").val();
+                var filterAnioRegresado = $("[name=filterAnioRegresado]").val();
+                var filterNivelIdioma = $("[name=filterNivelIdioma]").val();
+
+                return {
+                    Nombre: filterNombre, Apellidos: filterApellidos, TipoTitulacion: filterTipoTitulacion,
+                    TipoIdentificacion: filterTipoIdentificacion, NumeroIdentificacion: filterNumeroIdentificacion,
+                    CentroSearch: filterCentro, TipoTecnologia: filterTipoTecnologia, Email: filterEmail,
+                    Telefono: filterTelefono, CentroEducativoId: filterCentroEducativoId,
+                    CentroEducativoName: filterCentroEducativoName, AnioRegresado: filterAnioRegresado,
+                    NivelIdioma: filterNivelIdioma
+                };
+            }
+
+            //Navegacion Buttons
+
+            $(document).on('click', '#EditButton', function () {
+                var item = $(this).closest("tr").find("#CandidatoId").val();
+                saveCookie(item);
+            });
+
+            $(document).on('click', '#CreateCandidaturaButton', function () {
+                var id = $(this).closest("tr").find("#CandidatoId").val();
+                var nombre = $(this).closest("tr").find("#NombresYApellidos").val();
+                var url = '@Url.Action("CreateByCandidato", "Candidaturas", new { id = "__id__", nombre = "_nombre_" })';
+                window.location.href = url.replace('__id__', id).replace('_nombre_', nombre);
+            });
+
+            $(document).on('click', '#DonwloadCVButton', function () {
+                    var id = $(this).closest("tr").find("#CandidatoId").val();
+                    var url = '@Url.Action("DownloadCV", "Candidatos", new { id = "__id__" })';
+                    window.location.href = url.replace('__id__', id);
+            });
+
+
+            $(document).on('click', '#DeleteButton', function () {
+
+                var item = $(this).closest("tr").find("#CandidatoId").val();
+
+                BootstrapDialog.confirm({
+                    title: '@Resources.Candidato_EliminarTitulo',
+                    message: '@Resources.Candidato_EliminarMensaje',
+                    type: BootstrapDialog.TYPE_CONFIRMDELETE,
+                    callback: function (result) {
+                       if (result) {
+                        $.post('@Url.Action("ComprobarCandidatoUsado", "Candidatos")', { CandidatoId: item }).
+                            success(function (Data) {
+                                if (Data.IsValid) {
+                                    if(Data.Usado == true)
+                                    {
+                                        BootstrapDialog.show({
+                                            type: BootstrapDialog.TYPE_ERROR,
+                                            title: '@Resources.CandidatoEnUsoTitulo',
+                                            message: '@Resources.CandidatoEnUsoTexto',
+                                        });
+                                    }
+                                    else
+                                    {
+                                        $.post('@Url.Action("Delete", "Candidatos")', { id: item }).
+                                        success(function (Data) {
+                                            if (Data.IsValid) {
+                                                var tableComponent = $('#tablaCandidatos').DataTable();
+                                                tableComponent.ajax.reload(null, true);
+                                            }
+                                            else if (Data == "") {
+                                                BootstrapDialog.show({
+                                                    type: BootstrapDialog.TYPE_ERROR,
+                                                    title: '@Resources.Permiso_Titulo',
+                                                    message: '@Resources.Permiso_Mensaje',
+                                                });
+                                            }
+                                        })
+                                    }
+                                }
+                                else if (Data == "") {
+                                    BootstrapDialog.show({
+                                        type: BootstrapDialog.TYPE_ERROR,
+                                        title: '@Resources.Permiso_Titulo',
+                                        message: '@Resources.Permiso_Mensaje',
+                                    });
+                                }
+                            })
+                    } else {
+                            BootstrapDialog.closeAll();
+                        }
+                    }
+                });
+            });
+
+            $(document).on('click', '#CandidaturasButton', function () {
+                var id = $(this).closest("tr").find("#CandidatoId").val();
+                var url = '@Url.Action("IndexByCandidato", "Candidaturas", new { id = "__id__" })';
+                window.location.href = url.replace('__id__', id);
+
+                });
+
+            $(document).on('click', '#DetailButton', function () {
+                var item = $(this).closest("tr").find("#CandidatoId").val();
+                saveCookie(item);
+            });
+
+            $(document).on('click', '#btnDescargarExcel', function () {
+                var pageFilter = $('#tablaCandidatos').data('filters');
+                var filters = {
+                    filterNombre: pageFilter['custom-filter-Nombre'],
+                    filterApellidos: pageFilter['custom-filter-Apellidos'],
+                    filterTipoTitulacion: pageFilter['custom-filter-TipoTitulacion'],
+                    filterTipoIdentificacion: pageFilter['custom-filter-TipoIdentificacion'],
+                    filterNumeroIdentificacion: pageFilter['custom-filter-NumeroIdentificacion'],
+                    filterTipoTecnologia: pageFilter['custom-filter-TipoTecnologia'],
+                    filterCentro: pageFilter['custom-filter-CentroSearch'],
+                    filterEmail: pageFilter['custom-filter-Email'],
+                    filterTelefono: pageFilter['custom-filter-Telefono'],
+                    filterCentroEducativoId: pageFilter['custom-filter-CentroEducativoId'],
+                    filterCentroAnioRegresado: pageFilter['custom-filter-AnioRegresado'],
+                    filterNivelIdioma : pageFilter['custom-filter-NivelIdioma']
+                };
+
+                var strFiltros = jQuery.param(filters);
+                var url = '@Url.Action("ExportToExcel", "Candidatos")?' + strFiltros;
+                window.location.assign(url);
+
+            });
+
+
+            $(document).on('click', '#CandidatoCandidaturasButton', function () {
+                var id = $(this).closest("tr").find("#CandidatoId").val();
+                $('#FilterCandidatoCandidaturas').val(id);
+                $('#BuscarModalCandidatura').val(true);
+                $('#modalTablaCandidaturas').modal('show');
+                var tablaCandidaturasModal = $('#tablaCandidaturasModal');
+                tablaCandidaturasModal.data("fn-search")();
+
+            });
+
+            $(document).on('click', '#CandidatoBecariosButton', function () {
+                var id = $(this).closest("tr").find("#CandidatoId").val();
+                $('#FilterCandidatoBecarios').val(id);
+                $('#BuscarModalBecario').val(true);
+                $('#modalTablaBecarios').modal('show');
+                var tablaBecariosModal = $('#tablaBecariosModal');
+                tablaBecariosModal.data("fn-search")();
+
+            });
+
+
+
+            //Funciones
+
+            function saveCookie(item)
+            {
+                var cookieActual = getCookies();
+                if(cookieActual != null)
+                {
+                    if(!cookieActual.includes(item))
+                    {
+                        cookieActual += "," + item;
+                    }
+                }
+                else
+                {
+                    cookieActual = item;
+                }
+
+                $.cookie('@nUsuario' + '-candidatos', cookieActual, {expires : @tiempoExpiracionCookie});
+            }
+
+            function getCookies()
+            {
+                var cookieActual = $.cookie('@nUsuario' + '-candidatos');
+                return cookieActual;
+            }
+
+            function colorearCandidatosVisitados()
+            {
+                var listaCandidatos = getCookies();
+                if (listaCandidatos != null)
+                {
+                    $('#tablaCandidatos tr:not(:first)').each(function(){
+                        if($(this).find("#CandidatoId") != null)
+                        {
+                            if(listaCandidatos.includes($(this).find("#CandidatoId").val()))
+                            {
+                                $(this).addClass("linkVisitado");
+                            }
+                        }
+                    });
+                }
+            }
+
+            function getFiltersModalCandidaturas() {
+                var CandidatoId = $('#FilterCandidatoCandidaturas').val();
+                var BuscarModalCandidatura = $('#BuscarModalCandidatura').val();
+
+                return { CandidatoId: CandidatoId, BuscarModalCandidatura: BuscarModalCandidatura };
+            }
+
+            function getFiltersModalBecarios() {
+                var CandidatoId = $('#FilterCandidatoBecarios').val();
+                var BuscarModalBecario = $('#BuscarModalBecario').val();
+
+                return { CandidatoId: CandidatoId, BuscarModalBecario: BuscarModalBecario };
+            }
+
+
+
+        </script>
+}
+
+@helper ComprobacionesComunesFrontActions(System.Web.Mvc.UrlHelper Url)
+    {
+        <script type="text/javascript">
+        
+
+        $(document).on('click', '#btncreateContactos', function () {
+            createItem("listSubmitContact");
+        });
+
+        $(document).on('click', '#btncreateExperiencia', function () {
+            createItem("listSubmitExp");
+        });
+
+        $(document).on('click', '#btncreateIdioma', function () {
+            createItemLang("listSubmitIdioma");
+        });
+
+
+        $(document).on('click', '#btnDelete', function () {
+            var item = $(this).closest("tr");
+            deleteItem(item);
+        });
+
+        $(document).on('change', '[name="ContactCandidatoViewModel[{0}].ValorContacto"]', function () {
+        var id = $('[name="CandidatoId"]').val();
+        var contacto = $(this).closest('tr').find('[name="ContactCandidatoViewModel[{0}].ValorContacto"]');
+ 
+        if (contacto.val() !== 'undefined' && contacto.val().length > 0 ) {
+                $.ajax({
+                url: '@Url.Action("ComprobarExisteUsuario", "Candidatos")',
+                data: { contacto: contacto.val(), idCandidato : id },
+                type: 'POST',
+                    success: function (data)
+                    {
+                        if (data) {
+                            BootstrapDialog.show({
+                                title: '@Resources.ExisteCandidato',
+                                message: data,
+                                type: BootstrapDialog.TYPE_CONFIRMFINALICE,
+                                closable: false,
+                                closeByBackdrop: false,
+                                closeByKeyboard: false,
+                                buttons: [{
+                                    label: '@Resources.Boton_Aceptar',
+                                    cssClass: 'btn btnAdd',
+                                    action: function (dialogRef) {
+                                        contacto.val('');
+                                        dialogRef.close();
+                                    }
+                                }]
+                            });
+
+                        }
+                        //alert(data);
+                    },//success
+                    error: function (data)
+                    {
+                        alert("Error: problemas al conectar con la base de datos");
+                    }//error
+                });//ajax   
+        }
+
+            
+        });//funcion numIdentificacion
+
+
+        //Funciones
+
+        function createItem(item) {
+            var original = $('#' + item + ' tbody tr:first');
+            var clone = original.clone(false);
+            clone.removeClass('hidden');
+            var cloneInputs = clone.find("input, select, textarea");
+            cloneInputs.removeAttr('disabled');
+            $('#' + item + ' tbody').append(clone);
+
+         }
+
+        function createItemLang(item) {
+            var ingles = 15;
+            var nameIdioma = '[name$="IdiomaCandidatoViewModel[{0}].IdiomaId"]';
+            var original = $('#' + item + ' tbody tr:first');
+            var clone = original.clone(false);
+
+            clone.removeClass('hidden');
+            var cloneInputs = clone.find("input, select, textarea");
+            cloneInputs.removeAttr('disabled');
+            cloneInputs.attr('required', true);
+           
+            clone.find(nameIdioma).val(ingles);
+   
+            $('#' + item + ' tbody').append(clone);
+
+        }
+
+
+        function deleteItem(item) {
+            BootstrapDialog.confirm({
+                title: '@Resources.Eliminar_Generico_Title',
+                message: '@Resources.Eliminar_Generico_Message',
+                type: BootstrapDialog.TYPE_CONFIRMDELETE,
+                callback: function (result) {
+                    if (result) {
+                        item.remove();
+                        return false;
+                    } else {
+                        BootstrapDialog.closeAll();
+                    }
+                }
+            });
+        }
+
+        //Logica Modal Centro
+        $(document).on('click', '#buscarModalCentro', function () {
+            var table = $('#tablaCentroEducativo');
+            table.data("fn-search")();
+        });
+
+        $(document).on('click', '#limpiarModalCentro', function () {
+            var table = $('#tablaCentroEducativo');
+            table.data("fn-clear")();
+            resetFields('#form-filterCentro');
+        });
+
+        function getFiltersCentros() {
+
+            var filterCentro = $("#filterCentro").val();
+            var filterCiudad = $("#filterCiudad").val();
+            var filterPais = $("#filterPais").val();
+
+            return {
+                Centro: filterCentro, Ciudad: filterCiudad, Pais: filterPais,
+            };
+        }
+
+        $(document).on('click', '#BtnCentro', function () {
+            var id = $("#modalCentros input:radio:checked").closest("tr").find("#CentroId").val();
+            var centro = $("#modalCentros input:radio:checked").closest("tr").find("#Centro").val();
+            $('#NombreCentroEducativo').val(centro);
+            $('#CandidatoCentroEducativoId').val(id);
+            $('#modalCentros').modal('hide');
+        });
+  //Logica crear/editar Centro
+
+        $(document).on('click', '#BtnCreateCentro', function () {
+            $('[name="CentroIdCrearEdit"]').val(0);
+            $('#CentroCrearEdit').val("");
+            $('#CiudadCrearEdit').val("");
+            $('#PaisCrearEdit').val("");
+        });
+
+
+        $(document).on('click', '#EditCentroButton', function () {
+
+            var centroId = $(this).closest("tr").find("#CentroId").val();
+            var centro = $(this).closest("tr").find("#Centro").val();
+            var ciudad = $(this).closest("tr").find("#Ciudad").val();
+            var pais = $(this).closest("tr").find("#Pais").val();
+            $('[name="CentroIdCrearEdit"]').val(centroId);
+            $('#CentroCrearEdit').val(centro);
+            $('#CiudadCrearEdit').val(ciudad);
+            $('#PaisCrearEdit').val(pais);
+
+        });
+
+        $(document).on('click', '#BtnCrearEditCentro', function () {
+            if ($('#CentroCrearEdit').val() == "" ||
+                    $('#CiudadCrearEdit').val() == "" ||
+                    $('#PaisCrearEdit').val() == "") {
+                BootstrapDialog.show({
+                    type: BootstrapDialog.TYPE_ERROR,
+                    title: '@Resources.CentroVacioTitulo',
+                    message: '@Resources.CentroVacioTexto',
+                });
+            }
+            else {
+                BootstrapDialog.confirm({
+                    title: '@Resources.Becario_ConfirmacionGuardarCentroTitulo',
+                    message: '@Resources.Becario_ConfirmacionGuardarCentroTexto',
+                    type: BootstrapDialog.TYPE_CONFIRMFINALICE,
+                    callback: function (result) {
+                        if (result) {
+                            var centroId = $('[name=CentroIdCrearEdit]').val();
+                            var centro = $('#CentroCrearEdit').val();
+                            var ciudad = $('#CiudadCrearEdit').val();
+                            var pais = $('#PaisCrearEdit').val();
+
+
+                            $.post('@Url.Action("CrearEditCentro", "Candidatos")', { CentroId: centroId, Centro: centro, Ciudad: ciudad, Pais: pais }).
+                                                success(function (IsValid) {
+                                                    if (IsValid) {
+                                                        $('[name=CentroIdEdit]').val('');
+                                                        $('#CentroCrear').val('');
+                                                        $('#CiudadCrear').val('');
+                                                        $('#PaisCrear').val('');
+                                                        BootstrapDialog.closeAll();
+                                                        var table = $('#tablaCentroEducativo');
+                                                        table.data("fn-search")();
+                                                    }
+                                                    else if (Data == "") {
+                                                        BootstrapDialog.show({
+                                                            type: BootstrapDialog.TYPE_ERROR,
+                                                            title: '@Resources.Permiso_Titulo',
+                                                            message: '@Resources.Permiso_Mensaje',
+                                                        });
+                                                    }
+                                                })
+
+                        } else {
+                            BootstrapDialog.closeAll();
+                        }
+                    }
+                });
+                $('#modalCrearEditCentros').modal('hide');
+            }
+
+        });
+
+        //Logica borrar Centro
+        $(document).on('click', '#DeleteCentroButton', function () {
+
+            var item = $(this).closest("tr").find("#CentroId").val();
+
+            BootstrapDialog.confirm({
+                title: '@Resources.Becarios_EliminarCentroTitulo',
+                message: '@Resources.Becarios_EliminarCentroTexto',
+                type: BootstrapDialog.TYPE_CONFIRMDELETE,
+                callback: function (result) {
+                    if (result) {
+                        $.post('@Url.Action("ComprobarCentroUsado", "Candidatos")', { CentroId: item }).
+                            success(function (Data) {
+                                if (Data.IsValid) {
+                                    if(Data.Usado == true)
+                                    {
+                                        BootstrapDialog.show({
+                                            type: BootstrapDialog.TYPE_ERROR,
+                                            title: '@Resources.CentroCandidatoEnUsoTitulo',
+                                            message: '@Resources.CentroCandidatoEnUsoTexto',
+                                        });
+                                    }
+                                    else
+                                    {
+                                        $.post('@Url.Action("DeleteCentro", "Candidatos")', { CentroId: item }).
+                                        success(function (Data) {
+                                            if (Data.IsValid) {
+                                                var table = $('#tablaCentroEducativo');
+                                                table.data("fn-search")();
+                                            }
+                                            else if (Data == "") {
+                                                BootstrapDialog.show({
+                                                    type: BootstrapDialog.TYPE_ERROR,
+                                                    title: '@Resources.Permiso_Titulo',
+                                                    message: '@Resources.Permiso_Mensaje',
+                                                });
+                                            }
+                                        })
+                                    }
+                                }
+                                else if (Data == "") {
+                                    BootstrapDialog.show({
+                                        type: BootstrapDialog.TYPE_ERROR,
+                                        title: '@Resources.Permiso_Titulo',
+                                        message: '@Resources.Permiso_Mensaje',
+                                    });
+                                }
+                            })
+                    } else {
+                        BootstrapDialog.closeAll();
+                    }
+                }
+            });
+        });
+         //Logica comprobaciones Centro
+
+
+        $(document).on('change', '#CentroCrearEdit', function () {
+            var NombreCentro = $('#CentroCrearEdit').val();
+            var Ciudad = $('#CiudadCrearEdit').val();
+            var Pais = $('#PaisCrearEdit').val();
+            checkNombreCentro(NombreCentro, Ciudad, Pais);
+        });
+        $(document).on('change', '#CiudadCrearEdit', function () {
+            var NombreCentro = $('#CentroCrearEdit').val();
+            var Ciudad = $('#CiudadCrearEdit').val();
+            var Pais = $('#PaisCrearEdit').val();
+            checkNombreCentro(NombreCentro, Ciudad, Pais);
+        });
+        $(document).on('change', '#PaisCrearEdit', function () {
+            var NombreCentro = $('#CentroCrearEdit').val();
+            var Ciudad = $('#CiudadCrearEdit').val();
+            var Pais = $('#PaisCrearEdit').val();
+            checkNombreCentro(NombreCentro, Ciudad, Pais);
+        });
+
+
+
+        function checkNombreCentro(NombreCentro, Ciudad, Pais) {
+            $.ajax({
+                url: '@Url.Action("ComprobarExisteCentro", "Candidatos")',
+                data: { NombreCentro: NombreCentro, Ciudad: Ciudad, Pais: Pais },
+                type: 'POST',
+                success: function (data) {
+                    if (data) {
+                        BootstrapDialog.show({
+                            title: '@Resources.ExisteCentro',
+                            message: data,
+                            type: BootstrapDialog.TYPE_CONFIRMFINALICE,
+                            closable: false,
+                            closeByBackdrop: false,
+                            closeByKeyboard: false,
+                            buttons: [{
+                                label: '@Resources.Boton_Aceptar',
+                                cssClass: 'btn btnAdd',
+                                action: function (dialogRef) {
+                                    //lo ponemos vacio
+                                    $('#CentroCrearEdit').val('');
+                                    dialogRef.close();
+                                }
+                            }]
+
+                        });
+                    }
+                    //alert(data);
+                },//success
+                error: function (data) {
+                    alert("Error: problemas al conectar con la base de datos");
+                }//error
+            });//ajax
+        }
+
+        </script>
+}
+
+@helper CreateEditFrontActions()
+    {
+        <script type="text/javascript">
+
+
+        $(document).on('click', '#numIdentificacion', function () {
+
+            var seleccionado = $('#TipoIdentificacion').val();
+            if (seleccionado == 53) {
+                $('#numIdentificacion').attr('pattern', '/^[a-zA-Z]{3}[0-9]{6}[a-zA-Z]?$/');
+            } else {
+                $('#numIdentificacion').attr('pattern', '/^\\d{8}[a-zA-Z]{1}$/');
+                $('#TipoIdentificacion').val('18');
+           }
+        });
+       //Finalizar
+
+        function finalizar(source) {
+
+            var validar = comprobarDatosContactoDuplicados();
+            if ($("form").parsley().validate()) {
+                if (validar) {
+                    BootstrapDialog.confirm({
+                        title: '@Resources.Candidato_ConfirmacionGuardarTitutlo',
+                        message: '@Resources.Candidato_ConfirmacionGuardarTexto',
+                        type: BootstrapDialog.TYPE_CONFIRMFINALICE,
+                        callback: function (result) {
+                            if (result) {
+                                forTable();
+                                var submitType = $("[name=SubmitType]");
+                                submitType.val("finalizar");
+                                $("form").submit();
+                            } else {
+                                BootstrapDialog.closeAll();
+                            }
+                        }
+                    });
+                } else {
+                    BootstrapDialog.show({
+                         type: BootstrapDialog.TYPE_ERROR,
+                         title: '@Resources.Candidato_DatosContactoDuplicadoTitulo',
+                         title: '@Resources.Candidato_DatosContactoDuplicadoTitulo',
+                         message: '@Resources.Candidato_DatosContactoDuplicadoTexto',
+                    });
+                }
+            }
+        }
+
+            function comprobarDatosContactoDuplicados() {
+            var email = 0;
+            var tlf = 0;
+            $('#listSubmitContact').find('[name = "ContactCandidatoViewModel[{0}].TipoMedioContactoId"]:not(:first)').each(function () {
+                console.log($(this).val());
+                if ($(this).val() == @((int)TipoContactoEnum.Email)) {
+                    email++;
+                } else if ($(this).val() == @((int)TipoContactoEnum.Telefono)) {
+                    tlf++;
+                }
+            });
+
+            if (email > 1 && tlf > 1) {
+                return false;
+            } else if (email > 1) {
+                return false;
+            } else if (tlf > 1) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+
+         //lógica de idiomas
+       $(document).on('change', '[name$=".NivelIdiomaId"], [name$=".IdiomaId"]', function () {
+                var idiomaID = $(this).closest('tr').find('[name$=".IdiomaId"]').val();
+
+                if (!verifyLanguagesLevels(idiomaID)) {
+                    $(this).val("");
+
+                    BootstrapDialog.alert({
+                        title: '@Resources.Candidatura_NivelIdiomaRepetidoErrorTitulo',
+                        message: '@Resources.Candidatura_NivelIdiomaRepetidoErrorTexto',
+                        type: BootstrapDialog.TYPE_ERROR,
+                    });
+                }
+
+            });
+
+            $(document).on('change', '[name$=".TipoTecnologiaId"], [name$=".NivelTecnologiaId"], [name$=".Experiencia"]', function () {
+                var tecnID = $(this).closest('tr').find('[name$=".TipoTecnologiaId"]').val();
+
+                if (!verifyExpITLevels(tecnID)) {
+                    $(this).val("");
+
+                    BootstrapDialog.alert({
+                        title: '@Resources.Candidatura_NivelTecnologiaRepetidoErrorTitulo',
+                        message: '@Resources.Candidatura_NivelTecnologiaRepetidoErrorTexto',
+                        type: BootstrapDialog.TYPE_ERROR,
+                    });
+                }
+            });
+
+
+            function verifyLanguagesLevels(idiomaId) {
+                var idiomas = $('[name$=".IdiomaId"]').toArray();
+                var cont = 0;
+
+                for (var i = 0; i < idiomas.length; i++) {
+                    if (idiomas[i].value == idiomaId && idiomas[i].value != "") {
+                        cont = cont + 1;
+                    }
+                }
+
+                if (cont > 1) {
+                    return false;
+                } else
+                    return true;
+            }
+
+            function verifyExpITLevels(tipoTecnId) {
+                var tipoTecn = $('[name$=".TipoTecnologiaId"]').toArray();
+                var cont = 0;
+
+                for (var i = 0; i < tipoTecn.length; i++) {
+                    if (tipoTecn[i].value == tipoTecnId && tipoTecn[i].value != "") {
+                        cont = cont + 1;
+                    }
+                }
+
+                if (cont > 1) {
+                    return false;
+                } else
+                    return true;
+
+            }
+
+
+        </script>
+
+}
+
+@helper ForTable()
+    {
+        <script type="text/javascript">
+            String.format = function (format) {
+                var args = Array.prototype.slice.call(arguments, 1);
+                return format.replace(/{(\d+)}/g, function (match, number) {
+                    return typeof args[number] != 'undefined'
+                        ? args[number]
+                        : match
+                        ;
+                });
+            };
+
+
+            function forTable() {
+
+                var $cont = 0;
+                $("#listSubmitContact tbody tr:not(:first)").each(function () {
+                    var item = $(this);
+                    item.find('input, select, textarea').each(function () {
+                        var input = $(this);
+                        input.attr('name', String.format(input.attr('name'), $cont));
+                    });
+
+                    $cont++;
+                });
+
+                var $cont = 0;
+                $("#listSubmitExp tbody tr:not(:first)").each(function () {
+                    var item = $(this);
+                    item.find('input, select, textarea').each(function () {
+                        var input = $(this);
+                        input.attr('name', String.format(input.attr('name'), $cont));
+                    });
+
+                    $cont++;
+                });
+
+                var $cont = 0;
+                $("#listSubmitIdioma tbody tr:not(:first)").each(function () {
+                    var item = $(this);
+                    item.find('input, select, textarea').each(function () {
+                        var input = $(this);
+                        input.attr('name', String.format(input.attr('name'), $cont));
+                    });
+
+                    $cont++;
+                });
+
+            }
+        </script>
+}

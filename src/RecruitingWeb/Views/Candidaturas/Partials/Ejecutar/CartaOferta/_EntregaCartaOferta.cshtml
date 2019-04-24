@@ -1,0 +1,55 @@
+﻿@using RecruitingWeb.Helpers;
+@using RecruitingWeb.Properties
+
+@model Recruiting.Application.Candidaturas.ViewModel.EntregaCartaOferta
+@{
+    var expRegularDecimal = System.Configuration.ConfigurationManager.AppSettings["expRegularDecimal"];
+    
+    string htmlMoneda = FormatHelper.GetHtmlMoneda(Model.Moneda);
+}
+<div class="row form-row">
+    <div class="form-group col-lg-4">
+        <div class="col-lg-12 title-form">
+            <label for="SalarioPropuesto">@Resources.HTML_Candidaturas_EntregaCartaOferta_SalarioPropuesto</label>
+        </div>
+        <div class="col-lg-12">
+            <div class="inner-addon right-addon">
+                @Edit.Decimal(Model.SalarioPropuesto, name: Model.AccessEntrega + "SalarioPropuesto", id: "SalarioPropuesto", required: true, htmlClass: "form-control", expReg: expRegularDecimal, decimalSeparator: ",", numberSeparator: ".")
+                @Html.Raw(htmlMoneda)
+            </div>
+        </div>
+    </div>
+    <div class="form-group col-lg-4">
+        <div class="col-lg-12 title-form">
+            <label for="SalarioDeseado">@Resources.HTML_Candidaturas_EntregaCartaOferta_SalarioDeseado</label>
+        </div>
+        <div class="col-lg-12">
+            <div class="inner-addon right-addon">
+                @Edit.Decimal(Model.SalarioDeseado, name: Model.AccessEntrega + "SalarioDeseado", id: "SalarioDeseado", required: true, htmlClass: "form-control", expReg: expRegularDecimal, decimalSeparator: ",", numberSeparator: ".")
+                @Html.Raw(htmlMoneda)
+            </div>
+        </div>
+    </div>
+    <div class="form-group col-lg-4">
+        <div class="col-lg-12 title-form">
+            <label for="SalarioActual">@Resources.HTML_Candidaturas_EntregaCartaOferta_SalarioActual</label>
+        </div>
+        <div class="col-lg-12">
+            <div class="inner-addon right-addon">
+                @Edit.Decimal(Model.SalarioActual, name: Model.AccessEntrega + "SalarioActual", id: "SalarioActual", required: false, htmlClass: "form-control", expReg: expRegularDecimal, decimalSeparator: ",", numberSeparator: ".")
+                @Html.Raw(htmlMoneda)
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row form-row">
+    <div class="form-group col-lg-8">
+        <div class="col-lg-12 title-form">
+            <label for="ObservacionesCartaOferta">@Resources.HTML_Candidaturas_EntregaCartaOferta_Observaciones</label>
+        </div>
+        <div class="col-lg-12">            
+            @Edit.TextAreaEditor(Model.ObservacionesCartaOferta, Model.AccessEntrega + "ObservacionesCartaOferta", id: "ObservacionesCartaOferta", rows: 8, required: false, htmlClass: "form-control")
+        </div>
+    </div>
+</div>
+

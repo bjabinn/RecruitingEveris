@@ -1,0 +1,13 @@
+﻿@using Recruiting.Application.Proyectos.ViewModels
+@using RecruitingWeb.Properties
+
+@model ProyectoRowViewModel
+
+<div>
+    <a title="@Resources.HTML_Title_Editar" data-id="@Model.ProyectoId" name="EditButtonProyecto">
+        @Display.GlyphiconButton("glyphicon-pencil icon action")
+    </a>
+    <a title="@Resources.HTML_Title_Eliminar" data-id="@Model.ProyectoId" name="DeleteButtonProyecto">
+        @Display.GlyphiconButton("glyphicon-trash icon action")
+    </a>
+</div>

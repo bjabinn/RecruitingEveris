@@ -1,0 +1,144 @@
+﻿@using RecruitingWeb.Properties
+
+@model Recruiting.Application.Becarios.ViewModels.BecarioDatosBasicosViewModel
+
+<div class="content-box border-top-cero">
+    <div class="content-box-content">
+        <div class="row form-row">
+            <div class="form-group col-lg-4">
+                <div class="col-lg-12 title-form">
+                    <label>@Resources.HTML_Becarios_DatosBasicos_Candidato</label>
+                </div>
+                <div class="col-lg-12 content-form">
+                    <label>@Model.NombreCandidato</label>
+                </div>
+            </div>
+            <div class="form-group col-lg-4">
+                <div class="col-lg-12 title-form">
+                    <label>@Resources.HTML_Becarios_DatosBasicos_TipoBecario</label>
+                </div>
+                <div class="col-lg-12 content-form">
+                    <label>@Model.TipoBecario</label>
+                </div>
+            </div>
+            <div class="form-group col-lg-4">
+                <div class="col-lg-12 title-form">
+                    <label>@Resources.HTML_Becarios_DatosBasicos_SubidaCV</label>
+                </div>
+                <div class="col-lg-12 content-form">
+                    @{
+                        if (string.IsNullOrEmpty(Model.NombreCV))
+                        {
+                            @Resources.HTML_General_CampoVacio_Details_NA
+                        }
+                        else
+                        {
+                            @Edit.InputFileDownloadDig("DownloadCV", false, false, Model.NombreCV)
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="row form-row">
+            <div class="form-group col-lg-4">
+                <div class="col-lg-12 title-form">
+                    <label>@Resources.HTML_Becarios_DatosBasicos_CentroProcedencia</label>
+                </div>
+                <div class="col-lg-12 content-form">
+                    @{
+                        if (string.IsNullOrEmpty(Model.NombreCentroProcedencia))
+                        {
+                            @Resources.HTML_General_CampoVacio_Details_NA
+                        }
+                        else
+                        {
+                            @Model.NombreCentroProcedencia
+                        }
+                    }
+                </div>
+            </div>
+            <div class="form-group col-lg-4">
+                <div class="col-lg-12 title-form">
+                    <label>@Resources.HTML_Becarios_DatosBasicos_Convocatoria</label>
+                </div>
+                <div class="col-lg-12 content-form">
+                    <label>@Model.NombreConvocatoria</label>
+                </div>
+            </div>
+            <div class="form-group col-lg-4">
+                <div class="col-lg-12 title-form">
+                    <label for="filterOrigenCV">@Resources.HTML_Candidaturas_DatosBasicos_OrigenCV</label>
+                </div>
+                <div class="col-lg-12 content-form">
+                    @{
+                        if (string.IsNullOrEmpty(Model.OrigenCvNombre))
+                        {
+                            @Resources.HTML_General_CampoVacio_Details_NA
+                        }
+                        else
+                        {
+                            @Model.OrigenCvNombre
+
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="row form-row">
+            <div class="form-group col-lg-4">
+                <div class="col-lg-12 title-form">
+                    <label for="filterFuenteReclutamiento">@Resources.HTML_Candidaturas_DatosBasicos_FuenteReclutamiento</label>
+                </div>
+                <div class="col-lg-12 content-form">
+                    @{
+                        if (string.IsNullOrEmpty(Model.FuenteReclutamientoNombre))
+                        {
+                            @Resources.HTML_General_CampoVacio_Details_NA
+                        }
+                        else
+                        {
+                            @Model.FuenteReclutamientoNombre
+
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="row form-row" id="listaGeneralEmailReferenciados">
+            <div class="form-group col-lg-4">
+                <div class="col-lg-12">
+                    <table id="listSubmitReferenciados" data-id="listSubmit">
+                        <thead>
+                            <tr role="row">
+                                <th>@Resources.HTML_Candidaturas_Referenciado_ContactoHeader</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+
+                            @{
+                                if (Model.ListEmailReferenciados != null)
+                                {
+                                    for (int x = 0; x < Model.ListEmailReferenciados.Count; x++)
+                                    {
+                                        <tr role="row" class="odd">
+                                            <td>@Model.ListEmailReferenciados[x]</td>
+                                        </tr>
+                                    }
+                                }
+                                if (!Model.ListEmailReferenciados.Any())
+                                {
+                                    <tr role="row" class="odd">
+                                        <td>@Resources.HTML_General_CampoVacio_Details_NA</td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

@@ -1,0 +1,41 @@
+﻿@using RecruitingWeb.Properties
+
+@model Recruiting.Application.Becarios.ViewModels.BecarioDatosPracticasViewModel
+
+<div class="row titlePage">
+    <div class="col-lg-6">
+        <h3>@Resources.HTML_Becarios_Practicas_Practicas - @Model.NombreCandidato</h3>
+    </div>
+</div>
+<div class="row header-flap">
+    <div class="btn-group" role="group">
+        <a href="@Url.Action("Volver", "Becarios")" class="btn btn-default">
+            <span class="text">@Resources.HTML_BotonGenericoVolver</span>
+        </a>
+        <a href="#" data-action="guardar" class="btn btn-default">
+            <span class="text">@Resources.HTML_BotonGenericoGuardar</span>
+        </a>
+        <a href="#" data-action="finalizar" class="btn btn-default">
+            <span class="text">@Resources.HTML_BotonGenericoFinalizar</span>
+        </a>
+    </div>
+    <div class="col-lg-6 removePadding">
+        <h4 class="noMargin headerBox">@Resources.HTML_Becarios_Practicas_DatosPracticas</h4>
+    </div>
+</div>
+
+@using (Html.BeginForm("Practicas", "Becarios", FormMethod.Post, new Dictionary<string, object> { { "role", "form" }, { "data-parsley-validate", "true" }, { "id", "formProceso" } }))
+{
+    @Edit.Hidden("guardar", "SubmitType")
+    @Edit.Hidden(Model.BecarioId, "BecarioId")
+    @Html.Partial("~/Views/Becarios/Partials/Ejecutar/Practicas/Practicas.cshtml", Model)
+}
+
+
+@section scripts{
+
+    @BecariosFrontActions.MenuFrontActions()
+    @BecariosFrontActions.PracticasFrontActions()
+    @BecariosFrontActions.ForTable()
+
+}

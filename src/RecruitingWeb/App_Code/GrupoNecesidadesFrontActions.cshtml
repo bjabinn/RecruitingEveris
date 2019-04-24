@@ -1,0 +1,2617 @@
+﻿@using System.Web.Mvc.Html
+@using RecruitingWeb.Helpers
+@using RecruitingWeb.Properties
+@using Recruiting.Application.Candidaturas.Enums
+@using Recruiting.Application.Maestros.Enums
+
+
+
+@helper MenuFrontActions()
+    {
+        <script type="text/javascript">
+            var menuItemToSelect = $("#main-nav li a[data-option-name=Necesidades]");
+            menuItemToSelect.addClass("current");
+        </script>
+}
+
+@helper IndexFrontActions(System.Web.Mvc.UrlHelper Url, string nUsuario, string tiempoExpiracionCookie)
+    {
+        <script type="text/javascript">
+
+         //Navegacion Filtro
+
+        $(window).keydown(function (event) {
+            if (event.keyCode == 13) {
+                buscarIntro();
+                return true;
+            }
+        });
+
+        function buscarIntro() {
+            var table = $('#tablaGruposNecesidades');
+            table.data("fn-search")();
+        }
+
+        $(document).on('click', '[name=buscar]', function () {
+            buscarIntro();
+        });
+
+        $(document).on('click', '[name=limpiar]', function () {
+                resetFields('#form-filter');
+                var table = $('#tablaGruposNecesidades');
+                var url = '@Url.Action("LimpiarGrupoNecesidad", "Necesidades")';
+                window.location.href = url;
+        });
+
+        //Carga Tabla
+
+        $('#tablaGruposNecesidades').on('draw.dt', function (event, data) {
+            var total = $('#tempdataGruposNecesidades');
+            colorearGruposNecesidadesVisitados();
+            total.html(data._iRecordsTotal);
+        });
+
+        function getFiltersGruposNecesidades() {
+
+            var filterGrupoNecesidadId = $("[name=filterGrupoNecesidadId]").val();
+            var filterNombreGrupoNecesidad = $('[name="filterNombreGrupoNecesidad"]').val();
+            var filterCentro = $("[name=filterCentro]").val();
+            var filterCliente = $("[name=filterCliente]").val();
+            var filterProyecto = $("[name=filterProyecto]").val();
+            var filterEstadoGrupoNecesidad = $("[name=filterEstadoGrupoNecesidad]").val();
+
+            return {
+                GrupoNecesidadId: filterGrupoNecesidadId,
+                NombreGrupoNecesidad: filterNombreGrupoNecesidad,
+                Centro: filterCentro,
+                Cliente: filterCliente,
+                Proyecto: filterProyecto,
+                EstadoGrupoNecesidad: filterEstadoGrupoNecesidad,
+            };
+        }
+
+        //Navegacion Buttons
+
+        $(document).on('click', '#DeleteButton', function () {
+            var grupoId = $(this).closest("tr").find("#GrupoNecesidadId").val();
+            BootstrapDialog.confirm({
+                title: 'ELIMINAR GRUPO NECESIDADES',
+                message: '¿Quiere eliminar el grupo de necesidades?',
+                type: BootstrapDialog.TYPE_CONFIRMDELETE,
+                callback: function (result) {
+                    if (result) {
+                        $.post('@Url.Action("DeleteGrupoNecesidades", "Necesidades")', { id: grupoId }).
+                            success(function (Data) {
+                                if (Data.IsValid) {
+                                    var tableComponent = $('#tablaGruposNecesidades').DataTable();
+                                    tableComponent.ajax.reload(null, true);
+                                }
+                                else if (Data == "") {
+                                    BootstrapDialog.show({
+                                        type: BootstrapDialog.TYPE_ERROR,
+                                        title: '@Resources.Permiso_Titulo',
+                                        message: '@Resources.Permiso_Mensaje',
+                                    });
+                                }
+                            })
+
+                    } else {
+                        BootstrapDialog.closeAll();
+                    }
+                }
+            });
+        });
+
+        $(document).on('click', '#DetailsButton', function () {
+            var grupoId = $(this).closest("tr").find("#GrupoNecesidadId").val();
+            saveCookie(grupoId);
+            var url = '@Url.Action("SeguimientoGrupoNecesidad", "Necesidades", new { grupoId = "__id__" })';
+            window.open(url.replace('__id__', grupoId), '_blank');
+        });
+
+        $(document).on('click', '#EditButton', function () {
+            var grupoId = $(this).closest("tr").find("#GrupoNecesidadId").val();
+            saveCookie(grupoId);
+            var url = '@Url.Action("SeguimientoGrupoNecesidadTable", "Necesidades", new { grupoId = "__id__" })';
+            window.open(url.replace('__id__', grupoId), '_blank');
+        });
+
+        $(document).on('click', '#btnDescargarExcel', function () {
+            var pageFilter = $('#tablaGruposNecesidades').data('filters');
+
+            var filters = {
+                filterGrupoNecesidadId: pageFilter['custom-filter-GrupoNecesidadId'],
+                filterNombreGrupoNecesidad: pageFilter['custom-filter-NombreGrupoNecesidad'],
+                filterCentro: pageFilter['custom-filter-CentroSearch'],
+                filterCliente: pageFilter['custom-filter-Cliente'],
+                filterProyecto: pageFilter['custom-filter-Proyecto'],
+                filterEstadoGrupoNecesidad: pageFilter['custom-filter-EstadoGrupoNecesidad'],
+            };
+
+            var strFiltros = jQuery.param(filters);
+            var url = '@Url.Action("ExportToExcelSeguimientoGrupo", "Necesidades")?' + strFiltros;
+            window.location.assign(url);
+
+        });
+
+        //Funciones
+
+        function generaClienteFromProyecto(ProyectoId) {
+
+                if (ProyectoId != null && ProyectoId != '') {
+                    $.post('@Url.Action("GeneraSectorYServicioFromProyecto", "Necesidades")', { proyectoId: ProyectoId }).done(function (data) {
+
+                        var clienteId = data.ClienteId;
+
+                        if (clienteId != null && clienteId != '') {
+                            $('#filterCliente').val(clienteId);
+                        }
+
+                    });
+                }
+
+        }
+
+        function saveCookie(item)
+        {
+            var cookieActual = getCookies();
+            if(cookieActual != null)
+            {
+                if(!cookieActual.includes(item))
+                {
+                    cookieActual += "," + item;
+                }
+            }
+            else
+            {
+                cookieActual = item;
+            }
+
+            $.cookie('@nUsuario' + '-gruposNecesidades', cookieActual, {expires : @tiempoExpiracionCookie});
+        }
+
+        function getCookies()
+        {
+            var cookieActual = $.cookie('@nUsuario' + '-gruposNecesidades');
+            return cookieActual;
+        }
+
+        function colorearGruposNecesidadesVisitados()
+        {
+            var listaGruposNecesidades = getCookies();
+            if (listaGruposNecesidades != null)
+            {
+                $('#tablaGruposNecesidades tr:not(:first)').each(function(){
+                    if($(this).find("#GrupoNecesidadId") != null)
+                    {
+                        if(listaGruposNecesidades.includes($(this).find("#GrupoNecesidadId").val()))
+                        {
+                            $(this).addClass("linkVisitado");
+                        }
+                    }
+                });
+            }
+        }
+
+        //Comprobaciones y restricciones
+
+        $("#filterCliente").on("change", function (event) {
+
+                var clienteIdSeleccionado = $("#filterCliente").val();
+                var $select = $('#filterProyecto');
+                $select.empty();
+
+                $.post('@Url.Action("GeneraProyectosFromClientes", "Necesidades")', { clienteId: clienteIdSeleccionado }).done(function (data) {
+
+                    $('<option>', {
+                        value: ''
+                    }).html('(select an option)').appendTo($select);
+
+                    $.each(data, function (indice, elementoActual) {
+                        $('<option>', {
+                            value: elementoActual.ProyectoId
+                        }).html(elementoActual.Nombre).appendTo($select);
+                    });
+
+                    if (clienteIdSeleccionado != '') {
+                        generaSectorYServicioFromProyecto($('#filterProyecto').val(), false);
+                    }
+
+                });
+
+            });
+
+            $("#filterProyecto").on("change", function (event) {
+                generaClienteFromProyecto($(this).val());
+            });
+
+        </script>
+}
+
+@helper EditFrontActions(System.Web.Mvc.UrlHelper Url, bool GrupoCerrado, Recruiting.Application.Necesidades.ViewModels.CreateEditGrupoNecesidadViewModel Model)
+    {
+        <script type="text/javascript">        
+
+            //Inicializaciones
+
+            var grupoCerrado = '@GrupoCerrado';
+
+
+            //inicializaciones para la caja de perfiles
+            var perfilSeleccionado;
+            var posicionesLibres = [];
+            var necesidadesEliminadas = [];
+
+            var numeroMaximoPerfiles = @Model.ListaNecesidades.Count(); //Inicializamos al numero de perfiles que tenemos actualmente pero guardaremos el máximo de los que hemos tenido
+            var estadoAnterior = ""; //esta variable guardará los valores del selectList de estado por si intentamos cerrar una necesidad de tipo contratación.
+            var antiguoEstadoEdicionMasiva = '';
+            var antiguaContratacionEdicionMasiva = '';
+
+            var nodes = $('[name="perfil"]');
+            var total = nodes.length
+            var boxes = [];
+
+            $(document).ready(function () {
+
+                initializeTransforms();
+                checkGrupoCerrado(grupoCerrado);
+                checkAndShowModuloGlobal($('#perfilFlexContainer'));
+                orderTable();
+                colorTable();
+                initializeDateTimes($('#perfilFlexContainer'));
+                checkFechaCierreRequired($('#perfilFlexContainer'));
+                checkAndShowPersonaAsignadaBtn($('[name="perfil"]'));
+                checkCandidaturaIdClearCambioInterno();
+
+            });
+
+            //Logica modal personas libres
+
+            $(document).on('click', '#btnAbrirModalPersonaLibre', function () {
+
+                perfilSeleccionado = $(this).closest('tr');
+
+            });
+
+            $(document).on('click', '#limpiarModal', function () {
+                var table = $('#tablaNecesidadesPersonasLibres');
+                table.data("fn-clear")();
+            });
+
+            $(document).on('click', '#buscarModal', function () {
+                var table = $('#tablaNecesidadesPersonasLibres');
+                table.data("fn-search")();
+            });
+
+            function getFiltersNecesidadesPersonasLibres() {
+
+                var filterNroEmpleado = $("[name=filterNroEmpleado]").val();
+                var filterNombre = $("[name=filterNombre]").val();
+                var filterApellidos = $("[name=filterApellidos]").val();
+                var filterCategoria = $("[name=filterCategoria]").val();
+                var filterLinea = $("[name=filterLinea]").val();
+                var filterCelda = $("[name=filterCelda]").val();
+                var filterTecnologia = $("[name=filterTecnologia]").val();
+
+                return {
+                    NroEmpleado: filterNroEmpleado, Nombre: filterNombre, Apellidos: filterApellidos,
+                    Categoria: filterCategoria, Linea: filterLinea, Celda: filterCelda,
+                    TipoTecnologiaId: filterTecnologia, Buscar: "true"
+                };
+            }
+
+            $(document).on('click', '#BtnPersonaLibre', function () {
+            var id = $("#myModal input:radio:checked").closest("tr").find("#PersonaLibreId").val();
+            var nombre = $("#myModal input:radio:checked").closest("tr").find("#NombresYApellidos").val();
+            var duplicado = compruebaDuplicidad(id, '@((int)TipoContratacionEnum.CambioInterno)');
+                if(!duplicado)
+                {
+                    perfilSeleccionado.find('#PersonaAsignada').val(nombre);
+                    perfilSeleccionado.find('#PersonaAsignadaId').attr('value', id);
+                    perfilSeleccionado.find('#CandidaturaId').attr('value', null);
+                    $('#myModal').modal('hide');
+                }
+                else
+                {
+                    BootstrapDialog.alert({
+                        title: '@Resources.NecesidadGrupo_PersonaAsignadaDuplicadaTitulo',
+                        message: '@Resources.NecesidadGrupo_PersonaAsignadaDuplicadaTexto',
+                        type: BootstrapDialog.TYPE_ERROR
+                    });
+                }
+            });
+
+            //Logica modal candidato
+
+            $(document).on('click', '#limpiarModalCandidatosQueCumplenPerfil', function () {
+                var table = $('#tablaCandidatosQueCumplenPerfil');
+                table.data("fn-clear")();
+            });
+
+            $(document).on('click', '#buscarModalCandidatosQueCumplenPerfil', function () {
+                var table = $('#tablaCandidatosQueCumplenPerfil');
+                table.data("fn-search")();
+            });
+
+            function getFiltersCandidatosQueCumplenPerfil() {
+
+                var filterNombre = $("[name=filterNombreCandidatoQueCumplePerfil]").val();
+                var filterApellidos = $("[name=filterApellidosCandidatoQueCumplePerfil]").val();
+                var filterTipoTecnologiaId = $("[name=filterTipoTecnologiaIdCandidatoQueCumplePerfil]").val();
+                var filterTipoPerfilId = $("[name=filterTipoPerfilIdCandidatoQueCumplePerfil]").val();
+                var filterNecesidadId = $("[name=filterNecesidadIdCandidatoQueCumplePerfil]").val();
+
+                return {
+                    Nombre: filterNombre, Apellidos: filterApellidos,
+                    TipoTecnologiaId: filterTipoTecnologiaId,
+                    TipoPerfilId: filterTipoPerfilId,
+                    NecesidadId: filterNecesidadId, Buscar: "true"
+                };
+            }
+
+            $(document).on('click', '#btnAbrirModalCandidato', function () {
+
+                perfilSeleccionado = $(this).closest('tr');
+
+                var teconologia = perfilSeleccionado.find('#TipoTecnologiaId');
+
+                var tipoPerfil = perfilSeleccionado.find('#TipoPerfilId');
+
+                $("[name=filterNecesidadIdCandidatoQueCumplePerfil]").val(perfilSeleccionado.find('#NecesidadId').val());
+
+                if(teconologia.val() != null && teconologia.val() != '')
+                {
+                    $("[name=filterTipoTecnologiaIdCandidatoQueCumplePerfil]").val(teconologia.val());
+                }
+
+                if(tipoPerfil.val() != null && tipoPerfil.val() != '')
+                {
+                    $("[name=filterTipoPerfilIdCandidatoQueCumplePerfil]").val(tipoPerfil.val());
+                }
+
+            });        
+
+            $(document).on('click', '#BtnCandidatosQueCumplenPerfil', function () {
+                var id = $("#modalCandidatosQueCumplenPerfil input:radio:checked").closest("tr").find("#CandidatoId").val();
+                var nombre = $("#modalCandidatosQueCumplenPerfil input:radio:checked").closest("tr").find("#NombresYApellidos").val();
+                var candidaturaId = $("#modalCandidatosQueCumplenPerfil input:radio:checked").closest("tr").find("#CandidaturaIdAsociado").val();
+                var duplicado = compruebaDuplicidad(id, '@((int)TipoContratacionEnum.Contratación)');
+                if(!duplicado)
+                {
+                    perfilSeleccionado.find('#PersonaAsignada').val(nombre);
+                    perfilSeleccionado.find('#PersonaAsignadaId').attr('value', id);
+                    perfilSeleccionado.find('#CandidaturaId').attr('value', candidaturaId);
+                    $('#modalCandidatosQueCumplenPerfil').modal('hide');
+                }
+                else
+                {
+                    BootstrapDialog.alert({
+                        title: '@Resources.NecesidadGrupo_PersonaAsignadaDuplicadaTitulo',
+                        message: '@Resources.NecesidadGrupo_PersonaAsignadaDuplicadaTexto',
+                        type: BootstrapDialog.TYPE_ERROR
+                    });
+                }
+            });
+
+            //Funciones
+
+            function initializeTransforms() {
+                for (var i = 0; i < total; i++) {
+
+                    var node = nodes[i];
+
+                    // Initialize transforms on node (using tweenlite)
+                    TweenLite.set(node, { x: 0 });
+
+                    boxes[i] = {
+                        transform: node._gsTransform,
+                        x: node.offsetLeft,
+                        y: node.offsetTop,
+                        node
+                    };
+                }
+            }
+
+            function generaSectorYServicioFromProyecto(ProyectoId, actualizaCliente) {
+
+                if (ProyectoId != null && ProyectoId != '') {
+                    $.post('@Url.Action("GeneraSectorYServicioFromProyecto", "Necesidades")', { proyectoId: ProyectoId }).done(function (data) {
+
+                        var sectorId = data.SectorId;
+                        var servicioId = data.ServicioId;
+                        var clienteId = data.ClienteId;
+
+                        if (sectorId != null && sectorId != '') {
+                            $('#SectorId').val(sectorId);
+                        }
+                        if (servicioId != null && servicioId != '') {
+                            $('#TipoServicioId').val(servicioId);
+                        }
+                        if (clienteId != null && clienteId != '' && actualizaCliente) {
+                            $('#ClienteId').val(clienteId);
+                        }
+
+                    });
+                }
+
+            }
+
+            function changePlanificadasToConfirmadas(){
+                var estadoNecesidadCerrada = @((int)EstadoNecesidadEnum.Cerrada);
+                var tipoContratacionCambioInterno = @((int)TipoContratacionEnum.CambioInterno);
+                var tipoPrevisionPlanificado = @((int)TipoPrevisionEnum.Planificado);
+                var tipoPrevisionConfirmado = @((int)TipoPrevisionEnum.Confirmado);
+
+                $('[name="perfil"]').each(function() {
+
+                    if ($(this).find('#EstadoNecesidadId').val() == estadoNecesidadCerrada
+                        && $(this).find('#TipoContratacionId').val() == tipoContratacionCambioInterno
+                        && $(this).find('#TipoPrevisionId').val() == tipoPrevisionPlanificado)
+                    {
+                        $(this).find('#TipoPrevisionId').val(tipoPrevisionConfirmado);
+                    }
+                });
+            }
+
+
+            function checkAndShowModuloGlobal(container)
+            {
+                container.find('[name="perfilUnico"]').each(function (){
+                    checkAndShowModulo($(this));
+                });
+            }
+
+            function checkAndShowModulo(filaClicada) {
+                var tecnologia = filaClicada.find('[id="TipoTecnologiaId"]');
+                var perfil = filaClicada.find('[id="TipoPerfilId"]');
+                var modulo = filaClicada.find('[id="Modulo"]');
+
+                modulo.attr('disabled', 'disabled');
+                modulo.prop('required', false);
+                //Estado: Cerrada y Contratacion: Cambio Interno
+                if ((tecnologia.val() == 34) && ((perfil.val() == 1282) || (perfil.val() == 1281) || (perfil.val() == 1280) || (perfil.val() == 1279))) {
+                    modulo.removeAttr('disabled');
+                }
+                else {
+                    modulo.val("");
+                    modulo.change();
+                }
+            }
+
+            function createNewPerfil(item) {
+                var clone = item.clone();
+                clone.removeClass('hidden');
+                var cloneInputs = clone.find('input, select, textarea');
+                cloneInputs.removeAttr('disabled');
+                cloneInputs.attr('required', 'true');
+                clone.find('#FechaCierre').removeAttr('required');
+                initializeDateTimes(clone);
+                clone.find('#PersonaAsignada').attr('required', 'false');
+                checkAndShowPersonaAsignadaBtn(clone);
+                clone.attr('name', 'perfil');
+                if (posicionesLibres.length > 0) {
+                    clone.attr('id', 'perfil-' + posicionesLibres[0]);
+                    clone.find('[name="position"]').val(posicionesLibres[0]);
+                    posicionesLibres.splice(0, 1);
+                }
+                else {
+                    clone.attr('id', 'perfil-' + numeroMaximoPerfiles);
+                    clone.find('[name="position"]').val(numeroMaximoPerfiles.toString());
+                    numeroMaximoPerfiles++;
+                }
+                $('#perfilFlexContainer').append(clone);
+                checkAndShowModulo(clone);
+                //inicializar animacioens
+                nodes = $('[name="perfil"]');
+                total = nodes.length
+                boxes = [];
+                initializeTransforms();
+                //fin inicializar
+                orderTable();
+                colorTable();
+            }
+
+            function deleteItemDialog(item) {
+                BootstrapDialog.confirm({
+                    title: '@Resources.Eliminar_Generico_Title',
+                    message: '@Resources.Eliminar_Generico_Message',
+                    type: BootstrapDialog.TYPE_CONFIRMDELETE,
+                    callback: function (result) {
+                        if (result) {
+                            deletePerfil(item);
+                            return false;
+                        } else {
+                            BootstrapDialog.closeAll();
+                        }
+                    }
+                });
+            }
+
+            function deletePerfil(perfil)
+            {
+                var necesidadId = perfil.find('#NecesidadId').val();
+                if(necesidadId != '')
+                {
+                    necesidadesEliminadas.push(necesidadId);
+                }
+                if(perfil.find('[name="position"]').val() == (numeroMaximoPerfiles-1).toString())
+                {
+                    numeroMaximoPerfiles--;
+                }
+                else
+                {
+                    posicionesLibres.push(perfil.find('[name="position"]').val());
+                }
+                perfil.remove();
+                orderTable();
+            }
+
+            function orderTable() {
+
+                var juniors = [];
+                var developers = [];
+                var seniorDevelopers = [];
+                var leaderDevelopers = [];
+                var serviceLeaders = [];
+                var seniorServiceLeaders = [];
+                var technicalSeniorSpecialists = [];
+                var technicalExpertSpecialists = [];
+                var technicalLeaderSpecialists = [];
+                var functionalSpecialists = [];
+                var functionalSeniorSpecialists = [];
+                var functionalExpertSpecialists = [];
+                var functionalLeaderSpecialists = [];
+                var testingSpecialists = [];
+                var testingSeniorSpecialists = [];
+                var testingLeaderSpecialists = [];
+                var testingExpertSpecialists = [];
+
+                for (var i = 0; i < numeroMaximoPerfiles; i++)
+                {
+                    if ($('#perfil-' + i).length > 0)
+                    {
+                        var perfil = parseInt($('#perfil-' + i).find('#TipoPerfilId').val());
+                        switch (perfil)
+                        {
+                            case @((int)TipoPerfilCandidaturaEnum.Junior):
+                                juniors.push(perfil);
+                                break;
+                            case @((int)TipoPerfilCandidaturaEnum.Developer):
+                                developers.push(perfil);
+                                break;
+                            case @((int)TipoPerfilCandidaturaEnum.SeniorDeveloper):
+                                seniorDevelopers.push(perfil);
+                                break;
+                            case @((int)TipoPerfilCandidaturaEnum.LeaderDeveloper):
+                                leaderDevelopers.push(perfil);
+                                break;
+                            case @((int)TipoPerfilCandidaturaEnum.ServiceLeader):
+                                serviceLeaders.push(perfil);
+                                break;
+                            case @((int)TipoPerfilCandidaturaEnum.SeniorServiceLeader):
+                                seniorServiceLeaders.push(perfil);
+                                break;
+                            case @((int)TipoPerfilCandidaturaEnum.TechnicalExpertSpecialist):
+                                technicalExpertSpecialists.push(perfil);
+                                break;
+                            case @((int)TipoPerfilCandidaturaEnum.TechnicalSeniorSpecialist):
+                                technicalSeniorSpecialists.push(perfil);
+                                break;
+                            case @((int)TipoPerfilCandidaturaEnum.TechnicalLeaderSpecialist):
+                                technicalLeaderSpecialists.push(perfil);
+                                break;
+                            case @((int)TipoPerfilCandidaturaEnum.FunctionalSpecialist):
+                                functionalSpecialists.push(perfil);
+                                break;
+                            case @((int)TipoPerfilCandidaturaEnum.FunctionalSeniorSpecialist):
+                                functionalSeniorSpecialists.push(perfil);
+                                break;
+                            case @((int)TipoPerfilCandidaturaEnum.FunctionalLeaderSpecialist):
+                                functionalLeaderSpecialists.push(perfil);
+                                break;
+                            case @((int)TipoPerfilCandidaturaEnum.FunctionalExpertSpecialist):
+                                functionalExpertSpecialists.push(perfil);
+                                break;
+                            case @((int)TipoPerfilCandidaturaEnum.TestingSpecialist):
+                                testingSpecialists.push(perfil);
+                                break;
+                            case @((int)TipoPerfilCandidaturaEnum.TestingSeniorSpecialist):
+                                testingSeniorSpecialists.push(perfil);
+                                break;
+                            case @((int)TipoPerfilCandidaturaEnum.TestingLeaderSpecialist):
+                                testingLeaderSpecialists.push(perfil);
+                                break;
+                            case @((int)TipoPerfilCandidaturaEnum.TestingExpertSpecialist):
+                                testingExpertSpecialists.push(perfil);
+                                break;
+                        }
+                    }
+                }
+                var perfiles =
+                leaderDevelopers.concat(
+                seniorDevelopers).concat(
+                developers).concat(
+                juniors).concat(
+                testingExpertSpecialists).concat(
+                testingLeaderSpecialists).concat(
+                testingSeniorSpecialists).concat(
+                testingSpecialists).concat(
+                functionalExpertSpecialists).concat(
+                functionalLeaderSpecialists).concat(
+                functionalSeniorSpecialists).concat(
+                functionalSpecialists).concat(
+                technicalExpertSpecialists).concat(
+                technicalLeaderSpecialists).concat(
+                technicalSeniorSpecialists).concat(
+                seniorServiceLeaders).concat(
+                serviceLeaders);
+
+                var perfilesSinRepetir = [];
+                $.each(perfiles, function(indice, elemento){
+                    if($.inArray(elemento, perfilesSinRepetir) === -1) perfilesSinRepetir.push(elemento);
+                });
+
+                indentarTabla(perfilesSinRepetir);
+
+                for (var i = 0; i < perfiles.length; i++)
+                {
+                    var perfil = perfiles[i];
+                    $('[id="TipoPerfilId"]').each(function(){
+                        if(parseInt($(this).val()) == perfil)
+                        {
+                            var tab = $(this).closest('[name="perfil"]');
+                            tab.css('order', i);
+                        }
+                        else if($(this).val() == '') //hará que si no seleccionamos perfil este esté el primero
+                        {
+                            var tab = $(this).closest('[name="perfil"]');
+                            tab.css('order', -1);
+                        }
+                    });
+                }
+
+                aplicarAnimaciones();
+
+            }
+
+            function colorTable()
+            {
+                $('[id="EstadoNecesidadId"]').each(function(){
+                    var tab = $(this).closest('[name="perfil"]');
+                    var estado = parseInt($(this).val());
+                    switch (estado){
+                        case @((int)EstadoNecesidadEnum.Abierta):
+                            tab.css('background-color', '#ff3737');
+                            break;
+                        case @((int)EstadoNecesidadEnum.Cerrada):
+                            tab.css('background-color', '#6ed56b');
+                            break;
+                        case @((int)EstadoNecesidadEnum.Preasignada):
+                            tab.css('background-color', '#ffa74f');
+                            break;
+                        case @((int)EstadoNecesidadEnum.Cancelado):
+                            tab.css('background-color', '#aaaaaa');
+                            break;
+                        default:
+                            tab.css('background-color', '#ffffff');
+                    }
+                });
+            }
+
+            function aplicarAnimaciones(){
+                for (var i = 0; i < total; i++) {
+
+                    var box = boxes[i];
+
+                    var lastX = box.x;
+                    var lastY = box.y;
+
+                    box.x = box.node.offsetLeft;
+                    box.y = box.node.offsetTop;
+
+                    // Continue if box hasn't moved
+                    if (lastX === box.x && lastY === box.y) continue;
+
+                    // Reversed delta values taking into account current transforms
+                    var x = box.transform.x + lastX - box.x;
+                    var y = box.transform.y + lastY - box.y;
+
+                    // Tween to 0 to remove the transforms
+                    TweenLite.fromTo(box.node, 0.5, { x, y }, { x: 0, y: 0 });
+                }
+            };
+
+            function initializeDateTimes(container){
+                container.find('.datepicker').each(function(){
+                    $(this)
+                       .removeClass('hasDatepicker')
+                       .removeData('datepicker')
+                       .removeAttr('id')
+                       .unbind()
+                       .datepicker(
+                        {
+                           firstDay: 1,
+                           selectOtherMonths: true,
+                           changeMonth: true,
+                           changeYear: true
+                       });
+                });
+            };
+
+            function checkAndShowPersonaAsignadaBtn(perfiles) {
+
+                perfiles.each(function(){
+
+                    var estado = $(this).find('[id="EstadoNecesidadId"]');
+                    var contratacion = $(this).find('[id="TipoContratacionId"]');
+                    var personaAsignada = $(this).find('[id="PersonaAsignada"]');
+
+                    personaAsignada.attr('disabled', 'disabled');
+                    personaAsignada.removeAttr('required');
+                    var botonCandidato = $(this).find('#botonCandidatosQueCumplenPerfil');
+                    var botonPersonaLibre = $(this).find('#botonBusquedaPersonaLibre');
+                    botonCandidato.hide();
+                    botonPersonaLibre.hide();
+
+                    //Estado: Cerrada y Preasignada: Cambio interno.
+                    if ((estado.val() == @((int)EstadoNecesidadEnum.Preasignada))
+                        || (estado.val() == @((int)EstadoNecesidadEnum.Cerrada)))
+                    {
+                        if ((contratacion.val() == @((int)TipoContratacionEnum.CambioInterno)))
+                        {
+                            personaAsignada.removeAttr('disabled');
+                            personaAsignada.attr('required', 'required');
+                            botonCandidato.hide();
+                            botonPersonaLibre.show();
+                        }
+                        else if ((contratacion.val() == @((int)TipoContratacionEnum.Contratación))
+                            && (estado.val() == @((int)EstadoNecesidadEnum.Preasignada)))
+                        {
+                            personaAsignada.removeAttr('disabled');
+                            personaAsignada.attr('required', 'required');
+                            botonCandidato.show();
+                            botonPersonaLibre.hide();
+                        }
+                    }
+                    else
+                    {
+                        clearPersonaAsignada($(this));
+                    }
+
+                });
+            }
+
+            function clearPersonaAsignada(filaPerfil)
+            {
+                filaPerfil.find('#PersonaAsignadaId').val('');
+                filaPerfil.find('#CandidaturaId').val('');
+                filaPerfil.find('#PersonaAsignada').val('');
+            }
+
+            function eliminarIndentacion()
+            {
+                $('[name="perfil"]').each(function(){
+                    $(this).css('padding-left', '0px');
+                });
+            }
+
+            function indentarCategoria(categorias)
+            {
+                categorias.forEach(function(item){
+                    var categoria = item;
+                    $('[name="perfil"]').each(function(){
+                        if ($(this).find('#TipoPerfilId').val() == categoria)
+                        {
+                            var elemento = $(this);
+                            var valorPaddingAnterior = elemento.css('padding-left');
+                            valorPaddingAnterior = valorPaddingAnterior.substring(0, valorPaddingAnterior.length - 2);
+                            valorPaddingNuevo = parseInt(valorPaddingAnterior) + 10;
+                            elemento.css('padding-left', valorPaddingNuevo.toString() + 'px');
+                        }
+                    });
+                });
+            }
+
+            function promesaIndentar(categorias)
+            {
+                return indentarCategoria(categorias);
+            }
+
+            function indentarTabla(listaPerfilesSinRepetir)
+            {
+                setTimeout(eliminarIndentacion(), 0)
+                time = 150;
+                $.each(listaPerfilesSinRepetir, function(indice, perfil){
+                    setTimeout(function(){
+                        switch (perfil)
+                        {
+                            case @((int)TipoPerfilCandidaturaEnum.Developer):
+                                indentarCategoria([@((int)TipoPerfilCandidaturaEnum.Junior)]);
+                                break;
+                            case @((int)TipoPerfilCandidaturaEnum.SeniorDeveloper):
+                                indentarCategoria([@((int)TipoPerfilCandidaturaEnum.Developer)
+                                    , @((int)TipoPerfilCandidaturaEnum.Junior)]);
+                                break;
+                            case @((int)TipoPerfilCandidaturaEnum.LeaderDeveloper):
+                                indentarCategoria([@((int)TipoPerfilCandidaturaEnum.SeniorDeveloper),
+                                    @((int)TipoPerfilCandidaturaEnum.Developer),
+                                    @((int)TipoPerfilCandidaturaEnum.Junior)]);
+                                break;
+                            case @((int)TipoPerfilCandidaturaEnum.SeniorServiceLeader):
+                                indentarCategoria([@((int)TipoPerfilCandidaturaEnum.ServiceLeader)]);
+                                break;
+                            case @((int)TipoPerfilCandidaturaEnum.TechnicalExpertSpecialist):
+                                indentarCategoria([@((int)TipoPerfilCandidaturaEnum.TechnicalLeaderSpecialist)
+                                        , @((int)TipoPerfilCandidaturaEnum.TechnicalSeniorSpecialist)]);
+                                break;
+                            case @((int)TipoPerfilCandidaturaEnum.TechnicalLeaderSpecialist):
+                                indentarCategoria([@((int)TipoPerfilCandidaturaEnum.TechnicalSeniorSpecialist)]);
+                                break;
+                            case @((int)TipoPerfilCandidaturaEnum.FunctionalSeniorSpecialist):
+                                indentarCategoria([@((int)TipoPerfilCandidaturaEnum.FunctionalSpecialist)]);
+                                break;
+                            case @((int)TipoPerfilCandidaturaEnum.FunctionalLeaderSpecialist):
+                                indentarCategoria([@((int)TipoPerfilCandidaturaEnum.FunctionalSeniorSpecialist)
+                                    , @((int)TipoPerfilCandidaturaEnum.FunctionalSpecialist)]);
+                                break;
+                            case @((int)TipoPerfilCandidaturaEnum.FunctionalExpertSpecialist):
+                                indentarCategoria([@((int)TipoPerfilCandidaturaEnum.FunctionalLeaderSpecialist),
+                                    @((int)TipoPerfilCandidaturaEnum.FunctionalSeniorSpecialist),
+                                    @((int)TipoPerfilCandidaturaEnum.FunctionalSpecialist)]);
+                                break;
+                            case @((int)TipoPerfilCandidaturaEnum.TestingSeniorSpecialist):
+                                indentarCategoria([@((int)TipoPerfilCandidaturaEnum.TestingSpecialist)]);
+                                break;
+                            case @((int)TipoPerfilCandidaturaEnum.TestingLeaderSpecialist):
+                                indentarCategoria([@((int)TipoPerfilCandidaturaEnum.TestingSeniorSpecialist)
+                                    , @((int)TipoPerfilCandidaturaEnum.TestingSpecialist)]);
+                                break;
+                            case @((int)TipoPerfilCandidaturaEnum.TestingExpertSpecialist):
+                                indentarCategoria([@((int)TipoPerfilCandidaturaEnum.TestingLeaderSpecialist),
+                                    @((int)TipoPerfilCandidaturaEnum.TestingSeniorSpecialist),
+                                    @((int)TipoPerfilCandidaturaEnum.TestingSpecialist)]);
+                                break;
+                        }
+                    }, time);
+                    time = time + 100;
+                });
+            }
+
+            function checkCandidaturaIdClearCambioInterno()
+            {
+                $('[name="perfilUnico"]').each(function (){
+                    if($(this).find('#TipoContratacionId').val() == @((int)TipoContratacionEnum.CambioInterno))
+                    {
+                        $(this).find('#CandidaturaId').attr('value', null);
+                }
+                });
+            }
+
+            function checkNecesidadLogicIntegrity(perfilEnUso){
+
+                if (antiguoEstadoEdicionMasiva == '@((int)EstadoNecesidadEnum.Cerrada)' &&
+                    perfilEnUso.find('#TipoContratacionId').val() == '@((int)TipoContratacionEnum.Contratación)' &&
+                    perfilEnUso.find('#EstadoNecesidadId').val() != '@((int)EstadoNecesidadEnum.Cancelado)'){ //Una necesidad que previamente ha sido cerrada no se puede abrir
+
+                    if(antiguoEstadoEdicionMasiva != '')
+                    {
+                        perfilEnUso.find('#EstadoNecesidadId').val(antiguoEstadoEdicionMasiva);
+                    }
+                    else if (antiguaContratacionEdicionMasiva != '')
+                    {
+                        perfilEnUso.find('#TipoContratacionId').val(antiguaContratacionEdicionMasiva);
+                    }
+                    antiguoEstadoEdicionMasiva = '';
+                    antiguaContratacionEdicionMasiva = '';
+
+                    BootstrapDialog.alert({
+                        title: '@Resources.Necesidad_ErrorAbrirNecesidadCerradaTitulo',
+                        message: '@Resources.Necesidad_ErrorAbrirNecesidadCerradaTexto',
+                        type: BootstrapDialog.TYPE_ERROR
+                    });
+
+                    return false;
+                }           
+
+                if (perfilEnUso.find('#TipoContratacionId').val() == '@((int)TipoContratacionEnum.Contratación)' &&
+                    perfilEnUso.find('#EstadoNecesidadId').val() == '@((int)EstadoNecesidadEnum.Cerrada)'){
+
+                    if(antiguoEstadoEdicionMasiva != '')
+                    {
+                        perfilEnUso.find('#EstadoNecesidadId').val(antiguoEstadoEdicionMasiva);
+                    }
+                    else if (antiguaContratacionEdicionMasiva != '')
+                    {
+                        perfilEnUso.find('#TipoContratacionId').val(antiguaContratacionEdicionMasiva);
+                    }
+                    antiguoEstadoEdicionMasiva = '';
+                    antiguaContratacionEdicionMasiva = '';
+
+                    BootstrapDialog.alert({
+                        title: '@Resources.Necesidad_ErrorCerrarNecesidadContratacionTitulo',
+                        message: '@Resources.Necesidad_ErrorCerrarNecesidadContratacionTexto',
+                        type: BootstrapDialog.TYPE_ERROR
+                    });
+
+                    return false;
+                }
+
+                if(perfilEnUso.find('#EstadoNecesidadId').val() == '@((int)EstadoNecesidadEnum.Abierta)')
+                {
+                    perfilEnUso.find('#PersonaAsignada').val('');
+                    perfilEnUso.find('#PersonaAsignadaId').val('');
+                    perfilEnUso.find('#CandidaturaId').val('');
+
+                    return true;
+                }
+
+                return true;
+            }
+
+            function compruebaDuplicidad(personaAsignadaId, tipoContratacion)
+            {
+                var duplicado = false;
+                $('[name="perfilUnico"]').each(function (){
+                    var idComprobado = $(this).find('#PersonaAsignadaId').val();
+                    var tipoContratacionComprobado = $(this).find('#TipoContratacionId').val();
+                    if(idComprobado == personaAsignadaId && tipoContratacion == tipoContratacionComprobado)
+                    {
+                        duplicado = true;
+                        return duplicado;
+                    }
+                });
+                return duplicado;
+            }
+
+            function checkFechaCierreRequired(htmlItem)
+            {
+                htmlItem.find('[name="perfilUnico"]').each(function (){
+                    var estadoN = $(this).find('#EstadoNecesidadId').val();
+                    var fechaCierreHtml = $(this).find('[name="ListaNecesidades[{0}].FechaCierre"]');
+                    if (estadoN == '@((int)EstadoNecesidadEnum.Cerrada)' || estadoN == '@((int)EstadoNecesidadEnum.Cancelado)')
+                    {
+                        fechaCierreHtml.attr('required', 'true');
+                        fechaCierreHtml.removeAttr('disabled');
+                    }
+                    else
+                    {
+                        fechaCierreHtml.attr('disabled', 'true');
+                        fechaCierreHtml.removeAttr('required');
+                    }
+                });
+            }
+
+            function checkGrupoCerrado(cerrado)
+            {
+                if (cerrado == 'True')
+                {
+                    $('input, select, textarea').attr('disabled', 'true');
+                    $('#btnAddPerfil').attr('disabled', 'true');
+                    $('#btnAddPerfil').addClass('disabled');
+                }
+            }
+
+            //Comprobaciones y restricciones
+
+            $(document).on('click', '#btnDelete', function () {
+                var item = $(this).closest('[name="perfil"]');
+                deleteItemDialog(item);
+            });
+
+            $("#ClienteId").on("change", function (event) {
+
+                    var clienteIdSeleccionado = $("#ClienteId").val();
+                    var $select = $('#ProyectoId');
+                    $select.empty();
+
+                    $.post('@Url.Action("GeneraProyectosFromClientes", "Necesidades")', { clienteId: clienteIdSeleccionado }).done(function (data) {
+
+                        $.each(data, function (indice, elementoActual) {
+                            $('<option>', {
+                                value: elementoActual.ProyectoId
+                            }).html(elementoActual.Nombre).appendTo($select);
+                        });
+
+                        if (clienteIdSeleccionado != '') {
+                            generaSectorYServicioFromProyecto($('#ProyectoId').val(), false);
+                        }
+
+                    });
+
+                });
+
+                $("#ProyectoId").on("change", function (event) {
+
+                    generaSectorYServicioFromProyecto($(this).val(), true);
+
+            });
+
+            $(document).on('click', '#EstadoNecesidadId', function () {
+                antiguaContratacionEdicionMasiva = '';
+                antiguoEstadoEdicionMasiva = $(this).val();
+            });
+
+            $(document).on('click', '#TipoContratacionId', function () {
+                antiguoEstadoEdicionMasiva = '';
+                antiguaContratacionEdicionMasiva = $(this).val();
+            });
+
+            $(document).on('change', '[id="TipoTecnologiaId"]', function () {
+
+                var filaClicada = $(this).closest("tr");
+                checkAndShowModulo(filaClicada);
+
+            });
+
+            $(document).on('change', '[id="TipoPerfilId"]', function () {
+                var filaClicada = $(this).closest("tr");
+                checkAndShowModulo(filaClicada);
+                var perfil = $(this).closest('[name="perfil"]');
+                perfil.css('z-index', 1); //hacemos que el elemento que hemos modificado pase por delante
+                orderTable();
+                setTimeout(function () {
+                    perfil.css('z-index', 0);
+                }, 400); //hacemos que al finalizar la animacion el elemento pase por detrás
+            });
+
+            $(document).on('change', '[id="EstadoNecesidadId"]', function () {
+                var perfilEnUso = $(this).closest('tr');
+                var pasaItengridad = checkNecesidadLogicIntegrity(perfilEnUso);
+                if (pasaItengridad) {
+                    checkFechaCierreRequired($(this).closest('[name="perfil"]'));
+                    colorTable();
+                    checkAndShowPersonaAsignadaBtn($(this).closest('[name="perfil"]'));
+                }
+            });
+
+            $(document).on('change', '[id="TipoContratacionId"]', function () {
+                var perfilEnUso = $(this).closest('tr');
+                var pasaItengridad = checkNecesidadLogicIntegrity(perfilEnUso);
+                if (pasaItengridad) {
+                    checkAndShowPersonaAsignadaBtn($(this).closest('[name="perfil"]'));
+                    clearPersonaAsignada($(this).closest('tr'));
+                }
+            });
+
+            $(document).on('click', '#btnAddPerfil', function () {
+                createNewPerfil($('[name="perfilTemplate"]'));
+            });          
+
+            //Guardar
+
+            function guardar(source) {
+
+                var grupoCerrado = true;
+
+                $('[name="perfil"]').each(function() {
+                    var estadoNeces = $(this).find('#EstadoNecesidadId').val();
+                    if ((estadoNeces != @((int)EstadoNecesidadEnum.Cerrada))
+                        && (estadoNeces != @((int)EstadoNecesidadEnum.Cancelado)))
+                    {
+                        grupoCerrado = false;
+                    }
+                });
+
+
+                if (!grupoCerrado)
+                {
+                    BootstrapDialog.confirm({
+                        title: '@Resources.Necesidad_ConfirmarFinalizarConfirmadoTitulo',
+                        message: '@Resources.Necesidad_ConfirmarFinalizarPlanificadasTexto',
+                        type: BootstrapDialog.TYPE_CONFIRMFINALICE,
+                        callback: function (result) {
+                            if (result) {
+                                if ($("form").parsley().validate())
+                                {
+                                    changePlanificadasToConfirmadas();
+                                    forTable();
+                                    $('[name="NecesidadesBorradas"]').val(necesidadesEliminadas.toString());
+                                    $("form").submit();
+                                }
+                            } else {
+                                BootstrapDialog.closeAll();
+                            }
+                        }
+                    });
+                }
+                else
+                {
+                    if($('[name="perfil"]').length === 0)
+                    {
+                        BootstrapDialog.alert({
+                            title: '@Resources.Error',
+                            message: '@Resources.ErrorGrupoNecesidadSinNecesidadesText',
+                            type: BootstrapDialog.TYPE_ERROR
+                        });
+                    }
+                    else
+                    {
+                        BootstrapDialog.confirm({
+                            title: '@Resources.Necesidad_ConfirmacionFinalizarTitulo',
+                            message: '@Resources.Necesidad_ConfirmacionFinalizarCerrarGrupoTexto',
+                            type: BootstrapDialog.TYPE_CONFIRMFINALICE,
+                            callback: function (result) {
+                                if (result) {
+                                    if ($("form").parsley().validate())
+                                    {
+                                        forTable();
+                                        $('[name="NecesidadesBorradas"]').val(necesidadesEliminadas.toString());
+                                        $("form").submit();
+                                    }
+                                } else {
+                                    BootstrapDialog.closeAll();
+                                }
+                            }
+                        });
+                    }
+                }
+            }
+
+        </script>
+}
+
+@helper DetailFrontActions(System.Web.Mvc.UrlHelper Url, bool GrupoCerrado)
+{
+    <script type="text/javascript">
+
+        //Inicializaciones
+
+        var grupoCerrado = '@GrupoCerrado';
+        var estadoNecesidadCerrada = @((int)EstadoNecesidadEnum.Cerrada);
+        var tipoContratacionCambioInterno = @((int)TipoContratacionEnum.CambioInterno);
+        var tipoPrevisionConfirmado = @((int)TipoPrevisionEnum.Confirmado);
+        var tipoPrevisionPlanificado = @((int)TipoPrevisionEnum.Planificado);
+
+        $(document).ready(function () {                    
+
+            checkGrupoCerrado(grupoCerrado);
+            checkAndShowModuloEdit();
+            checkAndShowModuloCreate();                   
+
+        });
+
+        //Comprobaciones y restricciones
+
+        $("#ClienteId").on("change", function (event) {
+
+                var clienteIdSeleccionado = $("#ClienteId").val();
+                var $select = $('#ProyectoId');
+                $select.empty();
+
+                $.post('@Url.Action("GeneraProyectosFromClientes", "Necesidades")', { clienteId: clienteIdSeleccionado }).done(function (data) {
+
+                    $.each(data, function (indice, elementoActual) {
+                        $('<option>', {
+                            value: elementoActual.ProyectoId
+                        }).html(elementoActual.Nombre).appendTo($select);
+                    });
+
+                    if (clienteIdSeleccionado != '') {
+                        generaSectorYServicioFromProyecto($('#ProyectoId').val(), false);
+                    }
+
+                });
+
+            });
+
+        $("#ProyectoId").on("change", function (event) {
+
+            generaSectorYServicioFromProyecto($(this).val(), true);
+
+        });
+
+        $(document).on('change', '[id="TipoTecnologiaId"]', function () {
+            var filaClicada = $(this).closest("tr");
+            checkAndShowModulo(filaClicada);
+        });
+
+        $(document).on('change', '[id="TipoPerfilId"]', function () {
+            var filaClicada = $(this).closest("tr");
+            checkAndShowModulo(filaClicada);
+        });      
+
+        //Funciones
+
+        function generaSectorYServicioFromProyecto(ProyectoId, actualizaCliente) {
+
+            if (ProyectoId != null && ProyectoId != '') {
+                $.post('@Url.Action("GeneraSectorYServicioFromProyecto", "Necesidades")', { proyectoId: ProyectoId }).done(function (data) {
+
+                    var sectorId = data.SectorId;
+                    var servicioId = data.ServicioId;
+                    var clienteId = data.ClienteId;
+
+                    if (sectorId != null && sectorId != '') {
+                        $('#SectorId').val(sectorId);
+                    }
+                    if (servicioId != null && servicioId != '') {
+                        $('#TipoServicioId').val(servicioId);
+                    }
+                    if (clienteId != null && clienteId != '' && actualizaCliente) {
+                        $('#ClienteId').val(clienteId);
+                    }
+
+                });
+            }
+
+        }
+
+        function checkAndShowModulo(filaClicada) {
+            var tecnologia = filaClicada.find('[id="TipoTecnologiaId"]');
+            var perfil = filaClicada.find('[id="TipoPerfilId"]');
+            var modulo = filaClicada.find('[id="Modulo"]');
+
+            modulo.attr('disabled', 'disabled');
+            modulo.prop('required', false);
+            //Estado: Cerrada y Contratacion: Cambio Interno
+            if ((tecnologia.val() == 34) && ((perfil.val() == 1282) || (perfil.val() == 1281) || (perfil.val() == 1280) || (perfil.val() == 1279))) {
+                modulo.removeAttr('disabled');
+            }
+            else {
+                modulo.val("");
+                modulo.change();
+            }
+        }       
+
+        //Guardar
+
+         function guardar(source) {
+
+                    var grupoCerrado = true;
+
+
+                    $('[name="perfil"]').each(function() {
+                        var estadoNeces = $(this).find('[name="listaNecesidades[{0}].EstadoNecesidadId"]').val();
+                        if ((estadoNeces != @((int)EstadoNecesidadEnum.Cerrada))
+                            && (estadoNeces != @((int)EstadoNecesidadEnum.Cancelado)))
+                        {
+                            grupoCerrado = false;
+                        }
+                    });
+
+
+                    if(!grupoCerrado)
+                    {
+                        BootstrapDialog.confirm({
+                            title: '@Resources.Necesidad_ConfirmacionFinalizarTitulo',
+                            message: '@Resources.Necesidad_ConfirmacionFinalizarTexto',
+                            type: BootstrapDialog.TYPE_CONFIRMFINALICE,
+                            callback: function (result) {
+                                if (result) {
+                                    forTable();
+                                    $('[name="NecesidadesBorradas"]').val(necesidadesEliminadas.toString());
+                                    $('#formularioPrincipal').submit();
+                                } else {
+                                    BootstrapDialog.closeAll();
+                                }
+                            }
+                        });
+                    }
+                    else
+                    {
+                        if($('[name="perfil"]').length === 0)
+                        {
+                            BootstrapDialog.alert({
+                                title: '@Resources.Error',
+                                message: '@Resources.ErrorGrupoNecesidadSinNecesidadesText',
+                                type: BootstrapDialog.TYPE_ERROR
+                            });
+                        }
+                        else
+                        {
+                            BootstrapDialog.confirm({
+                                title: '@Resources.Necesidad_ConfirmacionFinalizarTitulo',
+                                message: '@Resources.Necesidad_ConfirmacionFinalizarCerrarGrupoTexto',
+                                type: BootstrapDialog.TYPE_CONFIRMFINALICE,
+                                callback: function (result) {
+                                    if (result) {
+                                        forTable();
+                                        $('[name="NecesidadesBorradas"]').val(necesidadesEliminadas.toString());
+                                        $('#formularioPrincipal').submit();
+                                    } else {
+                                        BootstrapDialog.closeAll();
+                                    }
+                                }
+                            });
+                        }
+                    }
+                }        
+
+    </script>
+}
+
+@helper ForTableEdit()
+    {
+        <script type="text/javascript">
+
+            function forTable() {
+
+                var $cont = 0;
+                $('#perfilFlexContainer').find('[name="perfilUnico"]').each(function () {
+                    var item = $(this);
+                    item.find('input, select, textarea').each(function () {
+                        var input = $(this);
+                        input.attr('name', String.format(input.attr('name'), $cont));
+                    });
+
+                    $cont++;
+                });
+
+            }
+
+            String.format = function (format) {
+                var args = Array.prototype.slice.call(arguments, 1);
+                return format.replace(/{(\d+)}/g, function (match, number) {
+                    return typeof args[number] != 'undefined'
+                        ? args[number]
+                        : match
+                        ;
+                });
+            };
+        </script>
+}
+
+
+@helper ForTableDetail()
+{
+    <script type="text/javascript">
+
+        function forTable() {
+
+            var $cont = 0;
+            $("#listaPerfiles tbody tr:not(:first)").each(function () {
+                var item = $(this);
+                item.find('input, select, textarea').each(function () {
+                    var input = $(this);
+                    input.attr('name', String.format(input.attr('name'), $cont));
+                });
+
+                $cont++;
+            });
+
+        }
+
+        String.format = function (format) {
+            var args = Array.prototype.slice.call(arguments, 1);
+            return format.replace(/{(\d+)}/g, function (match, number) {
+                return typeof args[number] != 'undefined'
+                    ? args[number]
+                    : match
+                    ;
+            });
+        };
+    </script>
+}
+
+@helper JointJsFrontActions(Recruiting.Application.Necesidades.ViewModels.CreateEditGrupoNecesidadViewModel Model, System.Web.Mvc.HtmlHelper Html, System.Web.IHtmlString jsonString, dynamic listaPerfiles, dynamic listaTecnologias, dynamic listaModulos
+                            , dynamic listaContratacion, dynamic listaPrevision, dynamic listaServicios)
+{
+    <script type="text/javascript">
+
+        function getNombreById (lista, id){
+                    var text;
+                    lista.forEach(function(element) {
+                        if(element.Value == parseInt(id))
+                        {
+                            text = element.Text;
+                        }
+                    });
+                    return text;
+                }
+
+                //incializaciones del grafo
+
+                var graph = new joint.dia.Graph;
+                var listaNecesidades = @jsonString;
+                var altoPaper = (listaNecesidades.length / 5) *210;
+                var indiceIdPerfil = 0;
+                var necesidadesEliminadas = [];
+                var necesidadIdClicada;
+                var estadoNecesidadInicial;
+                var contratacionNecesidadInicial;
+
+                //fin inicializaciones del grafo
+
+                if(listaNecesidades.length % 5 != 0)
+                {
+                    altoPaper = altoPaper + 210;
+                }
+                var paper = new joint.dia.Paper({
+                    el: $('#pantallaPerfiles'),
+                    width: '100%',
+                    height: altoPaper,
+                    model: graph,
+                    gridSize: 1
+                });
+
+                // Create a custom element.
+                // ------------------------
+
+                joint.shapes.html = {};
+                joint.shapes.html.Element = joint.shapes.basic.Rect.extend({
+                    defaults: joint.util.deepSupplement({
+                        type: 'html.Element',
+                        attrs: {
+                            rect: { stroke: 'none', 'fill-opacity': 0 }
+                        }
+                    }, joint.shapes.basic.Rect.prototype.defaults)
+                });
+
+                // Create a custom view for that element that displays an HTML div above it.
+                // -------------------------------------------------------------------------
+
+               
+
+                joint.shapes.html.ElementView = joint.dia.ElementView.extend({
+
+                    template: [
+                        '<div class="perfil" name="perfil">',
+                        '@Html.Hidden("indiceIdPerfil")',
+                        '@Html.Hidden("listaNecesidades[{0}].NecesidadId")',
+                        '@Html.Hidden("listaNecesidades[{0}].TipoServicioId")',
+                        '@Html.Hidden("listaNecesidades[{0}].TipoPerfilId")',
+                        '@Html.Hidden("listaNecesidades[{0}].TipoTecnologiaId")',
+                        '@Html.Hidden("listaNecesidades[{0}].TipoContratacionId")',
+                        '@Html.Hidden("listaNecesidades[{0}].TipoPrevisionId")',
+                        '@Html.Hidden("listaNecesidades[{0}].DetalleTecnologia")',
+                        '@Html.Hidden("listaNecesidades[{0}].FechaCompromiso")',
+                        '@Html.Hidden("listaNecesidades[{0}].FechaCierre")',
+                        '@Html.Hidden("listaNecesidades[{0}].EstadoNecesidadId")',
+                        '@Html.Hidden("listaNecesidades[{0}].PersonaAsignada")',
+                        '@Html.Hidden("listaNecesidades[{0}].PersonaAsignadaId")',
+                        '@Html.Hidden("listaNecesidades[{0}].PersonaAsignadaNroEmpleado")',
+                        '@Html.Hidden("listaNecesidades[{0}].candidaturaId")',
+                        '@Html.Hidden("listaNecesidades[{0}].AsignadaCorrectamente")',
+                        '@Html.Hidden("listaNecesidades[{0}].GrupoNecesidad")',
+                        '@Html.Hidden("listaNecesidades[{0}].Modulo")',
+                        '<div class="closeBtn" name="closeBtn">X</div>',
+                        '<span class="btnEditarPerfil glyphicon glyphicon-pencil" id="editarBoton"></span>',
+                        '<div class="perfil-superior">',
+                        '<span id="perfil" name="tipoPerfil"></span>',
+                        '</div>',
+                        '<div class="perfil-content">',
+                        '<div class="row">', '<div>',
+                        '<div class="personaAsignadaPerfil">',
+                        '<span class="personaAsignadaPerfilSpan" id="personaAsignada"></span>',
+                        '</div>', '</div>', '</div>',
+                        '<div class="row seccion">',
+                        '<div class="col-lg-8 padding-eliminator">',
+                        '<span id="tecnologia"></span>',
+                        '</div>',
+                        '<div class="col-lg-4 padding-eliminator perfil-text-right">',
+                        '<span id="modulo"></span>',
+                        '</div>', '</div>',
+                        '<div class="row seccion">',
+                        '<div class="col-lg-12 padding-eliminator">',
+                        '<span id="fechaCompromiso"></span>',
+                        '<span id="fechaCierre"></span>',
+                        '</div>', '</div>',
+                        '<div class="row seccion">',
+                        '<div class="col-lg-12 padding-eliminator">',
+                        '<div class="col-lg-8 padding-eliminator">',
+                        '<span id="tipoContratacion"></span>',
+                        '</div>',
+                        '<div class="col-lg-4 padding-eliminator perfil-text-right">',
+                        '<span id="servicio">DEV</span>',
+                        ' </div>',
+                        '</div>', '</div>',
+                        '<div class="row seccion">',
+                        '<div class="col-lg-12 padding-eliminator">',
+                        '<div class="col-lg-8 padding-eliminator">',
+                        '<span id="tipoPrevision"></span>',
+                        '</div>',
+                        '</div>', '</div>',
+                        '<div class="row seccion">',
+                         '</div>', '</div>', '</div>'
+                    ].join(''),
+
+
+                    initialize: function () {
+                        _.bindAll(this, 'updateBox');
+                        joint.dia.ElementView.prototype.initialize.apply(this, arguments);
+
+                        this.$box = $(_.template(this.template)());
+                        // Prevent paper from handling pointerdown.
+                        this.$box.find('input,select').on('mousedown click', function (evt) {
+                            evt.stopPropagation();
+                        });
+                        // This is an example of reacting on the input change and storing the input data in the cell model.
+                        this.$box.find('input').on('change', _.bind(function (evt) {
+                            this.model.set('input', $(evt.target).val());
+                        }, this));
+                        this.$box.find('select').on('change', _.bind(function (evt) {
+                            this.model.set('select', $(evt.target).val());
+                        }, this));
+                        this.$box.find('select').val(this.model.get('select'));
+                        //this.$box.find('.closeBtn').on('click', _.bind(this.model.remove, this.model));
+                        this.$box.find('.closeBtn').on('click', _.bind(function (evt) {
+                            //this.model.set('select', $(evt.target).val());
+                            var model = this.model;
+                            BootstrapDialog.confirm({
+                                title: '@Resources.Necesidad_EliminarTitulo',
+                                message: '@Resources.Necesidad_EliminarMensaje',
+                                type: BootstrapDialog.TYPE_CONFIRMDELETE,
+                                callback: function (result) {
+                                    if (result) {
+                                        var necesidadId = model.prop('NecesidadIdHidden');
+                                        if(necesidadId != null && necesidadId != '')
+                                        {
+                                            necesidadesEliminadas.push(necesidadId);
+                                        }
+                                        model.remove();
+                                        var numeroElementosPF = parseInt($('#numeroElementosPorFila').val());
+                                        reorganizaGrafo(graph.getCells(), numeroElementosPF);
+                                    } else {
+                                        BootstrapDialog.closeAll();
+                                    }
+                                }
+                            });
+                        }, this));
+                        // Update the box position whenever the underlying model changes.
+                        this.model.on('change', this.updateBox, this);
+                        // Remove the box when the model gets removed from the graph.
+                        this.model.on('remove', this.removeBox, this);
+
+                        this.updateBox();
+                    },
+                    render: function () {
+                        joint.dia.ElementView.prototype.render.apply(this, arguments);
+                        this.paper.$el.prepend(this.$box);
+                        this.updateBox();
+                        return this;
+                    },
+                    updateBox: function () {
+
+                        // Set the position and dimension of the box so that it covers the JointJS element.
+                        var bbox = this.model.getBBox();
+                        // Example of updating the HTML with a data stored in the cell model.
+                        this.$box.find('#personaAsignada').text(this.model.get('personaAsignada'));
+                        this.$box.find('#perfil').text(this.model.get('perfil'));
+                        this.$box.find('#tecnologia').text(this.model.get('tecnologia'));
+                        this.$box.find('#modulo').text(this.model.get('modulo'));
+                        this.$box.find('#fechaCompromiso').text(this.model.get('fechaCompromiso'));
+                        this.$box.find('#fechaCierre').text(this.model.get('fechaCierre'));
+                        this.$box.find('#tipoContratacion').text(this.model.get('tipoContratacion'));
+                        this.$box.find('#tipoPrevision').text(this.model.get('tipoPrevision'));
+                        this.$box.find('#servicio').text(this.model.get('servicio'));
+                        this.$box.find('[name="listaNecesidades[{0}].NecesidadId"]').val(this.model.get('NecesidadIdHidden'));
+                        this.$box.find('[name="listaNecesidades[{0}].EstadoNecesidadId"]').val(this.model.get('EstadoNecesidadIdHidden'));
+                        this.$box.find('[name="listaNecesidades[{0}].TipoPerfilId"]').val(this.model.get('TipoPerfilIdHidden'));
+                        this.$box.find('[name="listaNecesidades[{0}].TipoServicioId"]').val(this.model.get('TipoServicioIdHidden'));
+                        this.$box.find('[name="listaNecesidades[{0}].TipoTecnologiaId"]').val(this.model.get('TipoTecnologiaIdHidden'));
+                        this.$box.find('[name="listaNecesidades[{0}].TipoContratacionId"]').val(this.model.get('TipoContratacionIdHidden'));
+                        this.$box.find('[name="listaNecesidades[{0}].TipoPrevisionId"]').val(this.model.get('TipoPrevisionIdHidden'));
+                        this.$box.find('[name="listaNecesidades[{0}].DetalleTecnologia"]').val(this.model.get('DetalleTecnologiaHidden'));
+                        this.$box.find('[name="listaNecesidades[{0}].FechaCompromiso"]').val(this.model.get('FechaCompromisoHidden'));
+                        this.$box.find('[name="listaNecesidades[{0}].FechaCierre"]').val(this.model.get('FechaCierreHidden'));
+                        this.$box.find('[name="listaNecesidades[{0}].PersonaAsignada"]').val(this.model.get('personaAsignada'));
+                        this.$box.find('[name="listaNecesidades[{0}].PersonaAsignadaId"]').val(this.model.get('PersonaAsignadaIdHidden'));
+                        this.$box.find('[name="listaNecesidades[{0}].PersonaAsignadaNroEmpleado"]').val(this.model.get('PersonaAsignadaNroEmpleadoHidden'));
+                        this.$box.find('[name="listaNecesidades[{0}].candidaturaId"]').val(this.model.get('candidaturaIdHidden'));
+                        this.$box.find('[name="listaNecesidades[{0}].Modulo"]').val(this.model.get('ModuloIdHidden'));
+                        this.$box.find('[name="listaNecesidades[{0}].AsignadaCorrectamente"]').val(this.model.get('AsignadaCorrectamenteHidden'));
+                        this.$box.find('[name="listaNecesidades[{0}].GrupoNecesidad"]').val(this.model.get('GrupoNecesidadHidden'));
+                        this.$box.find('[name="indiceIdPerfil"]').val(this.model.get('IndiceIdPerfil'));
+
+                        //this.$box.find('span').text(this.model.get('select'));
+                        this.$box.css({
+                            width: bbox.width,
+                            height: bbox.height,
+                            left: bbox.x,
+                            top: bbox.y,
+                            transform: 'rotate(' + (this.model.get('angle') || 0) + 'deg)'
+                        });
+                    },
+                    removeBox: function (evt) {
+                        this.$box.remove();
+                    }
+                });
+
+
+
+                // Inicializacion del grafo
+                // -----------------------------------------------------------
+
+                var listaPerfiles = @listaPerfiles;
+                var listaTecnologias = @listaTecnologias;
+                var listaModulos = @listaModulos;
+                var listaContratacion = @listaContratacion;
+                var listaPrevision = @listaPrevision;
+                var listaServicios = @listaServicios;
+                var separacionDeFilas = 40;
+                var miniSeparacion = 12;
+                var numeroElementosPorFila = parseInt($('#numeroElementosPorFila').val());
+                var altoCaja = 127;
+                var anchoCaja = 180;
+                var correccionPosicion = anchoCaja / 2;
+                var xposInicial = $('#pantallaPerfiles').css('width');
+                var primeraVezQueOrdenoPerfil = true;
+                xposInicial = parseInt(xposInicial.substr(0, xposInicial.length - 2));
+                xposInicial = xposInicial / 2 - correccionPosicion;
+                cargarPerfiles();
+                coloreaPerfiles();
+                reorganizaGrafo(graph.getCells(), numeroElementosPorFila);
+
+                function cargarPerfiles(){
+                    listaNecesidades.forEach(function(necesidad) {
+                        crearElemento(necesidad, xposInicial, separacionDeFilas, indiceIdPerfil, false);
+                        indiceIdPerfil++;
+                    });
+                }
+
+                function coloreaPerfiles(){
+                    $('[name="perfil"]').each(function(){
+                        if($(this).hasClass('necesidadCerrada'))
+                        {
+                            $(this).removeClass('necesidadCerrada');
+                        }
+                        else if($(this).hasClass('necesidadPreasignada'))
+                        {
+                            $(this).removeClass('necesidadPreasignada');
+                        }
+                        else if($(this).hasClass('necesidadAbierta'))
+                        {
+                            $(this).removeClass('necesidadAbierta');
+                        }
+                        else if($(this).hasClass('necesidadCancelada'))
+                        {
+                            $(this).removeClass('necesidadCancelada');
+                        }
+
+                        if (($(this).find('[name="listaNecesidades[{0}].EstadoNecesidadId"]').val() == @((int)EstadoNecesidadEnum.Cerrada)))
+                        {
+                            $(this).addClass('necesidadCerrada');
+                        }
+                        else if(($(this).find('[name="listaNecesidades[{0}].EstadoNecesidadId"]').val() == @((int)EstadoNecesidadEnum.Preasignada)))
+                        {
+                            $(this).addClass('necesidadPreasignada');
+                        }
+                        else if(($(this).find('[name="listaNecesidades[{0}].EstadoNecesidadId"]').val() == @((int)EstadoNecesidadEnum.Abierta)))
+                        {
+                            $(this).addClass('necesidadAbierta');
+                        }
+                        else if(($(this).find('[name="listaNecesidades[{0}].EstadoNecesidadId"]').val() == @((int)EstadoNecesidadEnum.Cancelado)))
+                        {
+                            $(this).addClass('necesidadCancelada');
+                        }
+                    });
+                }
+
+                function crearElemento(necesidad, xpos, ypos, indice, elementoNuevo) {
+                    var fechaCompromiso;
+                    var fechaCompromisoMostrar;
+                    var fechaCierre;
+                    var fechaCierreValor;
+                    var fechaCierreMostrar;
+
+                    if (!elementoNuevo)
+                    {
+                        fechaCompromiso = new Date(necesidad.FechaCompromiso);
+                        fechaCompromisoMostrar = fechaCompromiso.getDate()+'/'+(fechaCompromiso.getMonth()+1)+'/'+ fechaCompromiso.getFullYear();
+                        if(necesidad.FechaCierre != null)
+                        {
+                            fechaCierre = new Date(necesidad.FechaCierre);
+                            fechaCierreValor = fechaCierre.getDate()+'/'+(fechaCierre.getMonth()+1)+'/'+ fechaCierre.getFullYear();
+                            fechaCierreMostrar = ' - ' + fechaCierreValor;
+                        }
+                    }
+                    else
+                    {
+                        fechaCompromisoMostrar = necesidad.FechaCompromiso;
+                    }
+
+                    var moduloMostrar = getNombreById(listaModulos, necesidad.Modulo);
+
+                    if(moduloMostrar != null)
+                    {
+                        moduloMostrar =  ' / ' + moduloMostrar;
+                    }
+
+                    var nuevoPerfil = new joint.shapes.html.Element({
+                        position: { x: xpos, y: ypos },
+                        size: { width: anchoCaja, height: altoCaja },
+                        personaAsignada: necesidad.PersonaAsignada,
+                        perfil: getNombreById(listaPerfiles, necesidad.TipoPerfilId),
+                        tecnologia:  getNombreById(listaTecnologias, necesidad.TipoTecnologiaId),
+                        modulo: moduloMostrar,
+                        fechaCompromiso: fechaCompromisoMostrar,
+                        fechaCierre: fechaCierreMostrar,
+                        tipoContratacion: getNombreById(listaContratacion, necesidad.TipoContratacionId),
+                        tipoPrevision: getNombreById(listaPrevision, necesidad.TipoPrevisionId),
+                        servicio: getNombreById(listaServicios, necesidad.TipoServicioId),
+                        NecesidadIdHidden: necesidad.NecesidadId,
+                        EstadoNecesidadIdHidden: necesidad.EstadoNecesidadId,
+                        TipoPerfilId: necesidad.TipoPerfilId,
+                        TipoPerfilIdHidden: necesidad.TipoPerfilId,
+                        TipoServicioIdHidden: necesidad.TipoServicioId,
+                        TipoTecnologiaIdHidden: necesidad.TipoTecnologiaId,
+                        TipoContratacionIdHidden: necesidad.TipoContratacionId,
+                        TipoPrevisionIdHidden: necesidad.TipoPrevisionId,
+                        DetalleTecnologiaHidden: necesidad.DetalleTecnologia,
+                        FechaCompromisoHidden: fechaCompromisoMostrar,
+                        FechaCierreHidden: fechaCierreValor,
+                        PersonaAsignadaIdHidden: necesidad.PersonaAsignadaId,
+                        PersonaAsignadaNroEmpleadoHidden: necesidad.PersonaAsignadaNroEmpleado,
+                        candidaturaIdHidden: necesidad.candidaturaId,
+                        AsignadaCorrectamenteHidden: necesidad.AsignadaCorrectamente,
+                        GrupoNecesidadHidden: necesidad.GrupoNecesidad,
+                        IndiceIdPerfil: indice,
+                        ModuloIdHidden: necesidad.Modulo
+                    });
+                    graph.addCells([nuevoPerfil]);
+
+                }
+
+
+
+                function reorganizaGrafo(elements, numeroElementosPorFila)
+                {
+                    //inicializamos lista perfiles
+                    primeraVezQueOrdenoPerfil = true;
+
+                    var juniors = [];
+                    var developers = [];
+                    var seniorDevelopers = [];
+                    var leaderDevelopers = [];
+                    var serviceLeaders = [];
+                    var seniorServiceLeaders = [];
+                    var technicalSeniorSpecialists = [];
+                    var technicalExpertSpecialists = [];
+                    var technicalLeaderSpecialists = [];
+                    var functionalSpecialists = [];
+                    var functionalSeniorSpecialists = [];
+                    var functionalExpertSpecialists = [];
+                    var functionalLeaderSpecialists = [];
+                    var testingSpecialists = [];
+                    var testingSeniorSpecialists = [];
+                    var testingLeaderSpecialists = [];
+                    var testingExpertSpecialists = [];
+                    var elementosGrafo = graph.getCells();
+
+                    for (var i = 0; i <elementosGrafo.length; i++)
+                    {
+                        var perfil = parseInt(elementosGrafo[i].get('TipoPerfilId'));
+                        switch (perfil)
+                        {
+                            case @((int)TipoPerfilCandidaturaEnum.Junior):
+                                juniors.push(perfil);
+                                break;
+                            case @((int)TipoPerfilCandidaturaEnum.Developer):
+                                developers.push(perfil);
+                                break;
+                            case @((int)TipoPerfilCandidaturaEnum.SeniorDeveloper):
+                                seniorDevelopers.push(perfil);
+                                break;
+                            case @((int)TipoPerfilCandidaturaEnum.LeaderDeveloper):
+                                leaderDevelopers.push(perfil);
+                                break;
+                            case @((int)TipoPerfilCandidaturaEnum.ServiceLeader):
+                                serviceLeaders.push(perfil);
+                                break;
+                            case @((int)TipoPerfilCandidaturaEnum.SeniorServiceLeader):
+                                seniorServiceLeaders.push(perfil);
+                                break;
+                            case @((int)TipoPerfilCandidaturaEnum.TechnicalExpertSpecialist):
+                                technicalExpertSpecialists.push(perfil);
+                                break;
+                            case @((int)TipoPerfilCandidaturaEnum.TechnicalSeniorSpecialist):
+                                technicalSeniorSpecialists.push(perfil);
+                                break;
+                            case @((int)TipoPerfilCandidaturaEnum.TechnicalLeaderSpecialist):
+                                technicalLeaderSpecialists.push(perfil);
+                                break;
+                            case @((int)TipoPerfilCandidaturaEnum.FunctionalSpecialist):
+                                functionalSpecialists.push(perfil);
+                                break;
+                            case @((int)TipoPerfilCandidaturaEnum.FunctionalSeniorSpecialist):
+                                functionalSeniorSpecialists.push(perfil);
+                                break;
+                            case @((int)TipoPerfilCandidaturaEnum.FunctionalLeaderSpecialist):
+                                functionalLeaderSpecialists.push(perfil);
+                                break;
+                            case @((int)TipoPerfilCandidaturaEnum.FunctionalExpertSpecialist):
+                                functionalExpertSpecialists.push(perfil);
+                                break;
+                            case @((int)TipoPerfilCandidaturaEnum.TestingSpecialist):
+                                testingSpecialists.push(perfil);
+                                break;
+                            case @((int)TipoPerfilCandidaturaEnum.TestingSeniorSpecialist):
+                                testingSeniorSpecialists.push(perfil);
+                                break;
+                            case @((int)TipoPerfilCandidaturaEnum.TestingLeaderSpecialist):
+                                testingLeaderSpecialists.push(perfil);
+                                break;
+                            case @((int)TipoPerfilCandidaturaEnum.TestingExpertSpecialist):
+                                testingExpertSpecialists.push(perfil);
+                                break;
+                        }
+                    }
+
+                    //cambio tamaño del paper
+
+                    var filas = numeroDeFilas(juniors, numeroElementosPorFila)
+                    + numeroDeFilas(developers, numeroElementosPorFila)
+                    + numeroDeFilas(seniorDevelopers, numeroElementosPorFila)
+                    + numeroDeFilas(leaderDevelopers, numeroElementosPorFila)
+                    + numeroDeFilas(testingSpecialists, numeroElementosPorFila)
+                    + numeroDeFilas(testingSeniorSpecialists, numeroElementosPorFila)
+                    + numeroDeFilas(testingLeaderSpecialists, numeroElementosPorFila)
+                    + numeroDeFilas(testingExpertSpecialists, numeroElementosPorFila)
+                    + numeroDeFilas(functionalSpecialists, numeroElementosPorFila)
+                    + numeroDeFilas(functionalSeniorSpecialists, numeroElementosPorFila)
+                    + numeroDeFilas(functionalLeaderSpecialists, numeroElementosPorFila)
+                    + numeroDeFilas(functionalExpertSpecialists, numeroElementosPorFila)
+                    + numeroDeFilas(technicalSeniorSpecialists, numeroElementosPorFila)
+                    + numeroDeFilas(technicalLeaderSpecialists, numeroElementosPorFila)
+                    + numeroDeFilas(technicalExpertSpecialists, numeroElementosPorFila)
+                    + numeroDeFilas(serviceLeaders, numeroElementosPorFila)
+                    + numeroDeFilas(seniorServiceLeaders, numeroElementosPorFila);
+
+                    paper.setDimensions('100%', filas * (separacionDeFilas + altoCaja) + separacionDeFilas);
+
+                    //fin cambio tamaño
+
+                    //organizamos elementos
+
+                    var listasPerfiles = [leaderDevelopers, seniorDevelopers, developers, juniors
+                    , testingExpertSpecialists, testingLeaderSpecialists, testingSeniorSpecialists, testingSpecialists
+                    , functionalExpertSpecialists, functionalLeaderSpecialists, functionalSeniorSpecialists, functionalSpecialists
+                    , technicalExpertSpecialists, technicalLeaderSpecialists, technicalSeniorSpecialists
+                    , seniorServiceLeaders, serviceLeaders];
+
+                    var posicionYInicial = 0;
+                    for (var i=0; i<listasPerfiles.length; i++)
+                    {
+                        if(listasPerfiles[i].length > 0)
+                        {
+                            var posicionYFinal = ordenaPerfil(listasPerfiles[i], posicionYInicial, numeroElementosPorFila);
+                            posicionYInicial = posicionYFinal;
+                        }
+                    }
+
+                    //fin organizamos elementos
+
+                    var perfiles =
+        leaderDevelopers.concat(
+        seniorDevelopers).concat(
+        developers).concat(
+        juniors).concat(
+        testingExpertSpecialists).concat(
+        testingLeaderSpecialists).concat(
+        testingSeniorSpecialists).concat(
+        testingSpecialists).concat(
+        functionalExpertSpecialists).concat(
+        functionalLeaderSpecialists).concat(
+        functionalSeniorSpecialists).concat(
+        functionalSpecialists).concat(
+        technicalExpertSpecialists).concat(
+        technicalLeaderSpecialists).concat(
+        technicalSeniorSpecialists).concat(
+        seniorServiceLeaders).concat(
+        serviceLeaders);
+ 
+                    var perfilesSinRepetir = [];
+                    $.each(perfiles, function(indice, elemento){
+                        if($.inArray(elemento, perfilesSinRepetir) === -1) perfilesSinRepetir.push(elemento);
+                    });
+                }
+
+                function ordenaPerfil(perfiles, posicionYInicial, numeroElementosPorFila)
+                {
+                    var elementos = getElementosPerfil(graph.getCells(), perfiles[0]);
+                    var filasQueOcupa = numeroDeFilas(perfiles, numeroElementosPorFila);
+                    var resto = elementos.length % numeroElementosPorFila;
+                    var limiteFinalBucle = numeroElementosPorFila;
+                    var limiteInicialBucle = 0;
+                    var posY = 0;
+                    for(var i = 0; i<filasQueOcupa; i++)
+                    {
+                        if(i == 0 && posicionYInicial == 0)
+                        {
+                            posY = separacionDeFilas;
+                        }
+                        else
+                        {
+                            if((filasQueOcupa == 1) || (i == 0 && filasQueOcupa > 1))
+                            {
+                                posY = posicionYInicial;
+                                primeraVezQueOrdenoPerfil = false;
+                            }
+                            else
+                            {
+                                if(primeraVezQueOrdenoPerfil && filasQueOcupa > 1)
+                                {
+                                    posY = posicionYInicial + separacionDeFilas + (i * (altoCaja + miniSeparacion));
+                                }
+                                else
+                                {
+                                    posY = posicionYInicial + (i * (altoCaja + miniSeparacion));
+                                    primeraVezQueOrdenoPerfil = false;
+                                }
+                            }
+                        }
+                        var divisionFila = numeroElementosPorFila + 1;
+                        if((i == (filasQueOcupa - 1)) && resto != 0)
+                        {
+                            divisionFila = resto + 1;
+                        }
+                        var desplazamientoX = $('#pantallaPerfiles').css('width');
+                        desplazamientoX = parseInt(desplazamientoX.substr(0, desplazamientoX.length - 2));
+                        desplazamientoX = (desplazamientoX / divisionFila);
+                        var pasoPosicion = 1;
+                        elementos.forEach(function(elemento, indice){
+                            if(indice < limiteFinalBucle)
+                            {
+                                if(indice >= limiteInicialBucle)
+                                {
+                                    var posicionX = pasoPosicion * desplazamientoX;
+                                    mueveElemento(elemento, posicionX - correccionPosicion, posY);
+                                    pasoPosicion = pasoPosicion + 1;
+                                }
+                            }
+                        });
+                        limiteFinalBucle = limiteFinalBucle + numeroElementosPorFila;
+                        limiteInicialBucle = limiteInicialBucle + numeroElementosPorFila;
+                    }
+                    return posY + separacionDeFilas + altoCaja;
+                }
+
+                function getElementosPerfil(listaElementos, perfil)
+                {
+                    var elementosADevolver = [];
+                    listaElementos.forEach(function(elemento){
+                        if(parseInt(elemento.get('TipoPerfilId')) == perfil)
+                        {
+                            elementosADevolver.push(elemento);
+                        }
+                    });
+                    return elementosADevolver;
+                }
+
+                function numeroDeFilas(listaPerfiles, numeroElementosPorFila)
+                {
+                    var filas = (listaPerfiles.length / numeroElementosPorFila);
+                    if(listaPerfiles.length % numeroElementosPorFila != 0)
+                    {
+                        filas = filas + 1;
+                    }
+                    filas = parseInt(toFixedDown(filas, 0));
+                    return filas;
+                }
+
+                function mueveElemento(elemento, x, y)
+                {
+                    var transition = {
+                        delay: 50,
+                        duration: 150,
+                        timingFunction: function(t) { return t*t; },
+                        valueFunction: function(a, b) { return function(t) { return a + (b - a) * t }}
+                    };
+                    var posicion = elemento.attributes.position;
+                    elemento.translate(x - posicion.x, y - posicion.y, {transition: transition})
+                }
+
+                $(document).on('click', '#editarBoton', function () {
+                    var perfilCargar = $(this).closest('[name="perfil"]');
+                    estadoNecesidadInicial = perfilCargar.find('[name="listaNecesidades[{0}].EstadoNecesidadId"]').val();
+                    contratacionNecesidadInicial = perfilCargar.find('[name="listaNecesidades[{0}].TipoContratacionId"]').val();
+                    necesidadIdClicada = perfilCargar.find('[name="listaNecesidades[{0}].NecesidadId"]').val();
+                    limpiarModalEdit();
+                    cargarModalEdit(perfilCargar);
+                    checkAndShowPersonaAsignadaBtn();
+                    checkAndShowFechaCierreEdit();
+                    $("#modalEditPerfil").modal('show');
+                });
+
+                function cargarModalEdit(perfilCargar)
+                {
+                    var fechaCierre = perfilCargar.find('#fechaCierre').html();
+                    if(fechaCierre != null && fechaCierre != '')
+                    {
+                        fechaCierre = fechaCierre.substr(3, fechaCierre.length);
+                    }
+                    $('#indiceIdPerfilModalEditPerfil').val(perfilCargar.find('[name="indiceIdPerfil"]').val());
+                    $('#TipoPerfilIdModalEditPerfil').val(perfilCargar.find('[name="listaNecesidades[{0}].TipoPerfilId"]').val());
+                    $('#PersonaAsignadaModalEditPerfil').val(perfilCargar.find('#personaAsignada').html());
+                    $('#PersonaAsignadaIdModalEditPerfil').val(perfilCargar.find('[name="listaNecesidades[{0}].PersonaAsignadaId"]').val());
+                    $('#CandidaturaIdModalEditPerfil').val(perfilCargar.find('[name="listaNecesidades[{0}].candidaturaId"]').val());
+                    $('#TipoContratacionIdModalEditPerfil').val(perfilCargar.find('[name="listaNecesidades[{0}].TipoContratacionId"]').val());
+                    $('#TipoPrevisionIdModalEditPerfil').val(perfilCargar.find('[name="listaNecesidades[{0}].TipoPrevisionId"]').val());
+                    $('#EstadoNecesidadModalEditPerfil').val(perfilCargar.find('[name="listaNecesidades[{0}].EstadoNecesidadId"]').val());
+                    $('#TipoTecnologiaIdModalEditPerfil').val(perfilCargar.find('[name="listaNecesidades[{0}].TipoTecnologiaId"]').val());
+                    $('#ModuloModalEditPerfil').val(perfilCargar.find('[name="listaNecesidades[{0}].Modulo"]').val());
+                    $('#FechaCompromisoModalEditPerfil').val(perfilCargar.find('#fechaCompromiso').html());
+                    $('#FechaCierreModalEditPerfil').val(fechaCierre);
+                    $('#TipoServicioIdModalEditPerfil').val(perfilCargar.find('[name="listaNecesidades[{0}].TipoServicioId"]').val());
+                }
+
+                function limpiarModalEdit()
+                {
+                    $('#indiceIdPerfilModalEditPerfil').val('');
+                    $('#TipoPerfilIdModalEditPerfil').val('');
+                    $('#PersonaAsignadaModalEditPerfil').val('');
+                    $('#PersonaAsignadaIdModalEditPerfil').val('');
+                    $('#CandidaturaIdModalEditPerfil').val('');
+                    $('#TipoContratacionIdModalEditPerfil').val('');
+                    $('#TipoPrevisionIdModalEditPerfil').val('');
+                    $('#EstadoNecesidadModalEditPerfil').val('');
+                    $('#TipoTecnologiaIdModalEditPerfil').val('');
+                    $('#ModuloModalEditPerfil').val('');
+                    $('#FechaCompromisoModalEditPerfil').val('');
+                    $('#FechaCierreModalEditPerfil').val('');
+                    $('#TipoServicioIdModalEditPerfil').val('');
+                }
+
+                function creaNecesidadFromModalEdit()
+                {
+                    var indice = $('#indiceIdPerfilModalEditPerfil').val();
+                    var cell;
+                    var cells = graph.getCells();
+
+                    for(var i = 0; i<cells.length; i++)
+                    {
+                        var indiceAComprarar = cells[i].get('IndiceIdPerfil');
+                        if (indiceAComprarar == parseInt(indice))
+                        {
+                            cell = cells[i];
+                        }
+                    }
+
+                    var moduloMostrar = getNombreById(listaModulos, $('#ModuloModalEditPerfil').val());
+                    if(moduloMostrar != null)
+                    {
+                        moduloMostrar =  ' / ' + moduloMostrar;
+                    }
+
+                    var fechaCierre = $('#FechaCierreModalEditPerfil').val();
+                    if (fechaCierre != null && fechaCierre != '')
+                    {
+                        fechaCierre = ' - ' + fechaCierre;
+                    }
+
+                    cell.prop('personaAsignada', $('#PersonaAsignadaModalEditPerfil').val());
+                    cell.prop('perfil', getNombreById(listaPerfiles, $('#TipoPerfilIdModalEditPerfil').val()));
+                    cell.prop('tecnologia', getNombreById(listaTecnologias, $('#TipoTecnologiaIdModalEditPerfil').val()));
+                    cell.prop('modulo', moduloMostrar);
+                    cell.prop('fechaCompromiso', $('#FechaCompromisoModalEditPerfil').val());
+                    cell.prop('fechaCierre', fechaCierre);
+                    cell.prop('FechaCierreHidden', $('#FechaCierreModalEditPerfil').val())
+                    cell.prop('tipoContratacion', getNombreById(listaContratacion, $('#TipoContratacionIdModalEditPerfil').val()));
+                    cell.prop('tipoPrevision', getNombreById(listaPrevision, $('#TipoPrevisionIdModalEditPerfil').val()));
+                    cell.prop('servicio', getNombreById(listaServicios , $('#TipoServicioIdModalEditPerfil').val()));
+                    cell.prop('EstadoNecesidadIdHidden', $('#EstadoNecesidadModalEditPerfil').val());
+                    cell.prop('TipoPerfilId', $('#TipoPerfilIdModalEditPerfil').val());
+                    cell.prop('TipoPerfilIdHidden', $('#TipoPerfilIdModalEditPerfil').val());
+                    cell.prop('TipoServicioIdHidden', $('#TipoServicioIdModalEditPerfil').val());
+                    cell.prop('TipoTecnologiaIdHidden', $('#TipoTecnologiaIdModalEditPerfil').val());
+                    cell.prop('TipoContratacionIdHidden', $('#TipoContratacionIdModalEditPerfil').val());
+                    cell.prop('TipoPrevisionIdHidden', $('#TipoPrevisionIdModalEditPerfil').val());
+                    cell.prop('FechaCompromisoHidden', $('#FechaCompromisoModalEditPerfil').val());
+                    cell.prop('PersonaAsignadaIdHidden', $('#PersonaAsignadaIdModalEditPerfil').val());
+                    cell.prop('candidaturaIdHidden', $('#CandidaturaIdModalEditPerfil').val());
+                    cell.prop('ModuloIdHidden', $('#ModuloModalEditPerfil').val());
+                }
+
+                $(document).on('click', '#btnAddPerfil', function(){
+                    $("#modalCreatePerfil").modal('show');
+                });
+
+                $(document).on('click', '#BtnAceptarModalEditPerfil', function(){
+                    if ($('#formModalEditPerfil').parsley().validate())
+                    {
+                        if($('#EstadoNecesidadModalEditPerfil').val() == estadoNecesidadCerrada
+                            && $('#TipoContratacionIdModalEditPerfil').val() == tipoContratacionCambioInterno
+                            && $('#TipoPrevisionIdModalEditPerfil').val() == tipoPrevisionPlanificado)
+                        {
+                            BootstrapDialog.confirm({
+                                title: '@Resources.Necesidad_ConfirmarFinalizarConfirmadoTitulo',
+                                message: '@Resources.Necesidad_ConfirmarFinalizarConfirmadoTexto',
+                                type: BootstrapDialog.TYPE_CONFIRMFINALICE,
+                                callback: function (result) {
+                                    if (result) {
+                                        $('#TipoPrevisionIdModalEditPerfil').val(tipoPrevisionConfirmado);
+                                        guardarNecesidadEditada();
+                                    } else {
+                                        BootstrapDialog.closeAll();
+                                    }
+                                }
+                            });
+                        }
+                        else{
+                            guardarNecesidadEditada();
+                        }
+
+
+                    }
+                });
+
+                function guardarNecesidadEditada(){
+                    $("#modalEditPerfil").modal('hide');
+                    creaNecesidadFromModalEdit();
+                    coloreaPerfiles();
+                    reorganizaGrafo(graph.getCells(), numeroElementosPorFila);
+                }
+                $(document).on('click', '#BtnAceptarModalCreatePerfil', function(){
+                    if($('#formModalCreatePerfil').parsley().validate())
+                    {
+                        $("#modalCreatePerfil").modal('hide');
+                        var necesidadACrear = crearNecesidadDatosNoComunes('', '', $('#TipoPerfilIdModalCreatePerfil').val()
+                                                    , $('#TipoTecnologiaIdModalCreatePerfil').val(), $('#ModuloModalCreatePerfil').val()
+                                                    , $('#FechaCompromisoModalCreatePerfil').val(), '', $('#TipoContratacionIdModalCreatePerfil').val()
+                                                     ,$('#TipoPrevisionIdModalCreatePerfil').val()
+                                                    , $('#TipoServicioIdModalCreatePerfil').val(), '@((int)EstadoNecesidadEnum.Abierta)'
+                                                    , '', '', '', '', '', '@Model.GrupoNecesidadId');
+                        crearElemento(necesidadACrear, xposInicial, separacionDeFilas, indiceIdPerfil, true);
+                        indiceIdPerfil++;
+                        coloreaPerfiles();
+                        reorganizaGrafo(graph.getCells(), numeroElementosPorFila);
+                    }
+                });
+
+
+                function toFixedDown(number, digits) {
+                    var re = new RegExp("(\\d+\\.\\d{" + digits + "})(\\d)"),
+                        m = number.toString().match(re);
+                    return m ? parseFloat(m[1]) : number.valueOf();
+                };
+
+                $('#toggleButton').click(function () {
+                    setTimeout(function(){
+                        reorganizaGrafo(graph.getCells(), numeroElementosPorFila);
+                    }, 240);
+                });
+
+                var zIndexGlobalHover;
+                var zIndexGlobalClick;
+                var posicionGlobalAnterior;
+
+                paper.on('cell:mouseover', function(cellView, evt) {
+                    if(cellView.$box.data('clickado') == null || cellView.$box.data('clickado') == false)
+                    {
+                        zIndexGlobalHover = cellView.$box.css('z-index');
+                        cellView.$box.css('z-index', 10);
+                    }
+                });
+                paper.on('cell:mouseout', function(cellView, evt) {
+                    if(cellView.$box.data('clickado') == null || cellView.$box.data('clickado') == false)
+                    {
+                        cellView.$box.css('z-index', zIndexGlobalHover);
+                    }
+                });
+                paper.on('cell:pointerdown', function(cellView, evt) {
+                    cellView.$box.data('clickado', true);
+                    zIndexGlobalClick = cellView.$box.css('z-index');
+                    cellView.$box.css('z-index', 20);
+                    posicionGlobalAnterior = cellView.model.get('position');
+                });
+                paper.on('cell:pointerup', function(cellView, evt) {
+                    cellView.$box.data('clickado', false);
+                    var zIndexAGuardar = zIndexGlobalClick;
+                    mueveElemento(cellView.model, posicionGlobalAnterior.x, posicionGlobalAnterior.y);
+                    cellView.$box.css('z-index', zIndexAGuardar);
+                });
+
+                $(document).on('change', '#numeroElementosPorFila', function(){
+                    var elementosPorFila = parseInt($('#numeroElementosPorFila').val());
+                    setTimeout(function(){
+                        reorganizaGrafo(graph.getCells(), elementosPorFila);
+                    }, 50);
+                });
+
+                function crearNecesidadDatosNoComunes(necesidadId, personaAsignada, tipoPerfilId,
+                    tipoTecnologiaId, modulo, fechaCompromiso, fechaCierre, tipoContratacionId,
+                    tipoPrevisionId, tipoServicioId, estadoNecesidadId, detalleTecnologia, personaAsignadaId,
+                    personaAsignadaNroEmpleado, candidaturaID, asignadaCorrectamente, grupoNecesidad){
+                    var necesidad =
+                    {
+                        NecesidadId: necesidadId,
+                        PersonaAsignada: personaAsignada,
+                        TipoPerfilId: tipoPerfilId,
+                        TipoTecnologiaId: tipoTecnologiaId,
+                        Modulo: modulo,
+                        FechaCompromiso: fechaCompromiso,
+                        FechaCierre: fechaCierre,
+                        TipoContratacionId: tipoContratacionId,
+                        TipoPrevisionId: tipoPrevisionId,
+                        TipoServicioId: tipoServicioId,
+                        EstadoNecesidadId: estadoNecesidadId,
+                        DetalleTecnologia: detalleTecnologia,
+                        PersonaAsignadaId: personaAsignadaId,
+                        PersonaAsignadaNroEmpleado: personaAsignadaNroEmpleado,
+                        candidaturaId: candidaturaID,
+                        AsignadaCorrectamente: asignadaCorrectamente,
+                        GrupoNecesidad: grupoNecesidad
+                    };
+                    return necesidad;
+                }
+
+                ////////////////////////////// RESTRICCIONES DE MODALES ///////////////////////////////
+
+                function checkAndShowModuloCreate() {
+                    var tecnologia = $('#TipoTecnologiaIdModalCreatePerfil');
+                    var perfil = $('#TipoPerfilIdModalCreatePerfil');
+                    var modulo = $('#ModuloModalCreatePerfil');
+
+                    modulo.attr('disabled', 'disabled');
+                    modulo.prop('required', false);
+                    //Estado: Cerrada y Contratacion: Cambio Interno
+                    if ((tecnologia.val() == 34) && ((perfil.val() == 1282) || (perfil.val() == 1281) || (perfil.val() == 1280) || (perfil.val() == 1279))) {
+                        modulo.removeAttr('disabled');
+                    }
+                    else {
+                        modulo.val("");
+                        modulo.change();
+                    }
+                }
+
+                $(document).on('change', '#TipoTecnologiaIdModalCreatePerfil', function(){
+                    checkAndShowModuloCreate();
+                });
+
+                $(document).on('change', '#TipoPerfilIdModalCreatePerfil', function(){
+                    checkAndShowModuloCreate();
+                });
+
+                var estadoClickadoEdit = '';
+                var contratacionClickadoEdit = '';
+
+                $(document).on('change', '#EstadoNecesidadModalEditPerfil', function(){
+                    if (checkNecesidadLogicIntegrityModalEdit())
+                    {
+                        checkAndShowPersonaAsignadaBtn();
+                        checkAndShowFechaCierreEdit();
+                        if($('#EstadoNecesidadModalEditPerfil').val() == '@((int)EstadoNecesidadEnum.Abierta)'
+                            || $('#EstadoNecesidadModalEditPerfil').val() == '@((int)EstadoNecesidadEnum.Cancelado)')
+                        {
+                            $('[id="PersonaAsignadaModalEditPerfil"]').val('');
+                            $('[id="PersonaAsignadaIdModalEditPerfil"]').val('');
+                            $('[id="CandidaturaIdModalEditPerfil"]').val('');
+                        }
+                    }
+                });
+
+                $(document).on('change', '#TipoContratacionIdModalEditPerfil', function(){
+                    if (checkNecesidadLogicIntegrityModalEdit())
+                    {
+                        checkAndShowPersonaAsignadaBtn();
+                        checkAndShowFechaCierreEdit();
+                        $('[id="PersonaAsignadaModalEditPerfil"]').val('');
+                        $('[id="PersonaAsignadaIdModalEditPerfil"]').val('');
+                        $('[id="CandidaturaIdModalEditPerfil"]').val('');
+                    }
+                });
+
+                $(document).on('click', '#EstadoNecesidadModalEditPerfil', function(){
+                    estadoClickadoEdit = $(this).val();
+                    contratacionClickadoEdit = '';
+                });
+
+                $(document).on('click', '#TipoContratacionIdModalEditPerfil', function(){
+                    contratacionClickadoEdit = $(this).val();
+                    estadoClickadoEdit = '';
+                });
+
+                function checkAndShowPersonaAsignadaBtn() {
+
+                    var estado = $('#EstadoNecesidadModalEditPerfil');
+                    var contratacion = $('[id="TipoContratacionIdModalEditPerfil"]');
+                    var personaAsignada = $('[id="PersonaAsignadaModalEditPerfil"]');
+
+                    personaAsignada.attr('disabled', 'disabled');
+                    personaAsignada.removeAttr('required');
+                    var botonCandidato = $('#botonCandidatosQueCumplenPerfil');
+                    var botonPersonaLibre = $('#botonBusquedaPersonaLibre');
+                    botonCandidato.hide();
+                    botonPersonaLibre.hide();
+
+                    //Estado: Cerrada y Preasignada: Cambio interno.
+                    if ((estado.val() == @((int)EstadoNecesidadEnum.Preasignada))
+                        || (estado.val() == @((int)EstadoNecesidadEnum.Cerrada)))
+                    {
+                        if ((contratacion.val() == @((int)TipoContratacionEnum.CambioInterno)))
+                        {
+                            personaAsignada.removeAttr('disabled');
+                            personaAsignada.attr('required', 'required');
+                            botonCandidato.hide();
+                            botonPersonaLibre.show();
+                        }
+                        else if ((contratacion.val() == @((int)TipoContratacionEnum.Contratación))
+                        && (estado.val() == @((int)EstadoNecesidadEnum.Preasignada)))
+                        {
+                            personaAsignada.removeAttr('disabled');
+                            personaAsignada.attr('required', 'required');
+                            botonCandidato.show();
+                            botonPersonaLibre.hide();
+                        }
+                    }
+                }
+
+                function checkAndShowModuloEdit() {
+                    var tecnologia = $('#TipoTecnologiaIdModalEditPerfil');
+                    var perfil = $('#TipoPerfilIdModalEditPerfil');
+                    var modulo = $('#ModuloModalEditPerfil');
+
+                    modulo.attr('disabled', 'disabled');
+                    modulo.prop('required', false);
+                    //Estado: Cerrada y Contratacion: Cambio Interno
+                    if ((tecnologia.val() == 34) && ((perfil.val() == 1282) || (perfil.val() == 1281) || (perfil.val() == 1280) || (perfil.val() == 1279))) {
+                        modulo.removeAttr('disabled');
+                    }
+                    else {
+                        modulo.val("");
+                        modulo.change();
+                    }
+                }
+
+                $(document).on('change', '#TipoTecnologiaIdModalEditPerfil', function(){
+                    checkAndShowModuloEdit();
+                });
+
+                $(document).on('change', '#TipoPerfilIdModalEditPerfil', function(){
+                    checkAndShowModuloEdit();
+                });
+
+                function checkAndShowFechaCierreEdit() {
+                    var estado = $('#EstadoNecesidadModalEditPerfil');
+                    var fechaCierre = $('#FechaCierreModalEditPerfil');
+
+                    fechaCierre.attr('disabled', 'disabled');
+                    fechaCierre.prop('required', false);
+                    //Estado: Cerrada y Contratacion: Cambio Interno
+                    if (estado.val() == '@((int)EstadoNecesidadEnum.Cerrada)' || estado.val() == '@((int)EstadoNecesidadEnum.Cancelado)') {
+                        fechaCierre.removeAttr('disabled');
+                        fechaCierre.prop('required', true);
+                    }
+                    else {
+                        fechaCierre.val("");
+                        fechaCierre.change();
+                    }
+                }
+
+                function checkNecesidadLogicIntegrityModalEdit(){
+
+                    if (estadoClickadoEdit == '@((int)EstadoNecesidadEnum.Cerrada)' &&
+                        $('#TipoContratacionIdModalEditPerfil').val() == '@((int)TipoContratacionEnum.Contratación)' &&
+                        ($('#EstadoNecesidadModalEditPerfil').val() == '@((int)EstadoNecesidadEnum.Abierta)' ||
+                        $('#EstadoNecesidadModalEditPerfil').val() == '@((int)EstadoNecesidadEnum.Preasignada)')){ //Una necesidad que previamente ha sido cerrada no se puede abrir
+
+                        if(estadoClickadoEdit != '')
+                        {
+                            $('#EstadoNecesidadModalEditPerfil').val(estadoClickadoEdit);
+                        }
+                        else if (contratacionClickadoEdit != '')
+                        {
+                            $('#TipoContratacionIdModalEditPerfil').val(contratacionClickadoEdit);
+                        }
+                        estadoClickadoEdit = '';
+                        contratacionClickadoEdit = '';
+
+                        BootstrapDialog.alert({
+                            title: '@Resources.Necesidad_ErrorAbrirNecesidadCerradaTitulo',
+                            message: '@Resources.Necesidad_ErrorAbrirNecesidadCerradaTexto',
+                            type: BootstrapDialog.TYPE_ERROR
+                        });
+
+                        return false;
+                    }
+
+                    if(estadoNecesidadInicial == '@((int)EstadoNecesidadEnum.Cerrada)'
+                        && estadoClickadoEdit == '@((int)EstadoNecesidadEnum.Cancelado)'
+                        && $('#EstadoNecesidadModalEditPerfil').val() != '@((int)EstadoNecesidadEnum.Cerrada)'
+                        && $('#TipoContratacionIdModalEditPerfil').val() != '@((int)TipoContratacionEnum.CambioInterno)'
+                        && contratacionNecesidadInicial != '@((int)TipoContratacionEnum.CambioInterno)')
+                    {
+                        if(estadoClickadoEdit != '')
+                        {
+                            $('#EstadoNecesidadModalEditPerfil').val(estadoClickadoEdit);
+                        }
+                        BootstrapDialog.alert({
+                            title: '@Resources.Necesidad_ErrorAbrirNecesidadCerradaTitulo',
+                            message: '@Resources.Necesidad_ErrorAbrirNecesidadCerradaTexto',
+                            type: BootstrapDialog.TYPE_ERROR
+                        });
+
+                        return false;
+                    }
+
+                    if ($('#TipoContratacionIdModalEditPerfil').val() == '@((int)TipoContratacionEnum.Contratación)' &&
+                        $('#EstadoNecesidadModalEditPerfil').val() == '@((int)EstadoNecesidadEnum.Cerrada)'){
+
+                        if(estadoClickadoEdit != '')
+                        {
+                            $('#EstadoNecesidadModalEditPerfil').val(estadoClickadoEdit);
+                        }
+                        else if (contratacionClickadoEdit != '')
+                        {
+                            $('#TipoContratacionIdModalEditPerfil').val(contratacionClickadoEdit);
+                        }
+                        estadoClickadoEdit = '';
+                        contratacionClickadoEdit = '';
+
+                        BootstrapDialog.alert({
+                            title: '@Resources.Necesidad_ErrorCerrarNecesidadContratacionTitulo',
+                            message: '@Resources.Necesidad_ErrorCerrarNecesidadContratacionTexto',
+                            type: BootstrapDialog.TYPE_ERROR
+                        });
+
+                        return false;
+                    }
+                    if($('#EstadoNecesidadModalEditPerfil').val() == '@((int)EstadoNecesidadEnum.Abierta)')
+                    {
+                        $('#PersonaAsignadaModalEditPerfil').val('');
+                        $('#PersonaAsignadaIdModalEditPerfil').val('');
+                        $('#CandidaturaIdModalEditPerfil').val('');
+
+                        return true;
+                    }
+
+
+                    return true;
+                }
+
+
+
+                function checkGrupoCerrado(cerrado)
+                {
+                    if (cerrado == 'True')
+                    {
+                        $('input, select, textarea').attr('disabled', 'true');
+                        $('#btnAddPerfil').attr('disabled', 'true');
+                        $('#btnAddPerfil').addClass('disabled');
+                        $('#numeroElementosPorFila').removeAttr('disabled');
+                        $('[name="perfil"]').each(function (){
+                            $(this).find('#editarBoton').addClass('hidden');
+                            $(this).find('[name="closeBtn"]').addClass('hidden');
+                        });
+                    }
+                }
+
+                ////////////////////////////// MODALES DE BUSQUEDA ///////////////////////////////
+
+                $(document).on('click', '#limpiarModal', function () {
+                    var table = $('#tablaNecesidadesPersonasLibres');
+                    table.data("fn-clear")();
+                });
+
+                $(document).on('click', '#buscarModal', function () {
+                    var table = $('#tablaNecesidadesPersonasLibres');
+                    table.data("fn-search")();
+                });
+
+                $(document).on('click', '#limpiarModalCandidatosQueCumplenPerfil', function () {
+                    var table = $('#tablaCandidatosQueCumplenPerfil');
+                    table.data("fn-clear")();
+                });
+
+                $(document).on('click', '#buscarModalCandidatosQueCumplenPerfil', function () {
+                    var table = $('#tablaCandidatosQueCumplenPerfil');
+                    table.data("fn-search")();
+                });
+
+                function getFiltersNecesidadesPersonasLibres() {
+
+                    var filterNroEmpleado = $("[name=filterNroEmpleado]").val();
+                    var filterNombre = $("[name=filterNombre]").val();
+                    var filterApellidos = $("[name=filterApellidos]").val();
+                    var filterCategoria = $("[name=filterCategoria]").val();
+                    var filterLinea = $("[name=filterLinea]").val();
+                    var filterCelda = $("[name=filterCelda]").val();
+                    var filterTecnologia = $("[name=filterTecnologia]").val();
+
+                    return {
+                        NroEmpleado: filterNroEmpleado, Nombre: filterNombre, Apellidos: filterApellidos,
+                        Categoria: filterCategoria, Linea: filterLinea, Celda: filterCelda,
+                        TipoTecnologiaId: filterTecnologia, Buscar: "true"
+                    };
+                }
+
+                function getFiltersCandidatosQueCumplenPerfil() {
+
+                    var filterNombre = $("[name=filterNombreCandidatoQueCumplePerfil]").val();
+                    var filterApellidos = $("[name=filterApellidosCandidatoQueCumplePerfil]").val();
+                    var filterTipoTecnologiaId = $("[name=filterTipoTecnologiaIdCandidatoQueCumplePerfil]").val();
+                    var filterTipoPerfilId = $("[name=filterTipoPerfilIdCandidatoQueCumplePerfil]").val();
+                    var filterNecesidadId = $("[name=filterNecesidadIdCandidatoQueCumplePerfil]").val();
+
+                    return {
+                        Nombre: filterNombre, Apellidos: filterApellidos,
+                        TipoTecnologiaId: filterTipoTecnologiaId,
+                        TipoPerfilId: filterTipoPerfilId,
+                        NecesidadId: filterNecesidadId, Buscar: "true"
+                    };
+                }
+
+                $(document).on('click', '#btnAbrirModalCandidato', function () {
+
+                    var teconologia = $('#TipoTecnologiaIdModalEditPerfil');
+
+                    var tipoPerfil = $('#TipoPerfilIdModalEditPerfil');
+
+                    $("[name=filterNecesidadIdCandidatoQueCumplePerfil]").val(necesidadIdClicada);
+
+                    if(teconologia.val() != null && teconologia.val() != '')
+                    {
+                        $("[name=filterTipoTecnologiaIdCandidatoQueCumplePerfil]").val(teconologia.val());
+                    }
+
+                    if(tipoPerfil.val() != null && tipoPerfil.val() != '')
+                    {
+                        $("[name=filterTipoPerfilIdCandidatoQueCumplePerfil]").val(tipoPerfil.val());
+                    }
+
+                });
+
+                $(document).on('click', '#BtnPersonaLibre', function () {
+                    var id = $("#myModal input:radio:checked").closest("tr").find("#PersonaLibreId").val();
+                    var nombre = $("#myModal input:radio:checked").closest("tr").find("#NombresYApellidos").val();
+                    var duplicado = compruebaDuplicidad(id, '@((int)TipoContratacionEnum.CambioInterno)');
+                    if(!duplicado)
+                    {
+                        $('#PersonaAsignadaModalEditPerfil').val(nombre);
+                        $('#PersonaAsignadaIdModalEditPerfil').attr('value', id);
+                        $('#CandidaturaIdModalEditPerfil').attr('value', null);
+                        $('#myModal').modal('hide');
+                    }
+                    else
+                    {
+                        BootstrapDialog.alert({
+                            title: '@Resources.NecesidadGrupo_PersonaAsignadaDuplicadaTitulo',
+                            message: '@Resources.NecesidadGrupo_PersonaAsignadaDuplicadaTexto',
+                            type: BootstrapDialog.TYPE_ERROR
+                        });
+                    }
+                });
+
+                $(document).on('click', '#BtnCandidatosQueCumplenPerfil', function () {
+                    var id = $("#modalCandidatosQueCumplenPerfil input:radio:checked").closest("tr").find("#CandidatoId").val();
+                    var nombre = $("#modalCandidatosQueCumplenPerfil input:radio:checked").closest("tr").find("#NombresYApellidos").val();
+                    var candidaturaId = $("#modalCandidatosQueCumplenPerfil input:radio:checked").closest("tr").find("#CandidaturaIdAsociado").val();
+                    var duplicado = compruebaDuplicidad(id, '@((int)TipoContratacionEnum.Contratación)');
+                    if(!duplicado)
+                    {
+                        $('#PersonaAsignadaModalEditPerfil').val(nombre);
+                        $('#PersonaAsignadaIdModalEditPerfil').attr('value', id);
+                        $('#CandidaturaIdModalEditPerfil').attr('value', candidaturaId);
+                        $('#modalCandidatosQueCumplenPerfil').modal('hide');
+                    }
+                    else
+                    {
+                        BootstrapDialog.alert({
+                            title: '@Resources.NecesidadGrupo_PersonaAsignadaDuplicadaTitulo',
+                            message: '@Resources.NecesidadGrupo_PersonaAsignadaDuplicadaTexto',
+                            type: BootstrapDialog.TYPE_ERROR
+                        });
+                    }
+                });
+
+                function compruebaDuplicidad(personaAsignadaId, tipoContratacion)
+                {
+                    var duplicado = false;
+                    $('[name="perfil"]').each(function (){
+                        var idComprobado = $(this).find('[name="listaNecesidades[{0}].PersonaAsignadaId"]').val();
+                        var tipoContratacionComprobado = $(this).find('[name="listaNecesidades[{0}].TipoContratacionId"]').val();
+                        if(idComprobado == personaAsignadaId && tipoContratacion == tipoContratacionComprobado)
+                        {
+                            duplicado = true;
+                            return duplicado;
+                        }
+                    });
+                    return duplicado;
+                }
+
+                function forTable() {
+
+                    var $cont = 0;
+                    $('[name="perfil"]').each(function () {
+                        var item = $(this);
+                        item.find('input, select, textarea').each(function () {
+                            var input = $(this);
+                            input.attr('name', String.format(input.attr('name'), $cont));
+                        });
+
+                        $cont++;
+                    });
+
+                }
+    </script>
+}

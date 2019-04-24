@@ -1,0 +1,110 @@
+@using Recruiting.Application.Becarios.ViewModels
+@using Recruiting.Application.Becarios.Enums
+@using RecruitingWeb.Properties
+
+@model Recruiting.Application.Becarios.ViewModels.BecarioRowViewModel
+
+@{
+    var permisoAdministrarBecario = (bool)TempData["ModificarBecario"];
+}
+
+<div>
+    @Edit.Text(Model.BecarioId.ToString(), "BecarioId", id: "BecarioId", htmlClass: "form-control hide")
+
+    <a href="/Becarios/Edit/@Model.BecarioId" title="@Resources.HTML_Title_Editar"
+       id="EditButton"
+       @getClassAddDisabled("", !(bool)TempData["ModificarBecario"])>
+
+        @Display.GlyphiconButton("glyphicon-pencil icon action")
+    </a>
+
+    <a title="@Resources.HTML_Title_Eliminar"
+       id="DeleteButton"
+       @getClassAddDisabled("", !(bool)TempData["AniadirEliminarBecario"])>
+        @Display.GlyphiconButton("glyphicon-trash icon action")
+    </a>
+
+    <a href="/Becarios/Details/@Model.BecarioId" title="@Resources.HTML_Title_DetalleBecario" id="DetailButton" @getClassAddDisabled("", !(bool)TempData["VerBecario"])>
+        @Display.GlyphiconButton("glyphicon-eye-open icon action")
+    </a>
+
+    <a href="/BitacorasBecarios/Index?BecarioId=@Model.BecarioId" title="@Resources.HTML_Title_BitacoraBecario" id="BitacoraButton" class="@GetDisabledClass(!permisoAdministrarBecario)">
+        @Display.GlyphiconButton("glyphicon glyphicon-list-alt icon action")
+    </a>
+</div>
+
+@helper getClassAddDisabled(string htmlClass, bool disabled)
+{
+var allClass = string.Format("class=\"{0} {1}\"", htmlClass, disabled ? "disabled" : "");
+    @(new MvcHtmlString(allClass))
+}
+
+@functions{
+
+    public bool isPaused()
+    {
+        return (
+           Model.EstadoBecarioId == (int)TipoEstadoBecarioEnum.Stand_By
+        );
+    }
+
+
+    public bool isRevoked()
+    {
+        return (
+            Model.EstadoBecarioId == (int)TipoEstadoBecarioEnum.Renuncia ||
+            Model.EstadoBecarioId == (int)TipoEstadoBecarioEnum.Descartado
+        );
+    }
+
+    public bool canTurnBack()
+    {
+        return (
+            Model.EstadoBecarioId != (int)TipoEstadoBecarioEnum.Inicio
+        );
+    }
+
+    public bool isContracted()
+    {
+        return (
+            Model.EstadoBecarioId == (int)TipoEstadoBecarioEnum.Finalizado
+        );
+    }
+
+    public bool isPausable()
+    {
+        return (
+            Model.EstadoBecarioId == (int)TipoEstadoBecarioEnum.Inicio
+
+        );
+    }
+
+    public bool isFinished()
+    {
+        return (
+            Model.EstadoBecarioId == (int)TipoEstadoBecarioEnum.Finalizado
+
+        );
+    }
+
+    public bool isContractible()
+    {
+        return (
+            Model.TipoDecisionFinalId == (int)TipoDecisionPracticasEnum.Contratable
+            && Model.ExisteCandidatura == false
+
+        );
+    }
+
+}
+
+@helper GetDisabledClass(bool disable)
+{
+var disabled = string.Empty;
+if (disable)
+{
+    disabled = "disabled";
+}
+
+    @disabled
+}

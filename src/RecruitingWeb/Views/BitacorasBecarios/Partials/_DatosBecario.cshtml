@@ -1,0 +1,66 @@
+﻿@using RecruitingWeb.Components.Searchable
+@using RecruitingWeb.Properties
+
+@model RecruitingWeb.Models.FiltroBitacoraBecarioModels
+
+<div class="form-filter" id="form-filter">
+    <div class="row form-row" data-id="formFilter">
+        <div class="form-group col-lg-4">
+            <div class="col-lg-12 title-form">
+                <label for="filterEstado">@Resources.HTML_BitacorasBecarios_EstadoBecario </label>
+            </div>
+            <div class="col-lg-12 content-form">                
+                @Model.EstadoBecario
+            </div>
+        </div>
+        <div class="form-group col-lg-4">
+            <div class="col-lg-12 title-form">
+                <label for="filterTipoBeca">@Resources.HTML_BitacorasBecarios_TipoBecario</label>
+            </div>
+            <div class="col-lg-12 content-form">                
+                @Model.TipoBecario
+            </div>
+        </div>
+        <div class="form-group col-lg-4">
+            <div class="col-lg-12 title-form">
+                <label for="filterCentroProcedencia">@Resources.HTML_BitacorasBecarios_CentroProcedencia</label>
+            </div>
+            <div class="col-lg-12 content-form">
+                @{
+                    if (string.IsNullOrEmpty(Model.CentroProcedencia) || string.IsNullOrWhiteSpace(Model.CentroProcedencia))
+                    {
+                        <p>@Resources.HTML_General_CampoVacio_Details_NA</p>;
+                    }
+                    else
+                    {
+                        @Model.CentroProcedencia
+
+                    }
+
+                }
+            </div>
+        </div>
+    </div>
+    <div class="row form-row">
+        <div class="form-group col-lg-4">
+            <div class="col-lg-12 title-form">
+                <label for="filterNombreBecario">@Resources.HTML_BitacorasBecarios_NombreBecario</label>
+            </div>
+            <div class="col-lg-12 content-form">                
+                @Model.NombreBecario
+            </div>
+        </div>
+        @if (Model.CentroIdUsuarioLogueado == string.Empty)
+        {
+            <div class="form-group col-lg-4">
+                <div class="col-lg-12 title-form">
+                    <label for="CentroId">@Resources.HTML_BitacorasBecarios_Centro</label>
+                </div>
+                <div class="col-lg-12 content-form">                    
+                    @Model.CentroUsuarioCreacion
+                </div>
+            </div>
+        }
+    </div>
+</div>
+

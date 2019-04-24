@@ -1,0 +1,236 @@
+﻿@using RecruitingWeb.Components.DataTable.Models
+@using RecruitingWeb.Helpers
+@using RecruitingWeb.Properties
+
+<table id="@Model.Id" class="@(string.IsNullOrWhiteSpace(Model.TableClass) ? Model.DefaultTableClass : Model.TableClass)">
+    @if (Model.UseCustomHeader)
+    {
+        @Model.CustomHeader(null)
+    }
+    else
+    {
+        <thead>
+            <tr>
+                @foreach (var column in Model.ColumnsData)
+                {
+                    var classHidden = column.Hidden ? "hide" : "";
+                    var columnClass = string.Empty;
+
+                    if (!string.IsNullOrWhiteSpace(classHidden) || !string.IsNullOrWhiteSpace(column.CssHeaderClass))
+                    {
+                        columnClass = string.Format("{0} {1}", column.CssHeaderClass, classHidden);
+                    }
+                    <th class="@columnClass">@column.Header</th>
+                }
+            </tr>
+        </thead>
+    }
+    <tbody>
+        @if ((Model.ModelData != null) && (Model.ModelData.Count > 0) && string.IsNullOrWhiteSpace(Model.GetAjaxLoadUrl()))
+        {
+            var rowIndex = 0;
+            foreach (var row in Model.ModelData)
+            {
+                rowIndex++;
+                foreach (var rowTemplate in Model.RowTemplatesDefinition)
+                {
+                    if (rowTemplate.RowTemplateType == RowTemplateType.FirstRow && rowIndex == 1)
+                    {
+                        @rowTemplate.Template(row)
+                    }
+                }
+
+                <tr data-id="@Model.ResolvedPrimaryKey(row)">
+                    @foreach (var column in Model.ColumnsData)
+                    {
+                        var classTxt = string.Empty;
+                        if (!string.IsNullOrWhiteSpace(column.CssClass))
+                        {
+                            classTxt = string.Format("class=\"{0}\"", column.CssClass);
+                        }
+
+                        if (column.Hidden)
+                        {
+                            if (string.IsNullOrWhiteSpace(classTxt))
+                            {
+                                classTxt = "class=\"hide\"";
+                            }
+                            else
+                            {
+                                classTxt = string.Format("class=\"{0} {1}\"", column.CssClass, "hide");
+                            }
+                        }
+
+                        <td @(new MvcHtmlString(classTxt)) @column.ResolvedAttributes(row)>@column.Value(row)</td>
+                    }
+                </tr>
+                foreach (var rowTemplate in Model.RowTemplatesDefinition)
+                {
+                    if (rowTemplate.RowTemplateType == RowTemplateType.AllRows || (rowTemplate.RowTemplateType == RowTemplateType.EvenRows && rowIndex % 2 == 0) || (rowTemplate.RowTemplateType == RowTemplateType.OddRows && rowIndex % 2 != 0) || (rowTemplate.RowTemplateType == RowTemplateType.LastRow && rowIndex == Model.ModelData.Count))
+                    {
+                        @rowTemplate.Template(row)
+                    }
+                }
+            }
+        }
+        else
+        {
+            foreach (var rowTemplate in Model.RowTemplatesDefinition)
+            {
+                if (rowTemplate.RowTemplateType == RowTemplateType.FirstRow)
+                {
+                    @rowTemplate.Template(null)
+                }
+            }
+        }
+    </tbody>
+    <tfoot>
+        @foreach (var rowTemplate in Model.FootTemplatesDefinition)
+        {
+            @rowTemplate.Template(null)
+        }
+    </tfoot>
+
+
+</table>
+
+@Html.ScriptBlock(
+    @<script type="text/javascript">
+        registerCallback(function()
+        {
+            var languajeEs = {
+                "sProcessing":     "<div class='progress progress-striped active' style='margin-bottom:0;'><div class='progress-bar' style='width: 100%'>Procesando...</div></div>",
+                "sLengthMenu":     "Mostrar _MENU_ registros",
+                "sZeroRecords":    "@Resources.HTML_DataTable_NoResultados",
+                "sEmptyTable":     "@Resources.HTML_DataTable_NingunDato",
+                "sInfo":           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
+                "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
+                "sInfoPostFix":    "",
+                "sSearch":         "@Resources.HTML_DataTable_Buscar",
+                "sUrl":            "",
+                "sInfoThousands":  ",",
+                "sLoadingRecords": "@Resources.HTML_DataTable_Cargando",
+                "oPaginate": {
+                    "sFirst":    "@Resources.HTML_DataTable_Primero",
+                    "sLast":     "@Resources.HTML_DataTable_Ultimo",
+                    "sNext":     "@Resources.HTML_DataTable_Siguiente",
+                    "sPrevious": "@Resources.HTML_DataTable_Anterior"
+                },
+                "oAria": {
+                    "sSortAscending":  "@Resources.HTML_DataTable_OrdenarAscendente",
+                    "sSortDescending": "@Resources.HTML_DataTable_OrdenarDescendente"
+                }
+            };
+
+            var myDatatable = $('#@Model.Id');
+
+            var options = {
+                "language": languajeEs
+                ,"processing": false
+                ,"serverSide": false
+                ,"info": false
+                ,"paging": false
+                ,"searching": false
+                ,"dom": '@Html.Raw(Model.Dom)'
+                ,"autoWidth": false
+                ,"ordering": false
+                //,"deferLoading": 0
+            };
+
+            var isPaginable = "@Model.GetPaginable()";
+            if (isPaginable === "True"){
+                var pageSize = parseInt('@Model.GetPageSize()');
+                var initPage = parseInt("@Model.GetInitialPage()");
+
+                options = $.extend(options, {  "paging": true, "pageLength": pageSize, "displayStart": initPage * pageSize });
+            }
+
+            //Check columns and set his options. If someone is orderable, datatable too.
+            var isOrderable = false;
+            var columnsSettings = [];
+            var columnSetting = {};
+
+            var columnData = @Html.Raw(Json.Encode(Model.ColumnsData));
+            columnData.forEach(function(columns)
+            {
+                var columnName = columns.ColumnName;
+                var ordenable = columns.Orderable;
+
+
+                isOrderable = isOrderable || ordenable;
+                columnSetting = { "sortable": ordenable };
+
+                if (columnName != null)
+                {
+                    columnSetting = $.extend(columnSetting, { "name": columnName });
+                }
+                columnsSettings.push(columnSetting);
+            });
+
+            //If the table is orderable we set his property.
+            options = $.extend(options, { "ordering": isOrderable });
+            if (columnsSettings.length > 0)
+            {
+                options = $.extend(options, { "columns": columnsSettings });
+            }
+
+            var ajaxUrl = "";
+            @if (!string.IsNullOrWhiteSpace(Model.GetAjaxLoadUrl()))
+        {
+            @:ajaxUrl = "@Model.GetAjaxLoadUrl()";
+                    }
+            if (ajaxUrl != ""){
+                //Set properties to load element using ajax
+                options = $.extend(options,
+                {
+                    "processing": true
+                    ,"serverSide": true
+                    ,"ajax": {
+                        "url": ajaxUrl
+                        ,"type": "POST"
+                        ,"data": function(d)
+                        {
+                            d = $.extend(d, myDatatable.data("filters"));
+                        }
+                    }
+                });
+            }
+
+            var @Model.Id = myDatatable.dataTable(options);
+            if (myDatatable.data("filters") == null){
+                myDatatable.data("filters", {});
+            }
+            myDatatable.data("fn-search", function()
+            {
+                var customFilter = "";
+                @if (!string.IsNullOrWhiteSpace(Model.GetCustomFilterHandler()))
+            {
+                @:customFilter = "@Model.GetCustomFilterHandler()";
+                            }
+
+                var filterData = {};
+                if (customFilter !== "")
+                {
+                    var functionFilter = window[customFilter];
+                    if (typeof functionFilter === "function")
+                    {
+                        filterData = functionFilter();
+                    }
+                }
+                var filterToUpload = GetFilterForSearchableTable(filterData);
+                myDatatable.data("filters", filterToUpload);
+
+                var tableComponent = myDatatable.DataTable();
+                tableComponent.ajax.reload(null, true);
+            });
+            myDatatable.data("fn-clear", function()
+            {
+                myDatatable.data("filters", {});
+
+                var tableComponent = myDatatable.DataTable();
+                tableComponent.ajax.reload(null, true);
+            });
+        });
+    </script>
+)

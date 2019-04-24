@@ -1,0 +1,152 @@
+﻿@using System.Web.Mvc
+@using RecruitingWeb.Helpers
+@using RecruitingWeb.Properties
+@using System.Web.WebPages
+@using System.Web.Mvc.Html
+
+@helper MenuFrontActions()
+    {
+        <script type="text/javascript">
+            var menuItemToSelect = $("#main-nav li a[data-option-name=Dashboard]");
+            menuItemToSelect.addClass("current");
+        </script>
+}
+
+@helper IndexFrontActions(System.Web.Mvc.HtmlHelper Html, System.Web.Mvc.UrlHelper Url, Recruiting.Application.Dashboard.ViewModels.DashboardViewModel Model)
+    {
+        <script type="text/javascript">
+
+            //Inicializaciones
+
+            $(document).ready(function () {
+                @if(Model.InfoEntrevistadorViewModel != null)
+               {
+                    @:var jsData = @Html.Raw(Json.Encode(Model.InfoEntrevistadorViewModel.ListEntrevistasPlanificadasViewModel));
+                                            @:$('#calendar').fullCalendar({
+                                                        @: header: {
+                                                                @:left: 'prev,next today',
+                                                                @:center: 'title',
+                                                                @:right: 'month,basicWeek,basicDay'
+                                                                @:},
+                                                        @:defaultDate:  new Date(),
+                                                        @:editable: false, // solo lectura
+                                                        @:eventLimit: true, // allow "more" link when too many events
+                                                     @:events:  jsData
+                                                    @:});
+                }
+
+                window.onscroll = function () { myFunction() };
+
+                var header = $('#menuFixed')
+                var sticky = 250;
+
+                function myFunction() {
+                    if (window.pageYOffset >= sticky) {
+                        header.addClass("sticky");
+                    } else {
+                        header.removeClass("sticky");
+                    }
+                }
+
+                coloreaDiasRetraso();
+
+
+            });
+
+            //Botonera
+
+            $(document).on('click', '#tabEntrevistas', function () {
+                setTimeout(function () {
+                    $('.fc-month-button').click()
+                }, 300);
+            })
+
+             $(document).on('click', '#DonwloadCVButton', function () {
+                var id = $(this).closest("tr").find("#CandidaturaId").html();
+                var url = '@Url.Action("DownloadCV", "Candidaturas", new { id = "__id__" })';
+                window.location.href = url.replace('__id__', id);
+            })
+
+            $(document).on('click', '#BtnGuardarAlertas', function () {
+                $('form').submit();
+            })
+
+
+            $(document).on('click', '[name = submit]', function () {
+                $('#tabla').show();
+                var valuePeriodDateAlertNecesidad = $(this).val();
+                if (valuePeriodDateAlertNecesidad == 7) {
+                    $("div.btn-group").find(".active").removeClass("active");
+                    $('#filterDatePeriodWeek').addClass("active");
+                }
+                if (valuePeriodDateAlertNecesidad == 14) {
+                    $("div.btn-group").find(".active").removeClass("active");
+                    $('#filterDatePeriodBiweekly').addClass("active");
+                }
+                if (valuePeriodDateAlertNecesidad == 30) {
+                    $("div.btn-group").find(".active").removeClass("active");
+                    $('#filterDatePeriodMonth').addClass("active");
+                }
+
+                var table = $('#tablaAlertaNecesidades');
+                table.data("fn-search")();
+            });
+
+            $(document).on('click', '#btnAdministrarAlertas', function () {
+                $('#modalAlertasAdmin').modal('show');
+            })
+
+            $(document).on('click', '#btnDescargarExcel', function () {
+            var pageFilter = $('#tablaAlertaNecesidades').data('filters');
+            var filters = {
+                filterEstado: pageFilter['custom-filter-Estado'],
+                filterPrevision: pageFilter['custom-filter-Prevision'],
+                filterFechaModificacion: pageFilter['custom-filter-FechaModificacion']
+            };
+
+            var strFiltros = jQuery.param(filters);
+            var url = '@Url.Action("ExportToExcel", "Dashboard")?' + strFiltros;
+            window.location.assign(url);
+
+        });
+
+            //Comprobaciones y restricciones
+
+            $('#tablaAlertaNecesidades').on('draw.dt', function (event, data) {
+                var total = $('#tempdataNecesidades');
+                $('#tabla').show();
+                total.html(data._iRecordsTotal);
+            });
+
+            //Funciones
+
+            function getFiltersAlertaNecesidades() {
+                var filterEstado = "10";
+                var filterPrevision = "135";
+                var filterFechaModificacion = $("div.btn-group").find(".active").val();
+
+                return {
+                    Estado: filterEstado,
+                    Prevision: filterPrevision,
+                    FechaModificacion: filterFechaModificacion
+                };
+            };
+
+            function coloreaDiasRetraso() {
+
+                $('[name=EntrevistaARecolorear]').each(function () {
+
+                    var tableRow = $(this);
+                    var diasRetraso = tableRow.find('input[name=DiasRetraso]').val();
+                    if (diasRetraso == 1) {
+                        tableRow.addClass("orange-text");
+                    }
+                    else if (diasRetraso >= 2) {
+                        tableRow.addClass("red-text");
+                    }
+                });
+            }
+
+        </script>
+}
+

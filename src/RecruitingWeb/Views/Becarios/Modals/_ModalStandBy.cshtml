@@ -1,0 +1,44 @@
+﻿@using RecruitingWeb.Components.Searchable
+@using RecruitingWeb.Properties
+
+<div class="modal fade" id="modalStandBy">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="row">
+                    <div class="col-lg-6 text-left">
+                        <h4 class="modal-title tituloModal">
+                            @Resources.HTML_Becarios_ModalStandBy_Pausarandidatura
+                        </h4>
+                    </div>
+                    <div class="col-lg-6 text-right">
+                        <button type="button" class="btnCloseModal" data-dismiss="modal">@Display.GlyphiconButton("glyphicon-remove")</button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body">
+                @Html.Hidden("becarioIdPausar")
+                <div class="row">
+                    <div class="col-lg-12 title-form">
+                        <label>@Resources.HTML_Becarios_ModalStandBy_AsigneFechaLimite</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-3"></div>
+                    <div class="form-group col-lg-6">
+                        <div class="col-lg-12 title-form">
+                            <label for="FechaContactoStandBy"> @Resources.HTML_Candidaturas_ModalStandBy_Fecha </label>
+                        </div>
+                        <div class="col-lg-12">
+                            @Edit.Date(null, "FechaContactoStandBy", id: "FechaContactoStandBy", required: false, htmlClass: "form-control")
+                        </div>
+                    </div>
+                    <div class="col-lg-3"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" id="BtnPausar">@Resources.Boton_Aceptar</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

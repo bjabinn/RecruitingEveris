@@ -1,0 +1,83 @@
+﻿@using RecruitingWeb.Properties
+@using RecruitingWeb.Components.Searchable
+
+@using Recruiting.Application.Centros.Enums
+@using Recruiting.Application.Candidaturas.Enums
+
+@model Recruiting.Application.Candidaturas.ViewModel.AgendarCartaOferta
+@{    
+
+    string EntrevistadorId = Model.AccessAgendarCarta ?? "";
+    EntrevistadorId = EntrevistadorId + "EntrevistadorId";
+    var oficinas = (SelectList)HttpContext.Current.Session["OficinaIdCentroUsuario"];
+    int centroId = (int)HttpContext.Current.Session["CentroIdUsuario"];
+
+    var oficina = (Model.OficinaId.HasValue) ? Model.OficinaId.Value.ToString() : "";
+    if (!oficinas.Any(x => x.Value == oficina))
+    {
+        oficina = "";
+    }
+    var salas = new List<SelectListItem>();
+    string isReadonly = "";
+    Dictionary<string, string> atribrutoDeshabilitar = new Dictionary<string, string>() { };
+    if (Model.AccessEtapa != (int)TipoEtapaCandidaturaEnum.AgendarCartaOferta)
+    {
+        atribrutoDeshabilitar.Add("disabled", "disabled");
+        isReadonly = "readonly";
+    }
+}
+<div class="row form-row">
+    <div class="form-group col-lg-4">
+        <div class="col-lg-12 title-form">
+            <label for="EntrevistadorId">@Resources.HTML_Candidaturas_DatosCartaOferta_Entrevistador</label>
+        </div>
+        <div class="col-lg-12">
+            @(Html.Searchable(EntrevistadorId, Url)
+                                                .Id(EntrevistadorId)
+                                                .AddCssClass("form-control")
+                                                .Action("GetUsuariosByNombreUsuario", "Admin")
+                                                .Value(Model.EntrevistadorName, Model.EntrevistadorId.ToString(), isReadonly)
+                                                .Required(true))
+        </div>
+    </div>
+    <div class="form-group col-lg-4">
+        <div class="col-lg-12 title-form">
+            <label for="FechaAgendarCarta">@Resources.HTML_Candidaturas_DatosCartaOferta_FechaAgendarCarta</label>
+        </div>
+        <div class="col-lg-12">
+            @Edit.DateTime(Model.FechaAgendarCarta, Model.AccessAgendarCarta + "FechaAgendarCarta", "FechaAgendarCarta", validate: true, required: true, isReadOnly: Model.AccessEtapa != (int)TipoEtapaCandidaturaEnum.AgendarCartaOferta, htmlClass: "form-control")
+        </div>
+    </div>
+    <div class="form-group col-lg-4">
+        <div class="col-lg-12 title-form">
+            <label for="AvisarAlCandidato">@Resources.HTML_Candidaturas_DatosCartaOferta_PlantillaCorreos</label>
+        </div>
+        <div class="col-lg-12">
+            @Edit.DropDownExtend(oficina, Model.AccessAgendarCarta + "OficinaId", oficinas, htmlClass: "form-control ", validate: false, required: false, id: "Oficina", showEmptyOption: false, comboAttributes: atribrutoDeshabilitar)
+        </div>
+    </div>
+</div>
+    <div class="row form-row" id="regionMeetings">
+        <div class="form-group col-lg-5">
+            <div class="col-lg-12 title-form">
+                <label for="NombreSala">@Resources.HTML_Candidaturas_AgendarEntrevista_NombreSala</label>
+            </div>
+            <div class="col-lg-12">
+                @Edit.DropDownExtend("", "nombreSala", salas, htmlClass: "col-lg-12 form-control ", validate: true, required: false, id: "SalasId", showEmptyOption: false, comboAttributes: atribrutoDeshabilitar)
+            </div>
+        </div>
+        <div class="form-group col-lg-3 pt-22">
+            <div class="col-lg-6 title-form">
+                <label for="IgnorarDispEntrevistador">@Resources.HTML_Candidaturas_AgendarEntrevista_IgnorarEntrevistador</label>
+            </div>
+            <div class="col-lg-6">
+                @Edit.CheckBoxDig(false, "IgnorarDispEntrevistador", "IgnorarDispEntrevistador", false, false)
+            </div>
+        </div>
+        <div class="form-group col-lg-4 pt-22">
+            <div class="form-group col-lg-12">
+                <button class="btn btn-default" title="@Resources.HTML_Candidaturas_AgendarEntrevista_BuscarSala" id="buscarSalasButton" type="button">@Resources.HTML_Candidaturas_AgendarEntrevista_BuscarSala</button>
+                <button class="ml-5 btn btn-default" title="Enviar convocatoria" id="enviarConvocatoriaButton" type="button">@Resources.HTML_Candidaturas_AgendarEntrevista_EnviarConvocatoria</button>
+            </div>
+        </div>
+    </div>

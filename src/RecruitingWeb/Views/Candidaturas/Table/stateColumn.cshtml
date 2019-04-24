@@ -1,0 +1,205 @@
+@using Recruiting.Application.Candidaturas.ViewModel
+@using Recruiting.Application.Candidaturas.Enums
+@using RecruitingWeb.Properties
+@using Recruiting.Application.Usuarios.ViewModels
+
+@model Recruiting.Application.Candidaturas.ViewModel.CandidaturaRowViewModel
+
+@{
+    var currentUserId = (int)HttpContext.Current.Session["UsuarioId"];
+    var permisoModificarCandidatura = (bool)TempData["ModificarCandidatura"];
+    var permisoAdministrarCandidatura = (bool)TempData["AdministrarCandidatura"];
+    var permisoVerCandidatura = (bool)TempData["VerCandidatura"];
+    var permisoVerCandidato = (bool)TempData["VerCandidato"];
+    var currentUser = (UsuarioRolPermisoViewModel)HttpContext.Current.Session["Usuario"];
+    var userEmail = currentUser.Email;
+    var emailVacio = userEmail == null;
+
+    var esMiEntrevista = ((currentUserId == Model.EntrevistadorId) ||
+    ((currentUserId == Model.FiltradorId) && (Model.EtapaId == (int)TipoEtapaCandidaturaEnum.FiltradoTecnico))); //comprueba que somos entrevistador O filtrador
+
+    var subEntrevistadores = Model.SubEntrevistadoresString.Split(',');
+    
+
+    foreach (var subEntrevistadorId in subEntrevistadores) //compruebaSiEsMiSubEntrevista.
+    {
+        if (currentUserId.ToString() == subEntrevistadorId && !esMiEntrevista && !permisoAdministrarCandidatura)
+        {            
+            esMiEntrevista = true;
+            break;
+        }
+    }  
+
+    var entrevistadorPermisos = esMiEntrevista && EsModificablePorEstado() && EsModificablePorEtapa();
+
+    var esModificablePorEstado = EsModificablePorEstado();
+    var esModificablePorEtapa = EsModificablePorEtapa();
+    
+
+    var candidaturaSeguidaPorMi = false;
+    if (Model.EmailsSeguimiento != null)
+    {
+        var emails = Model.EmailsSeguimiento;
+        if (!emailVacio && emails.Contains(userEmail))
+        {
+            candidaturaSeguidaPorMi = true;
+        }
+    }
+    
+}
+
+<div class="row">
+
+        @if (!isRevoked() && !isContracted())
+        {
+            if (!isPaused())
+            {
+
+                if (permisoAdministrarCandidatura || (permisoModificarCandidatura && esMiEntrevista && esModificablePorEstado && esModificablePorEtapa))
+                {                   
+                    <a title="@Resources.HTML_Title_Ejecutar" id="Ejecutar">
+                    @Display.GlyphiconButton("glyphicon-flash icon stateChange")
+                    </a>
+                }
+                else 
+                {
+                    <a title="@Resources.HTML_Title_Ejecutar" href="#" class="disabled">
+                     @Display.GlyphiconButton("glyphicon-flash icon stateChange")
+                    </a>
+                }
+
+                if (isPausable())
+                {                   
+                    <a title="@Resources.HTML_Title_Pausar" id="Pausar" class="@GetDisabledClass(!permisoAdministrarCandidatura)">
+                        @Display.GlyphiconButton("glyphicon-pause icon stateChange")
+                    </a>
+
+                    if (Model.EtapaId == (int)TipoEtapaCandidaturaEnum.FiltradoTelefonico || Model.EtapaId == (int)TipoEtapaCandidaturaEnum.AgendarCartaOferta 
+                        || Model.EtapaId == (int)TipoEtapaCandidaturaEnum.AgendarEntrevistas || Model.EtapaId == (int)TipoEtapaCandidaturaEnum.AgendarSegundaEntrevista)
+                    {
+                        <a title="@Resources.HTML_Title_Renunciar_Descartar_FiltradoTelefonico" id="RenunciarButton" class="@GetDisabledClass(!permisoAdministrarCandidatura)">
+                            @Display.GlyphiconButton("glyphicon-log-in icon stateChange")
+                        </a>
+                    }
+                    else
+                    {
+                        <a title="@Resources.HTML_Title_Renunciar" id="RenunciarButton" href="#" class="@GetDisabledClass(!permisoAdministrarCandidatura)">
+                            @Display.GlyphiconButton("glyphicon-log-in icon stateChange")
+                        </a>
+                    }
+
+
+                }
+
+
+            }
+            else
+            {
+                <a title="@Resources.HTML_Title_Retornar" href="@Url.Action("Reanudar", new { CandidaturaId = (int)Model.CandidaturaId })" class="@GetDisabledClass(!permisoAdministrarCandidatura)">
+                    @Display.GlyphiconButton("glyphicon-play icon stateChange")
+                </a>
+                <a title="@Resources.HTML_Title_Recontactar" id="RecontactarButton" href="#" class="@GetDisabledClass(!permisoAdministrarCandidatura)">
+                    @Display.GlyphiconButton("glyphicon-repeat icon stateChange")
+                </a>
+
+                <a title="@Resources.HTML_Title_Descartar" id="DescartarButton" href="#" class="@GetDisabledClass(!permisoAdministrarCandidatura)">
+                    @Display.GlyphiconButton("glyphicon-remove icon stateChange")
+                </a>
+            }
+        }
+
+        @if (!isPaused() && Model.PuedeRetroceder)
+        {
+            <a title="@Resources.HTML_Title_Retroceder" id="RetrocederButton" href="#" class="@GetDisabledClass(!permisoAdministrarCandidatura)">
+                @Display.GlyphiconButton("glyphicon-transfer icon stateChange")
+            </a>
+        }
+        @if (!candidaturaSeguidaPorMi)
+        {
+            <a title="@Resources.HTML_Title_Seguir" id="SeguirButton" class="@GetDisabledClass(emailVacio)">
+                @Display.GlyphiconButton("glyphicon-ok icon stateChange")
+            </a>
+        }
+        else
+        {
+            <a title="@Resources.HTML_Title_DejarSeguir" id="DejarSeguirButton">
+                @Display.GlyphiconButton("glyphicon-ok icon action")
+            </a>
+        }   
+</div>
+
+@functions{
+
+    public bool isPaused()
+    {
+        return (
+            Model.EstadoId == (int)TipoEstadoCandidaturaEnum.StandBy ||
+            Model.EstadoId == (int)TipoEstadoCandidaturaEnum.BacklogEntrevista ||
+            Model.EstadoId == (int)TipoEstadoCandidaturaEnum.AntiguoCVenBBDD ||
+            Model.EstadoId == (int)TipoEstadoCandidaturaEnum.Recontactado
+
+        );
+    }
+
+
+    public bool isRevoked()
+    {
+        return (
+            Model.EstadoId == (int)TipoEstadoCandidaturaEnum.Renuncia ||
+            Model.EstadoId == (int)TipoEstadoCandidaturaEnum.RechazaOferta ||
+            Model.EstadoId == (int)TipoEstadoCandidaturaEnum.KOOferta ||
+            Model.EstadoId == (int)TipoEstadoCandidaturaEnum.Descartado ||            
+            Model.EstadoId == (int)TipoEstadoCandidaturaEnum.Recontactado
+        );
+    }
+
+    public bool isContracted()
+    {
+        return (
+            Model.EstadoId == (int)TipoEstadoCandidaturaEnum.Contratado
+        );
+    }
+
+    public bool isPausable()
+    {
+        return (
+            Model.EtapaId == (int)TipoEtapaCandidaturaEnum.AgendarEntrevistas ||
+            Model.EtapaId == (int)TipoEtapaCandidaturaEnum.AgendarSegundaEntrevista ||
+            Model.EtapaId == (int)TipoEtapaCandidaturaEnum.AgendarCartaOferta ||
+            Model.EtapaId == (int)TipoEtapaCandidaturaEnum.FiltradoTelefonico ||
+            Model.EtapaId == (int)TipoEtapaCandidaturaEnum.PendienteDecisionSegundaEntrevista ||
+            Model.EtapaId == (int)TipoEtapaCandidaturaEnum.PendienteDecisionCartaOferta
+        );
+    }
+
+    public bool EsModificablePorEstado()
+    {
+        return (
+            Model.EstadoId == (int)TipoEstadoCandidaturaEnum.Entrevista ||
+            Model.EstadoId == (int)TipoEstadoCandidaturaEnum.SegundaEntrevista ||
+            Model.EstadoId == (int)TipoEstadoCandidaturaEnum.CartaOferta ||
+            Model.EstadoId == (int)TipoEstadoCandidaturaEnum.FiltradoPeople
+        );
+    }
+
+    public bool EsModificablePorEtapa()
+    {
+        return (
+            Model.EtapaId == (int)TipoEtapaCandidaturaEnum.EntregaCartaOferta ||
+            Model.EtapaId == (int)TipoEtapaCandidaturaEnum.FeedbackPrimeraEntrevista ||
+            Model.EtapaId == (int)TipoEtapaCandidaturaEnum.FeedbackSegundaEntrevista ||
+            Model.EtapaId == (int)TipoEtapaCandidaturaEnum.FiltradoTecnico
+        );
+    }
+}
+
+@helper GetDisabledClass(bool disable)
+{
+    var disabled = string.Empty;
+    if (disable)
+    {
+        disabled = "disabled";
+    }
+
+    @disabled
+}

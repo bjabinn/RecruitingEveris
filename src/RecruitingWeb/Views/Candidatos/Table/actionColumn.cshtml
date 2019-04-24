@@ -1,0 +1,88 @@
+@using Recruiting.Application.Candidatos.ViewModels
+@using RecruitingWeb.Properties
+
+@model Recruiting.Application.Candidatos.ViewModels.CandidatoRowViewModel
+
+<div>
+    @Edit.Hidden(@Model.Nombres + " " + @Model.Apellidos, "NombresYApellidos", new Dictionary<string, string> { { "id", "NombresYApellidos" } })
+    @Edit.Text(Model.CandidatoId.ToString(), "CandidatoId", id: "CandidatoId", htmlClass: "form-control hide")
+
+    <button type="button" class="flat" aria-label="Left Align" id="DonwloadCVButton" @getDisabledAttribute(!Model.CVAvailable)>
+        <span class="glyphicon glyphicon-download-alt icon action"
+              @getDataDisabledAttribute(!Model.CVAvailable)
+              aria-hidden="true"></span>
+    </button>
+
+    <a title="@Resources.HTML_Title_CrearCandidatura"
+       id="CreateCandidaturaButton"
+       @getDataDisabledAttribute(!Model.CandidaturaAvailable)
+       @getClassAddDisabled("glyphicon glyphicon-file icon action", !Model.CandidaturaAvailable)>
+    </a>
+
+    <a href="/Candidatos/Edit/@Model.CandidatoId" title="@Resources.HTML_Title_Editar"
+       id="EditButton"
+       @getClassAddDisabled("", !(bool)TempData["ModificarCandidato"])>
+
+        @Display.GlyphiconButton("glyphicon-pencil icon action")
+    </a>
+
+    <a title="@Resources.HTML_Title_Eliminar"
+       id="DeleteButton"
+       @getClassAddDisabled("", !(bool)TempData["AniadirEliminarCandidato"])>
+        @Display.GlyphiconButton("glyphicon-trash icon action")
+    </a>
+
+    <a href="/Candidatos/Details/@Model.CandidatoId" title="@Resources.HTML_Title_DetalleCandidato"
+       id="DetailButton"
+       @getClassAddDisabled("", !(bool)TempData["VerCandidato"])>
+        @Display.GlyphiconButton("glyphicon-eye-open icon action")
+    </a>
+    @*<a title="@Resources.HTML_Title_Candidaturas"
+           id="CandidaturasButton"
+           @getClassAddDisabled("", !(bool)TempData["VerCandidaturas"])>
+            @Display.GlyphiconButton("glyphicon-inbox icon action")
+        </a>*@
+    <a title="@Resources.HTML_Title_Candidaturas"
+       id="CandidatoCandidaturasButton"
+       @getClassAddDisabled("", !(bool)Model.ExistenCandidaturas)>
+        @Display.GlyphiconButton("glyphicon-inbox icon action")
+    </a>
+    <a title="@Resources.HTML_Title_Becarios"
+       id="CandidatoBecariosButton"
+       @getClassAddDisabled("", !(bool)Model.ExistenBecarios)>
+        @Display.GlyphiconButton("glyphicon-book icon action")
+    </a>
+
+
+
+</div>
+
+@helper getDisabledAttribute(bool disabled)
+    {
+        if (disabled)
+        {
+            @(new MvcHtmlString("disabled=\"disabled\""))
+        }
+        else
+        {
+            @(new MvcHtmlString(""))
+        }
+}
+
+@helper getDataDisabledAttribute(bool disabled)
+    {
+        if (disabled)
+        {
+            @(new MvcHtmlString("data-disabled=\"true\""))
+        }
+        else
+        {
+            @(new MvcHtmlString(""))
+        }
+}
+
+@helper getClassAddDisabled(string htmlClass, bool disabled)
+    {
+        var allClass = string.Format("class=\"{0} {1}\"", htmlClass, disabled ? "disabled" : "");
+        @(new MvcHtmlString(allClass))
+}

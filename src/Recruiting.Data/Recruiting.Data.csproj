@@ -1,0 +1,1294 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{B2D0F6AC-A65C-4C5E-A093-8E644D93B5A9}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Recruiting.Data</RootNamespace>
+    <AssemblyName>Recruiting.Data</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Preproduction|AnyCPU'">
+    <OutputPath>bin\Preproduction\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="EntityFramework\Base\RecruitingBaseRepository.cs" />
+    <Compile Include="EntityFramework\RecruitingDbContext.cs" />
+    <Compile Include="EntityFramework\Repositories\CandidatoCentroEducativoRepository.cs" />
+    <Compile Include="EntityFramework\Repositories\CandidaturaOfertaRepository.cs" />
+    <Compile Include="EntityFramework\Repositories\BecarioConvocatoriaRepository.cs" />
+    <Compile Include="EntityFramework\Repositories\BecarioCentroRepository.cs" />
+    <Compile Include="EntityFramework\Repositories\BecarioObservacionRepository.cs" />
+    <Compile Include="EntityFramework\Repositories\BecarioRepository.cs" />
+    <Compile Include="EntityFramework\Repositories\BitacoraBecarioRepository.cs" />
+    <Compile Include="EntityFramework\Repositories\BlackListSalaRepository.cs" />
+    <Compile Include="EntityFramework\Repositories\BitacoraNecesidadRepository.cs" />
+    <Compile Include="EntityFramework\Repositories\BecarioCentroProcedenciaRepository.cs" />
+    <Compile Include="EntityFramework\Repositories\CorreoBecarioRepository.cs" />
+    <Compile Include="EntityFramework\Repositories\CuentaTokenRepository.cs" />
+    <Compile Include="EntityFramework\Repositories\GrupoNecesidadRepository.cs" />
+    <Compile Include="EntityFramework\Repositories\AdministradorDashboardRepository.cs" />
+    <Compile Include="EntityFramework\Repositories\OficinaRepository.cs" />
+    <Compile Include="EntityFramework\Repositories\CentroRepository.cs" />
+    <Compile Include="EntityFramework\Repositories\PersonaLibreIdiomaRepository.cs" />
+    <Compile Include="EntityFramework\Repositories\SubEntrevistaRepository.cs" />
+    <Compile Include="EntityFramework\Repositories\MonedasDeCentroRepository.cs" />
+    <Compile Include="EntityFramework\Repositories\PersonaLibreRepository.cs" />
+    <Compile Include="EntityFramework\Repositories\CorreoPlantillaRepository.cs" />
+    <Compile Include="EntityFramework\Repositories\CorreoPlantillaVariableValorRepository.cs" />
+    <Compile Include="EntityFramework\Repositories\CorreoPlantillaVariableRepository.cs" />
+    <Compile Include="EntityFramework\Repositories\CorreoRepository.cs" />
+    <Compile Include="EntityFramework\Repositories\CorreoAdjuntoRepository.cs" />
+    <Compile Include="EntityFramework\Repositories\CandidatoContactoRepository.cs" />
+    <Compile Include="EntityFramework\Repositories\CandidatoExperienciaRepository.cs" />
+    <Compile Include="EntityFramework\Repositories\CandidatoIdiomaRepository.cs" />
+    <Compile Include="EntityFramework\Repositories\CandidatoRepository.cs" />
+    <Compile Include="EntityFramework\Repositories\CandidaturaEstadoRepository.cs" />
+    <Compile Include="EntityFramework\Repositories\CandidaturaEtapaRepository.cs" />
+    <Compile Include="EntityFramework\Repositories\BitacoraRepository.cs" />
+    <Compile Include="EntityFramework\Repositories\CandidaturaRepository.cs" />
+    <Compile Include="EntityFramework\Repositories\ClienteRepository.cs" />
+    <Compile Include="EntityFramework\Repositories\MaestroRepository.cs" />
+    <Compile Include="EntityFramework\Repositories\CartaOfertaRepository.cs" />
+    <Compile Include="EntityFramework\Repositories\EntrevistaRepository.cs" />
+    <Compile Include="EntityFramework\Repositories\NecesidadRepository.cs" />
+    <Compile Include="EntityFramework\Repositories\OfertaRepository.cs" />
+    <Compile Include="EntityFramework\Repositories\ProyectoRepository.cs" />
+    <Compile Include="EntityFramework\Repositories\FenixCategoriaLineaCeldaRepository.cs" />
+    <Compile Include="EntityFramework\Repositories\RolRepository.cs" />
+    <Compile Include="EntityFramework\Repositories\TipoEstadoBecarioRepository.cs" />
+    <Compile Include="EntityFramework\Repositories\TipoEstadoCandidaturaRepository.cs" />
+    <Compile Include="EntityFramework\Repositories\TipoEtapaCandidaturaRepository.cs" />
+    <Compile Include="EntityFramework\Repositories\TipoDecisionRepository.cs" />
+    <Compile Include="EntityFramework\Repositories\PermisoRepository.cs" />
+    <Compile Include="EntityFramework\Repositories\UsuarioRepository.cs" />
+    <Compile Include="EntityFramework\Repositories\RelacionEtapaRepository.cs" />
+    <Compile Include="EntityFramework\Repositories\RelacionVistaEtapaRepository.cs" />
+    <Compile Include="Migrations\201504200941340_EverisRecruiting DDBB schema.cs" />
+    <Compile Include="Migrations\201504200941340_EverisRecruiting DDBB schema.Designer.cs">
+      <DependentUpon>201504200941340_EverisRecruiting DDBB schema.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201504231107189_CandidaturaNombre.cs" />
+    <Compile Include="Migrations\201504231107189_CandidaturaNombre.Designer.cs">
+      <DependentUpon>201504231107189_CandidaturaNombre.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201504240801336_CambiosTablas.cs" />
+    <Compile Include="Migrations\201504240801336_CambiosTablas.Designer.cs">
+      <DependentUpon>201504240801336_CambiosTablas.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201504291001400_Necesidad CartaOferta.cs" />
+    <Compile Include="Migrations\201504291001400_Necesidad CartaOferta.Designer.cs">
+      <DependentUpon>201504291001400_Necesidad CartaOferta.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201504291012412_Necesidad CartaOferta Nulo.cs" />
+    <Compile Include="Migrations\201504291012412_Necesidad CartaOferta Nulo.Designer.cs">
+      <DependentUpon>201504291012412_Necesidad CartaOferta Nulo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201504300917148_Add Estado Origen Nullable RelacionEtapa.cs" />
+    <Compile Include="Migrations\201504300917148_Add Estado Origen Nullable RelacionEtapa.Designer.cs">
+      <DependentUpon>201504300917148_Add Estado Origen Nullable RelacionEtapa.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201504301124501_Add Estado Origen Nullable RelacionVistEtapa.cs" />
+    <Compile Include="Migrations\201504301124501_Add Estado Origen Nullable RelacionVistEtapa.Designer.cs">
+      <DependentUpon>201504301124501_Add Estado Origen Nullable RelacionVistEtapa.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201504301125488_Add Estado Origen RelacionVistaEtapa.cs" />
+    <Compile Include="Migrations\201504301125488_Add Estado Origen RelacionVistaEtapa.Designer.cs">
+      <DependentUpon>201504301125488_Add Estado Origen RelacionVistaEtapa.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201504301425401_Review Campos Obligatorios.cs" />
+    <Compile Include="Migrations\201504301425401_Review Campos Obligatorios.Designer.cs">
+      <DependentUpon>201504301425401_Review Campos Obligatorios.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505061529523_Eliminado campo Nombre de Candidatura.cs" />
+    <Compile Include="Migrations\201505061529523_Eliminado campo Nombre de Candidatura.Designer.cs">
+      <DependentUpon>201505061529523_Eliminado campo Nombre de Candidatura.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505131320066_Nuevo_Campo_TipoTecnologia_en_Candidatura.cs" />
+    <Compile Include="Migrations\201505131320066_Nuevo_Campo_TipoTecnologia_en_Candidatura.Designer.cs">
+      <DependentUpon>201505131320066_Nuevo_Campo_TipoTecnologia_en_Candidatura.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505131348413_Eliminado_tipotecnologia_en_candidatura.cs" />
+    <Compile Include="Migrations\201505131348413_Eliminado_tipotecnologia_en_candidatura.Designer.cs">
+      <DependentUpon>201505131348413_Eliminado_tipotecnologia_en_candidatura.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505131358068_Add_tipotecnologia_en_candidatura.cs" />
+    <Compile Include="Migrations\201505131358068_Add_tipotecnologia_en_candidatura.Designer.cs">
+      <DependentUpon>201505131358068_Add_tipotecnologia_en_candidatura.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505251324389_Prueba2.cs" />
+    <Compile Include="Migrations\201505251324389_Prueba2.Designer.cs">
+      <DependentUpon>201505251324389_Prueba2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505251325182_Prueba3.cs" />
+    <Compile Include="Migrations\201505251325182_Prueba3.Designer.cs">
+      <DependentUpon>201505251325182_Prueba3.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505251328354_prueba4.cs" />
+    <Compile Include="Migrations\201505251328354_prueba4.Designer.cs">
+      <DependentUpon>201505251328354_prueba4.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505251329274_prueba5.cs" />
+    <Compile Include="Migrations\201505251329274_prueba5.Designer.cs">
+      <DependentUpon>201505251329274_prueba5.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201507101135463_Add UserName to Usuario.cs" />
+    <Compile Include="Migrations\201507101135463_Add UserName to Usuario.Designer.cs">
+      <DependentUpon>201507101135463_Add UserName to Usuario.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201602080933152_AddCentro.cs" />
+    <Compile Include="Migrations\201602080933152_AddCentro.Designer.cs">
+      <DependentUpon>201602080933152_AddCentro.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201602221345069_AddCentroToClientes.cs" />
+    <Compile Include="Migrations\201602221345069_AddCentroToClientes.Designer.cs">
+      <DependentUpon>201602221345069_AddCentroToClientes.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201602251618228_Add_CartaOfertaGenerada_ToCartaOferta.cs" />
+    <Compile Include="Migrations\201602251618228_Add_CartaOfertaGenerada_ToCartaOferta.Designer.cs">
+      <DependentUpon>201602251618228_Add_CartaOfertaGenerada_ToCartaOferta.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201603041041555_CreacionBitacora.cs" />
+    <Compile Include="Migrations\201603041041555_CreacionBitacora.Designer.cs">
+      <DependentUpon>201603041041555_CreacionBitacora.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201603220838019_EnvioCorreos.cs" />
+    <Compile Include="Migrations\201603220838019_EnvioCorreos.Designer.cs">
+      <DependentUpon>201603220838019_EnvioCorreos.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201603220912100_AddColumnNombrePlantillaCorreo.cs" />
+    <Compile Include="Migrations\201603220912100_AddColumnNombrePlantillaCorreo.Designer.cs">
+      <DependentUpon>201603220912100_AddColumnNombrePlantillaCorreo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201603221521454_AddColumnValorDefecto_toCorreoPlantillaVariable.cs" />
+    <Compile Include="Migrations\201603221521454_AddColumnValorDefecto_toCorreoPlantillaVariable.Designer.cs">
+      <DependentUpon>201603221521454_AddColumnValorDefecto_toCorreoPlantillaVariable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201604010656264_AddCentro_toCorreoPlantilla.cs" />
+    <Compile Include="Migrations\201604010656264_AddCentro_toCorreoPlantilla.Designer.cs">
+      <DependentUpon>201604010656264_AddCentro_toCorreoPlantilla.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201606041105387_columna tipo test.cs" />
+    <Compile Include="Migrations\201606041105387_columna tipo test.Designer.cs">
+      <DependentUpon>201606041105387_columna tipo test.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201606211405005_Motivo de renuncia.cs" />
+    <Compile Include="Migrations\201606211405005_Motivo de renuncia.Designer.cs">
+      <DependentUpon>201606211405005_Motivo de renuncia.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201606220909345_clave ajena de motivo renuncia con maestro.cs" />
+    <Compile Include="Migrations\201606220909345_clave ajena de motivo renuncia con maestro.Designer.cs">
+      <DependentUpon>201606220909345_clave ajena de motivo renuncia con maestro.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201610200959135_AddPersonaAsignadaNecesidad.cs" />
+    <Compile Include="Migrations\201610200959135_AddPersonaAsignadaNecesidad.Designer.cs">
+      <DependentUpon>201610200959135_AddPersonaAsignadaNecesidad.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201610261034264_AddCamposProyecto.cs" />
+    <Compile Include="Migrations\201610261034264_AddCamposProyecto.Designer.cs">
+      <DependentUpon>201610261034264_AddCamposProyecto.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201610271119576_ModificacionBitacora.cs" />
+    <Compile Include="Migrations\201610271119576_ModificacionBitacora.Designer.cs">
+      <DependentUpon>201610271119576_ModificacionBitacora.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201610271521096_ModificacionBitacoraColumnaReversible.cs" />
+    <Compile Include="Migrations\201610271521096_ModificacionBitacoraColumnaReversible.Designer.cs">
+      <DependentUpon>201610271521096_ModificacionBitacoraColumnaReversible.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201701261149476_CampoModeloNecesidad.cs" />
+    <Compile Include="Migrations\201701261149476_CampoModeloNecesidad.Designer.cs">
+      <DependentUpon>201701261149476_CampoModeloNecesidad.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201701270758091_CampoModuloCandidaturas.cs" />
+    <Compile Include="Migrations\201701270758091_CampoModuloCandidaturas.Designer.cs">
+      <DependentUpon>201701270758091_CampoModuloCandidaturas.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201701271353389_MaestroCampoOrden.cs" />
+    <Compile Include="Migrations\201701271353389_MaestroCampoOrden.Designer.cs">
+      <DependentUpon>201701271353389_MaestroCampoOrden.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201701310708577_NecesidadIdiomaCRUD.cs" />
+    <Compile Include="Migrations\201701310708577_NecesidadIdiomaCRUD.Designer.cs">
+      <DependentUpon>201701310708577_NecesidadIdiomaCRUD.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704280922083_PersonaLibre.cs" />
+    <Compile Include="Migrations\201704280922083_PersonaLibre.Designer.cs">
+      <DependentUpon>201704280922083_PersonaLibre.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704281103199_Modificacion_FK_PersonaLibre.cs" />
+    <Compile Include="Migrations\201704281103199_Modificacion_FK_PersonaLibre.Designer.cs">
+      <DependentUpon>201704281103199_Modificacion_FK_PersonaLibre.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201705031113457_Aniadir_columna_UrlCV_a_candidatura.cs" />
+    <Compile Include="Migrations\201705031113457_Aniadir_columna_UrlCV_a_candidatura.Designer.cs">
+      <DependentUpon>201705031113457_Aniadir_columna_UrlCV_a_candidatura.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201705041445434_Eliminar_campo_SalarioDeseado_de_tabla_dbo_candidato.cs" />
+    <Compile Include="Migrations\201705041445434_Eliminar_campo_SalarioDeseado_de_tabla_dbo_candidato.Designer.cs">
+      <DependentUpon>201705041445434_Eliminar_campo_SalarioDeseado_de_tabla_dbo_candidato.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201705160704104_Aniadir_Orden_Al_Tipo_Estado.cs" />
+    <Compile Include="Migrations\201705160704104_Aniadir_Orden_Al_Tipo_Estado.Designer.cs">
+      <DependentUpon>201705160704104_Aniadir_Orden_Al_Tipo_Estado.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201705160712465_Aniadir_Orden_A_Etapa_Candidautra.cs" />
+    <Compile Include="Migrations\201705160712465_Aniadir_Orden_A_Etapa_Candidautra.Designer.cs">
+      <DependentUpon>201705160712465_Aniadir_Orden_A_Etapa_Candidautra.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201705161552157_Aniadir_FiltradorId_y_ForeingKey_en_Candidaturas.cs" />
+    <Compile Include="Migrations\201705161552157_Aniadir_FiltradorId_y_ForeingKey_en_Candidaturas.Designer.cs">
+      <DependentUpon>201705161552157_Aniadir_FiltradorId_y_ForeingKey_en_Candidaturas.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201705231011242_Modificado_tabla_PersonasLibres_FechaLiberacion_y_Tecnologia.cs" />
+    <Compile Include="Migrations\201705231011242_Modificado_tabla_PersonasLibres_FechaLiberacion_y_Tecnologia.Designer.cs">
+      <DependentUpon>201705231011242_Modificado_tabla_PersonasLibres_FechaLiberacion_y_Tecnologia.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201705240752467_Cambio_en_personaLibre_NecesidadId_Nullable.cs" />
+    <Compile Include="Migrations\201705240752467_Cambio_en_personaLibre_NecesidadId_Nullable.Designer.cs">
+      <DependentUpon>201705240752467_Cambio_en_personaLibre_NecesidadId_Nullable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201705250945458_Aniadir_Campos_SinNecesidadAsignada_A_PersonaLibre_Y_PersonaAsignadaId_A_Necesidades.cs" />
+    <Compile Include="Migrations\201705250945458_Aniadir_Campos_SinNecesidadAsignada_A_PersonaLibre_Y_PersonaAsignadaId_A_Necesidades.Designer.cs">
+      <DependentUpon>201705250945458_Aniadir_Campos_SinNecesidadAsignada_A_PersonaLibre_Y_PersonaAsignadaId_A_Necesidades.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201705251254521_Aniadir_PersonaAsignadaNroEmpleado_a_Necesidad.cs" />
+    <Compile Include="Migrations\201705251254521_Aniadir_PersonaAsignadaNroEmpleado_a_Necesidad.Designer.cs">
+      <DependentUpon>201705251254521_Aniadir_PersonaAsignadaNroEmpleado_a_Necesidad.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201705310910438_Nueva_Tabla_FenixCategoriaLineaCelda.cs" />
+    <Compile Include="Migrations\201705310910438_Nueva_Tabla_FenixCategoriaLineaCelda.Designer.cs">
+      <DependentUpon>201705310910438_Nueva_Tabla_FenixCategoriaLineaCelda.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201706011033324_aniadir_tabla_monedasDeCentro.cs" />
+    <Compile Include="Migrations\201706011033324_aniadir_tabla_monedasDeCentro.Designer.cs">
+      <DependentUpon>201706011033324_aniadir_tabla_monedasDeCentro.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201706021123340_aniadir_campo_moneda_a_candidatura.cs" />
+    <Compile Include="Migrations\201706021123340_aniadir_campo_moneda_a_candidatura.Designer.cs">
+      <DependentUpon>201706021123340_aniadir_campo_moneda_a_candidatura.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201706050644572_aniadir_campo_candidaturaId_a_necesidad.cs" />
+    <Compile Include="Migrations\201706050644572_aniadir_campo_candidaturaId_a_necesidad.Designer.cs">
+      <DependentUpon>201706050644572_aniadir_campo_candidaturaId_a_necesidad.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201706060904156_aniadir_tabla_subEntrevista.cs" />
+    <Compile Include="Migrations\201706060904156_aniadir_tabla_subEntrevista.Designer.cs">
+      <DependentUpon>201706060904156_aniadir_tabla_subEntrevista.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201706120702577_aniadido_campos_nuevos_a_tabla_subEntrevista.cs" />
+    <Compile Include="Migrations\201706120702577_aniadido_campos_nuevos_a_tabla_subEntrevista.Designer.cs">
+      <DependentUpon>201706120702577_aniadido_campos_nuevos_a_tabla_subEntrevista.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201706141511114_added_SubEntrevistaId_to_Correos.cs" />
+    <Compile Include="Migrations\201706141511114_added_SubEntrevistaId_to_Correos.Designer.cs">
+      <DependentUpon>201706141511114_added_SubEntrevistaId_to_Correos.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201706190806078_aniadido_AvisarAlCandidato_a_SubEntrevistas.cs" />
+    <Compile Include="Migrations\201706190806078_aniadido_AvisarAlCandidato_a_SubEntrevistas.Designer.cs">
+      <DependentUpon>201706190806078_aniadido_AvisarAlCandidato_a_SubEntrevistas.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201706211029200_aniadido_ModuloId_para_crear_FK_con_Maestro.cs" />
+    <Compile Include="Migrations\201706211029200_aniadido_ModuloId_para_crear_FK_con_Maestro.Designer.cs">
+      <DependentUpon>201706211029200_aniadido_ModuloId_para_crear_FK_con_Maestro.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201706211102122_drop_Modulo_from_Candidaturas.cs" />
+    <Compile Include="Migrations\201706211102122_drop_Modulo_from_Candidaturas.Designer.cs">
+      <DependentUpon>201706211102122_drop_Modulo_from_Candidaturas.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201706301133404_aniadir_avisarAlCAndidato_a_entrevistas.cs" />
+    <Compile Include="Migrations\201706301133404_aniadir_avisarAlCAndidato_a_entrevistas.Designer.cs">
+      <DependentUpon>201706301133404_aniadir_avisarAlCAndidato_a_entrevistas.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201707250959186_aniadido_campo_AsignadaCorrectamente_a_Necesidad.cs" />
+    <Compile Include="Migrations\201707250959186_aniadido_campo_AsignadaCorrectamente_a_Necesidad.Designer.cs">
+      <DependentUpon>201707250959186_aniadido_campo_AsignadaCorrectamente_a_Necesidad.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201708010933033_aniadir_NumeroDeEntrevistas_a_Candidaturas.cs" />
+    <Compile Include="Migrations\201708010933033_aniadir_NumeroDeEntrevistas_a_Candidaturas.Designer.cs">
+      <DependentUpon>201708010933033_aniadir_NumeroDeEntrevistas_a_Candidaturas.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201708021150407_aniadida_tabla_Centro.cs" />
+    <Compile Include="Migrations\201708021150407_aniadida_tabla_Centro.Designer.cs">
+      <DependentUpon>201708021150407_aniadida_tabla_Centro.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201708031117497_removeCentroFK.cs" />
+    <Compile Include="Migrations\201708031117497_removeCentroFK.Designer.cs">
+      <DependentUpon>201708031117497_removeCentroFK.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201708081202445_aniadido_campo_ComentariosRenuncia_a_Candidaturas.cs" />
+    <Compile Include="Migrations\201708081202445_aniadido_campo_ComentariosRenuncia_a_Candidaturas.Designer.cs">
+      <DependentUpon>201708081202445_aniadido_campo_ComentariosRenuncia_a_Candidaturas.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201708100716033_aniadido_campo_Completada_a_Entrevistas.cs" />
+    <Compile Include="Migrations\201708100716033_aniadido_campo_Completada_a_Entrevistas.Designer.cs">
+      <DependentUpon>201708100716033_aniadido_campo_Completada_a_Entrevistas.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201708180941278_aniadida_tabla_Oficina.cs" />
+    <Compile Include="Migrations\201708180941278_aniadida_tabla_Oficina.Designer.cs">
+      <DependentUpon>201708180941278_aniadida_tabla_Oficina.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201708210635182_aniadido_campo_OficinaId_a_Entrevista.cs" />
+    <Compile Include="Migrations\201708210635182_aniadido_campo_OficinaId_a_Entrevista.Designer.cs">
+      <DependentUpon>201708210635182_aniadido_campo_OficinaId_a_Entrevista.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201708210652134_aniadido_campo_OficinaId_a_CartaOferta.cs" />
+    <Compile Include="Migrations\201708210652134_aniadido_campo_OficinaId_a_CartaOferta.Designer.cs">
+      <DependentUpon>201708210652134_aniadido_campo_OficinaId_a_CartaOferta.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201708210752223_aniadido_campo_OficinaId_a_PlantillaCorreo.cs" />
+    <Compile Include="Migrations\201708210752223_aniadido_campo_OficinaId_a_PlantillaCorreo.Designer.cs">
+      <DependentUpon>201708210752223_aniadido_campo_OficinaId_a_PlantillaCorreo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201708211013161_aniadido_campo_TipoAviso_a_Correo.cs" />
+    <Compile Include="Migrations\201708211013161_aniadido_campo_TipoAviso_a_Correo.Designer.cs">
+      <DependentUpon>201708211013161_aniadido_campo_TipoAviso_a_Correo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201708301024079_aniadidos_campos_Sector_Servicio_a_Proyecto.cs" />
+    <Compile Include="Migrations\201708301024079_aniadidos_campos_Sector_Servicio_a_Proyecto.Designer.cs">
+      <DependentUpon>201708301024079_aniadidos_campos_Sector_Servicio_a_Proyecto.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201708311108575_aniadida_tabla_GrupoNecesidad.cs" />
+    <Compile Include="Migrations\201708311108575_aniadida_tabla_GrupoNecesidad.Designer.cs">
+      <DependentUpon>201708311108575_aniadida_tabla_GrupoNecesidad.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201708311120084_aniadido_campo_GrupoNecesidadId_a_Necesidad.cs" />
+    <Compile Include="Migrations\201708311120084_aniadido_campo_GrupoNecesidadId_a_Necesidad.Designer.cs">
+      <DependentUpon>201708311120084_aniadido_campo_GrupoNecesidadId_a_Necesidad.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201709051028392_added_modifiableEntity_data_to_GrupoNecesidad.cs" />
+    <Compile Include="Migrations\201709051028392_added_modifiableEntity_data_to_GrupoNecesidad.Designer.cs">
+      <DependentUpon>201709051028392_added_modifiableEntity_data_to_GrupoNecesidad.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201709151022309_eliminar_entrevista_completada.cs" />
+    <Compile Include="Migrations\201709151022309_eliminar_entrevista_completada.Designer.cs">
+      <DependentUpon>201709151022309_eliminar_entrevista_completada.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201709211028551_aniadido_campo_Fecha_Contacto_Standby_a_Candidatura.cs" />
+    <Compile Include="Migrations\201709211028551_aniadido_campo_Fecha_Contacto_Standby_a_Candidatura.Designer.cs">
+      <DependentUpon>201709211028551_aniadido_campo_Fecha_Contacto_Standby_a_Candidatura.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201710171010320_aniadir_campos_ComentariosRenunciaDescarte_y_motivoRenunciaDescarteId_a_Candidatura.cs" />
+    <Compile Include="Migrations\201710171010320_aniadir_campos_ComentariosRenunciaDescarte_y_motivoRenunciaDescarteId_a_Candidatura.Designer.cs">
+      <DependentUpon>201710171010320_aniadir_campos_ComentariosRenunciaDescarte_y_motivoRenunciaDescarteId_a_Candidatura.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201710171031085_eliminar_campos_ComentariosRenuncia_y_motivoRenunciaId_de_Candidatura.cs" />
+    <Compile Include="Migrations\201710171031085_eliminar_campos_ComentariosRenuncia_y_motivoRenunciaId_de_Candidatura.Designer.cs">
+      <DependentUpon>201710171031085_eliminar_campos_ComentariosRenuncia_y_motivoRenunciaId_de_Candidatura.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201710251049343_RTOOLS-10_Anhadir_origenCV_FuenteReclutamiento.cs" />
+    <Compile Include="Migrations\201710251049343_RTOOLS-10_Anhadir_origenCV_FuenteReclutamiento.Designer.cs">
+      <DependentUpon>201710251049343_RTOOLS-10_Anhadir_origenCV_FuenteReclutamiento.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201710301042163_Incluir_Persona_Cuenta_Proyecto_en_Necesidad.cs" />
+    <Compile Include="Migrations\201710301042163_Incluir_Persona_Cuenta_Proyecto_en_Necesidad.Designer.cs">
+      <DependentUpon>201710301042163_Incluir_Persona_Cuenta_Proyecto_en_Necesidad.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201711140917353_Create_Bitacora_Necesidad.cs" />
+    <Compile Include="Migrations\201711140917353_Create_Bitacora_Necesidad.Designer.cs">
+      <DependentUpon>201711140917353_Create_Bitacora_Necesidad.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201711170651366_Aniadir_Centro_a_Proyectos.cs" />
+    <Compile Include="Migrations\201711170651366_Aniadir_Centro_a_Proyectos.Designer.cs">
+      <DependentUpon>201711170651366_Aniadir_Centro_a_Proyectos.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201711170654224_Eliminar_Centro_de_Clientes.cs" />
+    <Compile Include="Migrations\201711170654224_Eliminar_Centro_de_Clientes.Designer.cs">
+      <DependentUpon>201711170654224_Eliminar_Centro_de_Clientes.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201711200917290_Aumentar_capacidad_descripcion_GrupoNecesidades.cs" />
+    <Compile Include="Migrations\201711200917290_Aumentar_capacidad_descripcion_GrupoNecesidades.Designer.cs">
+      <DependentUpon>201711200917290_Aumentar_capacidad_descripcion_GrupoNecesidades.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201711241005583_Aniadir_PersonaAsignada_a_BitacoraNecesidad.cs" />
+    <Compile Include="Migrations\201711241005583_Aniadir_PersonaAsignada_a_BitacoraNecesidad.Designer.cs">
+      <DependentUpon>201711241005583_Aniadir_PersonaAsignada_a_BitacoraNecesidad.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201712010909198_Aniadir_EmailsSeguimiento_a_Candidatura.cs" />
+    <Compile Include="Migrations\201712010909198_Aniadir_EmailsSeguimiento_a_Candidatura.Designer.cs">
+      <DependentUpon>201712010909198_Aniadir_EmailsSeguimiento_a_Candidatura.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201712131459520_Aniadir_EmailsReferenciados_a_Candidatura.cs" />
+    <Compile Include="Migrations\201712131459520_Aniadir_EmailsReferenciados_a_Candidatura.Designer.cs">
+      <DependentUpon>201712131459520_Aniadir_EmailsReferenciados_a_Candidatura.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201801081209316_Aniadir_Tabla_BecarioCentroProcedencia.cs" />
+    <Compile Include="Migrations\201801081209316_Aniadir_Tabla_BecarioCentroProcedencia.Designer.cs">
+      <DependentUpon>201801081209316_Aniadir_Tabla_BecarioCentroProcedencia.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201801081210517_Aniadir_Tabla_TipoEstadoBecario.cs" />
+    <Compile Include="Migrations\201801081210517_Aniadir_Tabla_TipoEstadoBecario.Designer.cs">
+      <DependentUpon>201801081210517_Aniadir_Tabla_TipoEstadoBecario.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201801081254302_Aniadir_Tabla_Becario.cs" />
+    <Compile Include="Migrations\201801081254302_Aniadir_Tabla_Becario.Designer.cs">
+      <DependentUpon>201801081254302_Aniadir_Tabla_Becario.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201801221251203_Aniadir_FechaContactoStandBy_Becario.cs" />
+    <Compile Include="Migrations\201801221251203_Aniadir_FechaContactoStandBy_Becario.Designer.cs">
+      <DependentUpon>201801221251203_Aniadir_FechaContactoStandBy_Becario.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201801231610560_Aniadir_Tabla_BecarioObservacion.cs" />
+    <Compile Include="Migrations\201801231610560_Aniadir_Tabla_BecarioObservacion.Designer.cs">
+      <DependentUpon>201801231610560_Aniadir_Tabla_BecarioObservacion.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201801260657024_Cambiado_Tipo_Campos_BecarioObservacion.cs" />
+    <Compile Include="Migrations\201801260657024_Cambiado_Tipo_Campos_BecarioObservacion.Designer.cs">
+      <DependentUpon>201801260657024_Cambiado_Tipo_Campos_BecarioObservacion.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201801261018160_Aniadidos_ObservacionProceso_Y_SuperaProceso_a_Becario.cs" />
+    <Compile Include="Migrations\201801261018160_Aniadidos_ObservacionProceso_Y_SuperaProceso_a_Becario.Designer.cs">
+      <DependentUpon>201801261018160_Aniadidos_ObservacionProceso_Y_SuperaProceso_a_Becario.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201801291244574_Aniadir_PersonaConvocatoriaId_y_ResponsableId_A_BecarioObservacion.cs" />
+    <Compile Include="Migrations\201801291244574_Aniadir_PersonaConvocatoriaId_y_ResponsableId_A_BecarioObservacion.Designer.cs">
+      <DependentUpon>201801291244574_Aniadir_PersonaConvocatoriaId_y_ResponsableId_A_BecarioObservacion.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201801301142382_Aniadir_Tabla_BitacoraBecario.cs" />
+    <Compile Include="Migrations\201801301142382_Aniadir_Tabla_BitacoraBecario.Designer.cs">
+      <DependentUpon>201801301142382_Aniadir_Tabla_BitacoraBecario.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201801301351545_Aniadir_Campos_Seleccion_a_Becario.cs" />
+    <Compile Include="Migrations\201801301351545_Aniadir_Campos_Seleccion_a_Becario.Designer.cs">
+      <DependentUpon>201801301351545_Aniadir_Campos_Seleccion_a_Becario.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802011211570_Aniadir_Datos_ResultadoFinal_a_Becario.cs" />
+    <Compile Include="Migrations\201802011211570_Aniadir_Datos_ResultadoFinal_a_Becario.Designer.cs">
+      <DependentUpon>201802011211570_Aniadir_Datos_ResultadoFinal_a_Becario.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802011618122_Corregir_Nombre_Columna_BecarioId_de_TablaBitacoraBecario.cs" />
+    <Compile Include="Migrations\201802011618122_Corregir_Nombre_Columna_BecarioId_de_TablaBitacoraBecario.Designer.cs">
+      <DependentUpon>201802011618122_Corregir_Nombre_Columna_BecarioId_de_TablaBitacoraBecario.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802021235520_Aniadir_ComentariosRenunciaDescarte_a_Becario.cs" />
+    <Compile Include="Migrations\201802021235520_Aniadir_ComentariosRenunciaDescarte_a_Becario.Designer.cs">
+      <DependentUpon>201802021235520_Aniadir_ComentariosRenunciaDescarte_a_Becario.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802050758515_Aniadir_Revertible_a_BitacoraBecario.cs" />
+    <Compile Include="Migrations\201802050758515_Aniadir_Revertible_a_BitacoraBecario.Designer.cs">
+      <DependentUpon>201802050758515_Aniadir_Revertible_a_BitacoraBecario.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802061212449_Eliminar_Navigation_Centro_En_Necesidad.cs" />
+    <Compile Include="Migrations\201802061212449_Eliminar_Navigation_Centro_En_Necesidad.Designer.cs">
+      <DependentUpon>201802061212449_Eliminar_Navigation_Centro_En_Necesidad.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802061214172_Aniadir_Navigation_Centro_En_Necesidad.cs" />
+    <Compile Include="Migrations\201802061214172_Aniadir_Navigation_Centro_En_Necesidad.Designer.cs">
+      <DependentUpon>201802061214172_Aniadir_Navigation_Centro_En_Necesidad.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802071304091_Aniadir_NotificacionDescarte_a_Candidatura.cs" />
+    <Compile Include="Migrations\201802071304091_Aniadir_NotificacionDescarte_a_Candidatura.Designer.cs">
+      <DependentUpon>201802071304091_Aniadir_NotificacionDescarte_a_Candidatura.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802091102321_Aniadir_Tabla_AdministradorDashboard.cs" />
+    <Compile Include="Migrations\201802091102321_Aniadir_Tabla_AdministradorDashboard.Designer.cs">
+      <DependentUpon>201802091102321_Aniadir_Tabla_AdministradorDashboard.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802151114205_Eliminar_Responsable_BecariosObservaciones.cs" />
+    <Compile Include="Migrations\201802151114205_Eliminar_Responsable_BecariosObservaciones.Designer.cs">
+      <DependentUpon>201802151114205_Eliminar_Responsable_BecariosObservaciones.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803260716470_Aniadir_tabla_CuentaToken.cs" />
+    <Compile Include="Migrations\201803260716470_Aniadir_tabla_CuentaToken.Designer.cs">
+      <DependentUpon>201803260716470_Aniadir_tabla_CuentaToken.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803260720217_Aniadir_campo_CuentaTokenId_a_Centros.cs" />
+    <Compile Include="Migrations\201803260720217_Aniadir_campo_CuentaTokenId_a_Centros.Designer.cs">
+      <DependentUpon>201803260720217_Aniadir_campo_CuentaTokenId_a_Centros.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803270619477_Aniadir_tabla_BlackListSala.cs" />
+    <Compile Include="Migrations\201803270619477_Aniadir_tabla_BlackListSala.Designer.cs">
+      <DependentUpon>201803270619477_Aniadir_tabla_BlackListSala.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804030846018_Aniadir_Tabla_BecarioConvocatoria_y_Campo_ConvocatoriaId_a_Becario.cs" />
+    <Compile Include="Migrations\201804030846018_Aniadir_Tabla_BecarioConvocatoria_y_Campo_ConvocatoriaId_a_Becario.Designer.cs">
+      <DependentUpon>201804030846018_Aniadir_Tabla_BecarioConvocatoria_y_Campo_ConvocatoriaId_a_Becario.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804040650018_Eliminado_Ciudad_Pais_de_Convocatoria_Aniadido_CentroId.cs" />
+    <Compile Include="Migrations\201804040650018_Eliminado_Ciudad_Pais_de_Convocatoria_Aniadido_CentroId.Designer.cs">
+      <DependentUpon>201804040650018_Eliminado_Ciudad_Pais_de_Convocatoria_Aniadido_CentroId.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804050915423_Eliminar_requerido_CentroProcedenciaId_en_Tabla_Becario.cs" />
+    <Compile Include="Migrations\201804050915423_Eliminar_requerido_CentroProcedenciaId_en_Tabla_Becario.Designer.cs">
+      <DependentUpon>201804050915423_Eliminar_requerido_CentroProcedenciaId_en_Tabla_Becario.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804241343245_Agregar_Campo_Prioridad_a_Necesidad.cs" />
+    <Compile Include="Migrations\201804241343245_Agregar_Campo_Prioridad_a_Necesidad.Designer.cs">
+      <DependentUpon>201804241343245_Agregar_Campo_Prioridad_a_Necesidad.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201805281106578_Agregar_Campo_ObservacionesStaffing_a_Necesidades.cs" />
+    <Compile Include="Migrations\201805281106578_Agregar_Campo_ObservacionesStaffing_a_Necesidades.Designer.cs">
+      <DependentUpon>201805281106578_Agregar_Campo_ObservacionesStaffing_a_Necesidades.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201806081017446_Creada_Tabla_CandidaturaOferta.cs" />
+    <Compile Include="Migrations\201806081017446_Creada_Tabla_CandidaturaOferta.Designer.cs">
+      <DependentUpon>201806081017446_Creada_Tabla_CandidaturaOferta.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201806110719260_Agregado_Campo_CandidaturaOfertaId_A_Candidaturas.cs" />
+    <Compile Include="Migrations\201806110719260_Agregado_Campo_CandidaturaOfertaId_A_Candidaturas.Designer.cs">
+      <DependentUpon>201806110719260_Agregado_Campo_CandidaturaOfertaId_A_Candidaturas.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201807100718577_Modificar_Longitud_Campo_Comentario_PersonaLibre.cs" />
+    <Compile Include="Migrations\201807100718577_Modificar_Longitud_Campo_Comentario_PersonaLibre.Designer.cs">
+      <DependentUpon>201807100718577_Modificar_Longitud_Campo_Comentario_PersonaLibre.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201808270656175_Agregado_Campo_Direccion.cs" />
+    <Compile Include="Migrations\201808270656175_Agregado_Campo_Direccion.Designer.cs">
+      <DependentUpon>201808270656175_Agregado_Campo_Direccion.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201808271001580_Agregado_Campo_AnioRegresado.cs" />
+    <Compile Include="Migrations\201808271001580_Agregado_Campo_AnioRegresado.Designer.cs">
+      <DependentUpon>201808271001580_Agregado_Campo_AnioRegresado.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201808281059247_Agregar_Tabla_CandidatoCentroEducativo.cs" />
+    <Compile Include="Migrations\201808281059247_Agregar_Tabla_CandidatoCentroEducativo.Designer.cs">
+      <DependentUpon>201808281059247_Agregar_Tabla_CandidatoCentroEducativo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201808310834181_Añadido Campo CandidatoCentroEducativoId.cs" />
+    <Compile Include="Migrations\201808310834181_Añadido Campo CandidatoCentroEducativoId.Designer.cs">
+      <DependentUpon>201808310834181_Añadido Campo CandidatoCentroEducativoId.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201809060540221_Agregado_Campo_Centro_Tabla_Maestro.cs" />
+    <Compile Include="Migrations\201809060540221_Agregado_Campo_Centro_Tabla_Maestro.Designer.cs">
+      <DependentUpon>201809060540221_Agregado_Campo_Centro_Tabla_Maestro.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201809061046431_Agregar_Campo_Referencia_Externa_Tabla_Necesidad.cs" />
+    <Compile Include="Migrations\201809061046431_Agregar_Campo_Referencia_Externa_Tabla_Necesidad.Designer.cs">
+      <DependentUpon>201809061046431_Agregar_Campo_Referencia_Externa_Tabla_Necesidad.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201811151325587_Cambiar_Length_Descripcion_GrupoNecesidad.cs" />
+    <Compile Include="Migrations\201811151325587_Cambiar_Length_Descripcion_GrupoNecesidad.Designer.cs">
+      <DependentUpon>201811151325587_Cambiar_Length_Descripcion_GrupoNecesidad.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201812040744082_AddPersonasLibresIdioma.cs" />
+    <Compile Include="Migrations\201812040744082_AddPersonasLibresIdioma.Designer.cs">
+      <DependentUpon>201812040744082_AddPersonasLibresIdioma.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201812121555015_AddFuRecOrCVEmailRefToBecario.cs" />
+    <Compile Include="Migrations\201812121555015_AddFuRecOrCVEmailRefToBecario.Designer.cs">
+      <DependentUpon>201812121555015_AddFuRecOrCVEmailRefToBecario.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201812171216386_Aniadir_CampoUbicacion_Candidaturas.cs" />
+    <Compile Include="Migrations\201812171216386_Aniadir_CampoUbicacion_Candidaturas.Designer.cs">
+      <DependentUpon>201812171216386_Aniadir_CampoUbicacion_Candidaturas.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201901140751122_Add-Sin-Decision.cs" />
+    <Compile Include="Migrations\201901140751122_Add-Sin-Decision.Designer.cs">
+      <DependentUpon>201901140751122_Add-Sin-Decision.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201901170907291_AniadirAnioExperiencia.cs" />
+    <Compile Include="Migrations\201901170907291_AniadirAnioExperiencia.Designer.cs">
+      <DependentUpon>201901170907291_AniadirAnioExperiencia.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201901280925597_Add_Tabla_CorreoBecario.cs" />
+    <Compile Include="Migrations\201901280925597_Add_Tabla_CorreoBecario.Designer.cs">
+      <DependentUpon>201901280925597_Add_Tabla_CorreoBecario.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201901311023431_Add_Campo_NotificacionDescarte_Becario.cs" />
+    <Compile Include="Migrations\201901311023431_Add_Campo_NotificacionDescarte_Becario.Designer.cs">
+      <DependentUpon>201901311023431_Add_Campo_NotificacionDescarte_Becario.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201903080740221_Cambio_Tabla_Aniosexp.cs" />
+    <Compile Include="Migrations\201903080740221_Cambio_Tabla_Aniosexp.Designer.cs">
+      <DependentUpon>201903080740221_Cambio_Tabla_Aniosexp.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201903080951140_delete_aniosexperienciacandidato.cs" />
+    <Compile Include="Migrations\201903080951140_delete_aniosexperienciacandidato.Designer.cs">
+      <DependentUpon>201903080951140_delete_aniosexperienciacandidato.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Recruiting.Business\Recruiting.Business.csproj">
+      <Project>{2994b963-0181-4a1f-bb84-fde37e46d920}</Project>
+      <Name>Recruiting.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Recruiting.Infra\Recruiting.Infra.csproj">
+      <Project>{b32595b8-4298-416e-89d2-d255710c6a33}</Project>
+      <Name>Recruiting.Infra</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201504200941340_EverisRecruiting DDBB schema.resx">
+      <DependentUpon>201504200941340_EverisRecruiting DDBB schema.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504231107189_CandidaturaNombre.resx">
+      <DependentUpon>201504231107189_CandidaturaNombre.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504240801336_CambiosTablas.resx">
+      <DependentUpon>201504240801336_CambiosTablas.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504291001400_Necesidad CartaOferta.resx">
+      <DependentUpon>201504291001400_Necesidad CartaOferta.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504291012412_Necesidad CartaOferta Nulo.resx">
+      <DependentUpon>201504291012412_Necesidad CartaOferta Nulo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504300917148_Add Estado Origen Nullable RelacionEtapa.resx">
+      <DependentUpon>201504300917148_Add Estado Origen Nullable RelacionEtapa.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504301124501_Add Estado Origen Nullable RelacionVistEtapa.resx">
+      <DependentUpon>201504301124501_Add Estado Origen Nullable RelacionVistEtapa.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504301125488_Add Estado Origen RelacionVistaEtapa.resx">
+      <DependentUpon>201504301125488_Add Estado Origen RelacionVistaEtapa.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504301425401_Review Campos Obligatorios.resx">
+      <DependentUpon>201504301425401_Review Campos Obligatorios.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505061529523_Eliminado campo Nombre de Candidatura.resx">
+      <DependentUpon>201505061529523_Eliminado campo Nombre de Candidatura.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505131320066_Nuevo_Campo_TipoTecnologia_en_Candidatura.resx">
+      <DependentUpon>201505131320066_Nuevo_Campo_TipoTecnologia_en_Candidatura.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505131348413_Eliminado_tipotecnologia_en_candidatura.resx">
+      <DependentUpon>201505131348413_Eliminado_tipotecnologia_en_candidatura.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505131358068_Add_tipotecnologia_en_candidatura.resx">
+      <DependentUpon>201505131358068_Add_tipotecnologia_en_candidatura.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505251324389_Prueba2.resx">
+      <DependentUpon>201505251324389_Prueba2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505251325182_Prueba3.resx">
+      <DependentUpon>201505251325182_Prueba3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505251328354_prueba4.resx">
+      <DependentUpon>201505251328354_prueba4.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505251329274_prueba5.resx">
+      <DependentUpon>201505251329274_prueba5.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201507101135463_Add UserName to Usuario.resx">
+      <DependentUpon>201507101135463_Add UserName to Usuario.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201602080933152_AddCentro.resx">
+      <DependentUpon>201602080933152_AddCentro.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201602221345069_AddCentroToClientes.resx">
+      <DependentUpon>201602221345069_AddCentroToClientes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201602251618228_Add_CartaOfertaGenerada_ToCartaOferta.resx">
+      <DependentUpon>201602251618228_Add_CartaOfertaGenerada_ToCartaOferta.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201603041041555_CreacionBitacora.resx">
+      <DependentUpon>201603041041555_CreacionBitacora.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201603220838019_EnvioCorreos.resx">
+      <DependentUpon>201603220838019_EnvioCorreos.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201603220912100_AddColumnNombrePlantillaCorreo.resx">
+      <DependentUpon>201603220912100_AddColumnNombrePlantillaCorreo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201603221521454_AddColumnValorDefecto_toCorreoPlantillaVariable.resx">
+      <DependentUpon>201603221521454_AddColumnValorDefecto_toCorreoPlantillaVariable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201604010656264_AddCentro_toCorreoPlantilla.resx">
+      <DependentUpon>201604010656264_AddCentro_toCorreoPlantilla.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201606041105387_columna tipo test.resx">
+      <DependentUpon>201606041105387_columna tipo test.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201606211405005_Motivo de renuncia.resx">
+      <DependentUpon>201606211405005_Motivo de renuncia.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201606220909345_clave ajena de motivo renuncia con maestro.resx">
+      <DependentUpon>201606220909345_clave ajena de motivo renuncia con maestro.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201610200959135_AddPersonaAsignadaNecesidad.resx">
+      <DependentUpon>201610200959135_AddPersonaAsignadaNecesidad.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201610261034264_AddCamposProyecto.resx">
+      <DependentUpon>201610261034264_AddCamposProyecto.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201610271119576_ModificacionBitacora.resx">
+      <DependentUpon>201610271119576_ModificacionBitacora.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201610271521096_ModificacionBitacoraColumnaReversible.resx">
+      <DependentUpon>201610271521096_ModificacionBitacoraColumnaReversible.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201701261149476_CampoModeloNecesidad.resx">
+      <DependentUpon>201701261149476_CampoModeloNecesidad.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201701270758091_CampoModuloCandidaturas.resx">
+      <DependentUpon>201701270758091_CampoModuloCandidaturas.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201701271353389_MaestroCampoOrden.resx">
+      <DependentUpon>201701271353389_MaestroCampoOrden.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201701310708577_NecesidadIdiomaCRUD.resx">
+      <DependentUpon>201701310708577_NecesidadIdiomaCRUD.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704280922083_PersonaLibre.resx">
+      <DependentUpon>201704280922083_PersonaLibre.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704281103199_Modificacion_FK_PersonaLibre.resx">
+      <DependentUpon>201704281103199_Modificacion_FK_PersonaLibre.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705031113457_Aniadir_columna_UrlCV_a_candidatura.resx">
+      <DependentUpon>201705031113457_Aniadir_columna_UrlCV_a_candidatura.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705041445434_Eliminar_campo_SalarioDeseado_de_tabla_dbo_candidato.resx">
+      <DependentUpon>201705041445434_Eliminar_campo_SalarioDeseado_de_tabla_dbo_candidato.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705160704104_Aniadir_Orden_Al_Tipo_Estado.resx">
+      <DependentUpon>201705160704104_Aniadir_Orden_Al_Tipo_Estado.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705160712465_Aniadir_Orden_A_Etapa_Candidautra.resx">
+      <DependentUpon>201705160712465_Aniadir_Orden_A_Etapa_Candidautra.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705161552157_Aniadir_FiltradorId_y_ForeingKey_en_Candidaturas.resx">
+      <DependentUpon>201705161552157_Aniadir_FiltradorId_y_ForeingKey_en_Candidaturas.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705231011242_Modificado_tabla_PersonasLibres_FechaLiberacion_y_Tecnologia.resx">
+      <DependentUpon>201705231011242_Modificado_tabla_PersonasLibres_FechaLiberacion_y_Tecnologia.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705240752467_Cambio_en_personaLibre_NecesidadId_Nullable.resx">
+      <DependentUpon>201705240752467_Cambio_en_personaLibre_NecesidadId_Nullable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705250945458_Aniadir_Campos_SinNecesidadAsignada_A_PersonaLibre_Y_PersonaAsignadaId_A_Necesidades.resx">
+      <DependentUpon>201705250945458_Aniadir_Campos_SinNecesidadAsignada_A_PersonaLibre_Y_PersonaAsignadaId_A_Necesidades.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705251254521_Aniadir_PersonaAsignadaNroEmpleado_a_Necesidad.resx">
+      <DependentUpon>201705251254521_Aniadir_PersonaAsignadaNroEmpleado_a_Necesidad.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705310910438_Nueva_Tabla_FenixCategoriaLineaCelda.resx">
+      <DependentUpon>201705310910438_Nueva_Tabla_FenixCategoriaLineaCelda.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201706011033324_aniadir_tabla_monedasDeCentro.resx">
+      <DependentUpon>201706011033324_aniadir_tabla_monedasDeCentro.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201706021123340_aniadir_campo_moneda_a_candidatura.resx">
+      <DependentUpon>201706021123340_aniadir_campo_moneda_a_candidatura.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201706050644572_aniadir_campo_candidaturaId_a_necesidad.resx">
+      <DependentUpon>201706050644572_aniadir_campo_candidaturaId_a_necesidad.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201706060904156_aniadir_tabla_subEntrevista.resx">
+      <DependentUpon>201706060904156_aniadir_tabla_subEntrevista.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201706120702577_aniadido_campos_nuevos_a_tabla_subEntrevista.resx">
+      <DependentUpon>201706120702577_aniadido_campos_nuevos_a_tabla_subEntrevista.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201706141511114_added_SubEntrevistaId_to_Correos.resx">
+      <DependentUpon>201706141511114_added_SubEntrevistaId_to_Correos.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201706190806078_aniadido_AvisarAlCandidato_a_SubEntrevistas.resx">
+      <DependentUpon>201706190806078_aniadido_AvisarAlCandidato_a_SubEntrevistas.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201706211029200_aniadido_ModuloId_para_crear_FK_con_Maestro.resx">
+      <DependentUpon>201706211029200_aniadido_ModuloId_para_crear_FK_con_Maestro.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201706211102122_drop_Modulo_from_Candidaturas.resx">
+      <DependentUpon>201706211102122_drop_Modulo_from_Candidaturas.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201706301133404_aniadir_avisarAlCAndidato_a_entrevistas.resx">
+      <DependentUpon>201706301133404_aniadir_avisarAlCAndidato_a_entrevistas.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201707250959186_aniadido_campo_AsignadaCorrectamente_a_Necesidad.resx">
+      <DependentUpon>201707250959186_aniadido_campo_AsignadaCorrectamente_a_Necesidad.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708010933033_aniadir_NumeroDeEntrevistas_a_Candidaturas.resx">
+      <DependentUpon>201708010933033_aniadir_NumeroDeEntrevistas_a_Candidaturas.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708021150407_aniadida_tabla_Centro.resx">
+      <DependentUpon>201708021150407_aniadida_tabla_Centro.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708031117497_removeCentroFK.resx">
+      <DependentUpon>201708031117497_removeCentroFK.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708081202445_aniadido_campo_ComentariosRenuncia_a_Candidaturas.resx">
+      <DependentUpon>201708081202445_aniadido_campo_ComentariosRenuncia_a_Candidaturas.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708100716033_aniadido_campo_Completada_a_Entrevistas.resx">
+      <DependentUpon>201708100716033_aniadido_campo_Completada_a_Entrevistas.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708180941278_aniadida_tabla_Oficina.resx">
+      <DependentUpon>201708180941278_aniadida_tabla_Oficina.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708210635182_aniadido_campo_OficinaId_a_Entrevista.resx">
+      <DependentUpon>201708210635182_aniadido_campo_OficinaId_a_Entrevista.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708210652134_aniadido_campo_OficinaId_a_CartaOferta.resx">
+      <DependentUpon>201708210652134_aniadido_campo_OficinaId_a_CartaOferta.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708210752223_aniadido_campo_OficinaId_a_PlantillaCorreo.resx">
+      <DependentUpon>201708210752223_aniadido_campo_OficinaId_a_PlantillaCorreo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708211013161_aniadido_campo_TipoAviso_a_Correo.resx">
+      <DependentUpon>201708211013161_aniadido_campo_TipoAviso_a_Correo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708301024079_aniadidos_campos_Sector_Servicio_a_Proyecto.resx">
+      <DependentUpon>201708301024079_aniadidos_campos_Sector_Servicio_a_Proyecto.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708311108575_aniadida_tabla_GrupoNecesidad.resx">
+      <DependentUpon>201708311108575_aniadida_tabla_GrupoNecesidad.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708311120084_aniadido_campo_GrupoNecesidadId_a_Necesidad.resx">
+      <DependentUpon>201708311120084_aniadido_campo_GrupoNecesidadId_a_Necesidad.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201709051028392_added_modifiableEntity_data_to_GrupoNecesidad.resx">
+      <DependentUpon>201709051028392_added_modifiableEntity_data_to_GrupoNecesidad.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201709151022309_eliminar_entrevista_completada.resx">
+      <DependentUpon>201709151022309_eliminar_entrevista_completada.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201709211028551_aniadido_campo_Fecha_Contacto_Standby_a_Candidatura.resx">
+      <DependentUpon>201709211028551_aniadido_campo_Fecha_Contacto_Standby_a_Candidatura.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710171010320_aniadir_campos_ComentariosRenunciaDescarte_y_motivoRenunciaDescarteId_a_Candidatura.resx">
+      <DependentUpon>201710171010320_aniadir_campos_ComentariosRenunciaDescarte_y_motivoRenunciaDescarteId_a_Candidatura.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710171031085_eliminar_campos_ComentariosRenuncia_y_motivoRenunciaId_de_Candidatura.resx">
+      <DependentUpon>201710171031085_eliminar_campos_ComentariosRenuncia_y_motivoRenunciaId_de_Candidatura.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710251049343_RTOOLS-10_Anhadir_origenCV_FuenteReclutamiento.resx">
+      <DependentUpon>201710251049343_RTOOLS-10_Anhadir_origenCV_FuenteReclutamiento.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710301042163_Incluir_Persona_Cuenta_Proyecto_en_Necesidad.resx">
+      <DependentUpon>201710301042163_Incluir_Persona_Cuenta_Proyecto_en_Necesidad.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711140917353_Create_Bitacora_Necesidad.resx">
+      <DependentUpon>201711140917353_Create_Bitacora_Necesidad.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711170651366_Aniadir_Centro_a_Proyectos.resx">
+      <DependentUpon>201711170651366_Aniadir_Centro_a_Proyectos.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711170654224_Eliminar_Centro_de_Clientes.resx">
+      <DependentUpon>201711170654224_Eliminar_Centro_de_Clientes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711200917290_Aumentar_capacidad_descripcion_GrupoNecesidades.resx">
+      <DependentUpon>201711200917290_Aumentar_capacidad_descripcion_GrupoNecesidades.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711241005583_Aniadir_PersonaAsignada_a_BitacoraNecesidad.resx">
+      <DependentUpon>201711241005583_Aniadir_PersonaAsignada_a_BitacoraNecesidad.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201712010909198_Aniadir_EmailsSeguimiento_a_Candidatura.resx">
+      <DependentUpon>201712010909198_Aniadir_EmailsSeguimiento_a_Candidatura.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201712131459520_Aniadir_EmailsReferenciados_a_Candidatura.resx">
+      <DependentUpon>201712131459520_Aniadir_EmailsReferenciados_a_Candidatura.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801081209316_Aniadir_Tabla_BecarioCentroProcedencia.resx">
+      <DependentUpon>201801081209316_Aniadir_Tabla_BecarioCentroProcedencia.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801081210517_Aniadir_Tabla_TipoEstadoBecario.resx">
+      <DependentUpon>201801081210517_Aniadir_Tabla_TipoEstadoBecario.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801081254302_Aniadir_Tabla_Becario.resx">
+      <DependentUpon>201801081254302_Aniadir_Tabla_Becario.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801221251203_Aniadir_FechaContactoStandBy_Becario.resx">
+      <DependentUpon>201801221251203_Aniadir_FechaContactoStandBy_Becario.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801231610560_Aniadir_Tabla_BecarioObservacion.resx">
+      <DependentUpon>201801231610560_Aniadir_Tabla_BecarioObservacion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801260657024_Cambiado_Tipo_Campos_BecarioObservacion.resx">
+      <DependentUpon>201801260657024_Cambiado_Tipo_Campos_BecarioObservacion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801261018160_Aniadidos_ObservacionProceso_Y_SuperaProceso_a_Becario.resx">
+      <DependentUpon>201801261018160_Aniadidos_ObservacionProceso_Y_SuperaProceso_a_Becario.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801291244574_Aniadir_PersonaConvocatoriaId_y_ResponsableId_A_BecarioObservacion.resx">
+      <DependentUpon>201801291244574_Aniadir_PersonaConvocatoriaId_y_ResponsableId_A_BecarioObservacion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801301142382_Aniadir_Tabla_BitacoraBecario.resx">
+      <DependentUpon>201801301142382_Aniadir_Tabla_BitacoraBecario.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801301351545_Aniadir_Campos_Seleccion_a_Becario.resx">
+      <DependentUpon>201801301351545_Aniadir_Campos_Seleccion_a_Becario.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802011211570_Aniadir_Datos_ResultadoFinal_a_Becario.resx">
+      <DependentUpon>201802011211570_Aniadir_Datos_ResultadoFinal_a_Becario.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802011618122_Corregir_Nombre_Columna_BecarioId_de_TablaBitacoraBecario.resx">
+      <DependentUpon>201802011618122_Corregir_Nombre_Columna_BecarioId_de_TablaBitacoraBecario.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802021235520_Aniadir_ComentariosRenunciaDescarte_a_Becario.resx">
+      <DependentUpon>201802021235520_Aniadir_ComentariosRenunciaDescarte_a_Becario.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802050758515_Aniadir_Revertible_a_BitacoraBecario.resx">
+      <DependentUpon>201802050758515_Aniadir_Revertible_a_BitacoraBecario.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802061212449_Eliminar_Navigation_Centro_En_Necesidad.resx">
+      <DependentUpon>201802061212449_Eliminar_Navigation_Centro_En_Necesidad.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802061214172_Aniadir_Navigation_Centro_En_Necesidad.resx">
+      <DependentUpon>201802061214172_Aniadir_Navigation_Centro_En_Necesidad.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802071304091_Aniadir_NotificacionDescarte_a_Candidatura.resx">
+      <DependentUpon>201802071304091_Aniadir_NotificacionDescarte_a_Candidatura.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802091102321_Aniadir_Tabla_AdministradorDashboard.resx">
+      <DependentUpon>201802091102321_Aniadir_Tabla_AdministradorDashboard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802151114205_Eliminar_Responsable_BecariosObservaciones.resx">
+      <DependentUpon>201802151114205_Eliminar_Responsable_BecariosObservaciones.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803260716470_Aniadir_tabla_CuentaToken.resx">
+      <DependentUpon>201803260716470_Aniadir_tabla_CuentaToken.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803260720217_Aniadir_campo_CuentaTokenId_a_Centros.resx">
+      <DependentUpon>201803260720217_Aniadir_campo_CuentaTokenId_a_Centros.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803270619477_Aniadir_tabla_BlackListSala.resx">
+      <DependentUpon>201803270619477_Aniadir_tabla_BlackListSala.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804030846018_Aniadir_Tabla_BecarioConvocatoria_y_Campo_ConvocatoriaId_a_Becario.resx">
+      <DependentUpon>201804030846018_Aniadir_Tabla_BecarioConvocatoria_y_Campo_ConvocatoriaId_a_Becario.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804040650018_Eliminado_Ciudad_Pais_de_Convocatoria_Aniadido_CentroId.resx">
+      <DependentUpon>201804040650018_Eliminado_Ciudad_Pais_de_Convocatoria_Aniadido_CentroId.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804050915423_Eliminar_requerido_CentroProcedenciaId_en_Tabla_Becario.resx">
+      <DependentUpon>201804050915423_Eliminar_requerido_CentroProcedenciaId_en_Tabla_Becario.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804241343245_Agregar_Campo_Prioridad_a_Necesidad.resx">
+      <DependentUpon>201804241343245_Agregar_Campo_Prioridad_a_Necesidad.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805281106578_Agregar_Campo_ObservacionesStaffing_a_Necesidades.resx">
+      <DependentUpon>201805281106578_Agregar_Campo_ObservacionesStaffing_a_Necesidades.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806081017446_Creada_Tabla_CandidaturaOferta.resx">
+      <DependentUpon>201806081017446_Creada_Tabla_CandidaturaOferta.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806110719260_Agregado_Campo_CandidaturaOfertaId_A_Candidaturas.resx">
+      <DependentUpon>201806110719260_Agregado_Campo_CandidaturaOfertaId_A_Candidaturas.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807100718577_Modificar_Longitud_Campo_Comentario_PersonaLibre.resx">
+      <DependentUpon>201807100718577_Modificar_Longitud_Campo_Comentario_PersonaLibre.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201808270656175_Agregado_Campo_Direccion.resx">
+      <DependentUpon>201808270656175_Agregado_Campo_Direccion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201808271001580_Agregado_Campo_AnioRegresado.resx">
+      <DependentUpon>201808271001580_Agregado_Campo_AnioRegresado.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201808281059247_Agregar_Tabla_CandidatoCentroEducativo.resx">
+      <DependentUpon>201808281059247_Agregar_Tabla_CandidatoCentroEducativo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201808310834181_Añadido Campo CandidatoCentroEducativoId.resx">
+      <DependentUpon>201808310834181_Añadido Campo CandidatoCentroEducativoId.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201809060540221_Agregado_Campo_Centro_Tabla_Maestro.resx">
+      <DependentUpon>201809060540221_Agregado_Campo_Centro_Tabla_Maestro.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201809061046431_Agregar_Campo_Referencia_Externa_Tabla_Necesidad.resx">
+      <DependentUpon>201809061046431_Agregar_Campo_Referencia_Externa_Tabla_Necesidad.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201811151325587_Cambiar_Length_Descripcion_GrupoNecesidad.resx">
+      <DependentUpon>201811151325587_Cambiar_Length_Descripcion_GrupoNecesidad.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201812040744082_AddPersonasLibresIdioma.resx">
+      <DependentUpon>201812040744082_AddPersonasLibresIdioma.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201812121555015_AddFuRecOrCVEmailRefToBecario.resx">
+      <DependentUpon>201812121555015_AddFuRecOrCVEmailRefToBecario.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201812171216386_Aniadir_CampoUbicacion_Candidaturas.resx">
+      <DependentUpon>201812171216386_Aniadir_CampoUbicacion_Candidaturas.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901140751122_Add-Sin-Decision.resx">
+      <DependentUpon>201901140751122_Add-Sin-Decision.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901170907291_AniadirAnioExperiencia.resx">
+      <DependentUpon>201901170907291_AniadirAnioExperiencia.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901280925597_Add_Tabla_CorreoBecario.resx">
+      <DependentUpon>201901280925597_Add_Tabla_CorreoBecario.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901311023431_Add_Campo_NotificacionDescarte_Becario.resx">
+      <DependentUpon>201901311023431_Add_Campo_NotificacionDescarte_Becario.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201903080740221_Cambio_Tabla_Aniosexp.resx">
+      <DependentUpon>201903080740221_Cambio_Tabla_Aniosexp.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201903080951140_delete_aniosexperienciacandidato.resx">
+      <DependentUpon>201903080951140_delete_aniosexperienciacandidato.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Scripts\Abril 2018\05-04-2018_Insercion tipo beca Beca Interna a Maestro.sql" />
+    <Content Include="Scripts\Agosto 2018\24-08-2018 Insercion de plantilla correos Outlook Sevilla.sql" />
+    <Content Include="Scripts\Agosto 2018\01-08-2018 Insercion de plantilla correo CO en practicas Tetuan.sql" />
+    <Content Include="Scripts\Diciembre 2017\20-12-2017 Insertar datos origenCV y en Fuente de Reclutamiento.sql" />
+    <Content Include="Scripts\Diciembre 2017\18-12-2017 Insercion de estados a TipoEstadoBecario.sql" />
+    <Content Include="Scripts\Diciembre 2017\19-12-2017 Añadido registro Web Center Sites %28WCS%29 con tipoTecnologia.sql" />
+    <Content Include="Scripts\Diciembre 2017\18-12-2017 Insertar TipoBecario en TipoMaestro e insertado campo en Master CFGS y Universidad.sql" />
+    <Content Include="Scripts\Diciembre 2017\12-12-2017 Insertar datos tipoTecnologia.sql" />
+    <Content Include="Scripts\Diciembre 2017\12-12-2017 Insertar nuevo modulo funcional SAP.sql" />
+    <Content Include="Scripts\Diciembre 2017\05-12-2017 Insercion de plantilla notificar referenciado alicante.sql" />
+    <Content Include="Scripts\Diciembre 2017\05-12-2017 Insercion de plantilla notificar seguimiento alicante.sql" />
+    <Content Include="Scripts\Diciembre 2017\05-12-2017 Insercion de plantilla notificar referenciado sevilla.sql" />
+    <Content Include="Scripts\Diciembre 2017\05-12-2017 Insercion de plantilla notificar seguimiento sevilla.sql" />
+    <Content Include="Scripts\Diciembre 2017\05-12-2017 Insercion de plantilla notificar referenciado sin centro.sql" />
+    <Content Include="Scripts\Diciembre 2017\05-12-2017 Insercion de plantilla notificar seguimiento sin centro.sql" />
+    <Content Include="Scripts\Diciembre 2017\12-12-2017 Insertar datos origenCV.sql" />
+    <Content Include="Scripts\Diciembre 2018\18-12-2018 Actualizacion de plantilla correo CO en practicas Sevilla.sql" />
+    <Content Include="Scripts\Diciembre 2018\26-12-2018 Actualizacion de correo referenciados en stand by.sql" />
+    <Content Include="Scripts\Diciembre 2018\18-12-2018 Insercion CorreoPlantillaVariable.sql" />
+    <Content Include="Scripts\Enero 2018\31-01-2018 Añadidos campos de Asistencia Becarios en Maestro.sql" />
+    <Content Include="Scripts\Enero 2018\24-01-2018 Añadido campos de observacionBecarios en TipoMaestro y en Maestro.sql" />
+    <Content Include="Scripts\Enero 2019\15-01-2019 script actualizar campo sin decidir feedbacks.sql" />
+    <Content Include="Scripts\Febrero 2018\14-02-2018_Insercion notificaciones descarte a true.sql" />
+    <Content Include="Scripts\Febrero 2018\06-02-2018_Insercion de plantilla CO de Salamanca.sql" />
+    <Content Include="Scripts\Febrero 2018\01-02-2018_Insercion de Resultado Final Practicas en Maestro.sql" />
+    <Content Include="Scripts\Febrero 2018\06-02-2018_Insercion de oficina Salamanca en Maestro.sql" />
+    <Content Include="Scripts\Febrero 2019\11-02-2019 AlicanteScriptCorreoDescarteBecario.sql" />
+    <Content Include="Scripts\Febrero 2019\11-02-2019 LisboaScriptCorreoDescarteBecario.sql" />
+    <Content Include="Scripts\Febrero 2019\11-02-2019 MurciaScriptCorreoDescarteBecario.sql" />
+    <Content Include="Scripts\Febrero 2019\11-02-2019 SalamancaScriptCorreoDescarteBecario.sql" />
+    <Content Include="Scripts\Febrero 2019\11-02-2019 SevillaScriptCorreoDescarteBecario.sql" />
+    <Content Include="Scripts\Febrero 2019\13-02-2019_AlicanteScriptCorreoFeedbackCandidatura.sql" />
+    <Content Include="Scripts\Febrero 2019\13-02-2019_Insercion de plantillas correo aviso finalizar feedback Sevilla.sql" />
+    <Content Include="Scripts\Febrero 2019\13-02-2019_LisboaScriptCorreoFeedbackCandidatura.sql" />
+    <Content Include="Scripts\Febrero 2019\13-02-2019_MurciaScriptCorreoFeedbackCandidatura.sql" />
+    <Content Include="Scripts\Febrero 2019\13-02-2019_SalamancaScriptCorreoFeedbackCandidatura.sql" />
+    <Content Include="Scripts\Febrero 2019\13-02-2019_SevillaScriptCorreoFeedbackCandidatura.sql" />
+    <Content Include="Scripts\Febrero 2019\26-02-2019_MurciaScriptFuenteReclutamiento - Copia.sql" />
+    <Content Include="Scripts\Febrero 2019\26-02-2019_MurciaScriptFuenteReclutamiento.sql" />
+    <Content Include="Scripts\Febrero 2019\26-02-2019_MurciaScriptTipoBeca.sql" />
+    <Content Include="Scripts\Julio 2018\17-07-2018 Insertar Nuevas Funcionalidades de StandBy.sql" />
+    <Content Include="Scripts\Julio 2018\13-07-2018 Migracion renuncia a descarte %28no lanzar%29 .sql" />
+    <Content Include="Scripts\Julio 2018\13-07-2018 Migracion descarte a renuncia %28no lanzar%29 .sql" />
+    <Content Include="Scripts\Julio 2018\13-07-2018 Creacion motivos descarte %28no lanzar%29.sql" />
+    <Content Include="Scripts\Julio 2018\03-07-2018 Arreglo Motivos descarte invertidos %28no lanzar%29.sql" />
+    <Content Include="Scripts\Julio 2018\27-07-2018_Insercion Permisos Funnel.sql" />
+    <Content Include="Scripts\Agosto 2018\01-08-2018 Insercion de plantilla correo CO en practicas Salamanca.sql" />
+    <Content Include="Scripts\Agosto 2018\01-08-2018 Insercion de plantilla correo CO en practicas Alicante.sql" />
+    <Content Include="Scripts\Agosto 2018\01-08-2018 Insercion de plantilla correo CO en practicas Murcia.sql" />
+    <Content Include="Scripts\Agosto 2018\01-08-2018 Insercion de plantilla correo CO en practicas Sevilla.sql" />
+    <Content Include="Scripts\Junio 2018\19-06-2018_Insercion Tecnologia BKS.sql" />
+    <Content Include="Scripts\Junio 2018\18-06-2018_Insercion Nuevos Permisos.sql" />
+    <Content Include="Scripts\Marzo 2018\28-03-2018 Insercion de plantilla meeting sevilla.sql" />
+    <Content Include="Scripts\Marzo 2018\26-03-2018_Insercion CuentaToken y añadida al Centro de Sevilla.sql" />
+    <Content Include="Scripts\Marzo 2018\08-03-2018 Cambiar collation Tablas Necesidad y Candidato para los nombres de personas.sql" />
+    <Content Include="Scripts\Marzo 2018\Recuperacion Datos PersonaAsignada en Necesidad %28no lanzar%29.sql" />
+    <Content Include="Scripts\Marzo 2018\01-03-2018_Insercion motivo Orientacion a otro sector a Maestro.sql" />
+    <Content Include="Scripts\Marzo 2019\04-03-2019_Update Aviso Candidato Sevilla.sql" />
+    <Content Include="Scripts\Marzo 2019\04-03-2019_Update Plantillas CO.sql" />
+    <Content Include="Scripts\Marzo 2019\22-03-2019_Cambiar datos años experiencia.sql" />
+    <Content Include="Scripts\Mayo 2018\23-05-2018 Insertar Centro Alicante Solutions.sql" />
+    <Content Include="Scripts\Mayo 2018\08-05-2018 Insertar tecnologias.sql" />
+    <Content Include="Scripts\Noviembre 2017\22-11-2017 Cambiar Collation Campos PersonaLibre y GrupoNecesidad.sql" />
+    <Content Include="Scripts\Noviembre 2017\20-11-2017 Aniadir Nuevas Tecnologias del Candidato a Maestro.sql" />
+    <Content Include="Scripts\Noviembre 2017\17-11-2017 Aniadir Recontactado a TipoEstadoCandidatura.sql" />
+    <Content Include="Scripts\Noviembre 2017\15-11-2017 Rellenar Centros Proyectos.sql" />
+    <Content Include="Scripts\Noviembre 2017\08-11-2017 Eliminar y migrar motivos de renuncia.sql" />
+    <Content Include="Scripts\Noviembre 2017\07-11-2017 Cambiar nombre motivo rechazo a motivo descarte en tipoMaestro.sql" />
+    <Content Include="Scripts\Noviembre 2018\Referenciados\Alicante\13-11-2018 Insercion de plantilla RefAceptaCO alicante.sql" />
+    <Content Include="Scripts\Noviembre 2018\Referenciados\Alicante\13-11-2018 Insercion de plantilla RefAgendarEntrevista alicante.sql" />
+    <Content Include="Scripts\Noviembre 2018\Referenciados\Alicante\13-11-2018 Insercion de plantilla RefAgendarEntrevistaComplementaria alicante.sql" />
+    <Content Include="Scripts\Noviembre 2018\Referenciados\Alicante\13-11-2018 Insercion de plantilla RefCartaOferta alicante.sql" />
+    <Content Include="Scripts\Noviembre 2018\Referenciados\Alicante\13-11-2018 Insercion de plantilla RefDescarte alicante.sql" />
+    <Content Include="Scripts\Noviembre 2018\Referenciados\Alicante\13-11-2018 Insercion de plantilla RefFiltroTelefonico alicante.sql" />
+    <Content Include="Scripts\Noviembre 2018\Referenciados\Alicante\13-11-2018 Insercion de plantilla RefReanudar alicante.sql" />
+    <Content Include="Scripts\Noviembre 2018\Referenciados\Alicante\13-11-2018 Insercion de plantilla RefRechazaCO alicante.sql" />
+    <Content Include="Scripts\Noviembre 2018\Referenciados\Alicante\13-11-2018 Insercion de plantilla RefRenuncia alicante.sql" />
+    <Content Include="Scripts\Noviembre 2018\Referenciados\Alicante\13-11-2018 Insercion de plantilla RefStandBy alicante.sql" />
+    <Content Include="Scripts\Noviembre 2018\Referenciados\Lisboa\13-11-2018 Insercion de plantilla RefAceptaCO lisboa.sql" />
+    <Content Include="Scripts\Noviembre 2018\Referenciados\Lisboa\13-11-2018 Insercion de plantilla RefAgendarEntrevista lisboa.sql" />
+    <Content Include="Scripts\Noviembre 2018\Referenciados\Lisboa\13-11-2018 Insercion de plantilla RefAgendarEntrevistaComplementaria lisboa.sql" />
+    <Content Include="Scripts\Noviembre 2018\Referenciados\Lisboa\13-11-2018 Insercion de plantilla RefCartaOferta lisboa.sql" />
+    <Content Include="Scripts\Noviembre 2018\Referenciados\Lisboa\13-11-2018 Insercion de plantilla RefDescarte lisboa.sql" />
+    <Content Include="Scripts\Noviembre 2018\Referenciados\Lisboa\13-11-2018 Insercion de plantilla RefFiltroTelefonico lisboa.sql" />
+    <Content Include="Scripts\Noviembre 2018\Referenciados\Lisboa\13-11-2018 Insercion de plantilla RefReanudar lisboa.sql" />
+    <Content Include="Scripts\Noviembre 2018\Referenciados\Lisboa\13-11-2018 Insercion de plantilla RefRechazaCO lisboa.sql" />
+    <Content Include="Scripts\Noviembre 2018\Referenciados\Lisboa\13-11-2018 Insercion de plantilla RefRenuncia lisboa.sql" />
+    <Content Include="Scripts\Noviembre 2018\Referenciados\Lisboa\13-11-2018 Insercion de plantilla RefStandBy lisboa.sql" />
+    <Content Include="Scripts\Noviembre 2018\Referenciados\Murcia\13-11-2018 Insercion de plantilla RefAceptaCO murcia.sql" />
+    <Content Include="Scripts\Noviembre 2018\Referenciados\Murcia\13-11-2018 Insercion de plantilla RefAgendarEntrevista murcia.sql" />
+    <Content Include="Scripts\Noviembre 2018\Referenciados\Murcia\13-11-2018 Insercion de plantilla RefAgendarEntrevistaComplementaria murcia.sql" />
+    <Content Include="Scripts\Noviembre 2018\Referenciados\Murcia\13-11-2018 Insercion de plantilla RefCartaOferta murcia.sql" />
+    <Content Include="Scripts\Noviembre 2018\Referenciados\Murcia\13-11-2018 Insercion de plantilla RefDescarte murcia.sql" />
+    <Content Include="Scripts\Noviembre 2018\Referenciados\Murcia\13-11-2018 Insercion de plantilla RefFiltroTelefonico murcia.sql" />
+    <Content Include="Scripts\Noviembre 2018\Referenciados\Murcia\13-11-2018 Insercion de plantilla RefReanudar murcia.sql" />
+    <Content Include="Scripts\Noviembre 2018\Referenciados\Murcia\13-11-2018 Insercion de plantilla RefRechazaCO murcia.sql" />
+    <Content Include="Scripts\Noviembre 2018\Referenciados\Murcia\13-11-2018 Insercion de plantilla RefRenuncia murcia.sql" />
+    <Content Include="Scripts\Noviembre 2018\Referenciados\Murcia\13-11-2018 Insercion de plantilla RefStandBy murcia.sql" />
+    <Content Include="Scripts\Noviembre 2018\Referenciados\Salamanca\13-11-2018 Insercion de plantilla RefAceptaCO salamanca.sql" />
+    <Content Include="Scripts\Noviembre 2018\Referenciados\Salamanca\13-11-2018 Insercion de plantilla RefAgendarEntrevista salamanca.sql" />
+    <Content Include="Scripts\Noviembre 2018\Referenciados\Salamanca\13-11-2018 Insercion de plantilla RefAgendarEntrevistaComplementaria salamanca.sql" />
+    <Content Include="Scripts\Noviembre 2018\Referenciados\Salamanca\13-11-2018 Insercion de plantilla RefCartaOferta salamanca.sql" />
+    <Content Include="Scripts\Noviembre 2018\Referenciados\Salamanca\13-11-2018 Insercion de plantilla RefDescarte salamanca.sql" />
+    <Content Include="Scripts\Noviembre 2018\Referenciados\Salamanca\13-11-2018 Insercion de plantilla RefFiltroTelefonico salamanca.sql" />
+    <Content Include="Scripts\Noviembre 2018\Referenciados\Salamanca\13-11-2018 Insercion de plantilla RefReanudar salamanca.sql" />
+    <Content Include="Scripts\Noviembre 2018\Referenciados\Salamanca\13-11-2018 Insercion de plantilla RefRechazaCO salamanca.sql" />
+    <Content Include="Scripts\Noviembre 2018\Referenciados\Salamanca\13-11-2018 Insercion de plantilla RefRenuncia salamanca.sql" />
+    <Content Include="Scripts\Noviembre 2018\Referenciados\Salamanca\13-11-2018 Insercion de plantilla RefStandBy salamanca.sql" />
+    <Content Include="Scripts\Noviembre 2018\Referenciados\Sevilla\13-11-2018 Insercion de plantilla RefReanudar sevilla.sql" />
+    <Content Include="Scripts\Noviembre 2018\Referenciados\Sevilla\13-11-2018 Insercion de plantilla RefStandBy sevilla.sql" />
+    <Content Include="Scripts\Noviembre 2018\Referenciados\Sevilla\13-11-2018 Insercion de plantilla RefRechazaCO sevilla.sql" />
+    <Content Include="Scripts\Noviembre 2018\Referenciados\Sevilla\13-11-2018 Insercion de plantilla RefAceptaCO sevilla.sql" />
+    <Content Include="Scripts\Noviembre 2018\Referenciados\Sevilla\13-11-2018 Insercion de plantilla RefDescarte sevilla.sql" />
+    <Content Include="Scripts\Noviembre 2018\Referenciados\Sevilla\13-11-2018 Insercion de plantilla RefRenuncia sevilla.sql" />
+    <Content Include="Scripts\Noviembre 2018\Referenciados\Sevilla\13-11-2018 Insercion de plantilla RefCartaOferta sevilla.sql" />
+    <Content Include="Scripts\Noviembre 2018\Referenciados\Sevilla\13-11-2018 Insercion de plantilla RefAgendarEntrevistaComplementaria sevilla.sql" />
+    <Content Include="Scripts\Noviembre 2018\Referenciados\Sevilla\13-11-2018 Insercion de plantilla RefAgendarEntrevista sevilla.sql" />
+    <Content Include="Scripts\Noviembre 2018\Referenciados\Sevilla\13-11-2018 Insercion de plantilla RefFiltroTelefonico sevilla.sql" />
+    <Content Include="Scripts\Noviembre 2018\Seguimiento\Alicante\15-11-2018 Insercion de plantilla SegAceptaCO alicante.sql" />
+    <Content Include="Scripts\Noviembre 2018\Seguimiento\Alicante\15-11-2018 Insercion de plantilla SegAgendarEntrevista alicante.sql" />
+    <Content Include="Scripts\Noviembre 2018\Seguimiento\Alicante\15-11-2018 Insercion de plantilla SegAgendarEntrevistaComplementaria alicante.sql" />
+    <Content Include="Scripts\Noviembre 2018\Seguimiento\Alicante\15-11-2018 Insercion de plantilla SegCartaOferta alicante.sql" />
+    <Content Include="Scripts\Noviembre 2018\Seguimiento\Alicante\15-11-2018 Insercion de plantilla SegDescarte alicante.sql" />
+    <Content Include="Scripts\Noviembre 2018\Seguimiento\Alicante\15-11-2018 Insercion de plantilla SegFiltroTelefonico alicante.sql" />
+    <Content Include="Scripts\Noviembre 2018\Seguimiento\Alicante\15-11-2018 Insercion de plantilla SegReanudar alicante.sql" />
+    <Content Include="Scripts\Noviembre 2018\Seguimiento\Alicante\15-11-2018 Insercion de plantilla SegRechazaCO alicante.sql" />
+    <Content Include="Scripts\Noviembre 2018\Seguimiento\Alicante\15-11-2018 Insercion de plantilla SegRenuncia alicante.sql" />
+    <Content Include="Scripts\Noviembre 2018\Seguimiento\Alicante\15-11-2018 Insercion de plantilla SegStandBy alicante.sql" />
+    <Content Include="Scripts\Noviembre 2018\Seguimiento\Lisboa\15-11-2018 Insercion de plantilla SegAceptaCO lisboa.sql" />
+    <Content Include="Scripts\Noviembre 2018\Seguimiento\Lisboa\15-11-2018 Insercion de plantilla SegAgendarEntrevista lisboa.sql" />
+    <Content Include="Scripts\Noviembre 2018\Seguimiento\Lisboa\15-11-2018 Insercion de plantilla SegAgendarEntrevistaComplementaria lisboa.sql" />
+    <Content Include="Scripts\Noviembre 2018\Seguimiento\Lisboa\15-11-2018 Insercion de plantilla SegCartaOferta lisboa.sql" />
+    <Content Include="Scripts\Noviembre 2018\Seguimiento\Lisboa\15-11-2018 Insercion de plantilla SegDescarte lisboa.sql" />
+    <Content Include="Scripts\Noviembre 2018\Seguimiento\Lisboa\15-11-2018 Insercion de plantilla SegFiltroTelefonico lisboa.sql" />
+    <Content Include="Scripts\Noviembre 2018\Seguimiento\Lisboa\15-11-2018 Insercion de plantilla SegReanudar lisboa.sql" />
+    <Content Include="Scripts\Noviembre 2018\Seguimiento\Lisboa\15-11-2018 Insercion de plantilla SegRechazaCO lisboa.sql" />
+    <Content Include="Scripts\Noviembre 2018\Seguimiento\Lisboa\15-11-2018 Insercion de plantilla SegRenuncia lisboa.sql" />
+    <Content Include="Scripts\Noviembre 2018\Seguimiento\Lisboa\15-11-2018 Insercion de plantilla SegStandBy lisboa.sql" />
+    <Content Include="Scripts\Noviembre 2018\Seguimiento\Murcia\15-11-2018 Insercion de plantilla SegAceptaCO murcia.sql" />
+    <Content Include="Scripts\Noviembre 2018\Seguimiento\Murcia\15-11-2018 Insercion de plantilla SegAgendarEntrevista murcia.sql" />
+    <Content Include="Scripts\Noviembre 2018\Seguimiento\Murcia\15-11-2018 Insercion de plantilla SegAgendarEntrevistaComplementaria murcia.sql" />
+    <Content Include="Scripts\Noviembre 2018\Seguimiento\Murcia\15-11-2018 Insercion de plantilla SegCartaOferta murcia.sql" />
+    <Content Include="Scripts\Noviembre 2018\Seguimiento\Murcia\15-11-2018 Insercion de plantilla SegDescarte murcia.sql" />
+    <Content Include="Scripts\Noviembre 2018\Seguimiento\Murcia\15-11-2018 Insercion de plantilla SegFiltroTelefonico murcia.sql" />
+    <Content Include="Scripts\Noviembre 2018\Seguimiento\Murcia\15-11-2018 Insercion de plantilla SegReanudar murcia.sql" />
+    <Content Include="Scripts\Noviembre 2018\Seguimiento\Murcia\15-11-2018 Insercion de plantilla SegRechazaCO murcia.sql" />
+    <Content Include="Scripts\Noviembre 2018\Seguimiento\Murcia\15-11-2018 Insercion de plantilla SegRenuncia murcia.sql" />
+    <Content Include="Scripts\Noviembre 2018\Seguimiento\Murcia\15-11-2018 Insercion de plantilla SegStandBy murcia.sql" />
+    <Content Include="Scripts\Noviembre 2018\Seguimiento\Salamanca\15-11-2018 Insercion de plantilla SegAceptaCO salamanca.sql" />
+    <Content Include="Scripts\Noviembre 2018\Seguimiento\Salamanca\15-11-2018 Insercion de plantilla SegAgendarEntrevista salamanca.sql" />
+    <Content Include="Scripts\Noviembre 2018\Seguimiento\Salamanca\15-11-2018 Insercion de plantilla SegAgendarEntrevistaComplementaria salamanca.sql" />
+    <Content Include="Scripts\Noviembre 2018\Seguimiento\Salamanca\15-11-2018 Insercion de plantilla SegCartaOferta salamanca.sql" />
+    <Content Include="Scripts\Noviembre 2018\Seguimiento\Salamanca\15-11-2018 Insercion de plantilla SegDescarte salamanca.sql" />
+    <Content Include="Scripts\Noviembre 2018\Seguimiento\Salamanca\15-11-2018 Insercion de plantilla SegFiltroTelefonico salamanca.sql" />
+    <Content Include="Scripts\Noviembre 2018\Seguimiento\Salamanca\15-11-2018 Insercion de plantilla SegReanudar salamanca.sql" />
+    <Content Include="Scripts\Noviembre 2018\Seguimiento\Salamanca\15-11-2018 Insercion de plantilla SegRechazaCO salamanca.sql" />
+    <Content Include="Scripts\Noviembre 2018\Seguimiento\Salamanca\15-11-2018 Insercion de plantilla SegRenuncia salamanca.sql" />
+    <Content Include="Scripts\Noviembre 2018\Seguimiento\Salamanca\15-11-2018 Insercion de plantilla SegStandBy salamanca.sql" />
+    <Content Include="Scripts\Noviembre 2018\Seguimiento\Sevilla\15-11-2018 Insercion de plantilla SegReanudar sevilla.sql" />
+    <Content Include="Scripts\Noviembre 2018\Seguimiento\Sevilla\15-11-2018 Insercion de plantilla SegStandBy sevilla.sql" />
+    <Content Include="Scripts\Noviembre 2018\Seguimiento\Sevilla\15-11-2018 Insercion de plantilla SegRechazaCO sevilla.sql" />
+    <Content Include="Scripts\Noviembre 2018\Seguimiento\Sevilla\15-11-2018 Insercion de plantilla SegAceptaCO sevilla.sql" />
+    <Content Include="Scripts\Noviembre 2018\Seguimiento\Sevilla\15-11-2018 Insercion de plantilla SegDescarte sevilla.sql" />
+    <Content Include="Scripts\Noviembre 2018\Seguimiento\Sevilla\15-11-2018 Insercion de plantilla SegRenuncia sevilla.sql" />
+    <Content Include="Scripts\Noviembre 2018\Seguimiento\Sevilla\15-11-2018 Insercion de plantilla SegCartaOferta sevilla.sql" />
+    <Content Include="Scripts\Noviembre 2018\Seguimiento\Sevilla\15-11-2018 Insercion de plantilla SegAgendarEntrevistaComplementaria sevilla.sql" />
+    <Content Include="Scripts\Noviembre 2018\Seguimiento\Sevilla\15-11-2018 Insercion de plantilla SegAgendarEntrevista sevilla.sql" />
+    <Content Include="Scripts\Noviembre 2018\Seguimiento\Sevilla\15-11-2018 Insercion de plantilla SegFiltroTelefonico sevilla.sql" />
+    <Content Include="Scripts\Octubre 2017\17-10-2017 Insertar nuevos Motivos y Comentarios de RenunciaDescarte a Candidaturas.sql" />
+    <Content Include="Scripts\Octubre 2017\30-10-2017 script migracion datos cuenta y persona proyecto a necesidades.sql" />
+    <Content Include="Scripts\Octubre 2017\25-10-2017 script insert dados origencv fuente reclutamiento-3226.sql" />
+    <Content Include="Scripts\Octubre 2017\31-10 script insert registros tablas tipoDecision y tabla RelacionEtapa.sql" />
+    <Content Include="Scripts\Octubre 2018\31-10-2018 Actualizar contacto de candidato.sql" />
+    <Content Include="Scripts\Octubre 2018\02-10-2018 Actualizar Oficinas Alicante.sql" />
+    <Content Include="Scripts\Octubre 2018\02-10-2018 Actualizar CuentaTokenId en Centros.sql" />
+    <Content Include="Scripts\Octubre 2018\02-10-2018 Insercion de plantilla correos Outlook Lisboa.sql" />
+    <Content Include="Scripts\Octubre 2018\02-10-2018 Insercion de plantilla correos Outlook Temuco.sql" />
+    <Content Include="Scripts\Octubre 2018\02-10-2018 Insercion de plantilla correos Outlook Tetuan.sql" />
+    <Content Include="Scripts\Octubre 2018\02-10-2018 Insercion de plantilla correos Outlook Trujillo.sql" />
+    <Content Include="Scripts\Octubre 2018\02-10-2018 Insercion de plantilla correos Outlook Uberlandia.sql" />
+    <Content Include="Scripts\Octubre 2018\02-10-2018 Insercion de plantilla correos Outlook Tucuman.sql" />
+    <Content Include="Scripts\Octubre 2018\02-10-2018 Insercion de plantilla correos Outlook Salamanca.sql" />
+    <Content Include="Scripts\Octubre 2018\02-10-2018 Insercion de plantilla correos Outlook Murcia.sql" />
+    <Content Include="Scripts\Octubre 2018\02-10-2018 Insercion de plantilla correos Outlook Alicante.sql" />
+    <Content Include="Scripts\Septiembre 2017\04-09-2017 Insercion Prueba Idioma.sql" />
+    <Content Include="Scripts\Septiembre 2017\22-09-2017 Insertar Motivo Rechazo CO en TipoMaestro.sql" />
+    <Content Include="Scripts\Septiembre 2017\23-09-2017 Insertar Motivos Rechazo CO en Maestro.sql" />
+    <Content Include="Scripts\Octubre 2017\02-10-2017 Cambiar nombre segunda entrevista.sql" />
+    <Content Include="Scripts\Septiembre 2017\25-09-2017 Migrar Motivos Rechazo CO antiguos.sql" />
+    <Content Include="Scripts\Agosto 2017\18-08-2017_Insercion de oficinas.sql" />
+    <Content Include="Scripts\Agosto 2017\10-08-2017_Actualizar Completada en Entrevistas.sql" />
+    <Content Include="Scripts\Agosto 2017\09-08-2017_Insercion de tecnologias en Maestro.sql" />
+    <Content Include="Scripts\Agosto 2017\03-08-2017_Quitar activo centros en Maestro.sql" />
+    <Content Include="Scripts\Agosto 2017\02-08-2017_Insercion de centros.sql" />
+    <Content Include="Scripts\Agosto 2017\28-08-2017 Insercion de plantilla correo Skype Alicante.sql" />
+    <Content Include="Scripts\Agosto 2017\28-08-2017 Update plantilla correo StandBy Alicante.sql" />
+    <Content Include="Scripts\Agosto 2017\30-08-2017 Update remitente variable correos de Alicante.sql" />
+    <Content Include="Scripts\Agosto 2017\28-08-2017 Update plantilla correo Descarte Alicante.sql" />
+    <Content Include="Scripts\Agosto 2017\28-08-2017 Insercion de plantilla correo ULAB Alicante.sql" />
+    <Content Include="Scripts\Agosto 2017\28-08-2017 Insercion de plantilla correo Rambla Alicante.sql" />
+    <Content Include="Scripts\Agosto 2017\28-08-2017 Insercion de plantilla correo Oscar Espla Alicante.sql" />
+    <Content Include="Scripts\Agosto 2017\31-08-2017 Update tipoPerfilId.sql" />
+    <Content Include="Scripts\actualizacion de nombres.sql" />
+    <Content Include="Scripts\InsercionDeTipoSubEntrevista.sql" />
+    <Content Include="Scripts\Inserto Nuevo Motivo Rechazo Entrevista.sql" />
+    <Content Include="Scripts\Inserto Nuevos Motivos RENUNCIA.sql" />
+    <Content Include="Scripts\inserto unificar BackLogEntrevista a Stand-By y Migracion.sql" />
+    <Content Include="Scripts\InsertoAvisoBackLogTetuan.sql" />
+    <Content Include="Scripts\InsertoAvisoCandidatoTetuan.sql" />
+    <Content Include="Scripts\InsertoAvisoDescartadoTetuan.sql" />
+    <Content Include="Scripts\InsertoAvisoEntrevistadorTetuan.sql" />
+    <Content Include="Scripts\Insertos para cambiar las etapas BackLog a una sola StandBy.sql" />
+    <Content Include="Scripts\MigracionModulo.sql" />
+    <Content Include="Scripts\Septiembre 2017\14-09-2017 RecuperarSegundaEntrevista.sql" />
+    <Content Include="Scripts\ScriptsCreacionPlantillas.sql" />
+    <Content Include="Scripts\Scripts.sql" />
+    <Content Include="Scripts\Septiembre 2018\04-09-2017 Insercion Tipo Becas Lisboa.sql" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
